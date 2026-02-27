@@ -61,10 +61,10 @@ export async function Layout({ children }: LayoutProps) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--bgColor-default)] text-[var(--fgColor-default)]" style={{ fontFamily: 'var(--fontStack-sansSerif)' }}>
+    <div className="min-h-screen flex flex-col bg-(--bgColor-default) text-(--fgColor-default)" style={{ fontFamily: 'var(--fontStack-sansSerif)' }}>
       <HeaderNavigation headerNavigation={headerNavigation} />
       
-      <main className="flex-grow">
+      <main className="grow">
         {children}
       </main>
       

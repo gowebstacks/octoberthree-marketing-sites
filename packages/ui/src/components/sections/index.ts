@@ -19,5 +19,9 @@ export * from './metricsBlock';
 export * from './resourceCarousel';
 export * from './resourceBentoCardDeck';
 export * from './statsBar';
+export * from './contentSwitcher';
+export * from './clusterTable';
+export * from './testimonialWall';
+export * from './testimonialSlider'
 
 

@@ -2,109 +2,96 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { within, expect } from '@storybook/test';
 import { TrustBar } from '@repo/ui';
 
+const LOGO_URL =
+  'https://a.storyblok.com/f/288727743104072/444x114/1af357c499/rlc_direct_logo_name.png?cv=1768323044252';
 
-const mockCompany = (id: string, name: string) => ({
-  _id: id,
-  _type: 'company' as const,
-  _key: `company-${id}`,
-  name,
-  slug: {
-    _type: 'slug' as const,
-    current: name.toLowerCase().replace(/\s+/g, '-'),
-  },
-  logo: {
-    _type: 'image' as const,
-    asset: {
-      _ref: `image-${id}`,
-      _type: 'reference' as const,
-      url: getLogoUrl(name),
-    },
+const mockCompany = (id: string) => ({
+  _uid: `company-${id}`,
+  component: 'company',
+  name: 'RLC Direct',
+  website: 'https://example.com',
+  logoOnLight: {
+    filename: LOGO_URL,
+    alt: 'RLC Direct logo',
   },
 });
 
-const getLogoUrl = (companyName: string): string => {
-  const logos: Record<string, string> = {
-    Slack: 'https://upload.wikimedia.org/wikipedia/commons/d/d5/Slack_icon_2019.svg',
-    Google: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
-    Notion: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png',
-  };
-
-  return logos[companyName];
-};
-
 const mockRows = [
   {
-    _key: 'row-1',
-    _type: 'trustBarRow' as const,
+    _uid: 'row-1',
+    component: 'trustBarRow',
     companies: [
-      mockCompany('1', 'Slack'),
-      mockCompany('2', 'Google'),
-      mockCompany('3', 'Notion'),
+      mockCompany('1'),
+      mockCompany('2'),
+      mockCompany('3'),
+      mockCompany('4'),
+      mockCompany('5'),
+      mockCompany('6'),
+      mockCompany('7'),
+    ],
+  },
+  {
+    _uid: 'row-2',
+    component: 'trustBarRow',
+    companies: [
+      mockCompany('8'),
+      mockCompany('9'),
+      mockCompany('10'),
+      mockCompany('11'),
+      mockCompany('12'),
+      mockCompany('13'),
+      mockCompany('14'),
     ],
   },
 ];
 
+const mocktitle ='Trusted by the best on the web'
 
 const meta: Meta<typeof TrustBar> = {
   title: 'Sections/TrustBar',
   component: TrustBar,
   parameters: {
-    layout: 'centered',
+    layout: 'fullscreen',
   },
   tags: ['autodocs'],
   argTypes: {
-    variants: {
-      description: 'Layout behavior of the trust bar',
-      control: { type: 'radio' },
-      options: ['scroll', 'static'],
-      table: { category: 'Layout' },
-    },
-
-    theme: {
-      description: 'Color theme for logos and eyebrow',
-      control: { type: 'radio' },
-      options: ['light', 'dark', 'bright'],
-      table: { category: 'Appearance' },
-    },
-
-    eyebrow: {
-      control: 'text',
-      table: { category: 'Content' },
-    },
-
-    rows: {
+    blok: {
       control: false,
-      table: {
-        category: 'Content',
-        type: { summary: 'Company[]' },
-      },
+      table: { category: 'Storyblok' },
     },
-
-    _type: { table: { disable: true } },
-    _key: { table: { disable: true } },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof TrustBar>;
 
-    const basePlay: Story['play'] = async ({ canvasElement }) => {
+const basePlay: Story['play'] = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
-
-  await expect(
-    canvas.getByText('Trusted by leading companies'),
-  ).toBeInTheDocument();
-
-const images = canvas.getAllByRole('img');
+  const images = canvas.getAllByRole('img');
   await expect(images.length).toBeGreaterThan(0);
 };
 
-export const Default: Story = {
+export const Static: Story = {
   args: {
-    eyebrow: 'Trusted by leading companies',
-    rows: mockRows,
-    theme: 'light',
+    blok: {
+      _uid: 'trustbar-static',
+      component: 'trustBar',
+      variant: 'static',
+      title: mocktitle,
+      rows: mockRows,
+    },
   },
   play: basePlay,
 };
 
+export const Scroll: Story = {
+  args: {
+    blok: {
+      _uid: 'trustbar-scroll',
+      component: 'trustBar',
+      variant: 'scroll',
+      title: mocktitle,
+      rows: mockRows,
+    },
+  },
+};

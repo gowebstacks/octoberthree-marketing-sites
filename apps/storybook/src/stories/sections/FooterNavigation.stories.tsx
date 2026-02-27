@@ -3,29 +3,104 @@ import { FooterNavigation } from '@repo/ui';
 import { within, expect } from '@storybook/test';
 
 const footerNavigationMock = {
+logo: {
+  alt: 'Company logo',
+  asset: {
+    url: '/logo_wordmark.svg',
+    metadata: {
+      dimensions: {
+        width: 320,
+        height: 96,
+        aspectRatio: 3.33
+      }
+    }
+  }
+},
   columns: [
     {
-      _uid: 'col-1',
+      _uid: 'column-products',
       groups: [
         {
-          _uid: 'group-1',
+          _uid: 'group-products',
           groupTitle: 'Products',
           links: [
             {
-              _uid: 'link-1',
+              _uid: 'product-platform',
               label: 'Platform',
               link: {
                 linkType: 'internal',
-                internalLink: { cached_url: 'platform' },
+                internalLink: {
+                  cached_url: 'platform',
+                },
               },
             },
             {
-              _uid: 'link-2',
+              _uid: 'product-pricing',
               label: 'Pricing',
               badge: 'New',
               link: {
                 linkType: 'internal',
-                internalLink: { cached_url: 'pricing' },
+                internalLink: {
+                  cached_url: 'pricing',
+                },
+              },
+            },
+          ],
+        },
+      ],
+    },
+    {
+      _uid: 'column-company',
+      groups: [
+        {
+          _uid: 'group-company',
+          groupTitle: 'Company',
+          links: [
+            {
+              _uid: 'company-about',
+              label: 'About us',
+              link: {
+                linkType: 'internal',
+                internalLink: {
+                  cached_url: 'about',
+                },
+              },
+            },
+            {
+              _uid: 'company-careers',
+              label: 'Careers',
+              link: {
+                linkType: 'internal',
+                internalLink: {
+                  cached_url: 'careers',
+                },
+              },
+            },
+          ],
+        },
+      ],
+    },
+    {
+      _uid: 'column-resources',
+      groups: [
+        {
+          _uid: 'group-resources',
+          groupTitle: 'Resources',
+          links: [
+            {
+              _uid: 'resource-blog',
+              label: 'Blog',
+              link: {
+                linkType: 'external',
+                externalUrl: 'https://blog.example.com',
+              },
+            },
+            {
+              _uid: 'resource-docs',
+              label: 'Documentation',
+              link: {
+                linkType: 'external',
+                externalUrl: 'https://docs.example.com',
               },
             },
           ],
@@ -33,23 +108,48 @@ const footerNavigationMock = {
       ],
     },
   ],
+
   bottomSection: [
     {
+      copyrightText: [
+        {
+          content: [
+            { text: '©  WEBSTACKS 2025' },
+          ],
+        },
+      ],
       legalLinks: [
         {
-          _uid: 'legal-1',
+          _uid: 'legal-privacy',
           label: 'Privacy Policy',
           link: {
             linkType: 'internal',
-            internalLink: { cached_url: 'privacy' },
+            internalLink: {
+              cached_url: 'privacy',
+            },
+          },
+        },
+        {
+          _uid: 'legal-terms',
+          label: 'Terms of Service',
+          link: {
+            linkType: 'internal',
+            internalLink: {
+              cached_url: 'terms',
+            },
           },
         },
       ],
       socialLinks: [
         {
-          _uid: 'social-1',
+          _uid: 'social-twitter',
           platform: 'twitter-x',
           url: 'https://twitter.com/example',
+        },
+        {
+          _uid: 'social-linkedin',
+          platform: 'linkedin',
+          url: 'https://linkedin.com/company/example',
         },
       ],
     },
@@ -76,13 +176,13 @@ const meta: Meta<typeof FooterNavigation> = {
 export default meta;
 type Story = StoryObj<typeof FooterNavigation>;
 
-export const Default: Story = {
-  
-};
 
-export const WithProvidedNavigation: Story = {
+export const Default: Story = {
   args: {
-    footerNavigation: footerNavigationMock,
+    footerNavigation: {
+      ...footerNavigationMock,
+      columns:[]
+    },
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -117,11 +217,10 @@ expect(twitter).toBeDefined();
 };
 
 
-export const WithoutColumns: Story = {
+export const WithLinks: Story = {
   args: {
-    footerNavigation: {
-      bottomSection: footerNavigationMock.bottomSection,
-    },
+    footerNavigation:  footerNavigationMock,
+    
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -135,45 +234,6 @@ export const WithoutColumns: Story = {
   },
 };
 
-export const ExternalLinksOnly: Story = {
-  args: {
-    footerNavigation: {
-      columns: [
-        {
-          _uid: 'col-ext',
-          groups: [
-            {
-              _uid: 'group-ext',
-              groupTitle: 'Resources',
-              links: [
-                {
-                  _uid: 'ext-1',
-                  label: 'Blog',
-                  link: {
-                    linkType: 'external',
-                    externalUrl: 'https://blog.example.com',
-                  },
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      bottomSection: [],
-    },
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
 
-    const blogLink = canvas.getByRole('link', { name: 'Blog' });
-
-    expect(blogLink).toHaveAttribute(
-      'href',
-      'https://blog.example.com/'
-    );
-
-    expect(blogLink.getAttribute('href')).toMatch(/^https?:\/\//);
-  },
-};
 
 

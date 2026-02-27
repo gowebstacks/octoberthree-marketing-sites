@@ -1,16 +1,29 @@
 'use client';
+
 import { cva } from 'class-variance-authority';
 import useHeaderStore, { toggleMobileMenu } from '../../store';
 
 export const hamburgerLineStyle = cva(
-  ['absolute left-0 block h-0.5 w-full rotate-0 bg-current transition-all duration-300'],
+  [
+    'absolute left-0 block w-full bg-current',
+    'transition-all duration-300 ease-in-out',
+  ],
   {
     variants: {
       line: {
-        0: ['top-0 group-aria-[expanded=true]:top-2 group-aria-[expanded=true]:rotate-[135deg]'],
-        1: ['top-2 group-aria-[expanded=true]:-left-5 group-aria-[expanded=true]:opacity-0'],
+        0: [
+          'top-0 h-[2.5px]',
+          'group-aria-[expanded=true]:top-2',
+          'group-aria-[expanded=true]:rotate-45',
+        ],
+        1: [
+          'top-2 h-[2.5px]',
+          'group-aria-[expanded=true]:opacity-0',
+        ],
         2: [
-          'top-4 group-aria-[expanded=false]:left-1/3 group-aria-[expanded=false]:w-2/3 group-aria-[expanded=true]:top-2 group-aria-[expanded=true]:rotate-[-135deg]',
+          'top-4 h-[2.5px]',
+          'group-aria-[expanded=true]:top-2',
+          'group-aria-[expanded=true]:-rotate-45',
         ],
       },
     },
@@ -22,15 +35,25 @@ const Hamburger = () => {
 
   return (
     <button
+      type="button"
       tabIndex={0}
       onClick={toggleMobileMenu}
-      className="group relative flex h-4 w-6 shrink-0 basis-6 cursor-pointer items-center justify-center xl:hidden"
       aria-expanded={open}
+      className="
+        group relative flex
+        h-5 w-5
+        shrink-0 basis-5
+        cursor-pointer items-center justify-center
+        xl:hidden
+      "
     >
       {Array(3)
         .fill(null)
         .map((_, index) => (
-          <span key={`line-${index + 1}`} className={hamburgerLineStyle({ line: index as 0 | 1 | 2 })} />
+          <span
+            key={`line-${index + 1}`}
+            className={hamburgerLineStyle({ line: index as 0 | 1 | 2 })}
+          />
         ))}
     </button>
   );

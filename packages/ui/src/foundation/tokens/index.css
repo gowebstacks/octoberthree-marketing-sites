@@ -159,6 +159,7 @@
 
   /* Mapped O3 */
   --text-headings: var(--color-neutral-900---p-dark);
+  --text-headings-light: var(--color-base-white);
   --text-body: var(--color-neutral-700---body);
   --text-body-dark: var(--color-neutral-700---body);
   --text-eyebrow: var(--color-navy-primary-900---p);
@@ -189,6 +190,8 @@
   --stroke-primary: var(--color-neutral-900---p-dark);
   --icon-link-hover: var(--color-navy-primary-700);
   --stroke-secondary-button: var(--color-neutral-900---p-dark);
+  --stroke-testimonial-1: var(--color-orange-400----p);
+  --stroke-testimonial-3: var(--color-orange-200---p-light);
   --logo-icon: var(--color-navy-primary-600);
   --stroke-card: var(--color-neutral-500);
   --surface-button-hover: var(--color-orange-800);
@@ -1126,6 +1129,10 @@
   .section-padding-xl-top-bottom{
      padding-top: var(--padding-top-down-sectional-96-72-48-xl);
     padding-bottom: var(--padding-top-down-sectional-96-72-48-xl);
+  }
+  .section-padding-xl-left-right{
+    padding-left: var(--padding-side-sectional-80-64-16);
+    padding-right: var(--padding-side-sectional-80-64-16);
   }
   .section-padding-md {
     padding: var(--padding-56-48-48) var(--padding-32-24-24);

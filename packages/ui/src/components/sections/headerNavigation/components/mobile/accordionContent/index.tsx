@@ -1,32 +1,63 @@
+import { Content } from "@radix-ui/react-accordion";
+import type { FC } from "react";
 
-import { Content } from '@radix-ui/react-accordion';
+import type {
+  StoryblokMenuSection,
+  StoryblokNavigationInnerItem,
+  StoryblokNavigationSpotlightCard,
+} from "../../../../../../types/storyblok";
 
-import type { FC } from 'react';
-import { StoryblokNavigationInnerItem, StoryblokNavigationMenuItem } from '../../../../../../types/storyblok';
-import NavItem from '../../navItem';
-import FeaturedCard from '../../featuredCard';
+import NavItem from "../../navItem";
+import FeaturedCard from "../../featuredCard";
+import { Link } from "../../../../../atoms";
+import { getLinkHref } from "../../../../../../utils/getLinkHref";
 
-const AccordionContent: FC<StoryblokNavigationMenuItem> = ({ innerItems, spotlightCard, link, label }) => (
+interface AccordionContentProps {
+  menuSection: StoryblokMenuSection[];
+  spotlightCard?: StoryblokNavigationSpotlightCard;
+}
+
+const AccordionContent: FC<AccordionContentProps> = ({
+  menuSection,
+  spotlightCard,
+}) => (
   <Content
-    className="flex flex-col gap-4 overflow-hidden data-[state=closed]:animate-(--animate-accordion-slide-up) data-[state=open]:animate-(--animate-accordion-slide-down)"
+    className="
+      flex flex-col gap-4 overflow-hidden
+      data-[state=closed]:animate-(--animate-accordion-slide-up)
+      data-[state=open]:animate-(--animate-accordion-slide-down)
+    "
     style={{
-      background: 'var(--Surface-background, #FFFCF3)',
-      borderLeft: '1px solid var(--borderColor-container-default, #EBEBEB)',
-      borderRight: '1px solid var(--borderColor-container-default, #EBEBEB)',
-      borderBottom: '1px solid var(--borderColor-container-default, #EBEBEB)'
+      background: "var(--surface-background)",
+   
     }}
   >
-    <div className="flex flex-col gap-8 p-8 md:p-12">
-      <div className="flex w-full flex-col sm:flex-wrap gap-4">
-        {innerItems && innerItems.map((menuItem: StoryblokNavigationInnerItem) => (
-          <NavItem key={menuItem._uid} {...menuItem} isMobile />
-        ))}
-      </div>
-      {spotlightCard?.heading && (
-        <FeaturedCard {...spotlightCard} />
-      )}
-    </div>
+    <div className="flex flex-col gap-8 p-(--scale-16)  sm:p-8  md:p-12">
+      {menuSection.map((section) => (
+        <div key={section._uid} className="flex flex-col gap-4">
+          {/* Section title */}
+          <span className="text-mono-sm  text-(--text-headings) uppercase tracking-wide ">
+            {section.title} 
+          </span>
 
+          {/* Section items */}
+          <div className="flex flex-wrap gap-4  sm:gap-14 items-center">
+            {section.items.map((menuItem: StoryblokNavigationInnerItem) => (
+              <NavItem key={menuItem._uid} {...menuItem} isMobile />
+            ))}
+
+            {section.footer && (
+              <Link
+                href={getLinkHref(section.footer.link)}
+                className="cursor-pointer text-xs font-medium text-(--text-link-active)"
+              >
+                {section.footer.label}
+              </Link>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
   </Content>
 );
 

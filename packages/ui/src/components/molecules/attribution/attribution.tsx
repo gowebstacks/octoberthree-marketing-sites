@@ -20,6 +20,7 @@ interface AttributionProps {
   avatarSrc?: string
   role?: AttributionBlok['role']
   showAvatar?: boolean
+  rounded?:boolean
 }
 
 export const Attribution: FC<AttributionProps> = ({
@@ -28,6 +29,7 @@ export const Attribution: FC<AttributionProps> = ({
   avatarSrc,
   role,
   showAvatar = true,
+  rounded
 }) => {
   const actualBlok = (blok as any)?.blok || blok
 
@@ -43,7 +45,7 @@ export const Attribution: FC<AttributionProps> = ({
       className="inline-flex items-center gap-1.5 lg:gap-3"
     >
       {showAvatar && actualAvatar && (
-        <Avatar src={actualAvatar} alt={actualName} />
+        <Avatar src={actualAvatar} alt={actualName} rounded={rounded} />
       )}
 
       <div className="flex flex-col items-start gap-1">

@@ -33,13 +33,13 @@ export const TestimonialItem: FC<TestimonialItemProps> = ({
 }) => {
   const { quote, author, brandLogo } = blok
 
-  const baseClasses = 'flex flex-col gap-6 max-w-xl'
+  const baseClasses = 'flex flex-col gap-6 '
 
   const variantClasses = {
     default:
-      'lg:border-l-4 lg:border-t-none lg:pl-[34px] border-l-none pl-0 pt-[34px] border-t-4 border-(--stroke-primary)',
+      'lg:border-l-4 lg:pl-[34px] border-l-none pl-0 pt-[34px] border-t-4 border-(--stroke-primary) lg:border-t-0',
     card:
-      'bg-(--surface-background) md:p-8 px-4 py-8 ',
+      'bg-(--surface-background) md:p-8 px-4 py-8 border border-(--stroke-secondary)',
   }
 
   return (

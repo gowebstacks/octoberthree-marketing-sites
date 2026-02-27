@@ -40,7 +40,7 @@ export const SliderControls: FC<SliderControlsProps> = ({
               onClick={() => onGoTo?.(i)}
               className={`h-1.5 rounded-sm transition-all ${
                 i === currentIndex 
-                  ? `w-56 ${mode === 'dark'? 'bg-(--color-base-white)' : 'bg-(--color-base-black)' }`
+                  ? `w-16 lg:w-56 ${mode === 'dark'? 'bg-(--color-base-white)' : 'bg-(--color-base-black)' }`
                   : `w-16 opacity-50 ${mode === 'dark'? 'bg-(--color-base-white)' : 'bg-(--color-base-black)'}`
               }`}
             />

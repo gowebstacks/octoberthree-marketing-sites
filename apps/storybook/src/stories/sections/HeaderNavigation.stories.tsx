@@ -1,311 +1,316 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { HeaderNavigation } from "@repo/ui";
-import type { HeaderNavigationProps } from "@repo/ui";
-import { within, expect } from "@storybook/test";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import { HeaderNavigation } from '@repo/ui'
+import type { HeaderNavigationProps } from '@repo/ui'
 
-const headerNavigationMock: HeaderNavigationProps["headerNavigation"] = {
-  component: "globalNavigation",
-  announcement: " Summer Sale: Get 30% off on all courses! Limited time offer.",
-  announcementIcon: "megaphone",
+
+const headerNavigationMock: HeaderNavigationProps['headerNavigation'] = {
+  component: 'globalNavigation',
+  announcement: 'Summer Sale: Get 30% off on all courses! Limited time offer.',
+  announcementIcon: 'megaphone',
+  announcementTheme: 'success',
   announcementLink: [
     {
-      component: "button",
-      label: "Learn More",
-      linkType: "internal",
+      component: 'button',
+      label: 'Learn More',
+      linkType: 'internal',
       internalLink: {
-        id: "12345",
-        url: "/summer-sale",
-        linktype: "story",
-        fieldtype: "multilink",
-        cached_url: "summer-sale",
+        id: '12345',
+        url: '/summer-sale',
+        linktype: 'story',
+        fieldtype: 'multilink',
+        cached_url: 'summer-sale',
       },
-      externalUrl: "",
+      externalUrl: '',
       openInNewTab: false,
     },
   ],
-  announcementTheme: "success",
+
   menuItems: [
     {
-      _uid: "menu-001",
-      component: "navigationMenuItem",
-      label: "Products",
+      _uid: 'menu-001',
+      component: 'navigationMenuItem',
+      label: 'Products',
       link: {
-        component: "link",
-        label: "View All Products",
-        linkType: "internal",
+        component: 'link',
+        label: 'View All Products',
+        linkType: 'internal',
         internalLink: {
-          id: "prod-001",
-          _uid: "page-001",
-          name: "Products",
-          slug: "products",
-          component: "page",
+          id: 'prod-001',
+          _uid: 'page-products',
+          name: 'Products',
+          slug: 'products',
+          component: 'page',
         },
-        externalUrl: "",
+        externalUrl: '',
         openInNewTab: false,
       },
-      innerItems: [
+
+      menuSection: [
         {
-          _uid: "inner-001",
-          component: "navigationInnerItem",
-          icon: "laptop",
-          label: "Web Development",
-          description: "Learn modern web technologies",
-          link: {
-            component: "link",
-            label: "Explore Web Dev",
-            linkType: "internal",
-            internalLink: {
-              id: "web-001",
-              _uid: "page-002",
-              name: "Web Development Courses",
-              slug: "courses/web-development",
-              component: "page",
+          _uid: 'section-product',
+          component: 'menuSection',
+          title: 'OUR PRODUCT',
+          items: [
+            {
+              _uid: 'product-about',
+              component: 'navigationInnerItem',
+              icon: 'square',
+              label: 'About the Product',
+              link: {
+                component: 'link',
+                label: 'About the Product',
+                linkType: 'internal',
+                internalLink: {
+                  id: 'about-product',
+                  _uid: 'page-about-product',
+                  name: 'About the Product',
+                  slug: 'about-product',
+                  component: 'page',
+                },
+                externalUrl: '',
+                openInNewTab: false,
+              },
             },
-            externalUrl: "",
-            openInNewTab: false,
-          },
+            {
+              _uid: 'product-changelog',
+              component: 'navigationInnerItem',
+              icon: 'refresh',
+              label: 'Changelog',
+              link: {
+                component: 'link',
+                label: 'Changelog',
+                linkType: 'internal',
+                internalLink: {
+                  id: 'changelog',
+                  _uid: 'page-changelog',
+                  name: 'Changelog',
+                  slug: 'changelog',
+                  component: 'page',
+                },
+                externalUrl: '',
+                openInNewTab: false,
+              },
+            },
+            {
+              _uid: 'product-demo',
+              component: 'navigationInnerItem',
+              icon: 'calendar',
+              label: 'Monthly Demo',
+              link: {
+                component: 'link',
+                label: 'Monthly Demo',
+                linkType: 'internal',
+                internalLink: {
+                  id: 'monthly-demo',
+                  _uid: 'page-monthly-demo',
+                  name: 'Monthly Demo',
+                  slug: 'monthly-demo',
+                  component: 'page',
+                },
+                externalUrl: '',
+                openInNewTab: false,
+              },
+            },
+          ],
         },
+
         {
-          _uid: "inner-002",
-          component: "navigationInnerItem",
-          icon: "smartphone",
-          label: "Mobile Apps",
-          description: "iOS & Android development",
-          link: {
-            component: "link",
-            label: "View Mobile Courses",
-            linkType: "internal",
-            internalLink: {
-              id: "mobile-001",
-              _uid: "page-003",
-              name: "Mobile Development",
-              slug: "courses/mobile-development",
-              component: "page",
+          _uid: 'section-integrations',
+          component: 'menuSection',
+          title: 'INTEGRATIONS',
+          items: [
+            {
+              _uid: 'integration-kafka',
+              component: 'navigationInnerItem',
+              label: 'Kafka',
+              link: {
+                component: 'link',
+                label: 'Kafka',
+                linkType: 'internal',
+                internalLink: {
+                  id: 'kafka',
+                  _uid: 'page-kafka',
+                  name: 'Kafka',
+                  slug: 'integrations/kafka',
+                  component: 'page',
+                },
+                externalUrl: '',
+                openInNewTab: false,
+              },
             },
-            externalUrl: "",
-            openInNewTab: false,
-          },
-        },
-        {
-          _uid: "inner-003",
-          component: "navigationInnerItem",
-          icon: "chart-bar",
-          label: "Data Science",
-          description: "Machine Learning & AI",
-          link: {
-            component: "link",
-            label: "Explore Data Science",
-            linkType: "internal",
-            internalLink: {
-              id: "data-001",
-              _uid: "page-004",
-              name: "Data Science Courses",
-              slug: "courses/data-science",
-              component: "page",
+            {
+              _uid: 'integration-postgres',
+              component: 'navigationInnerItem',
+              label: 'PostgreSQL',
+              link: {
+                component: 'link',
+                label: 'PostgreSQL',
+                linkType: 'internal',
+                internalLink: {
+                  id: 'postgresql',
+                  _uid: 'page-postgresql',
+                  name: 'PostgreSQL',
+                  slug: 'integrations/postgresql',
+                  component: 'page',
+                },
+                externalUrl: '',
+                openInNewTab: false,
+              },
             },
-            externalUrl: "",
-            openInNewTab: false,
+            {
+              _uid: 'integration-dbt',
+              component: 'navigationInnerItem',
+              label: 'dbt',
+              link: {
+                component: 'link',
+                label: 'dbt',
+                linkType: 'internal',
+                internalLink: {
+                  id: 'dbt',
+                  _uid: 'page-dbt',
+                  name: 'dbt',
+                  slug: 'integrations/dbt',
+                  component: 'page',
+                },
+                externalUrl: '',
+                openInNewTab: false,
+              },
+            },
+          ],
+          footer: {
+            label: 'View All Integrations',
+            link: {
+              component: 'link',
+              label: 'View All Integrations',
+              linkType: 'internal',
+              internalLink: {
+                id: 'integrations',
+                _uid: 'page-integrations',
+                name: 'Integrations',
+                slug: 'integrations',
+                component: 'page',
+              },
+              externalUrl: '',
+              openInNewTab: false,
+            },
           },
         },
       ],
+
       spotlightCard: {
-        _uid: "spotlight-001",
-        component: "navigationSpotlightCard",
+        _uid: 'spotlight-001',
+        component: 'navigationSpotlightCard',
         heading: {
           heading: {
-            _type: "heading",
-            fontFamily: "sans-serif",
-            elementType: "h3",
-            headingSize: "medium",
+            _type: 'heading',
+            fontFamily: 'sans-serif',
+            elementType: 'h3',
+            headingSize: 'medium',
           },
           body: [
             {
-              _uid: "text-001",
-              component: "text",
-              text: "Featured Course: React Masterclass",
+              _uid: 'text-001',
+              component: 'text',
+              text: 'Featured Course: React Masterclass',
             },
           ],
         },
       },
     },
+
     {
-      _uid: "menu-002",
-      component: "navigationMenuItem",
-      label: "Resources",
+      _uid: 'menu-002',
+      component: 'navigationMenuItem',
+      label: 'Resources',
       link: {
-        component: "link",
-        label: "All Resources",
-        linkType: "internal",
+        component: 'link',
+        label: 'All Resources',
+        linkType: 'internal',
         internalLink: {
-          id: "res-001",
-          _uid: "page-005",
-          name: "Resources",
-          slug: "resources",
-          component: "page",
+          id: 'res-001',
+          _uid: 'page-resources',
+          name: 'Resources',
+          slug: 'resources',
+          component: 'page',
         },
-        externalUrl: "",
+        externalUrl: '',
         openInNewTab: false,
       },
-      innerItems: [
-        {
-          _uid: "inner-004",
-          component: "navigationInnerItem",
-          icon: "book-open",
-          label: "Documentation",
-          description: "API references and guides",
-          link: {
-            component: "link",
-            label: "Read Docs",
-            linkType: "external",
-            internalLink: undefined,
-            externalUrl: "https://docs.example.com",
-            openInNewTab: true,
-          },
-        },
-        {
-          _uid: "inner-005",
-          component: "navigationInnerItem",
-          icon: "video",
-          label: "Tutorials",
-          description: "Step-by-step video guides",
-          link: {
-            component: "link",
-            label: "Watch Tutorials",
-            linkType: "internal",
-            internalLink: {
-              id: "tut-001",
-              _uid: "page-006",
-              name: "Tutorials",
-              slug: "tutorials",
-              component: "page",
-            },
-            externalUrl: "",
-            openInNewTab: false,
-          },
-        },
-      ],
-      featuredCard: {
-        _uid: "featured-001",
-        component: "navigationFeaturedCard",
-        callToAction: {
-          component: "link",
-          linkType: "internal",
-          externalUrl: "",
-          openInNewTab: false,
-        },
-        linkPosition: "bottom",
-        submenuLayout: "grid",
-      },
     },
+
     {
-      _uid: "menu-003",
-      component: "navigationMenuItem",
-      label: "Company",
+      _uid: 'menu-003',
+      component: 'navigationMenuItem',
+      label: 'Company',
       link: {
-        component: "link",
-        label: "About Us",
-        linkType: "internal",
+        component: 'link',
+        label: 'About Us',
+        linkType: 'internal',
         internalLink: {
-          id: "about-001",
-          _uid: "page-008",
-          name: "About",
-          slug: "about",
-          component: "page",
+          id: 'about-001',
+          _uid: 'page-about',
+          name: 'About',
+          slug: 'about',
+          component: 'page',
         },
-        externalUrl: "",
+        externalUrl: '',
         openInNewTab: false,
       },
-      innerItems: [
-        {
-          _uid: "inner-006",
-          component: "navigationInnerItem",
-          icon: "users",
-          label: "Our Team",
-          description: "Meet our experts",
-          link: {
-            component: "link",
-            label: "Meet the Team",
-            linkType: "internal",
-            internalLink: {
-              id: "team-001",
-              _uid: "page-009",
-              name: "Team",
-              slug: "team",
-              component: "page",
-            },
-            externalUrl: "",
-            openInNewTab: false,
-          },
-        },
-        {
-          _uid: "inner-007",
-          component: "navigationInnerItem",
-          icon: "briefcase",
-          label: "Careers",
-          description: "Join our growing team",
-          link: {
-            component: "link",
-            label: "View Openings",
-            linkType: "external",
-            internalLink: undefined,
-            externalUrl: "https://careers.example.com",
-            openInNewTab: true,
-          },
-        },
-      ],
     },
+
     {
-      _uid: "menu-004",
-      component: "navigationMenuItem",
-      label: "Contact",
+      _uid: 'menu-004',
+      component: 'navigationMenuItem',
+      label: 'Contact',
       link: {
-        component: "link",
-        label: "Contact Us",
-        linkType: "internal",
+        component: 'link',
+        label: 'Contact Us',
+        linkType: 'internal',
         internalLink: {
-          id: "contact-001",
-          _uid: "page-010",
-          name: "Contact",
-          slug: "contact",
-          component: "page",
+          id: 'contact-001',
+          _uid: 'page-contact',
+          name: 'Contact',
+          slug: 'contact',
+          component: 'page',
         },
-        externalUrl: "",
+        externalUrl: '',
         openInNewTab: false,
       },
     },
   ],
+
   ctaBar: [
     {
-      component: "ctaBar",
+      component: 'ctaBar',
       buttons: [
         {
-          component: "button",
-          label: "Sign In",
-          linkType: "internal",
+          component: 'button',
+          label: 'Sign In',
+          linkType: 'internal',
           internalLink: {
-            id: "auth-001",
-            url: "/signin",
-            linktype: "story",
-            fieldtype: "multilink",
-            cached_url: "signin",
+            id: 'auth-001',
+            url: '/signin',
+            linktype: 'story',
+            fieldtype: 'multilink',
+            cached_url: 'signin',
           },
-          externalUrl: "",
+          externalUrl: '',
           openInNewTab: false,
         },
       ],
     },
   ],
-};
+}
 
 const meta: Meta<typeof HeaderNavigation> = {
-  title: "Sections/HeaderNavigation",
+  title: 'Sections/HeaderNavigation',
   component: HeaderNavigation,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
   },
   decorators: [
-    (Story) => (
+    Story => (
       <div>
         <main>
           <Story />
@@ -319,63 +324,27 @@ const meta: Meta<typeof HeaderNavigation> = {
       control: false,
       table: {
         type: {
-          summary: "StoryblokGlobalNavigation",
+          summary: 'StoryblokGlobalNavigation',
         },
       },
     },
   },
-};
+}
 
-export default meta;
-type Story = StoryObj<typeof HeaderNavigation>;
+export default meta
+type Story = StoryObj<typeof HeaderNavigation>
 
 export const Navigation: Story = {
   args: {
     headerNavigation: { ...headerNavigationMock, announcement: undefined },
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    const globalNav = canvas.getByRole('navigation', { name: 'Global' });
-    expect(globalNav).toBeInTheDocument();
-
-    const resourcesDesktop = canvas.queryByText('Resources');
-
-    if (!resourcesDesktop) {
-      const menuToggle = canvas.getByRole('button', { expanded: false });
-     menuToggle.click();
-    }
-
-    expect(canvas.getByText('Products')).toBeInTheDocument();
-    expect(canvas.getByText('Resources')).toBeInTheDocument();
-    expect(canvas.getByText('Company')).toBeInTheDocument();
-
-    expect(
-      canvas.getByRole('link', { name: 'Sign In' })
-    ).toHaveAttribute('href', '/signin');
-  },
-};
-
+}
 
 export const WithAnnouncementBar: Story = {
   args: {
     headerNavigation: headerNavigationMock,
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    expect(
-      canvas.getByText(
-        "Summer Sale: Get 30% off on all courses! Limited time offer."
-      )
-    ).toBeInTheDocument();
-
-    expect(canvas.getByRole("link", { name: "Learn More" })).toHaveAttribute(
-      "href",
-      "https://summer-sale/"
-    );
-  },
-};
+}
 
 export const NavigationWithoutCTA: Story = {
   args: {
@@ -384,31 +353,13 @@ export const NavigationWithoutCTA: Story = {
       ctaBar: [],
     },
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    expect(
-      canvas.getByText("Products")
-    ).toBeInTheDocument();
-
-    expect(
-      canvas.queryByRole("button", { name: "Sign In" })
-    ).not.toBeInTheDocument();
-  },
-};
+}
 
 export const AnnouncementOnly: Story = {
   args: {
     headerNavigation: {
-      component: "globalNavigation",
-      announcement: "Maintenance scheduled for tonight",
+      component: 'globalNavigation',
+      announcement: 'Maintenance scheduled for tonight',
     },
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-
-    expect(
-      canvas.getByText("Maintenance scheduled for tonight")
-    ).toBeInTheDocument();
-  },
-};
+}

@@ -1,39 +1,79 @@
+'use client'
 
-import type { FC } from 'react';
-import { StoryblokNavigationInnerItem, StoryblokNavigationMenuItem } from '../../../../../types/storyblok';
-import NavItem from '../navItem';
-import FeaturedCard from '../featuredCard';
+import type { FC } from 'react'
+import Link from 'next/link'
 
-const DropDownMenu: FC<StoryblokNavigationMenuItem> = ({ innerItems, spotlightCard, link, label }) => {
-  // Check if there are dropdown items
-  const hasItems = innerItems && innerItems.length > 0;
-  const hasSpotlight = spotlightCard;
-  
+import {
+  StoryblokNavigationMenuItem,
+  StoryblokMenuSection,
+  StoryblokNavigationInnerItem,
+} from '../../../../../types/storyblok'
+import { Icon } from '../../../../atoms'
+import { getLinkHref } from '../../../../../utils/getLinkHref'
+
+const DropDownMenu: FC<StoryblokNavigationMenuItem> = ({ menuSection }) => {
+  if (!menuSection || menuSection.length === 0) return null
+
   return (
-  <div
-    className="light w-full max-w-[1280px] mx-auto overflow-hidden shadow-lg flex flex-col lg:grid lg:grid-cols-[minmax(0,1fr)_auto] gap-4 lg:gap-6"
-    style={{
-      borderRadius: 'var(--Border-Radius-lg, 8px)',
-      border: '1px solid var(--borderColor-container-default, #EBEBEB)',
-      background: 'var(--Surface-background, #FFFCF3)'
-    }}
-  >
-    <div className="flex flex-col min-w-0 xl:min-w-[720px] gap-6 lg:gap-8 p-6 sm:p-8 xl:p-12">
-      <div className={`grid grid-cols-1 gap-6 lg:gap-8 min-w-0 ${hasSpotlight ? 'md:grid-cols-2 xl:grid-cols-2' : 'md:grid-cols-2 xl:grid-cols-3'}`}>
-        {innerItems && innerItems.map((menuItem: StoryblokNavigationInnerItem) => (
-          <NavItem key={menuItem._uid} {...menuItem} />
+    <div
+      className="w-fit bg-(--surface-background) min-w-[260px]"
+      
+    >
+      <div className="flex flex-col gap-6 p-(--scale-24)">
+        {menuSection.map((section: StoryblokMenuSection, sectionIndex) => (
+          <div key={section._uid} className="flex flex-col gap-4">
+            <p className="text-mono-sm   uppercase tracking-wide text-(--text-nav-item)">
+              {section.title}
+            </p>
+
+            <div className="flex flex-col gap-4">
+              {section.items.map((item: StoryblokNavigationInnerItem) => {
+               
+
+                return (
+                  <Link
+                    key={item._uid}
+                    href={getLinkHref(item.link)}
+                    target={item.link.openInNewTab ? '_blank' : '_self'}
+                    rel={
+                      item.link.openInNewTab
+                        ? 'noopener noreferrer'
+                        : undefined
+                    }
+                    className="flex cursor-pointer items-center gap-4"
+                  >
+                    {item.icon && (
+                      <div className="flex h-6 w-6 rounded-sm items-center justify-center  bg-(--color-alphas-dark-navy)/60">
+                        <Icon icon={item.icon} size={16} />
+                      </div>
+                    )}
+                    <span className="text-xs text-(--text-nav-item) whitespace-nowrap">
+                      {item.label}
+                    </span>
+                  </Link>
+                )
+              })}
+            </div>
+
+            {section.footer && (
+              <Link
+                href={
+                 getLinkHref(section.footer.link)
+                }
+                className="cursor-pointer text-sm font-medium text-(--text-link-active)"
+              >
+                {section.footer.label}
+              </Link>
+            )}
+
+            {sectionIndex < menuSection.length - 1 && (
+              <div className="h-px w-full bg-(--color-navy-primary-300)" />
+            )}
+          </div>
         ))}
       </div>
     </div>
-    {hasSpotlight && spotlightCard && (
-      <div className="lg:col-start-2 lg:p-6 xl:p-8 xl:pl-10 xl:border-l xl:border-secondary min-w-0 self-stretch h-full flex">
-        <div className="h-full w-full">
-          <FeaturedCard {...spotlightCard} />
-        </div>
-      </div>
-    )}
-  </div>
-  );
-};
+  )
+}
 
-export default DropDownMenu;
+export default DropDownMenu

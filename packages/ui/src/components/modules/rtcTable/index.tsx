@@ -57,7 +57,7 @@ export const RTCTable: FC<RTCTableProps> = ({ node, pageSize = 6 }) => {
 
   return (
     <div className="my-12 space-y-10">
-      <div className="overflow-x-auto bg-(--surface-background) md:p-(--padding-40-32-32) py-(--padding-top-bottom-sectional-full) px-(--padding-side-sectional-80-64-16)">
+      <div className="overflow-x-auto bg-(--surface-background) md:p-(--padding-40-32-32) py-(--padding-top-bottom-sectional-full) section-padding-xl-left-right">
         <table className="w-full border-collapse">
           <thead>
             <tr>

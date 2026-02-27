@@ -17,10 +17,11 @@ export interface ContentBlockBlok extends SbBlokData {
 }
 
 interface ContentBlockProps {
-  blok: ContentBlockBlok
+  blok: ContentBlockBlok, 
+  headingSize?:string
 }
 
-export function ContentBlock({ blok }: ContentBlockProps) {
+export function ContentBlock({ blok, headingSize }: ContentBlockProps) {
   const {
     eyebrow,
     heading,
@@ -50,7 +51,12 @@ export function ContentBlock({ blok }: ContentBlockProps) {
             <Heading
               as="h1"
               heading={heading}
-              className="text-display-5xl mb-4"
+              className={
+                twMerge(
+                  "mb-4 lg:max-w-200",
+                  headingSize || 'text-display-5xl'
+                )
+              }
             />
           )}
 

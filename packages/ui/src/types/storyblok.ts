@@ -1,6 +1,7 @@
 // Basic Storyblok types for the frontend
 
 import { StoryblokRichTextNode } from "@storyblok/react";
+import { CTABarProps } from "../components/modules/ctaBar";
 
 export interface StoryblokStory<T = any> {
   id: number;
@@ -66,6 +67,7 @@ export interface StoryblokGlobalNavigation {
   component: 'globalNavigation';
   announcement?: string;
   announcementIcon?: string;
+  logo? : StoryblokAsset;
   announcementLink?: {
     component: 'button';
     label: string;
@@ -82,23 +84,7 @@ export interface StoryblokGlobalNavigation {
   }[];
   announcementTheme?: string;
   menuItems?: StoryblokNavigationMenuItem[];
-  ctaBar?: {
-    component: 'ctaBar';
-    buttons: {
-      component: 'button';
-      label: string;
-      linkType: 'internal' | 'external';
-      internalLink?: {
-        id: string;
-        url: string;
-        linktype: 'story';
-        fieldtype: 'multilink';
-        cached_url: string;
-      };
-      externalUrl: string;
-      openInNewTab: boolean;
-    }[];
-  }[];
+  ctaBar?: CTABarProps[];
 }
 
 export interface StoryblokNavigationMenuItem {
@@ -119,7 +105,7 @@ export interface StoryblokNavigationMenuItem {
     externalUrl: string;
     openInNewTab: boolean;
   };
-  innerItems?: StoryblokNavigationInnerItem[];
+  menuSection?: StoryblokMenuSection[];
   spotlightCard?: StoryblokNavigationSpotlightCard;
   featuredCard?: StoryblokNavigationFeaturedCard;
 }
@@ -127,9 +113,9 @@ export interface StoryblokNavigationMenuItem {
 export interface StoryblokNavigationInnerItem {
   _uid: string;
   component: 'navigationInnerItem';
-  icon: string;
+  icon?: string;
   label: string;
-  description: string;
+  description?: string;
   link: {
     component: 'link';
     label: string;
@@ -145,7 +131,16 @@ export interface StoryblokNavigationInnerItem {
     openInNewTab: boolean;
   };
 }
-
+export interface StoryblokMenuSection {
+  _uid: string;
+  component: 'menuSection';
+  title: string;
+  items: StoryblokNavigationInnerItem[];
+  footer?: {
+    label: string;
+    link?: StoryblokNavigationInnerItem['link'];
+  };
+}
 export interface StoryblokNavigationSpotlightCard {
   _uid: string;
   component: 'navigationSpotlightCard';
