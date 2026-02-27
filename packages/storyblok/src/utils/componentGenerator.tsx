@@ -11,6 +11,9 @@ import {
   AwardsBlade,
   Accordion,
   Hero,
+  ContentBlock,
+  TestimonialSlider,
+  TestimonialSliderBlok,
 } from "@repo/ui";
 import type { SbBlokData } from "@storyblok/react/rsc";
 import type { FC } from "react";
@@ -41,11 +44,18 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
 
     case "headingBlock":
       return <HeadingBlock key={component._uid} {...component} />;
-    case "marketingHero":
+    case "listingHero":
       return <Hero key={component._uid} blok={component} />;
+    case "testimonialSlider":
+      return (
+        <TestimonialSlider
+          key={component._uid}
+          blok={component as unknown as TestimonialSliderBlok}
+        />
+      );
 
-    case "switchback":
-      // return <Switchback key={component._uid} {...component} />;
+    // case "switchback":
+    // return <Switchback key={component._uid} {...component} />;
 
     case "iconCardDeck":
       return (
@@ -203,7 +213,7 @@ export const ComponentGenerator: FC<componentGeneratorProps> = ({
         const nextSection = index < arr.length - 1 ? arr[index + 1] : null;
 
         return (
-          <Section
+          <div
             key={section._uid}
             {...sectionProps}
             // isFirstSection={!skipFirstSectionSpacing && index === 0}
@@ -213,7 +223,7 @@ export const ComponentGenerator: FC<componentGeneratorProps> = ({
             id={section.htmlId as string}
           >
             {getComponent(section, rels)}
-          </Section>
+          </div>
         );
       })}
     </div>

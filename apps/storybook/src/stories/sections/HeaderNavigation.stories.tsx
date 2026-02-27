@@ -5,7 +5,6 @@ import type { HeaderNavigationProps } from '@repo/ui'
 
 const headerNavigationMock: HeaderNavigationProps['headerNavigation'] = {
   component: 'globalNavigation',
-  announcement: 'Summer Sale: Get 30% off on all courses! Limited time offer.',
   announcementIcon: 'megaphone',
   announcementTheme: 'success',
   announcementLink: [
@@ -48,7 +47,7 @@ const headerNavigationMock: HeaderNavigationProps['headerNavigation'] = {
       menuSection: [
         {
           _uid: 'section-product',
-          component: 'menuSection',
+          component: 'navigationMenuSection',
           title: 'OUR PRODUCT',
           items: [
             {
@@ -116,7 +115,7 @@ const headerNavigationMock: HeaderNavigationProps['headerNavigation'] = {
 
         {
           _uid: 'section-integrations',
-          component: 'menuSection',
+          component: 'navigationMenuSection',
           title: 'INTEGRATIONS',
           items: [
             {
@@ -177,9 +176,7 @@ const headerNavigationMock: HeaderNavigationProps['headerNavigation'] = {
               },
             },
           ],
-          footer: {
-            label: 'View All Integrations',
-            link: {
+         ctaLink : {
               component: 'link',
               label: 'View All Integrations',
               linkType: 'internal',
@@ -193,7 +190,6 @@ const headerNavigationMock: HeaderNavigationProps['headerNavigation'] = {
               externalUrl: '',
               openInNewTab: false,
             },
-          },
         },
       ],
 
@@ -355,11 +351,3 @@ export const NavigationWithoutCTA: Story = {
   },
 }
 
-export const AnnouncementOnly: Story = {
-  args: {
-    headerNavigation: {
-      component: 'globalNavigation',
-      announcement: 'Maintenance scheduled for tonight',
-    },
-  },
-}

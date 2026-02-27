@@ -54,6 +54,7 @@ export function ContentBlock({ blok, headingSize }: ContentBlockProps) {
               className={
                 twMerge(
                   "mb-4 lg:max-w-200",
+                  layout === 'stacked' && 'mx-auto',
                   headingSize || 'text-display-5xl'
                 )
               }
@@ -61,7 +62,15 @@ export function ContentBlock({ blok, headingSize }: ContentBlockProps) {
           )}
 
           {layout !== 'split' && subheading && (
-            <p className="text-sm mb-4 text-(--text-body-dark)">
+            <p className=
+            {
+              twMerge(
+                  layout === 'stacked' && 'mx-auto',
+                                              "text-sm mb-4 text-(--text-body-dark) max-w-[600px]"
+
+
+              )
+            }>
               {subheading}
             </p>
           )}

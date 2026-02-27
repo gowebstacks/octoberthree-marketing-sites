@@ -46,12 +46,12 @@ const AccordionContent: FC<AccordionContentProps> = ({
               <NavItem key={menuItem._uid} {...menuItem} isMobile />
             ))}
 
-            {section.footer && (
+            {section.ctaLink && (
               <Link
-                href={getLinkHref(section.footer.link)}
+                href={getLinkHref(section.ctaLink)}
                 className="cursor-pointer text-xs font-medium text-(--text-link-active)"
               >
-                {section.footer.label}
+                {section.ctaLink.label}
               </Link>
             )}
           </div>

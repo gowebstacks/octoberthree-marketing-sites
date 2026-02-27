@@ -31,7 +31,7 @@ export const IconCardDeck: FC<IconCardDeckProps> = ({
       id={htmlId}
       className="section-padding-xl bg-(--surface-background)"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
         <div className="flex flex-col gap-12 sm:gap-16">
 
           {content?.length ? (

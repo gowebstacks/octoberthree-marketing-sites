@@ -22,7 +22,7 @@ export const HeaderNavigation: React.FC<HeaderNavigationProps> = ({
   headerNavigation,
 }) => {
   return (
-    <header className="w-full transition-all duration-300 ease-in-out">
+    <header className="w-full transition-all duration-300 ease-in-out bg-(--surface-navbar)">
       {headerNavigation?.announcement && (
         <AnnouncementBar
           announcement={headerNavigation.announcement}
@@ -41,8 +41,8 @@ export const HeaderNavigation: React.FC<HeaderNavigationProps> = ({
           items-center
         "
       >
-        <div className="h-full lg:basis-auto lg:shrink-0 lg:grow-0 flex items-center">
-          {headerNavigation?.logo?.filename ? (
+        <div className="h-full lg:basis-auto lg:shrink-0 lg:grow-0 flex items-center text-black!">
+          {/* {headerNavigation?.logo?.filename ? (
             <Link href={"/"} aria-label="Home">
               <Image
                 asset={{
@@ -53,7 +53,8 @@ export const HeaderNavigation: React.FC<HeaderNavigationProps> = ({
               />
             </Link>
           ) : 'Logo Placeholder'
-        }
+        } */}
+        Logo Placeholder
         </div>
 
         {headerNavigation?.menuItems && (

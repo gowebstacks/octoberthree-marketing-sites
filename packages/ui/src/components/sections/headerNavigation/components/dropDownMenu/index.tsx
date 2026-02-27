@@ -55,14 +55,14 @@ const DropDownMenu: FC<StoryblokNavigationMenuItem> = ({ menuSection }) => {
               })}
             </div>
 
-            {section.footer && (
+            {section.ctaLink&& (
               <Link
                 href={
-                 getLinkHref(section.footer.link)
+                 getLinkHref(section.ctaLink)
                 }
                 className="cursor-pointer text-sm font-medium text-(--text-link-active)"
               >
-                {section.footer.label}
+                {section.ctaLink.label}
               </Link>
             )}
 

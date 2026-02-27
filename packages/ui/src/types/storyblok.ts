@@ -65,7 +65,7 @@ export interface StoryblokRelation {
 // Storyblok Global Navigation types
 export interface StoryblokGlobalNavigation {
   component: 'globalNavigation';
-  announcement?: string;
+  announcement?: RichTextContent;
   announcementIcon?: string;
   logo? : StoryblokAsset;
   announcementLink?: {
@@ -133,13 +133,10 @@ export interface StoryblokNavigationInnerItem {
 }
 export interface StoryblokMenuSection {
   _uid: string;
-  component: 'menuSection';
+  component: 'navigationMenuSection';
   title: string;
   items: StoryblokNavigationInnerItem[];
-  footer?: {
-    label: string;
-    link?: StoryblokNavigationInnerItem['link'];
-  };
+  ctaLink?: StoryblokNavigationInnerItem['link'];
 }
 export interface StoryblokNavigationSpotlightCard {
   _uid: string;

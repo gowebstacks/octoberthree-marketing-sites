@@ -50,7 +50,7 @@ const Icon = ({ icon, size = 24, className, strokeWidth = 1, spriteType, ...prop
 
   return (
     <svg
-    shape-rendering="auto"
+    shapeRendering="auto"
       width={size}
       height={size}
       viewBox="0 0 24 24"

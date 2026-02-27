@@ -61,14 +61,12 @@ export async function Layout({ children }: LayoutProps) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-(--bgColor-default) text-(--fgColor-default)" style={{ fontFamily: 'var(--fontStack-sansSerif)' }}>
+    <>
       <HeaderNavigation headerNavigation={headerNavigation} />
-      
       <main className="grow">
         {children}
       </main>
-      
-      <FooterNavigation />
-    </div>
+      <FooterNavigation/>
+      </>
   );
 };

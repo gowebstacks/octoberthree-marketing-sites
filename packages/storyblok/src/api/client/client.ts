@@ -7,11 +7,10 @@ const STORYBLOK_API_URL = 'https://api.storyblok.com/v2/cdn';
 const getAccessToken = (version: string = 'published') => {
   // For draft/preview content, only use the preview token
   if (version === 'draft') {
-    
     return process.env.STORYBLOK_PREVIEW_ACCESS_TOKEN;
   }
   // For published content, use the public token
-  return process.env.STORYBLOK_PUBLIC_ACCESS_TOKEN;
+  return 'd0o0iv3cDTMUXB1yItM2FQtt';
 };
 
 // Build URLSearchParams safely from mixed-type params
@@ -112,7 +111,6 @@ export async function getWebsitePageBySlug(slug: string, isDraft: boolean = fals
   if (!slug || slug.startsWith('.') || slug.includes('/') && slug.split('/').some(part => part.startsWith('.'))) {
     return null;
   }
-
   try {
     // First, get all website pages and find the one with matching SEO slug
     const stories = await getAllWebsitePages(isDraft);

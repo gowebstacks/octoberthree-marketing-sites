@@ -5,45 +5,23 @@ import Slider from "react-slick";
 import { storyblokEditable } from "@storyblok/react";
 import type { SbBlokData } from "@storyblok/react";
 import { Attribution, SliderControls } from "../../molecules";
-import { Eyebrow, Heading } from "../../atoms";
+import { Eyebrow, EyebrowBlockProps, Heading } from "../../atoms";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { TestimonialBlok } from "../../modules";
 
-interface TestimonialSliderBlok extends SbBlokData {
-  eyebrow?: {
-    _uid: string;
-    component: "eyebrow";
-    eyebrow: string;
-    elementType?:
-      | "h6"
-      | "div"
-      | "p"
-      | "span"
-      | "h1"
-      | "h2"
-      | "h3"
-      | "h4"
-      | "h5";
-  }[];
+ export interface TestimonialSliderBlok extends SbBlokData {
+  eyebrow?: EyebrowBlockProps[];
   heading?: string;
-  testimonials: {
-    _uid: string;
-    quote: string;
-    author?: {
-      name?: string;
-      role?: string;
-    };
-    brandLogo?: {
-      filename: string;
-      alt?: string;
-    };
-  }[];
+   testimonials: TestimonialBlok[];
+
 }
 
 interface TestimonialSliderProps {
   blok: TestimonialSliderBlok;
 }
+
 
 export function TestimonialSlider({ blok }: TestimonialSliderProps) {
   const desktopSliderRef = useRef<Slider | null>(null);
@@ -78,6 +56,8 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
     beforeChange: (_: number, next: number) => setCurrentIndex(next),
   };
 
+
+  console.log(blok, "inside testimonial slider")
   return (
     <section
       {...storyblokEditable(blok)}
@@ -144,11 +124,12 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
                     >
                       {testimonial.brandLogo?.filename && (
                         <div className="mb-8">
-                          <img
+                          {/* <img
                             src={testimonial.brandLogo.filename}
                             alt={testimonial.brandLogo.alt || ""}
                             className="h-8 object-contain"
-                          />
+                          /> */}
+                          Logo placeholder
                         </div>
                       )}
 
@@ -159,7 +140,7 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
                       <div className="mt-10 border-t border-(--stroke-primary) pt-6">
                         <p className="text-(--text-headings) text-md">
                           {testimonial.author?.name} at{" "}
-                          {testimonial.author?.role}
+                          {testimonial.author?.role?.label}
                         </p>
                       </div>
                     </div>
@@ -186,7 +167,7 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
                   <Attribution
                     name={testimonial.author?.name}
                     role={{
-                      label: testimonial.author?.role || "",
+                      label: testimonial.author?.role?.label || "",
                       variant: "orange",
                     }}
                     avatarSrc={testimonial.brandLogo?.filename}

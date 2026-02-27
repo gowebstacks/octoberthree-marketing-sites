@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import type { FC } from "react";
-import { twMerge } from "tailwind-merge";
 
 type AvatarProps = {
   src?: string;
@@ -17,11 +16,13 @@ export const Avatar: FC<AvatarProps> = ({ src, alt, rounded }) => {
 
   return (
     <div
-      className={
-        twMerge(
-          " flex h-12 w-12  items-center justify-center overflow-hidden  bg-(--surface-card text-(--text-body)",
-          rounded ? 'rounded-full' : 'rounded-sm'
-        )
+      className={`
+        flex h-12 w-12 items-center justify-center
+        overflow-hidden 
+        bg-(--surface-card)
+        text-(--text-body)
+        ${rounded ? 'rounded-full' :'rounded-sm' }
+      `
       }
       role="img"
       aria-label={alt || "Avatar"}
@@ -32,7 +33,7 @@ export const Avatar: FC<AvatarProps> = ({ src, alt, rounded }) => {
           alt={alt || "Avatar"}
           width={48}
           height={48}
-          className="h-full w-full object-contain"
+          className="h-full w-full object-cover"
         />
       ) : (
         <span className="text-sm font-medium leading-none">{fallbackText}</span>

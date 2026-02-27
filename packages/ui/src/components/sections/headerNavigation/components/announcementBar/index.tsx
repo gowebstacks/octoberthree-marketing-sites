@@ -1,9 +1,12 @@
 import { FC } from "react";
 import { Button, Icon, Link } from "../../../../atoms";
 import { getLinkHref } from "../../../../../utils/getLinkHref";
+import { RichText } from "../../../../molecules/richText/richText";
+import { RichTextContent } from "../../../../../types/storyblok";
+import { isRichTextEmpty } from "../../../../../utils/checkRichText";
 
 export interface AnnouncementProps {
-  announcement?: string;
+  announcement?: RichTextContent;
   announcementLink?: any;
 }
 
@@ -11,15 +14,14 @@ export const AnnouncementBar: FC<AnnouncementProps> = ({
   announcement,
   announcementLink,
 }) => {
-  if (!announcement) return null;
+  if (isRichTextEmpty(announcement)) return null
 
   return (
     <div className="w-full bg-(--surface-accent-background) text-(--text-headings) border-b border-(--stroke-primary)">
       <div className="flex justify-between items-center px-8 py-2   max-w-(--widths-1440-834-375)  mx-auto">
        <div className="flex gap-2 text-sm flex-col lg:flex-row">
          <Icon icon="announcement-02" size={16} />
-         <p>{announcement}</p>
-
+          <RichText doc={announcement}/>
 
         {announcementLink && (
           <Link

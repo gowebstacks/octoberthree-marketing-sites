@@ -70,7 +70,6 @@ const MobileNavigation: FC<MobileNavigationProps> = ({ menuItems, ctaBar }) => {
         className="w-full border-t border-(--stroke-primary) bg-(--surface-background)"
       >
         <div className="flex flex-col gap-24">
-          {/* Main navigation */}
           <div className="flex flex-col bg-(--surface-background)">
             {menuItems?.map((mainItem) => (
               <Item
@@ -85,7 +84,7 @@ const MobileNavigation: FC<MobileNavigationProps> = ({ menuItems, ctaBar }) => {
 
          {
           ctaBar &&
-          <div className="px-(--scale-16) pb-8">
+          <div className="px-(--scale-16) pb-8 sm:hidden">
              {ctaBar?.map((ctaGroup, index) => (
             <CTABar key={index} buttons={ctaGroup.buttons} />
           ))}

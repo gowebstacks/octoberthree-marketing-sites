@@ -2,6 +2,7 @@ import { twMerge } from 'tailwind-merge';
 
 import type { ComponentPropsWithoutRef, FC } from 'react';
 import parseUrl from '../../../utils/parseUrl';
+import { getLinkHref } from '../../../utils/getLinkHref';
 
 // Storyblok link data structure
 export type StoryblokLink = {
@@ -104,7 +105,7 @@ export const shouldOpenInNewTab = (link?: LinkFragment | string | null): boolean
 };
 
 export const Link: FC<LinkProps> = ({ children, href, className, disableFocus, ...props }) => {
-  const linkData = getLinkData(href);
+  const linkData = getLinkHref(href);
   
   // Don't render if there's no valid link
   if (!linkData) {
