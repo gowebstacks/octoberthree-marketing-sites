@@ -21,7 +21,7 @@ The structure was later extended and customized:
 
 .
 ├── apps
-│   ├── web         # Default
+│   ├── web        
 │   ├── main        
 │   ├── rlc         
 │   ├── edge       
