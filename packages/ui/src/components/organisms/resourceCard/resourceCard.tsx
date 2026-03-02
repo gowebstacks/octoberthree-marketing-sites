@@ -2,9 +2,10 @@ import type { FC } from 'react';
 import { getResourceRoute, RESOURCE_TYPE_LABELS } from '../../../lib';
 import { Button, Heading, Link } from '../../atoms';
 import Image from '../../molecules/image';
+import { SbBlokData, storyblokEditable } from '@storyblok/react';
 
 // Universal resource type that handles blogs, case studies, webinars, and press releases
-export interface ResourceCardProps {
+export interface ResourceCardProps extends SbBlokData {
   _id: string;
   _type: 'blogPost' | 'caseStudy' | 'webinar' | 'pressRelease';
   title: string;
@@ -103,7 +104,7 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
   const resourceUrl = `${getResourceRoute(_type)}/${resourceSlug}`;
   
   return (
-    <Link href={resourceUrl} className="group sm:max-w-[330px] relative flex h-full flex-col overflow-hidden transition-all duration-200 hover:border-(--stroke-card-hover) bg-(--surface-card) border  border-(--stroke-card)">
+    <Link href={resourceUrl} {...storyblokEditable}  className="group  relative flex h-full flex-col overflow-hidden transition-all duration-200 hover:border-(--stroke-card-hover) bg-(--surface-card) border  border-(--stroke-card)">
       {/* Featured Image */}
       {displayImage && (
         <div className="relative aspect-video overflow-hidden">

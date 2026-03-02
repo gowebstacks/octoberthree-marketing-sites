@@ -255,7 +255,7 @@ export async function getPersonById(id: string, isDraft: boolean = false) {
 }
 
 // Get all global navigation items
-export async function getAllGlobalNavigations(isDraft: boolean = false) {
+export async function getAllGlobalNavigations(isDraft: boolean = false, filterBy:string) {
   try {
     const accessToken = getAccessToken(isDraft ? 'draft' : 'published');
     
@@ -268,6 +268,7 @@ export async function getAllGlobalNavigations(isDraft: boolean = false) {
     const queryParams = new URLSearchParams({
       token: accessToken,
       content_type: 'globalNavigation',
+      starts_with: filterBy,
       per_page: '100',
       version: isDraft ? 'draft' : 'published',
       resolve_relations: 'button,ctaBar,headingBlock', // Resolve button, ctaBar, and headingBlock references
@@ -305,9 +306,9 @@ export async function getGlobalNavigationById(id: string, isDraft: boolean = fal
 }
 
 // Get the latest global navigation (most recent one)
-export async function getLatestGlobalNavigation(isDraft: boolean = false) {
+export async function getLatestGlobalNavigation(isDraft: boolean = false, filterBy :string) {
   try {
-    const stories = await getAllGlobalNavigations(isDraft);
+    const stories = await getAllGlobalNavigations(isDraft, filterBy);
     if (stories.length === 0) {
       return null;
     }

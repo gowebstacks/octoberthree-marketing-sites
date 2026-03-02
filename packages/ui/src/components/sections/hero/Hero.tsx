@@ -17,7 +17,7 @@ export interface HeroBlok extends SbBlokData {
 export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
   return (
     <section {...storyblokEditable(blok)} className="section-padding-xl bg-(--surface-background)">
-      <div className="mx-auto grid  grid-cols-1 gap-16 lg:grid-cols-2 items-center">
+      <div className="mx-auto grid max-w-7xl  grid-cols-1 gap-16 lg:grid-cols-2 items-center">
 
         <div >
           {blok.content?.map((nestedBlok) => (

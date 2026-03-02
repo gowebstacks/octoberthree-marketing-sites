@@ -7,6 +7,7 @@ import { twMerge } from 'tailwind-merge'
 
 import { ContentBlock, type ContentBlockBlok } from '../../organisms'
 import { Video, type VideoBlok } from '../../modules'
+import { storyblokLoader } from '../../../utils/storyblokImageLoader'
 
 export interface SwitchbackBlok extends SbBlokData {
   content?: ContentBlockBlok[]
@@ -16,7 +17,7 @@ export interface SwitchbackBlok extends SbBlokData {
     alt?: string
   }
   video?: VideoBlok
-  variant?: 'left' | 'right'
+  reverse?: boolean
 }
 
 export const Switchback: FC<{ blok: SwitchbackBlok }> = ({ blok }) => {
@@ -25,12 +26,14 @@ export const Switchback: FC<{ blok: SwitchbackBlok }> = ({ blok }) => {
     mediaType = 'image',
     image,
     video,
-    variant = 'right',
+    reverse = 'right',
   } = blok
 
-  const isReversed = variant === 'left'
+  const isReversed = reverse 
+
 
   const renderMedia = () => {
+    console.log(image, "image here", "____________")
     if (mediaType === 'image' && image?.filename) {
       const match = image.filename.match(/\/(\d+)x(\d+)\//)
       const width = match ? Number(match[1]) : 592
@@ -38,6 +41,7 @@ export const Switchback: FC<{ blok: SwitchbackBlok }> = ({ blok }) => {
 
       return (
         <Image
+        loader={storyblokLoader}
           src={image.filename}
           alt={image.alt ?? ''}
           width={width}
