@@ -14,6 +14,9 @@ import {
   ContentBlock,
   TestimonialSlider,
   TestimonialSliderBlok,
+  ConversionPanel,
+  ConversionPanelProps,
+  ResourceCardDeck,
 } from "@repo/ui";
 import type { SbBlokData } from "@storyblok/react/rsc";
 import type { FC } from "react";
@@ -53,9 +56,18 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
           blok={component as unknown as TestimonialSliderBlok}
         />
       );
+    case "conversionPanel":
+      return (
+        <ConversionPanel
+          key={component._uid}
+          {...(component as ConversionPanelProps)}
+        />
+      );
 
-    // case "switchback":
-    // return <Switchback key={component._uid} {...component} />;
+    case "switchback":
+    return <Switchback key={component._uid} blok={component} />;
+    case "resourceCardDeck":
+    return <ResourceCardDeck key={component._uid} {...component} />;
 
     case "iconCardDeck":
       return (

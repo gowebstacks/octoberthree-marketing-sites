@@ -32,7 +32,7 @@ export default async function RootLayout({
   
   try {
     console.log("calling latest global nav")
-    const storyblokNav = await getLatestGlobalNavigation(true);
+    const storyblokNav = await getLatestGlobalNavigation(true, 'octoberthree-main');
     if (storyblokNav) {
       headerNavigation = storyblokNav.content 
     }

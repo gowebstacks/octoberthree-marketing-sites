@@ -40,7 +40,7 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
     swipe: true,
     adaptiveHeight: true,
     centerMode: true,
-    centerPadding: "140px",
+    centerPadding: "180px",
     beforeChange: (_: number, next: number) => setCurrentIndex(next),
   };
 
@@ -57,7 +57,6 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
   };
 
 
-  console.log(blok, "inside testimonial slider")
   return (
     <section
       {...storyblokEditable(blok)}
@@ -72,10 +71,11 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
         }}
       />
 
-      <div className="relative mx-auto max-w-300 flex flex-col items-center gap-12">
+      <div className="relative mx-auto max-w-7xl w-full flex flex-col items-center gap-12">
         <div className="text-center hidden lg:block">
           {blok.eyebrow?.[0] && (
             <Eyebrow
+            {...storyblokEditable}
               {...blok.eyebrow[0]}
               className="text-(--text-headings-light)! text-center"
             />
@@ -83,11 +83,14 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
 
           {blok.heading && (
             <Heading
+            {...storyblokEditable}
               as="h2"
               size="4xl"
               className="text-(--text-headings-light)! mt-4 max-w-200 mx-auto"
             >
-              {blok.heading}
+              <span {...storyblokEditable}>
+                {blok.heading}
+              </span>
             </Heading>
           )}
         </div>
@@ -110,7 +113,7 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
               const zIndex = isActive ? 100 : isNext ? 0 : 1;
 
               return (
-                <div key={testimonial._uid} className="px-4">
+                <div {...storyblokEditable} key={testimonial._uid} className="px-4">
                   <div
                     className="relative will-change-transform transition-transform duration-500 ease-out"
                     style={{ transform, zIndex }}
@@ -133,12 +136,12 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
                         </div>
                       )}
 
-                      <Heading size="4xl">
+                      <Heading {...storyblokEditable} size="4xl">
                         <blockquote>“{testimonial.quote}”</blockquote>
                       </Heading>
 
                       <div className="mt-10 border-t border-(--stroke-primary) pt-6">
-                        <p className="text-(--text-headings) text-md">
+                        <p {...storyblokEditable} className="text-(--text-headings) text-md">
                           {testimonial.author?.name} at{" "}
                           {testimonial.author?.role?.label}
                         </p>

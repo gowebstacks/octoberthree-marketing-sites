@@ -3,27 +3,28 @@ import { storyblokEditable, SbBlokData } from "@storyblok/react";
 import { Heading, Button } from "../../atoms";
 import { RichText } from "../../molecules/richText/richText";
 import { ButtonProps } from "../../atoms/button";
+import { CTABarProps } from "../../modules/ctaBar";
 
-interface ConversionPanelProps extends SbBlokData {
+export interface ConversionPanelProps extends SbBlokData {
   heading: string;
   description?: any;
-  buttons?: ButtonProps[];
+  cta?: CTABarProps[];
 }
 
 export const ConversionPanel: FC<ConversionPanelProps> = ({
   heading,
   description,
-  buttons,
-  ...blok
+  cta,
+  ...blok 
 }) => {
-  const slicedButtons = buttons?.slice(0, 2);
+  const slicedcta = cta?.[0].buttons?.slice(0, 2);
 
   return (
     <section
       {...storyblokEditable(blok)}
       className="w-full bg-(--surface-background) section-padding-xl"
     >
-      <div className="w-full rounded-md flex bg-(--surface-secondary-background) flex-col md:items-center text-center section-padding-xl-top-bottom md:px-12 px-4">
+      <div className="w-full mx-auto max-w-7xl rounded-md flex bg-(--surface-secondary-background) flex-col md:items-center text-center section-padding-xl-top-bottom md:px-12 px-4">
         <Heading
           as="h2"
           headingSize="6xl"
@@ -38,9 +39,9 @@ export const ConversionPanel: FC<ConversionPanelProps> = ({
           </div>
         )}
 
-        {slicedButtons && slicedButtons.length > 0 && (
+        {slicedcta && slicedcta.length > 0 && (
           <div className="flex flex-col sm:flex-row gap-4">
-            {slicedButtons.map((button, index) => (
+            {slicedcta.map((button, index) => (
               <Button
                 key={button._uid}
                 href={button.href}
