@@ -3,6 +3,7 @@ import { twJoin, twMerge } from 'tailwind-merge';
 
 import type { ImageProps as NextImageProps } from 'next/image';
 import type { FC } from 'react';
+import { storyblokLoader } from '../../../utils/storyblokImageLoader';
 
 export type ImageFragment = {
   _type?: string;
@@ -83,6 +84,7 @@ const Image: FC<ImageProps> = ({
       }}
     >
       <NextImage
+      loader={storyblokLoader}
         src={asset?.url}
         alt={alt || ''}
         title={caption || ''}

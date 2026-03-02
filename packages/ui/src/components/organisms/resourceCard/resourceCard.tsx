@@ -102,6 +102,8 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
   const badgeLabel = RESOURCE_TYPE_LABELS[_type] || 'Article';
   
   const resourceUrl = `${getResourceRoute(_type)}/${resourceSlug}`;
+
+  console.log(featuredImage, "tetetetteteteteetteteetetetet")
   
   return (
     <Link href={resourceUrl} {...storyblokEditable}  className="group  relative flex h-full flex-col overflow-hidden transition-all duration-200 hover:border-(--stroke-card-hover) bg-(--surface-card) border  border-(--stroke-card)">
@@ -110,6 +112,9 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
         <div className="relative aspect-video overflow-hidden">
           <Image
             {...displayImage} 
+            asset={{
+              url: displayImage.filename
+            }}
             alt={displayImage?.alt || title || 'Resource'} 
             objectCover 
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
