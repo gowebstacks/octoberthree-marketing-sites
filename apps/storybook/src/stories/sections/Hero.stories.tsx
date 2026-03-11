@@ -25,7 +25,7 @@ const contentBlockBlok: ContentBlockBlok = {
       elementType: 'h6',
     },
   ],
-  heading: 'Where performance meets possibility',
+  // heading: 'Where performance meets possibility', 
   subheading: 'Everything you need to ship modern interfaces',
   content: {
     type: 'doc',

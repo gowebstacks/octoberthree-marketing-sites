@@ -13,30 +13,27 @@ interface IconCardRow {
 }
 
 export interface IconCardDeckProps extends SbBlokData {
-  content?: ContentBlockBlok[]
+  body?: ContentBlockBlok[]
   rows?: IconCardRow[]
   htmlId?: string
   minHeight?: 'none' | 'sm' | 'md' | 'lg'
 }
 
 export const IconCardDeck: FC<IconCardDeckProps> = ({
-  content,
+  body,
   rows,
   htmlId,
   ...blok
 }) => {
   return (
-    <section
-      {...storyblokEditable(blok)}
-      id={htmlId}
-      className="section-padding-xl bg-(--surface-background)"
-    >
-      <div className="max-w-7xl mx-auto">
+   
+      <div className="max-w-(--widths-1440-834-375) mx-auto"  {...storyblokEditable(blok)}
+      id={htmlId}>
         <div className="flex flex-col gap-12 sm:gap-16">
 
-          {content?.length ? (
+          {body?.length ? (
             <div className="flex flex-col gap-8">
-              {content.map((nestedBlok) => (
+              {body.map((nestedBlok) => (
                 <ContentBlock
                   key={nestedBlok._uid}
                   blok={nestedBlok}
@@ -87,6 +84,5 @@ export const IconCardDeck: FC<IconCardDeckProps> = ({
 
         </div>
       </div>
-    </section>
   )
 }

@@ -52,7 +52,7 @@ export const TabbedSwitcher = ({ blok }: TabbedSwitcherProps) => {
             onClick={() => setActiveIndex(index)}
           >
             <div className="grid w-full grid-cols-1 gap-16">
-              <ContentBlock blok={tab.content} headingSize="3xl" />
+              <ContentBlock blok={tab.content} />
 
               <div className="relative w-full aspect-square overflow-hidden">
                 <Image
@@ -70,7 +70,7 @@ export const TabbedSwitcher = ({ blok }: TabbedSwitcherProps) => {
 
       <div className="hidden md:block mt-(--gaps-32-24-24)">
         <div className="mx-auto grid w-full grid-cols-1 gap-16 lg:grid-cols-2 items-center">
-          <ContentBlock blok={activeTab.content} headingSize="3xl" />
+          <ContentBlock blok={activeTab.content}  />
 
           <div className="relative w-full aspect-square overflow-hidden">
             <Image

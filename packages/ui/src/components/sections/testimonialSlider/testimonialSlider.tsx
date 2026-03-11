@@ -10,18 +10,17 @@ import { Eyebrow, EyebrowBlockProps, Heading } from "../../atoms";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { TestimonialBlok } from "../../modules";
+import { HeadingBlok } from "../../atoms/heading";
 
- export interface TestimonialSliderBlok extends SbBlokData {
+export interface TestimonialSliderBlok extends SbBlokData {
   eyebrow?: EyebrowBlockProps[];
-  heading?: string;
-   testimonials: TestimonialBlok[];
-
+  heading?: HeadingBlok[];
+  testimonials: TestimonialBlok[];
 }
 
 interface TestimonialSliderProps {
   blok: TestimonialSliderBlok;
 }
-
 
 export function TestimonialSlider({ blok }: TestimonialSliderProps) {
   const desktopSliderRef = useRef<Slider | null>(null);
@@ -56,11 +55,10 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
     beforeChange: (_: number, next: number) => setCurrentIndex(next),
   };
 
-
   return (
-    <section
+    <div
       {...storyblokEditable(blok)}
-      className="relative w-full section-padding-xl bg-(--surface-background) lg:bg-(--surface-accent-background) rounded-lg overflow-hidden"
+      className="relative section-padding-xl-top-bottom max-w-(--widths-1440-834-375) mx-auto lg:bg-(--surface-accent-background) rounded-lg overflow-hidden"
     >
       <div
         className="absolute inset-0 opacity-5"
@@ -75,23 +73,16 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
         <div className="text-center hidden lg:block">
           {blok.eyebrow?.[0] && (
             <Eyebrow
-            {...storyblokEditable}
               {...blok.eyebrow[0]}
               className="text-(--text-headings-light)! text-center"
             />
           )}
 
-          {blok.heading && (
+          {blok.heading?.[0] && (
             <Heading
-            {...storyblokEditable}
-              as="h2"
-              size="4xl"
+              blok={blok.heading[0]}
               className="text-(--text-headings-light)! mt-4 max-w-200 mx-auto"
-            >
-              <span {...storyblokEditable}>
-                {blok.heading}
-              </span>
-            </Heading>
+            />
           )}
         </div>
 
@@ -113,7 +104,11 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
               const zIndex = isActive ? 100 : isNext ? 0 : 1;
 
               return (
-                <div {...storyblokEditable} key={testimonial._uid} className="px-4">
+                <div
+                  {...storyblokEditable(testimonial)}
+                  key={testimonial._uid}
+                  className="px-4"
+                >
                   <div
                     className="relative will-change-transform transition-transform duration-500 ease-out"
                     style={{ transform, zIndex }}
@@ -141,7 +136,10 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
                       </Heading>
 
                       <div className="mt-10 border-t border-(--stroke-primary) pt-6">
-                        <p {...storyblokEditable} className="text-(--text-headings) text-md">
+                        <p
+                          {...storyblokEditable}
+                          className="text-(--text-headings) text-md"
+                        >
                           {testimonial.author?.name} at{" "}
                           {testimonial.author?.role?.label}
                         </p>
@@ -201,6 +199,6 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
           }}
         />
       </div>
-    </section>
+    </div>
   );
 }

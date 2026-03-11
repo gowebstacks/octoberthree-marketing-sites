@@ -92,7 +92,6 @@ export async function getAllWebsitePages(isDraft: boolean = true) {
     const response = await fetch(`${STORYBLOK_API_URL}/stories?${queryParams}` as any, {
       cache: isDraft ? 'no-store' : undefined,
     } as any);
-    
     if (!response.ok) {
       throw new Error(`Storyblok API error: ${response.status} ${response.statusText}`);
     }

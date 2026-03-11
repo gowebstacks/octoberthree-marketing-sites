@@ -236,6 +236,7 @@
   --surface-card-hover: var(--color-neutral-100);
   --icon-contained-icon-hover: var(--color-navy-primary-600);
   --surface-accent-background: var(--color-navy-primary-900---p);
+  --surface-accent-background-2: var(--color-cyan-600);
   --stroke-secondary: var(--color-neutral-300);
   --surface-primary-outline-button: var(--surface-background);
   --surface-primary-outline-button-hover: var(--color-neutral-100);

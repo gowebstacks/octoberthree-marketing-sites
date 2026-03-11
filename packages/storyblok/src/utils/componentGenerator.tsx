@@ -47,7 +47,7 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
 
     case "headingBlock":
       return <HeadingBlock key={component._uid} {...component} />;
-    case "listingHero":
+    case "hero":
       return <Hero key={component._uid} blok={component} />;
     case "testimonialSlider":
       return (
@@ -152,63 +152,57 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
 // Helper function to get section props based on section type
 const getSectionProps = (section: SbBlokData) => {
   const baseProps = {
-    theme: (section.theme as any) || "light",
+    theme: (section.theme as any) || 'light',
     responsivePadding: (section.responsivePadding as any) || {
-      default: {
-        top: parseInt(String(section.paddingTopDefault || "48")),
-        bottom: parseInt(String(section.paddingBottomDefault || "48")),
+      default: { 
+        top: parseInt(String(section.paddingTopDefault || '48')), 
+        bottom: parseInt(String(section.paddingBottomDefault || '48')) 
       },
-      sm: {
-        top: parseInt(String(section.paddingTopSm || "48")),
-        bottom: parseInt(String(section.paddingBottomSm || "48")),
+      sm: { 
+        top: parseInt(String(section.paddingTopSm || '48')), 
+        bottom: parseInt(String(section.paddingBottomSm || '48')) 
       },
-      md: {
-        top: parseInt(String(section.paddingTopMd || "64")),
-        bottom: parseInt(String(section.paddingBottomMd || "64")),
+      md: { 
+        top: parseInt(String(section.paddingTopMd || '64')), 
+        bottom: parseInt(String(section.paddingBottomMd || '64')) 
       },
-      lg: {
-        top: parseInt(String(section.paddingTopLg || "80")),
-        bottom: parseInt(String(section.paddingBottomLg || "80")),
+      lg: { 
+        top: parseInt(String(section.paddingTopLg || '80')), 
+        bottom: parseInt(String(section.paddingBottomLg || '80')) 
       },
-      xl: {
-        top: parseInt(String(section.paddingTopXl || "96")),
-        bottom: parseInt(String(section.paddingBottomXl || "96")),
+      xl: { 
+        top: parseInt(String(section.paddingTopXl || '96')), 
+        bottom: parseInt(String(section.paddingBottomXl || '96')) 
       },
-      xxl: {
-        top: parseInt(String(section.paddingTopXxl || "96")),
-        bottom: parseInt(String(section.paddingBottomXxl || "96")),
-      },
+      xxl: { 
+        top: parseInt(String(section.paddingTopXxl || '96')), 
+        bottom: parseInt(String(section.paddingBottomXxl || '96')) 
+      }
     },
-    backgroundImage: section.backgroundImage as any,
-    minHeight: section.minHeight as any,
+    backgroundImage: (section.backgroundImage as any),
+    minHeight: (section.minHeight as any),
   };
 
   // Handle sections with background gradients
-  if (section.bgGradient && section.bgGradient !== "none") {
+  if (section.bgGradient && section.bgGradient !== 'none') {
     return {
       ...baseProps,
-      bgGradient: section.bgGradient as any,
+      bgGradient: (section.bgGradient as any),
       // Only use inverse gradient for textRevealBlock
-      inverseGradient: section.component === "textRevealBlock",
+      inverseGradient: section.component === 'textRevealBlock',
     };
   }
 
   return baseProps;
 };
 
-export const ComponentGenerator: FC<componentGeneratorProps> = ({
-  sections,
-  documentId,
-  documentType,
-  rels,
-}) => {
+export const ComponentGenerator: FC<componentGeneratorProps> = ({ sections, documentId, documentType, rels }) => {
   // Keep sections responsive to reorders via Presentation tool
   const [optimisticSections] = useOptimistic<SbBlokData[] | undefined, any>(
     sections ?? undefined,
     (current, action) => {
       if (!action || action.id !== documentId) return current;
-      if (action.document?.sections)
-        return action.document.sections as SbBlokData[];
+      if (action.document?.sections) return action.document.sections as SbBlokData[];
       return current;
     }
   );
@@ -220,24 +214,25 @@ export const ComponentGenerator: FC<componentGeneratorProps> = ({
     <div>
       {(optimisticSections ?? []).map((section, index, arr) => {
         const sectionProps = getSectionProps(section);
-
+        
         const prevSection = index > 0 ? arr[index - 1] : null;
         const nextSection = index < arr.length - 1 ? arr[index + 1] : null;
 
         return (
-          <div
+          <Section
             key={section._uid}
             {...sectionProps}
-            // isFirstSection={!skipFirstSectionSpacing && index === 0}
-            // sectionType={section.component}
-            // prevTheme={prevSection?.theme as any}
-            // nextTheme={nextSection?.theme as any}
+            isFirstSection={!skipFirstSectionSpacing && index === 0}
+            sectionType={section.component}
+            prevTheme={prevSection?.theme as any}
+            nextTheme={nextSection?.theme as any}
             id={section.htmlId as string}
           >
             {getComponent(section, rels)}
-          </div>
+          </Section>
         );
       })}
     </div>
   );
 };
+

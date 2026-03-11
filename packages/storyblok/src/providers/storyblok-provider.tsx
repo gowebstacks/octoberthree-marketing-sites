@@ -1,5 +1,6 @@
 
 
+import { CTABar } from '@repo/ui';
 import { apiPlugin, storyblokInit } from '@storyblok/react/rsc';
 
 export const getStoryblokApi = storyblokInit({
@@ -7,6 +8,10 @@ export const getStoryblokApi = storyblokInit({
   use: [apiPlugin],
   apiOptions: {
     region: 'us',
+  },
+  components: {
+    ctaBar: CTABar,
+    
   },
 
 } as any);
