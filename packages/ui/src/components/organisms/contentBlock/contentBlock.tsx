@@ -1,103 +1,85 @@
-'use client'
+"use client";
 
-import { storyblokEditable, type SbBlokData } from '@storyblok/react'
-import { RichText } from '../../molecules/richText/richText'
-import { twMerge } from 'tailwind-merge'
-import { Eyebrow, Heading, type EyebrowBlockProps } from '../../atoms'
-import type { RichTextContent } from '../../../types/storyblok'
-import CTABar, { CTABarProps } from '../../modules/ctaBar'
+import { storyblokEditable, type SbBlokData } from "@storyblok/react";
+import { RichText } from "../../molecules/richText/richText";
+import { twMerge } from "tailwind-merge";
+import { Eyebrow, Heading, type EyebrowBlockProps } from "../../atoms";
+import type { RichTextContent } from "../../../types/storyblok";
+import CTABar, { CTABarProps } from "../../modules/ctaBar";
+import { HeadingBlok } from "../../atoms/heading";
 
 export interface ContentBlockBlok extends SbBlokData {
-  eyebrow?: EyebrowBlockProps[]
-  heading?: string
-  content?: RichTextContent
-  subheading?: string
-  ctaBar?: CTABarProps[]   
-  layout?: 'stacked' | 'leading' | 'split'
+  eyebrow?: EyebrowBlockProps[];
+  heading?: HeadingBlok[];
+  body?: RichTextContent;
+  ctaBar?: CTABarProps[];
+  layout?: "stacked" | "leading" | "split";
 }
 
 interface ContentBlockProps {
-  blok: ContentBlockBlok, 
-  headingSize?:string
+  blok: ContentBlockBlok;
 }
 
-export function ContentBlock({ blok, headingSize }: ContentBlockProps) {
+export function ContentBlock({ blok }: ContentBlockProps) {
   const {
     eyebrow,
     heading,
-    content,
-    subheading,
+    body,
     ctaBar,
-    layout = 'stacked',
-  } = blok
+    layout = "stacked",
+  } = blok;
 
   const layoutClasses = {
-    stacked: 'mx-auto text-center',
-    leading: '',
-    split: 'grid grid-cols-1 gap-10 md:grid-cols-2 md:items-center',
-  }
+    stacked: "mx-auto text-center",
+    leading: "",
+    split: "grid grid-cols-1 gap-10 md:grid-cols-2 md:items-center",
+  };
   return (
     <div {...storyblokEditable(blok)}>
       <div
         className={twMerge(
           layoutClasses[layout],
-          'max-w-(--widths-1280-704-343) '
+          "max-w-(--widths-1280-704-343)"
         )}
       >
         <div>
           {eyebrow?.length ? <Eyebrow {...eyebrow[0]} /> : null}
 
-          {heading && (
+          {heading?.length && (
             <Heading
-              as="h1"
-              heading={heading}
+              blok={heading[0]}
               className={
                 twMerge(
                   "mb-4 lg:max-w-200",
                   layout === 'stacked' && 'mx-auto',
-                  headingSize || 'text-display-5xl'
                 )
               }
             />
           )}
 
-          {layout !== 'split' && subheading && (
-            <p className=
-            {
-              twMerge(
-                  layout === 'stacked' && 'mx-auto',
-                                              "text-sm mb-4 text-(--text-body-dark) max-w-[600px]"
-
-
-              )
-            }>
-              {subheading}
-            </p>
-          )}
         </div>
 
         <div>
-          {layout === 'split' && subheading && (
-            <p className="text-sm mb-4 text-(--text-body-dark)">
-              {subheading}
-            </p>
-          )}
 
-          {content && (
+          {body && (
             <RichText
-              doc={content}
+              doc={body}
               className={twMerge(
-                layout === 'stacked' &&
-                  '[&_ul]:w-fit [&_ul]:mx-auto [&_ul]:pl-0'
+                layout === "stacked" &&
+                  "[&_ul]:w-fit [&_ul]:mx-auto [&_ul]:pl-0 max-w-150 mx-auto"
               )}
             />
           )}
 
           {ctaBar?.map((cta) => (
-            <CTABar key={cta._uid} blok={cta} className={`${layout === 'stacked' && 'w-fit m-auto'} mt-8`}/>
+            <CTABar
+              key={cta._uid}
+              blok={cta}
+              className={`${layout === "stacked" && "w-fit m-auto"} mt-8`}
+            />
           ))}
         </div>
       </div>
     </div>
-  )
+  );
 }

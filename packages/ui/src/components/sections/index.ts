@@ -22,6 +22,7 @@ export * from './statsBar';
 export * from './contentSwitcher';
 export * from './clusterTable';
 export * from './testimonialWall';
-export * from './testimonialSlider'
+export * from './testimonialSlider';
+export * from './portableText'
 
 

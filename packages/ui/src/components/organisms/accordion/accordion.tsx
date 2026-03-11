@@ -16,8 +16,8 @@ type StoryblokImage = {
 };
 export type AccordionItem = {
   _uid: string;
-  title: string;
-  content: RichTextContent;
+  label: string;
+  body: RichTextContent;
   cta?: {
     label: string;
     href: string;
@@ -37,17 +37,20 @@ export function AccordionItem({
   className,
   ...blok
 }: AccordionItemProps) {
+  console.log(items, "test blok in accordion");
+
   return (
     <AccordionPrimitive.Root
       type="single"
       collapsible
       className={twMerge("w-full", className)}
-      {...storyblokEditable(blok)}
     >
       {items.map((item) => (
         <AccordionPrimitive.Item
           key={item._uid}
           value={item._uid}
+            {...storyblokEditable(item)}
+
           className="border-b border-(--stroke-secondary) flex flex-col gap-(--gaps-16-12-12) p-(--gaps-24-18-18)"
         >
           <AccordionPrimitive.Header>
@@ -61,8 +64,9 @@ export function AccordionItem({
                 data-[state=open]:text-(--text-headings-dark)
               "
             >
-              <div className="flex items-center gap-4">
-                {item.icon && (
+           
+               <div className="flex items-center gap-4">
+                {item?.icon?.filename  && (
                   <span
                     className="
       shrink-0 transition-opacity
@@ -78,8 +82,9 @@ export function AccordionItem({
                   </span>
                 )}
 
-                <span className="text-display-xl">{item.title}</span>
+                <span className="text-display-xl">{item.label}</span>
               </div>
+             
 
               <div
                 className="
@@ -119,7 +124,7 @@ export function AccordionItem({
               data-blok-field="content"
               className=" text-(--text-body-dark) text-sm flex flex-col gap-(--gaps-16-12-12)"
             >
-             <RichText doc={item.content}/>
+              <RichText doc={item.body} />
 
               {/* {item.cta && (
                 <Button

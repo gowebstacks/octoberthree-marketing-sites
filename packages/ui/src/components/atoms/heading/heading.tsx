@@ -1,10 +1,7 @@
 import React, { forwardRef, Ref } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { storyblokEditable, SbBlokData } from "@storyblok/react";
-import { RichTextContent } from '../../../types/storyblok';
-import { RichText } from '../../molecules/richText/richText';
+import { storyblokEditable, SbBlokData } from '@storyblok/react';
 
-// Valid heading tags
 const HeadingTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const;
 type HeadingTag = typeof HeadingTags[number];
 
@@ -33,7 +30,7 @@ export const headingVariants = cva('relative font-medium text-(--text-headings)'
     fontFamily: {
       display: 'font-heading-display',
       accent: 'font-heading-accent',
-      body: 'font-body=',
+      body: 'font-body',
       eyebrow: 'font-eyebrow',
     },
     textTransform: {
@@ -41,7 +38,7 @@ export const headingVariants = cva('relative font-medium text-(--text-headings)'
       uppercase: 'uppercase',
       lowercase: 'lowercase',
       capitalize: 'capitalize',
-    }
+    },
   },
   defaultVariants: {
     size: '2xl',
@@ -50,19 +47,30 @@ export const headingVariants = cva('relative font-medium text-(--text-headings)'
   },
 });
 
-interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement>, VariantProps<typeof headingVariants> {
+export interface HeadingBlok extends SbBlokData {
+  heading?: string;
   as?: HeadingTag;
-  heading?: string
   headingSize?: '2xs' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl' | '7xl';
+  weight?: 'normal' | 'medium' | 'semibold' | 'bold';
   fontFamily?: 'display' | 'accent' | 'body' | 'eyebrow';
   textTransform?: 'none' | 'uppercase' | 'lowercase' | 'capitalize';
-  children?:React.ReactNode
+}
+
+export interface HeadingProps
+  extends React.HTMLAttributes<HTMLHeadingElement>,
+    VariantProps<typeof headingVariants> {
+  blok?: HeadingBlok;
+  as?: HeadingTag;
+  heading?: string;
+  headingSize?: HeadingBlok['headingSize'];
+  children?: React.ReactNode;
 }
 
 export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
   (
     {
-      as: HeadingComponent = 'h2',
+      blok,
+      as,
       size,
       weight,
       headingSize,
@@ -75,21 +83,31 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
     },
     ref: Ref<HTMLHeadingElement>
   ) => {
-    // Validate heading tag
+    const HeadingComponent = blok?.as || as || 'h2';
+
     if (!HeadingTags.includes(HeadingComponent)) {
       console.error(`Heading: 'as' prop must be one of ${HeadingTags.join(', ')}`);
       return null;
     }
-    // If headingSize is provided, use it as the size
-    const finalSize = headingSize || size;
-    
+
+    const finalSize = blok?.headingSize || headingSize || size;
+    const finalWeight = blok?.weight || weight;
+    const finalFontFamily = blok?.fontFamily || fontFamily;
+    const finalText = blok?.heading || heading || children;
+
     return (
       <HeadingComponent
-        className={`${headingVariants({ size: finalSize, weight, fontFamily })} ${className} `}
         ref={ref}
+        className={`${headingVariants({
+          size: finalSize,
+          weight: finalWeight,
+          fontFamily: finalFontFamily,
+          textTransform,
+        })} ${className}`}
         {...rest}
+        {...(blok ? storyblokEditable(blok) : {})}
       >
-        {heading || children}
+        {finalText}
       </HeadingComponent>
     );
   }

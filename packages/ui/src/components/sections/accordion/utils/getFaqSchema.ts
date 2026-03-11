@@ -4,10 +4,10 @@ import { AccordionItem } from "../../../organisms/accordion/accordion";
 export const getFaqSchema = (accordionItems: AccordionItem[], schemaName?: string | null) => {
   const Accordion = accordionItems.map(item => ({
     '@type': 'Question',
-    name: item?.title || '',
+    name: item?.label || '',
     acceptedAnswer: {
       '@type': 'Answer',
-      text: item.content ,
+      text: item.body ,
     },
   }));
 

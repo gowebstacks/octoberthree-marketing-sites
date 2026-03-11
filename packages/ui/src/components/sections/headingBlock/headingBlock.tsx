@@ -17,18 +17,17 @@ export const HeadingBlock: FC<HeadingBlockSectionProps> = ({
   ...blok
 }) => {
   return (
-    <section
-      {...storyblokEditable(blok)}
-      className="section-padding-xl-top-bottom bg-(--surface-secondary-background)"
-    >
-      <ContentBlock
+  
+     <div  {...storyblokEditable(blok)} className="mx-auto max-w-(--widths-1440-834-375)">
+       <ContentBlock
         blok={{
           eyebrow,
-          heading: heading?.[0]?.heading,
-          content: body,
+          heading: heading,
+          body: body,
           layout: variant === "centered" ? "stacked" : variant,
         }}
       />
-    </section>
+     </div>
+   
   );
 };

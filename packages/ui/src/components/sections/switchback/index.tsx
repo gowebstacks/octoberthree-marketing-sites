@@ -33,7 +33,6 @@ export const Switchback: FC<{ blok: SwitchbackBlok }> = ({ blok }) => {
 
 
   const renderMedia = () => {
-    console.log(image, "image here", "____________")
     if (mediaType === 'image' && image?.filename) {
       const match = image.filename.match(/\/(\d+)x(\d+)\//)
       const width = match ? Number(match[1]) : 592
@@ -60,16 +59,14 @@ export const Switchback: FC<{ blok: SwitchbackBlok }> = ({ blok }) => {
   }
 
   return (
-    <section
-      {...storyblokEditable(blok)}
-      className={twMerge('section-padding-xl bg-(--surface-background)')}
-    >
+ 
       <div
+       {...storyblokEditable(blok)}
         className={twMerge(
           `
           mx-auto
           grid
-          max-w-7xl
+          max-w-(--widths-1440-834-375)
           grid-cols-1
           gap-16
           items-center
@@ -88,6 +85,6 @@ export const Switchback: FC<{ blok: SwitchbackBlok }> = ({ blok }) => {
           {renderMedia()}
         </div>
       </div>
-    </section>
+ 
   )
 }

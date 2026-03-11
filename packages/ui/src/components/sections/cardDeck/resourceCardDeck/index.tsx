@@ -23,23 +23,22 @@ export const ResourceCardDeck: FC<ResourceCardDeckBlok> = ({
   ...blok
 }) => {
   return (
-    <section
+    <div
       {...storyblokEditable(blok)}
       id={htmlId}
-      className="section-padding-xl bg-(--surface-background)"
+      className="flex max-w-(--widths-1440-834-375) mx-auto flex-col gap-12 sm:gap-16"
     >
-      <div className="flex max-w-7xl mx-auto flex-col gap-12 sm:gap-16">
-        {content?.length ? (
-          <div className="flex flex-col gap-8">
-            {content.map((nestedBlok) => (
-              <ContentBlock key={nestedBlok._uid} blok={nestedBlok} />
-            ))}
-          </div>
-        ) : null}
+      {content?.length ? (
+        <div className="flex flex-col gap-8">
+          {content.map((nestedBlok) => (
+            <ContentBlock key={nestedBlok._uid} blok={nestedBlok} />
+          ))}
+        </div>
+      ) : null}
 
-        {resources?.length ? (
-          <div
-            className="
+      {resources?.length ? (
+        <div
+          className="
           
 grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] 
  gap-y-(--gaps-56-48-48)
@@ -47,13 +46,12 @@ grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))]
 
 
             "
-          >
-            {resources.map((resource) => (
-              <ResourceCard key={resource._id} {...resource} />
-            ))}
-          </div>
-        ) : null}
-      </div>
-    </section>
+        >
+          {resources.map((resource) => (
+            <ResourceCard key={resource._id} {...resource} />
+          ))}
+        </div>
+      ) : null}
+    </div>
   );
 };

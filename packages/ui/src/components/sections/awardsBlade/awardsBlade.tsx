@@ -7,6 +7,7 @@ import { storyblokEditable } from "@storyblok/react";
 import type { FC } from "react";
 import { RichText } from "../../molecules/richText/richText";
 import { Heading } from "../../atoms";
+import { storyblokLoader } from "../../../utils/storyblokImageLoader";
 
 interface StoryblokAward {
   _uid: string;
@@ -49,9 +50,10 @@ const AwardImage: FC<AwardImageProps> = ({ award, theme, noPadding }) => {
   const dimensionMatch = filename.match(/\/(\d+)x(\d+)\//);
   const width = dimensionMatch ? parseInt(dimensionMatch[1]) : 224;
   const height = dimensionMatch ? parseInt(dimensionMatch[2]) : 160;
+  console.log(award, "award in awardblade")
 
   return (
-    <section
+    <div
       className={twMerge(
         "flex flex-col items-center",
         noPadding ? "" : "px-4 sm:px-8"
@@ -59,6 +61,7 @@ const AwardImage: FC<AwardImageProps> = ({ award, theme, noPadding }) => {
     >
       <div className="w-48 h-32 sm:w-56 sm:h-40 flex items-center justify-center">
         <Image
+          loader={storyblokLoader}
           src={filename}
           alt={award.alt}
           width={width}
@@ -87,7 +90,7 @@ const AwardImage: FC<AwardImageProps> = ({ award, theme, noPadding }) => {
           )}
         </div>
       )}
-    </section>
+    </div>
   );
 };
 
@@ -103,7 +106,7 @@ export const AwardsBlade: FC<StoryblokAwardsBlade> = ({
   return (
     <div
       {...storyblokEditable(blok as any)}
-      className="flex bg-(--surface-background) w-full flex-col gap-6 items-center section-padding-xl"
+      className="flex w-full flex-col gap-6 items-center max-w-(--widths-1440-834-375) mx-auto"
     >
       {rows &&
         (variant === "scroll" ? (

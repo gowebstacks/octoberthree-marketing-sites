@@ -29,7 +29,7 @@ interface TOCItem {
 interface TableOfContentsProps {
   label?: string;
   article: {
-    body: any[];
+    body: any;
     tableOfContents?: TOCItem[];
   };
 }
@@ -87,7 +87,7 @@ const ScrollItems: FC<{ items: TOCItem[] }> = ({ items }) => {
 };
 
 const TableOfContents: FC<TableOfContentsProps> = ({ label, article }) => {
-  const body = Array.isArray(article) ? article : article?.body;
+  const body = article?.body?.content || []; 
   const tableOfContents = Array.isArray(article) ? [] : article?.tableOfContents;
   const [expanded, setExpended] = useState(false);
   const tocRef = useRef<HTMLDivElement>(null);
@@ -96,30 +96,54 @@ const TableOfContents: FC<TableOfContentsProps> = ({ label, article }) => {
     return null;
   }
 
-  const generateTocItems = (blocks: any[]) => {
-    const items =
-      blocks
-        ?.filter(block => {
-          const isHeading = block.style === 'h2';
-          const hasText = block.children?.[0]?.text;
-          return isHeading && hasText;
-        })
-        ?.map((block, index) => {
-          const text = block.children[0].text;
-          const item = {
-            key: block._key,
-            title: text,
-            originalTitle: text,
-            level: block.style === 'h2' ? 2 : 3,
-            sectionId: generateSlug(text),
-            hidden: false,
-            order: index,
-          };
-          return item;
-        }) || [];
-    return items;
-  };
+  // const generateTocItems = (blocks: any[]) => {
+  //   const items =
+  //     blocks
+  //       ?.filter(block => {
+  //         const isHeading = block.style === 'h2';
+  //         const hasText = block.children?.[0]?.text;
+  //         return isHeading && hasText;
+  //       })
+  //       ?.map((block, index) => {
+  //         const text = block.children[0].text;
+  //         const item = {
+  //           key: block._key,
+  //           title: text,
+  //           originalTitle: text,
+  //           level: block.style === 'h2' ? 2 : 3,
+  //           sectionId: generateSlug(text),
+  //           hidden: false,
+  //           order: index,
+  //         };
+  //         return item;
+  //       }) || [];
+  //   return items;
+  // };
+const generateTocItems = (blocks: any[]) => {
+  if (!blocks) return [];
 
+  return blocks
+    .filter(
+      (block) =>
+        block.type === "heading" &&
+        block.attrs?.level === 2 &&
+        block.content?.length
+    )
+    .map((block, index) => {
+      const text =
+        block.content.map((node: any) => node.text || "").join("").trim();
+
+      return {
+        key: `toc-${index}`,
+        title: text,
+        originalTitle: text,
+        level: 2,
+        sectionId: generateSlug(text),
+        hidden: false,
+        order: index,
+      };
+    });
+};
   const tocItems = tableOfContents?.length ? tableOfContents : generateTocItems(body || []);
 
   useEffect(() => {

@@ -30,6 +30,60 @@ const mockTOC = [
   },
 ];
 
+const MockBody =  {
+            "type": "doc",
+            "content": [
+              {
+                "type": "heading",
+                "attrs": {
+                  "level": 2,
+                  "textAlign": null
+                },
+                "content": [
+                  {
+                    "text": "this is h2",
+                    "type": "text"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "attrs": {
+                  "textAlign": null
+                },
+                "content": [
+                  {
+                    "text": "this is just section",
+                    "type": "text"
+                  }
+                ]
+              },
+              {
+                "type": "heading",
+                "attrs": {
+                  "level": 2,
+                  "textAlign": null
+                },
+                "content": [
+                  {
+                    "text": "this is h2 again ",
+                    "type": "text"
+                  }
+                ]
+              },
+              {
+                "type": "paragraph",
+                "attrs": {
+                  "textAlign": null
+                },
+                "content": [
+                  {
+                    "text": "this is its section",
+                    "type": "text"
+                  }
+                ]
+              }]}
+
 const meta: Meta<typeof TableOfContents> = {
   title: 'Organisms/TableOfContents',
   component: TableOfContents,
@@ -60,7 +114,7 @@ export const BuildsFromBodyContent: Story = {
   args: {
     label: 'Table of contents',
     article: {
-      body: mockBody,
+      body: MockBody,
     },
   },
   play: async ({ canvasElement }) => {

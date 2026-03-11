@@ -35,7 +35,7 @@ export default async function SlugPage(props: { params: Promise<PageParams>; sea
   
   const page = await getWebsitePageBySlug(`octoberthree-main/${slugParam}`, preview);
 
-    console.log('*********************************************************', page)
+    console.log('*********************************************************', page, slugParam)
 
   if (!page) {
     notFound();
