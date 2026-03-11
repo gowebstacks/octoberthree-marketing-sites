@@ -131,13 +131,12 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
                         </div>
                       )}
 
-                      <Heading {...storyblokEditable} size="4xl">
+                      <Heading  size="4xl">
                         <blockquote>“{testimonial.quote}”</blockquote>
                       </Heading>
 
                       <div className="mt-10 border-t border-(--stroke-primary) pt-6">
                         <p
-                          {...storyblokEditable}
                           className="text-(--text-headings) text-md"
                         >
                           {testimonial.author?.name} at{" "}
