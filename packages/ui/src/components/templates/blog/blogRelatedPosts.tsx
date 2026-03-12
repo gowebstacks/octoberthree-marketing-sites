@@ -30,7 +30,7 @@ export default function BlogRelatedPosts({ posts }: BlogRelatedProps) {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 {posts.slice(0, 4).map((card, idx) => (
                   <div key={`${card._id}-${idx}-resource-card`} className="w-full">
-                    <ResourceCard {...card} />
+                    {/* <ResourceCard {...card} /> */}
                   </div>
                 ))}
               </div>

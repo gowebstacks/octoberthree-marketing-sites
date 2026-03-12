@@ -28,7 +28,7 @@ const PressReleaseListing:FC<PressReleaseListingProps> = ({ presses, totalPages 
       </div>
     </Section>
     <div className="relative -mt-20 container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 z-10 pb-10">
-      {presses?.map(press => <ResourceCard key={press._id} {...press} />)}
+      {/* {presses?.map(press => <ResourceCard key={press._id} {...press} />)} */}
     </div>
     {(totalPages || 0) > PAGE_SIZE && 
       <Pagination totalPages={Math.ceil((totalPages || 0) / PAGE_SIZE)} baseUrl="/press-releases" />

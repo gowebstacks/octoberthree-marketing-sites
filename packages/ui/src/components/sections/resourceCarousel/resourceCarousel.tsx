@@ -64,14 +64,12 @@ export const ResourceCarousel: FC<ResourceCarouselBlok> = ({
   }, [])
 
   return (
-    <section
-      {...storyblokEditable(blok)}
-      id={htmlId}
-      className="section-padding-xl bg-(--surface-background)"
-    >
+  
       <div
+       {...storyblokEditable(blok)}
+      id={htmlId}
         className="
-          mx-auto grid max-w-[1440px] grid-cols-1
+          mx-auto grid  max-w-(--widths-1440-834-375) grid-cols-1
           gap-y-(--gaps-56-48-48)
           gap-x-(--gaps-56-48-48)
           lg:grid-cols-2
@@ -104,12 +102,14 @@ export const ResourceCarousel: FC<ResourceCarouselBlok> = ({
                 data-card
                 className="snap-start shrink-0"
               >
-                <ResourceCard {...resource} />
+                <ResourceCard {...resource}  carousel={true}/>
               </div>
             ))}
           </div>
 
-          <div className="mt-6 flex justify-end gap-3">
+        {
+          !!resources.length &&
+            <div className="mt-6 flex justify-end gap-3">
             <CarouselButton
               direction="left"
               disabled={!canScrollLeft}
@@ -121,8 +121,8 @@ export const ResourceCarousel: FC<ResourceCarouselBlok> = ({
               onClick={() => scrollByCard('right')}
             />
           </div>
+        }
         </div>
       </div>
-    </section>
   )
 }

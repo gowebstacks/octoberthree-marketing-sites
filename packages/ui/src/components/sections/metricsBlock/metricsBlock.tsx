@@ -14,26 +14,23 @@ interface StatItemBlok extends SbBlokData {
 
 export interface MetricsBlockBlok extends SbBlokData {
   content?: ContentBlockBlok[]
-  metrics?: StatItemBlok[]
+  stat?: StatItemBlok[]
   htmlId?: string
 }
 
 export const MetricsBlock: FC<MetricsBlockBlok> = ({
   content,
-  metrics,
+  stat,
   htmlId,
   ...blok
 }) => {
   return (
     
-    <section
-      {...storyblokEditable(blok)}
-      id={htmlId}
-      className="section-padding-xl bg-(--surface-background)"
-    >
       <div
+       {...storyblokEditable(blok)}
+      id={htmlId}
         className="
-           grid max-w-[1440px] grid-cols-1
+           grid max-w-(--widths-1440-834-375)  mx-auto grid-cols-1
           gap-(--gaps-56-48-48)
           lg:grid-cols-2
         "
@@ -49,23 +46,23 @@ export const MetricsBlock: FC<MetricsBlockBlok> = ({
           </div>
         ) : null}
 
-        {metrics?.length ? (
+        {stat?.length ? (
           <div
             className="
               grid 
               gap-y-(--gaps-56-48-48)
             "
           >
-            {metrics.slice(0, 3).map((metric) => (
+            {stat.slice(0, 3).map((stat) => (
               <div
-                key={metric._uid}
-                {...storyblokEditable(metric)}
+                key={stat._uid}
+                {...storyblokEditable(stat)}
               >
                 <StatItem
                   blok={{
-                    _uid: metric._uid,
-                    value: metric.value,
-                    description: metric.description,
+                    _uid: stat._uid,
+                    value: stat.value,
+                    description: stat.description,
                   }}
                   variant="nested"
                 />
@@ -74,6 +71,5 @@ export const MetricsBlock: FC<MetricsBlockBlok> = ({
           </div>
         ) : null}
       </div>
-    </section>
   )
 }

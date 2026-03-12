@@ -19,7 +19,7 @@ export const ImageWithDesc: FC<ImageProps> = ({ blok, className }) => {
 
   return (
     <div
-      {...storyblokEditable(blok)}
+  
       className={twMerge(
         'w-full overflow-hidden',
         className

@@ -66,13 +66,10 @@ export const ImageBlock: FC<ImageBlockProps> = ({
   }
 
   return (
-    <section
-      {...storyblokEditable(blok)}
-      className="section-padding-xl bg-(--surface-background)"
-    >
-      <div className={imageWrapperStyle({ size })}>
+
+      <div  {...storyblokEditable(blok)} className={imageWrapperStyle({ size })}>
         {renderImage()}
       </div>
-    </section>
+ 
   )
 }

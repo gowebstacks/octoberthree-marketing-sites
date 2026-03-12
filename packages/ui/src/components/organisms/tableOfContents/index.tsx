@@ -252,7 +252,7 @@ const generateTocItems = (blocks: any[]) => {
 
               <DropdownMenu.Portal>
                 <DropdownMenu.Content
-                  className="w-[calc(100vw-32px)] min-w-[200px] overflow-auto  bg-(--surface-secondary-background) border border-(--stroke-primary) p-2 shadow-lg max-h-[--radix-popper-available-height]"
+                  className="w-[calc(100vw-32px)] min-w-50 overflow-auto  bg-(--surface-secondary-background) border border-(--stroke-primary) p-2 shadow-lg max-h-[--radix-popper-available-height]"
                   align="start"
                   sideOffset={4}
                 >

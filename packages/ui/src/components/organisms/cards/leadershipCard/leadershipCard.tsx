@@ -8,7 +8,7 @@ import { Heading } from '../../../atoms'
 
 export interface LeadershipCardBlok extends SbBlokData {
   name: string
-  title: string
+ role: string
   image?: {
     filename: string
     alt?: string
@@ -53,7 +53,7 @@ export const LeadershipCard: FC<LeadershipCardProps> = ({
 
         </Heading>
         <p className="mt-2 text-sm text-(--text-body-dark)">
-          {blok.title}
+          {blok.role}
         </p>
       </div>
     </div>

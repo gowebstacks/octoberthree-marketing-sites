@@ -45,7 +45,7 @@ export function ContentBlock({ blok }: ContentBlockProps) {
         <div>
           {eyebrow?.length ? <Eyebrow {...eyebrow[0]} /> : null}
 
-          {heading?.length && (
+          {!!heading?.length  && (
             <Heading
               blok={heading[0]}
               className={
