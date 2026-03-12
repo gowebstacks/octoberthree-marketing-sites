@@ -158,7 +158,7 @@ export const ResourceListing: FC<ResourceListingProps> = ({
             )}
 
             {/* Search Input */}
-            <div className="flex items-center px-5 py-[10px] rounded border border-secondary bg-input shadow-xs">
+            <div className="flex items-center px-5 py-2.5 rounded border border-secondary bg-input shadow-xs">
               <Icon icon="search-lg" size={16} className="mr-2 text-body" />
               <input
                 type="text"
@@ -210,9 +210,9 @@ export const ResourceListing: FC<ResourceListingProps> = ({
           }`}
           id="article-grid"
         >
-          {paginatedPosts.map(post => (
+          {/* {paginatedPosts.map(post => (
             <ResourceCard key={post._id} {...post} />
-          ))}
+          ))} */}
         </div>
       ) : (
         <div className="py-12 text-center">

@@ -67,7 +67,7 @@ export const StatisticsPanel: FC<StatisticsPanelProps> = ({ statistics, ...blok 
   }[statistics.length] || 'md:grid-cols-4'
 
   return (
-    <div {...storyblokEditable(blok)} className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div {...storyblokEditable(blok)} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div data-blok-field="statistics" className={`grid gap-0 grid-cols-1 ${gridColsClass} divide-y md:divide-y-0 md:divide-x divide-teal-200 dark:divide-teal-300`}>
         {renderStatistics()}
       </div>

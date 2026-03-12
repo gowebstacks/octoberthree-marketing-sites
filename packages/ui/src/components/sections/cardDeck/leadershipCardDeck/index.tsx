@@ -29,12 +29,8 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
   ...blok
 }) => {
   return (
-    <section
-      {...storyblokEditable(blok)}
-      id={htmlId}
-      className="section-padding-xl bg-(--surface-background)"
-    >
-      <div className="flex flex-col gap-12 sm:gap-16">
+ 
+      <div className="flex flex-col gap-12 sm:gap-16 mx-auto max-w-(--widths-1440-834-375)"  {...storyblokEditable(blok)}   id={htmlId}>
         {content?.length ? (
           <div className="flex flex-col gap-8">
             {content.map((nestedBlok) => (
@@ -80,6 +76,5 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
           </div>
         )}
       </div>
-    </section>
   );
 };
