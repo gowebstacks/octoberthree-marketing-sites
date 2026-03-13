@@ -44,7 +44,7 @@ storyblokInit({
     websitePage: WebsitePage,
     sectionLayout: SectionLayout,
     // headingBlock: HeadingBlock,
-    ctaBar: CTABar,
+    // ctaBar: CTABar,
     // imageCardDeck: ImageCardDeck,
     // awardsBlade: AwardsBlade,
     // accordion: Accordion,

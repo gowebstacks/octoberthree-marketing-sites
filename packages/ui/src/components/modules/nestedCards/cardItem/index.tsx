@@ -39,9 +39,9 @@ export const CardItem: FC<CardItemProps> = ({ blok }) => {
       </h3>
 
       {description && (
-        <p className="text-(--text-body-dark)">
+        <div className="text-(--text-body-dark)">
           {description}
-        </p>
+        </div>
       )}
 
       {linkLabel && link && (

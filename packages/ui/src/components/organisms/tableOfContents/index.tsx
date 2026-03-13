@@ -36,7 +36,6 @@ interface TableOfContentsProps {
 
 const ScrollItems: FC<{ items: TOCItem[] }> = ({ items }) => {
   const activeItem = useTocStore(state => state.activeItem);
-  const visibleItems = items.filter(item => !item.hidden);
 
   const handleActiveItem = (index: number) => {
     requestAnimationFrame(() => {
@@ -87,63 +86,42 @@ const ScrollItems: FC<{ items: TOCItem[] }> = ({ items }) => {
 };
 
 const TableOfContents: FC<TableOfContentsProps> = ({ label, article }) => {
-  const body = article?.body?.content || []; 
+  const body = article?.body?.content || [];
   const tableOfContents = Array.isArray(article) ? [] : article?.tableOfContents;
   const [expanded, setExpended] = useState(false);
   const tocRef = useRef<HTMLDivElement>(null);
-  
+  const activeItem = useTocStore(state => state.activeItem);
+
   if (!article) {
     return null;
   }
 
-  // const generateTocItems = (blocks: any[]) => {
-  //   const items =
-  //     blocks
-  //       ?.filter(block => {
-  //         const isHeading = block.style === 'h2';
-  //         const hasText = block.children?.[0]?.text;
-  //         return isHeading && hasText;
-  //       })
-  //       ?.map((block, index) => {
-  //         const text = block.children[0].text;
-  //         const item = {
-  //           key: block._key,
-  //           title: text,
-  //           originalTitle: text,
-  //           level: block.style === 'h2' ? 2 : 3,
-  //           sectionId: generateSlug(text),
-  //           hidden: false,
-  //           order: index,
-  //         };
-  //         return item;
-  //       }) || [];
-  //   return items;
-  // };
-const generateTocItems = (blocks: any[]) => {
-  if (!blocks) return [];
+  const generateTocItems = (blocks: any[]) => {
+    if (!blocks) return [];
 
-  return blocks
-    .filter(
-      (block) =>
-        block.type === "heading" &&
-        block.attrs?.level === 2 &&
-        block.content?.length
-    )
-    .map((block, index) => {
-      const text =
-        block.content.map((node: any) => node.text || "").join("").trim();
+    return blocks
+      .filter(
+        (block) =>
+          block.type === 'heading' &&
+          block.attrs?.level === 2 &&
+          block.content?.length
+      )
+      .map((block, index) => {
+        const text =
+          block.content.map((node: any) => node.text || '').join('').trim();
 
-      return {
-        key: `toc-${index}`,
-        title: text,
-        originalTitle: text,
-        level: 2,
-        sectionId: generateSlug(text),
-        hidden: false,
-        order: index,
-      };
-    });
-};
+        return {
+          key: `toc-${index}`,
+          title: text,
+          originalTitle: text,
+          level: 2,
+          sectionId: generateSlug(text),
+          hidden: false,
+          order: index,
+        };
+      });
+  };
+
   const tocItems = tableOfContents?.length ? tableOfContents : generateTocItems(body || []);
 
   useEffect(() => {
@@ -240,7 +218,6 @@ const generateTocItems = (blocks: any[]) => {
 
   return (
     <nav aria-label="Table of contents" className="w-full">
-      {/* Mobile/Tablet Dropdown - Styled to match desktop */}
       <div className="block lg:hidden">
         {dropdownItems.length > 0 && (
           <div className="pt-4">
@@ -257,7 +234,7 @@ const generateTocItems = (blocks: any[]) => {
                   sideOffset={4}
                 >
                   {dropdownItems.map((item, index) => {
-                    const isActive = index === useTocStore(state => state.activeItem);
+                    const isActive = index === activeItem;
                     return (
                       <DropdownMenu.Item
                         key={item.value}
@@ -279,7 +256,6 @@ const generateTocItems = (blocks: any[]) => {
         )}
       </div>
 
-      {/* Desktop Expanded/Collapsible Panel */}
       <div className="hidden lg:block bg-(--surface-secondary-background) border border-(--stroke-primary) overflow-hidden px-6 py-8">
         <p className="text-(--text-headings) border-b border-(--stroke-primary) pb-4 text-lg font-medium">
           {label || 'Table of contents'}
@@ -298,7 +274,7 @@ const generateTocItems = (blocks: any[]) => {
               className="sticky bottom-0 flex w-full p-2 items-center justify-center bg-(--surface-secondary-background) transition-colors"
               onClick={() => setExpended(!expanded)}
             >
-              <Icon color='var(--icon-primary)' icon="chevron-up" className={expanded ? 'rotate-0' : 'rotate-180'} />
+              <Icon color="var(--icon-primary)" icon="chevron-up" className={expanded ? 'rotate-0' : 'rotate-180'} />
             </button>
           </div>
         )}
