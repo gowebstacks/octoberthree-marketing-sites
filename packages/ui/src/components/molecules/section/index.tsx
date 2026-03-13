@@ -108,7 +108,6 @@ export const Section: FC<SectionProps> = ({
 
     if (responsivePadding) 
       Object.keys(responsivePadding).map(key => {
-    console.log('inside responsive padding', responsivePadding)
         const topPadding = responsivePadding[key as PaddingProps]?.top;
         const bottomPadding = responsivePadding[key as PaddingProps]?.bottom;
         let breakpoint = `${key}:`;
@@ -133,7 +132,6 @@ export const Section: FC<SectionProps> = ({
   // Regular themes
   const gradientClass = bgGradient && bgGradient !== 'none' ? 
     `bg-primary bg-(image:--gradient-hero-${bgGradient}${inverseGradient ? '-inverse' : ''})` : '';
-console.log('inside section')
 
   return (
     <Component
@@ -141,7 +139,7 @@ console.log('inside section')
       id={id}
       className={twMerge(
         theme === 'dark' && 'dark', 
-        "relative scroll-mt-16 text-body overflow-hidden section-padding-xl",
+        "relative scroll-mt-16 text-body",
         bgGradient && bgGradient !== 'none' ? gradientClass : getThemeClasses(theme),
         getPaddingClass(),
         getMinHeightClass(),

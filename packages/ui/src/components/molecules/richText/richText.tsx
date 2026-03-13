@@ -18,7 +18,7 @@ export const RichText: FC<RichTextProps> = ({ doc, className, enableToc }) => {
 
   const renderNode = (node: any, index: number): React.ReactNode => {
     if (node.type === "blok") {
-      console.log("blok it is")
+      console.log("yess its a blok", node.attrs?.body)
       return (
         <div key={`blok-${index}`} className="my-4">
           {node.attrs?.body?.map((blok: any) => (

@@ -23,6 +23,8 @@ import {
   ResourceCarousel,
   ResourceBentoCard,
   ResourceBentoCardDeck,
+  VideoBlock,
+  PortableText,
 } from "@repo/ui";
 import type { SbBlokData } from "@storyblok/react/rsc";
 import type { FC } from "react";
@@ -68,7 +70,7 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
       return (
         <ConversionPanel
           key={component._uid}
-          {...(component as ConversionPanelProps)}
+          blok={component as ConversionPanelProps}
         />
       );
 
@@ -154,6 +156,13 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
           component="imageBlock"
         />
       );
+    case "videoBlock":
+      return (
+        <VideoBlock
+          key={component._uid}
+          blok={component}
+        />
+      );
 
     case "statisticsPanel":
       return (
@@ -161,6 +170,13 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
           key={component._uid}
           {...component}
           component="statisticsPanel"
+        />
+      );
+    case "portableText":
+      return (
+        <PortableText
+          key={component._uid}
+          blok={component as any}
         />
       );
 

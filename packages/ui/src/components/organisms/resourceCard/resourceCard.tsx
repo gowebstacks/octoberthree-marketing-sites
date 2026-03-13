@@ -154,9 +154,9 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
 
           {/* Description */}
           {body && (
-            <p className="text-sm text-(--text-body-dark) line-clamp-4 grow mb-4">
+            <div className="text-sm text-(--text-body-dark) line-clamdiv-4 grow mb-4">
               <RichText doc={body} />
-            </p>
+            </div>
           )}
 
           {/* Learn More Link */}

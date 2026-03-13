@@ -1,49 +1,57 @@
 'use client'
 
 import type { FC } from 'react'
+import { cva } from 'class-variance-authority'
 import { storyblokEditable, type SbBlokData } from '@storyblok/react'
-import { Video } from '../../modules'
+import { Video, VideoBlok } from '../../modules'
 
 export interface VideoBlockBlok extends SbBlokData {
   autoPlay?: boolean
-  video?: {
-    title?: string
-    videoType?: 'youtube' | 'wistia'
-    youtubeUrl?: string
-    wistiaUrl?: string
-    thumbnail?: {
-      filename?: string
-      alt?: string
-    }
-  }
+  size?: 'full' | 'large' | 'medium' | 'small'
+  video?: VideoBlok[]
 }
 
+// same width system as ImageBlock
+const videoWrapperStyle = cva(['w-full', 'mx-auto'], {
+  variants: {
+    size: {
+      full: 'max-w-(--widths-1440-834-375)',
+      large: 'max-w-[1008px]',
+      medium: 'max-w-[768px]',
+      small: 'max-w-[576px]',
+    },
+  },
+  defaultVariants: {
+    size: 'full',
+  },
+})
+
 export const VideoBlock: FC<{ blok: VideoBlockBlok }> = ({ blok }) => {
+  if (!blok) return null
+
   const {
     size = 'full',
     video,
     autoPlay = false,
   } = blok
 
-  if (!video) return null
+  const videoItem = video?.[0]
 
-
+  if (!videoItem) return null
 
   return (
     <div
       {...storyblokEditable(blok)}
-      className={'section-padding-xl bg-(--surface-background)'}
+      className={videoWrapperStyle({ size })}
     >
-          <Video
-            blok={{
-              _uid: `${blok._uid}-video`,
-              component: 'video',
-              autoPlay,
-              ...video,
-            }}
-          />
-      
+      <Video
+        blok={{
+          _uid: `${blok._uid}-video`,
+          component: 'video',
+          autoPlay,
+          ...videoItem,
+        }}
+      />
     </div>
   )
 }
-
