@@ -81,11 +81,11 @@ export default async function SlugPage(props: {
     const teamMembers = (
       await getAllTeamMembers(preview, "octoberthree-main")
     ).map((member: any) => ({
-      _uid: member.uuid || crypto.randomUUID(),
+      _uid: member.uuid,
       component: "leadershipCard",
       name: member.content.name,
       role: member.content.title,
-      location:member.content.location,
+      location: member.content.location,
       image: member.content.headshotImage,
       team: member.content.team,
     }));
@@ -99,7 +99,7 @@ export default async function SlugPage(props: {
             rows: [
               {
                 ...(section.rows?.[0] || {}),
-                _uid: crypto.randomUUID(),
+                _uid: section.rows?.[0]?._uid || section._uid,
                 component: "leadershipCardDeckRow",
                 cards: teamMembers,
               },
@@ -109,21 +109,29 @@ export default async function SlugPage(props: {
 
         return section;
       }),
-    }));}
-
-    return (
-      <>
-        {preview ? (
-          <StoryblokBridge story={page} />
-        ) : (
-          <ComponentGenerator
-            sections={updatedSections}
-            documentId={page.id.toString()}
-            documentType={page.content.component}
-            rels={rels}
-          />
-        )}
-      </>
-    );
+    }));
   }
 
+  return (
+    <>
+      {preview ? (
+        <StoryblokBridge
+          story={{
+            ...page,
+            content: {
+              ...page.content,
+              sections: updatedSections,
+            },
+          }}
+        />
+      ) : (
+        <ComponentGenerator
+          sections={updatedSections}
+          documentId={page.id.toString()}
+          documentType={page.content.component}
+          rels={rels}
+        />
+      )}
+    </>
+  );
+}
