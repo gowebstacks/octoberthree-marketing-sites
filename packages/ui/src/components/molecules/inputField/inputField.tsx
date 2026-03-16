@@ -72,7 +72,6 @@ export function InputField({
         <input
           id={inputId}
           disabled={disabled}
-          readOnly={isSelect}
           className={commonClasses}
           {...(props as InputHTMLAttributes<HTMLInputElement>)}
         />
