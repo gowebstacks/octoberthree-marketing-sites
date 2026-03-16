@@ -3,16 +3,19 @@
 import type { FC } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { storyblokEditable } from '@storyblok/react'
-import { Button, Icon } from '../../../atoms'
+import { Button } from '../../../atoms'
 import { RichText } from '../../richText/richText'
 import { RichTextContent } from '../../../../types/storyblok'
+import { StoryblokAsset } from '../../../../lib'
+import Image from 'next/image'
+import { storyblokLoader } from '../../../../utils/storyblokImageLoader'
 
 export interface IconTextCardProps {
   _key: string
-  icon?: string
+  icon?: StoryblokAsset
   heading?: string
-  body?: RichTextContent // Storyblok rich text
-  button?: any[] // Storyblok button bloks (max 2)
+  body?: RichTextContent
+  button?: any[]
   theme?: 'light' | 'dark'
 }
 
@@ -30,19 +33,27 @@ export const IconTextCard: FC<IconTextCardProps> = ({
     <div
       {...storyblokEditable(blok)}
       className={twMerge(
-        'flex h-full flex-col gap-8 border border-(--stroke-card) p-(--padding-24-18-18) transition-all duration-200',
-        'bg-(--surface-card)',
-        hasButtons && 'group cursor-pointer hover:shadow-lg hover:border-(--stroke-card-hover)',
-        
+        'flex h-full flex-col  border border-(--stroke-card)  transition-all duration-200',
+        'bg-(--surface-card) h-fit',
+        hasButtons &&
+          'group cursor-pointer  hover:shadow-lg overflow-hidden rounded-sm'
       )}
     >
       {icon && (
-        <div className="text-(--icon-primary)">
-          <Icon icon={icon} size={36} />
+        <div className="relative h-72 w-full p-8 grid  place-items-center bg-(--surface-icon-card)">
+          <div className="square-pattern-white"></div>
+          <Image
+            loader={storyblokLoader}
+            src={icon.filename}
+            alt="icon"
+            width={200}
+            height={225}
+  className="h-56.25 w-50 object-contain z-12"
+          />
         </div>
       )}
 
-      <div className="flex w-full flex-col gap-4">
+      <div className="flex w-full flex-col gap-4 p-(--padding-24-18-18)">
         {heading && (
           <span className="text-display-2xl text-(--text-headings-dark)">
             {heading}
@@ -50,7 +61,7 @@ export const IconTextCard: FC<IconTextCardProps> = ({
         )}
 
         {body && (
-          <div className="text-(--text-body-dark) mt-4">
+          <div className="mt-4 text-(--text-body-dark)">
             <RichText
               doc={body}
               className="
@@ -62,25 +73,22 @@ export const IconTextCard: FC<IconTextCardProps> = ({
             />
           </div>
         )}
-      </div>
-
-      {hasButtons && (
+           {hasButtons && (
         <div className="mt-auto flex flex-col gap-3">
           {button.slice(0, 2).map((btn, index) => (
             <Button
               key={btn._uid || index}
               {...btn}
               tone={index === 0 ? 'primary' : 'secondary'}
-              mode={'filled'}
-              fullWidth
-              size='sm'
+              mode="filled"
+              size="sm"
             />
           ))}
         </div>
-
-        
       )}
+      </div>
 
+   
     </div>
   )
 }

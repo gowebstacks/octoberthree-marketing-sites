@@ -78,6 +78,7 @@ export function SearchFilters({
               multiple={select.multiple}
               placeholder={select.placeholder}
               onChange={(val) => select.onChange?.(val)}
+            
             />
           ))}
         </div>

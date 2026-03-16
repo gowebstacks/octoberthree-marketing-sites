@@ -3,6 +3,8 @@
 import { storyblokEditable } from "@storyblok/react";
 import type { FC } from "react";
 import type { SbBlokData } from "@storyblok/react";
+import { useState } from "react";
+import { twMerge } from "tailwind-merge";
 
 import { ImageTextCard, ImageTextCardProps } from "../../../molecules";
 import { ContentBlock, ContentBlockBlok } from "../../../organisms";
@@ -24,60 +26,54 @@ export const ImageCardDeck: FC<ImageCardDeckProps> = ({
   htmlId,
   ...blok
 }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+
   return (
     <div
-      className="flex flex-col gap-12 sm:gap-16 mx-auto max-w-(--widths-1440-834-375)"
+      className="mx-auto flex max-w-(--widths-1440-834-375) flex-col gap-12 sm:gap-16"
       {...storyblokEditable(blok)}
       id={htmlId}
     >
       {content?.length ? (
-        <div className="flex flex-col gap-8 ">
+        <div className="flex flex-col gap-8">
           {content.map((nestedBlok) => (
             <ContentBlock key={nestedBlok._uid} blok={nestedBlok} />
           ))}
         </div>
       ) : null}
 
-      {rows && (
-        <div
-          {...storyblokEditable(blok)}
-          data-blok-field="rows"
-          className="w-full"
-        >
-          {rows.map((row, rowIndex) => (
-            <div
-              key={rowIndex}
-              className={`
-                  grid w-full gap-4 justify-items-center
-                  grid-cols-1
-                  ${
-                    row.cardsPerRow === "3"
-                      ? "sm:grid-cols-3 lg:grid-cols-3"
-                      : row.cardsPerRow === "4"
-                        ? "sm:grid-cols-2 lg:grid-cols-4"
-                        : "sm:grid-cols-2 lg:grid-cols-2"
-                  }
-                `}
-            >
-              {row.cards?.map((item, i) => {
-                const key = (item as any)?._uid || (item as any)?._key || i;
+    {rows?.map((row, rowIndex) => {
+  const isTwoCards = row.cards?.length === 2;
 
-                return (
-                  <div
-                    key={key}
-                    {...((item as any)?.component
-                      ? storyblokEditable(item as any)
-                      : {})}
-                    className="w-full h-full"
-                  >
-                    <ImageTextCard {...(item as any)} />
-                  </div>
-                );
-              })}
-            </div>
-          ))}
-        </div>
-      )}
+  return (
+    <div
+      key={rowIndex}
+      onMouseLeave={() => setActiveIndex(0)}
+      className="flex w-full gap-4 overflow-hidden"
+    >
+      {row.cards?.map((item, i) => {
+        const key = (item as any)?._uid || (item as any)?._key || i;
+        const isActive = i === activeIndex;
+
+        return (
+          <div
+            key={key}
+            onMouseEnter={() => setActiveIndex(i)}
+            className={twMerge(
+              "transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) min-w-0",
+              isTwoCards ? "flex-1" : isActive ? "flex-[2]" : "flex-1"
+            )}
+          >
+            <ImageTextCard
+              {...(item as any)}
+              isActive={isActive}
+            />
+          </div>
+        );
+      })}
+    </div>
+  );
+})}
     </div>
   );
 };
