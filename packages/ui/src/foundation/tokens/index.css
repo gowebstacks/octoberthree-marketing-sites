@@ -173,6 +173,7 @@
   --text-disabled: var(--color-neutral-600);
   --surface-background: var(--color-cream-50---p-background);
   --surface-card: var(--color-neutral-50----p-background);
+  --surface-icon-card: var(--color-orange-200---p-light);
   --surface-success: var(--color-success-50);
   --surface-disabled: var(--color-neutral-200);
   --surface-warning: var(--color-warning-50);
@@ -193,7 +194,7 @@
   --stroke-testimonial-1: var(--color-orange-400----p);
   --stroke-testimonial-3: var(--color-orange-200---p-light);
   --logo-icon: var(--color-navy-primary-600);
-  --stroke-card: var(--color-neutral-500);
+  --stroke-card: var(--color-cream-200);
   --surface-button-hover: var(--color-orange-800);
   --stroke-error: var(--color-error-800);
   --surface-secondary-background: var(--color-base-white);
@@ -1138,5 +1139,14 @@
   .section-padding-md {
     padding: var(--padding-56-48-48) var(--padding-32-24-24);
   }
+
+  .square-pattern-white {
+  @apply absolute inset-0 pointer-events-none opacity-15 bg-repeat bg-auto;
+  background-image: url('/squarePattern/WhitePattern.svg');
+}
+.square-pattern-image {
+  @apply absolute top-0 left-0 z-10 h-full w-full pointer-events-none bg-no-repeat bg-auto;
+  background-image: url('/squarePattern/SquarePatterForImage.svg');
+}
 
 }

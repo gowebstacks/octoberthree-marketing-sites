@@ -94,8 +94,7 @@ export const RichText: FC<RichTextProps> = ({ doc, className, enableToc }) => {
         `
         text-(--text-body-dark)!
         text-rich-body
-
-        [&_p]:mb-4!
+        [&_p:not(:last-child)]:mb-4
         [&_h1]:mb-4 [&_h2]:mb-4 [&_h3]:mb-3 [&_h4]:mb-3
         [&_ul]:mb-4 [&_ol]:mb-4
         [&_li]:mb-1.5

@@ -4,7 +4,6 @@ import { getLinkData, Link, LinkFragment } from "../../../atoms/link";
 import { RichTextContent } from "../../../../types/storyblok";
 import { twMerge } from "tailwind-merge";
 import { RichText } from "../../richText/richText";
-import Image from "../../image";
 
 interface StoryblokImage {
   id: string;
@@ -20,6 +19,7 @@ export interface ImageTextCardProps {
   link?: LinkFragment;
   button?: any[];
   theme?: "light" | "dark";
+  isActive?: boolean;
 }
 
 export const ImageTextCard: FC<ImageTextCardProps> = ({
@@ -27,63 +27,67 @@ export const ImageTextCard: FC<ImageTextCardProps> = ({
   heading,
   body,
   link,
-  button,
+  isActive = false,
 }) => {
   const url = getLinkData(link);
   const linkData = link as any;
   const hasLink = link && linkData.label && url !== "";
 
   const CardContent = (
-    <div className="relative w-full h-[430px] overflow-hidden ">
+    <div className="relative h-107.5 w-full overflow-hidden">
       {image && (
         <div
-          className="absolute inset-0 w-full h-full bg-center bg-cover transition-transform duration-300"
+          className="absolute inset-0 h-full w-full bg-cover bg-center transition-transform duration-500"
           style={{ backgroundImage: `url(${image.filename})` }}
         />
       )}
 
-      <div className="absolute w-full flex flex-col justify-end bg-(--color-navy-primary-900---p) h-fit bottom-0 p-(--padding-24-18-18)">
+      <div className="absolute bottom-0 flex w-full flex-col justify-end bg-(--color-navy-primary-900---p) p-(--padding-24-18-18)">
         {heading && (
           <span
             className={twMerge(
-              "text-(--color-base-white)! text-display-2xl",
-              "transition-colors duration-200 group-hover:text-link-hover"
+              "text-display-2xl text-(--color-base-white)! transition-colors duration-300 block"
             )}
           >
             {heading}
           </span>
         )}
 
-        {body && (
+        <div
+          className={twMerge(
+            "grid transition-[grid-template-rows] duration-500 ease-in-out",
+            isActive ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+          )}
+        >
           <div
-            className="
-      max-h-0
-      overflow-hidden
-      transition-[max-height]
-      duration-300
-      ease-out
-      group-hover:max-h-[200px]
-    "
+            className={twMerge(
+              "overflow-hidden transition-opacity",
+              isActive ? "opacity-100" : "opacity-0 "
+            )}
           >
-            <div className="pt-4 opacity-0 transition-opacity duration-200 delay-150 group-hover:opacity-100">
-              <RichText
-                doc={body}
-                className="text-(--color-base-white)! text-lg"
-              />
+            <div className="overflow-hidden min-w-0">
+              {body && (
+                <div className="pt-4">
+                  <RichText
+                    doc={body}
+                    className="text-lg text-(--color-base-white)!"
+                  />
+                </div>
+              )}
             </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
 
   const wrapperClasses =
-    "group w-full block   transition-[max-width] duration-300 ease-in-out will-change-[max-width]";
+    "group block w-full transition-all duration-1000 ease-in-out";
 
   if (hasLink) {
     return (
       <Link href={link} className={wrapperClasses}>
-        <div className="dark flex h-full flex-col cursor-pointer hover:shadow-lg transition-shadow duration-300">
+        <div className="flex h-full cursor-pointer flex-col transition-shadow duration-1000 hover:shadow-lg">
           {CardContent}
         </div>
       </Link>
@@ -92,7 +96,7 @@ export const ImageTextCard: FC<ImageTextCardProps> = ({
 
   return (
     <div className={wrapperClasses}>
-      <div className="dark flex h-full flex-col">{CardContent}</div>
+      <div className="flex h-full flex-col">{CardContent}</div>
     </div>
   );
 };

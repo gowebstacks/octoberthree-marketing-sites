@@ -4,11 +4,12 @@ import type { FC } from 'react'
 import { storyblokEditable, SbBlokData } from '@storyblok/react'
 import { twMerge } from 'tailwind-merge'
 import { Image } from '../../../molecules'
-import { Heading } from '../../../atoms'
+import { Badge, Heading } from '../../../atoms'
 
 export interface LeadershipCardBlok extends SbBlokData {
   name: string
  role: string
+ location:string
   image?: {
     filename: string
     alt?: string
@@ -28,7 +29,7 @@ export const LeadershipCard: FC<LeadershipCardProps> = ({
     <div
       {...storyblokEditable(blok)}
       className={twMerge(
-        'flex flex-col overflow-hidden bg-white text-center',
+        'flex flex-col overflow-hidden bg-white border border-(--color-cream-200) rounded-sm hover:shadow-md transi',
         className
       )}
     >
@@ -46,7 +47,7 @@ export const LeadershipCard: FC<LeadershipCardProps> = ({
         />
       )}
 
-      <div className="w-full bg-(--surface-background) p-(--padding-20-18-18)">
+      <div className="w-full bg-(--surface-secondary-background) p-(--padding-20-18-18)  border-t border-(--color-cream-200)">
        
         <Heading size={'2xl'} as='h3'>
           {blok.name}
@@ -55,6 +56,8 @@ export const LeadershipCard: FC<LeadershipCardProps> = ({
         <p className="mt-2 text-sm text-(--text-body-dark)">
           {blok.role}
         </p>
+        <Badge label={blok.location}>
+        </Badge>
       </div>
     </div>
   )
