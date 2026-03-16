@@ -137,6 +137,7 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
 
                       <div className="mt-10 border-t border-(--stroke-primary) pt-6">
                         <p
+                          {...storyblokEditable(testimonial)}
                           className="text-(--text-headings) text-md"
                         >
                           {testimonial.author?.name} at{" "}

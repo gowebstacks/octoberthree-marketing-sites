@@ -1,20 +1,17 @@
 "use client";
 
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { ReactNode } from "react";
-
+import * as Popover from "@radix-ui/react-popover";
 
 export function DropdownSelect({ children }: { children: React.ReactNode }) {
   return (
-    <DropdownMenu.Portal>
-      <DropdownMenu.Content
+    <Popover.Portal>
+      <Popover.Content
         sideOffset={6}
         align="start"
         className="
           z-50
-          w-(--radix-popper-anchor-width)
-          max-w-(--radix-popper-anchor-width)
-          overflow-hidden
+          w-(--radix-popover-trigger-width)
+          max-w-(--radix-popover-trigger-width)
           flex
           flex-col
           gap-1
@@ -24,10 +21,13 @@ export function DropdownSelect({ children }: { children: React.ReactNode }) {
           shadow-md
           bg-(--surface-card)
           border-(--stroke-secondary)
+          max-h-50
+          overflow-x-scroll
         "
+        onOpenAutoFocus={(e) => e.preventDefault()}
       >
         {children}
-      </DropdownMenu.Content>
-    </DropdownMenu.Portal>
+      </Popover.Content>
+    </Popover.Portal>
   );
 }

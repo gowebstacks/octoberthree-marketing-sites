@@ -84,7 +84,7 @@ const Image: FC<ImageProps> = ({
       }}
     >
       <NextImage
-      loader={storyblokLoader}
+        loader={storyblokLoader}
         src={asset?.url}
         alt={alt || ''}
         title={caption || ''}

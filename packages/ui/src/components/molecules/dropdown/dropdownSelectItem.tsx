@@ -1,8 +1,7 @@
 "use client";
 
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { twMerge } from "tailwind-merge";
-import { Checkbox, Icon } from "../../atoms";
+import { Checkbox } from "../../atoms";
 
 type DropdownSelectItemProps = {
   label: string;
@@ -20,31 +19,25 @@ export function DropdownSelectItem({
   onSelect,
 }: DropdownSelectItemProps) {
   return (
-    <DropdownMenu.Item
-      onSelect={(e) => {
-        e.preventDefault();
-        onSelect();
-      }}
-     className={twMerge(
-  `
-  flex cursor-pointer items-start gap-3 p-2 outline-none
-  transition-colors
-  data-highlighted:bg-(--surface-dropdown-hover) hover:border-none!
-  data-highlighted:text-(--text-heading)
-  data-disabled:opacity-50 data-disabled:pointer-events-none
-  focus:border-4 focus:border-(--stroke-secondary-button-hover) focus:bg-(--surface-secondary-background)
-  `,
-  selected && "bg-(--surface-dropdown-selected)"
-)}
+    <button
+      type="button"
+      onClick={onSelect}
+      className={twMerge(
+        `
+        flex cursor-pointer items-start gap-3 p-2 outline-none
+        transition-colors
+        hover:bg-(--surface-dropdown-hover)
+        focus:bg-(--surface-secondary-background)
+        `,
+        selected && "bg-(--surface-dropdown-selected)"
+      )}
     >
       {multiple && (
         <div className="mt-1 shrink-0">
-          <Checkbox
-            checked={selected}
-            aria-hidden
-          />
+          <Checkbox checked={selected} aria-hidden />
         </div>
       )}
+
       <div className="flex min-w-0 flex-col gap-1">
         <span className="truncate text-xs text-(--text-heading)">
           {label}
@@ -56,6 +49,6 @@ export function DropdownSelectItem({
           </span>
         )}
       </div>
-    </DropdownMenu.Item>
+    </button>
   );
 }

@@ -1,10 +1,17 @@
-import { notFound } from 'next/navigation';
-import { Metadata } from 'next';
+import { notFound } from "next/navigation";
+import { Metadata } from "next";
 
-
-import { StoryblokComponent, storyblokEditable } from '@storyblok/react';
-import { ComponentGenerator, getAllWebsitePageSlugs, getWebsitePageBySlug, isStoryblokConfigured, StoryblokBridge, StoryblokSiteSettings } from '@repo/storyblok';
-import { renderMetadata, SITE_CONFIG } from '@repo/ui';
+import { StoryblokComponent, storyblokEditable } from "@storyblok/react";
+import {
+  ComponentGenerator,
+  getAllTeamMembers,
+  getAllWebsitePageSlugs,
+  getWebsitePageBySlug,
+  isStoryblokConfigured,
+  StoryblokBridge,
+  StoryblokSiteSettings,
+} from "@repo/storyblok";
+import { renderMetadata, SITE_CONFIG } from "@repo/ui";
 
 interface PageParams {
   slug?: string[];
@@ -19,23 +26,40 @@ function isStoryblokEditor(searchParams?: SearchParams) {
     return Array.isArray(v) ? v[0] : v;
   };
 
-  const version = (getParam('version') || '').toLowerCase();
-  const hasSbKey = Object.keys(qp).some(k => k.toLowerCase().includes('storyblok'));
-  const hasPreviewKey = ['_storyblok', 'storyblok', 'sb', 'preview'].some(k => !!getParam(k));
+  const version = (getParam("version") || "").toLowerCase();
+  const hasSbKey = Object.keys(qp).some((k) =>
+    k.toLowerCase().includes("storyblok")
+  );
+  const hasPreviewKey = ["_storyblok", "storyblok", "sb", "preview"].some(
+    (k) => !!getParam(k)
+  );
 
-  return hasSbKey || hasPreviewKey || version === 'draft';
+  return hasSbKey || hasPreviewKey || version === "draft";
 }
 
-export default async function SlugPage(props: { params: Promise<PageParams>; searchParams?: Promise<SearchParams> }) {
+export default async function SlugPage(props: {
+  params: Promise<PageParams>;
+  searchParams?: Promise<SearchParams>;
+}) {
   const params = await props.params;
-  const searchParams = props.searchParams ? await props.searchParams : undefined;
-  const slugParam = params.slug && params.slug.length > 0 ? params.slug.join('/') : 'home';
+  const searchParams = props.searchParams
+    ? await props.searchParams
+    : undefined;
+  const slugParam =
+    params.slug && params.slug.length > 0 ? params.slug.join("/") : "home";
   const inEditor = isStoryblokEditor(searchParams);
   const preview = inEditor;
-  
-  const page = await getWebsitePageBySlug(`octoberthree-main/${slugParam}`, preview);
 
-    console.log('*********************************************************', page, slugParam)
+  const page = await getWebsitePageBySlug(
+    `octoberthree-main/${slugParam}`,
+    preview
+  );
+
+  console.log(
+    "*********************************************************",
+    page,
+    slugParam
+  );
 
   if (!page) {
     notFound();
@@ -48,23 +72,66 @@ export default async function SlugPage(props: { params: Promise<PageParams>; sea
 
   // Build absolute URL matching the public canonical path
   const siteBase = SITE_CONFIG.urls.domain;
-  const pathPart = slugParam === 'homepage' ? '' : `/${slugParam}`;
+  const pathPart = slugParam === "homepage" ? "" : `/${slugParam}`;
   const absoluteUrl = `${siteBase}${pathPart}`;
+
+  let updatedSections = sections;
+
+  if (slugParam === "meet-our-team") {
+    const teamMembers = (
+      await getAllTeamMembers(preview, "octoberthree-main")
+    ).map((member: any) => ({
+      _uid: member.uuid,
+      component: "leadershipCard",
+      name: member.content.name,
+      role: member.content.title,
+      location: member.content.location,
+      image: member.content.headshotImage,
+      team: member.content.team,
+    }));
+
+    updatedSections = sections.map((layout: any) => ({
+      ...layout,
+      section: layout.section?.map((section: any) => {
+        if (section.component === "leadershipCardDeck") {
+          return {
+            ...section,
+            rows: [
+              {
+                ...(section.rows?.[0] || {}),
+                _uid: section.rows?.[0]?._uid || section._uid,
+                component: "leadershipCardDeckRow",
+                cards: teamMembers,
+              },
+            ],
+          };
+        }
+
+        return section;
+      }),
+    }));
+  }
 
   return (
     <>
-  
       {preview ? (
-        <StoryblokBridge story={page} />
+        <StoryblokBridge
+          story={{
+            ...page,
+            content: {
+              ...page.content,
+              sections: updatedSections,
+            },
+          }}
+        />
       ) : (
         <ComponentGenerator
-          sections={sections} 
-          documentId={page.id.toString()} 
+          sections={updatedSections}
+          documentId={page.id.toString()}
           documentType={page.content.component}
           rels={rels}
         />
       )}
-  
     </>
   );
 }

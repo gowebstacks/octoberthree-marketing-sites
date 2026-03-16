@@ -114,9 +114,7 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
     const finalText =
       blok?.heading ||
       heading ||
-      (typeof children === "string" || typeof children === "number"
-        ? children
-        : null);
+      children
     return (
       <HeadingComponent
         ref={ref}

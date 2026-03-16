@@ -360,3 +360,61 @@ export const storyblokApi = {
     return response.json();
   },
 };
+
+
+// Get All team members 
+export async function getAllTeamMembers(
+  isDraft: boolean = false,
+  sitename: string
+) {
+  try {
+    const accessToken = getAccessToken(isDraft ? 'draft' : 'published');
+
+    if (!accessToken) {
+      console.warn('Storyblok token not configured');
+      return [];
+    }
+
+    let allStories: any[] = [];
+    let page = 1;
+    let total = 0;
+
+    do {
+      const queryParams = new URLSearchParams({
+        token: accessToken,
+        starts_with: `${sitename}/team/`,
+        per_page: '100',
+        page: String(page),
+        version: 'draft',
+      });
+
+      const response = await fetch(
+        `${STORYBLOK_API_URL}/stories?${queryParams}` as any,
+        {
+          cache: isDraft ? 'no-store' : undefined,
+        } as any
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          `Storyblok API error: ${response.status} ${response.statusText}`
+        );
+      }
+
+      const data = await response.json();
+
+      total = Number(response.headers.get('total')) || data.total || 0;
+
+      allStories.push(...(data.stories || []));
+
+      page++;
+    } while (allStories.length < total);
+
+    console.log(allStories, 'all team members');
+
+    return allStories;
+  } catch (error) {
+    console.error('Failed to fetch all team members', error);
+    return [];
+  }
+}
