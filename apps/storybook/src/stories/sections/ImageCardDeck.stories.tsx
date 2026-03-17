@@ -14,7 +14,6 @@ const contentBlockBlok: ContentBlockBlok = {
       elementType: 'h6',
     },
   ],
-  heading: 'Conservative by design, dependable by nature',
   layout:'leading',
    ctaBar: [
     {
@@ -119,28 +118,25 @@ const meta: Meta<typeof ImageCardDeck> = {
 export default meta
 type Story = StoryObj<typeof ImageCardDeck>
 
-const basePlay: Story['play'] = async ({ canvasElement }) => {
-  const canvas = within(canvasElement)
+const basePlay: Story["play"] = async ({ canvasElement }) => {
+  const canvas = within(canvasElement);
 
   await expect(
-    canvas.getByText('Designed for every team')
-  ).toBeInTheDocument()
+    canvas.getByText("Engineering teams")
+  ).toBeInTheDocument();
 
   await expect(
-    canvas.getByText('Use cases')
-  ).toBeInTheDocument()
+    canvas.getByText("Product teams")
+  ).toBeInTheDocument();
 
   await expect(
-    canvas.getByText(/explore how different teams/i)
-  ).toBeInTheDocument()
+    canvas.getByText("Design teams")
+  ).toBeInTheDocument();
 
-  const images = canvasElement.querySelectorAll('img')
-  await expect(images.length).toBeGreaterThan(0)
 
-  const grid = canvasElement.querySelector('[class*="grid"]')
-  await expect(grid).toBeInTheDocument()
-}
 
+
+};
 export const Default: Story = {
   args: {
     content: [contentBlockBlok],

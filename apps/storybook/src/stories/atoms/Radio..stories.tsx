@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { useState } from "react";
 import { Radio } from "@repo/ui";
 
 const meta: Meta<typeof Radio> = {
@@ -8,8 +7,8 @@ const meta: Meta<typeof Radio> = {
   args: {
     label: "Remember me",
     disabled: false,
-    error: false,
     size: "sm",
+    type: "dot",
   },
   argTypes: {
     checked: {
@@ -20,14 +19,15 @@ const meta: Meta<typeof Radio> = {
       control: "boolean",
       description: "Disables the radio",
     },
-    error: {
-      control: "boolean",
-      description: "Shows the radio in an error state",
-    },
     size: {
       control: { type: "radio" },
       options: ["sm", "md"],
       description: "Controls the size of the radio",
+    },
+    type: {
+      control: { type: "radio" },
+      options: ["dot", "check"],
+      description: "Radio indicator type",
     },
     label: {
       control: "text",
@@ -51,7 +51,7 @@ const meta: Meta<typeof Radio> = {
       control: "text",
     },
     onChange: {
-      description: "Callback fired when the checked state changes",
+      description: "Callback fired when checked state changes",
     },
   },
   tags: ["autodocs"],
@@ -68,6 +68,13 @@ export const Checked: Story = {
   },
 };
 
+export const CheckType: Story = {
+  args: {
+    checked: true,
+    type: "check",
+  },
+};
+
 export const Disabled: Story = {
   args: {
     disabled: true,
@@ -81,16 +88,11 @@ export const DisabledChecked: Story = {
   },
 };
 
-export const Error: Story = {
+export const DisabledCheckType: Story = {
   args: {
-    error: true,
-  },
-};
-
-export const ErrorChecked: Story = {
-  args: {
-    error: true,
+    disabled: true,
     checked: true,
+    type: "check",
   },
 };
 
@@ -109,4 +111,22 @@ export const Sizes: Story = {
   ),
 };
 
+export const AllVariants: Story = {
+  render: () => (
+    <div className="grid grid-cols-2 gap-8">
+      <div className="flex flex-col gap-4">
+        <Radio label="Dot Default" type="dot" />
+        <Radio label="Dot Checked" type="dot" checked />
+        <Radio label="Dot Disabled" type="dot" disabled />
+        <Radio label="Dot Disabled Checked" type="dot" disabled checked />
+      </div>
 
+      <div className="flex flex-col gap-4">
+        <Radio label="Check Default" type="check" />
+        <Radio label="Check Checked" type="check" checked />
+        <Radio label="Check Disabled" type="check" disabled />
+        <Radio label="Check Disabled Checked" type="check" disabled checked />
+      </div>
+    </div>
+  ),
+};

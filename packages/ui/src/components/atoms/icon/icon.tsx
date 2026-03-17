@@ -53,7 +53,7 @@ const Icon = ({ icon, size = 24, className, strokeWidth = 1, spriteType, ...prop
     shapeRendering="auto"
       width={size}
       height={size}
-      viewBox="0 0 24 24"
+      // viewBox="0 0 24 24"
       className={className}
       fill={shouldDisableStroke ? 'currentColor' : 'none'}
       stroke={shouldDisableStroke ? 'none' : 'currentColor'}

@@ -55,7 +55,7 @@ export const FilledSecondaryDisabled: Story = {
 };
 
 export const Bleed: Story = {
-  args: { mode: "bleed", label: "Bleed Button" },
+  args: { mode: "nav", label: "Bleed Button" },
 };
 
 export const LinkStyleAutoArrow: Story = {
@@ -180,3 +180,33 @@ export const PopupButton: Story = {
   },
 };
 
+export const NavBgDark: Story = {
+  args: {
+    mode: "nav",
+    tone: "primary",
+    label: "Nav Button",
+    background: "dark",
+  },
+  decorators: [
+    (Story) => (
+      <div
+        style={{
+          background: "#000",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    const button = canvas.getByRole("button");
+
+    await expect(button).toBeInTheDocument();
+  },
+};

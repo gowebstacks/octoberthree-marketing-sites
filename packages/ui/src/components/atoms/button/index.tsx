@@ -25,11 +25,11 @@ export type ButtonProps = NativeButtonProps & {
   link?: string | LinkFragment;
   size?: "xs" | "sm" | "md" | "lg" | "xl";
   // New props for mode and tone
-  mode?: "filled" | "bleed" | "link";
+  mode?: "filled" | "link" | "nav";
   tone?: "primary" | "secondary";
   background? : 'light' | 'dark'
   // Keep variant for backward compatibility
-  variant?: "primary" | "secondary" | "link" | "bleed";
+  variant?: "primary" | "secondary" | "link" ;
   leadingIcon?: string;
   trailingIcon?: string;
   fullWidth?: boolean;
@@ -175,8 +175,8 @@ const Button: FC<ButtonProps> = ({
       ? "filled"
       : variant === "link"
         ? "link"
-        : variant === "bleed"
-          ? "bleed"
+        : variant === "nav"
+          ? "nav"
           : undefined);
 
   // Map old variant to new tone if variant is provided but tone is not
@@ -194,7 +194,7 @@ const Button: FC<ButtonProps> = ({
 
     return (
       <>
-        {actualLeadingIcon && actualLeadingIcon !== "None" && mode!=='bleed' && (
+        {actualLeadingIcon && actualLeadingIcon !== "None" && mode!=='nav' && (
           <span>
             <Icon color={iconColor} size={20} icon={actualLeadingIcon} aria-hidden={true} />
           </span>
@@ -202,12 +202,12 @@ const Button: FC<ButtonProps> = ({
         <span className="mt-0.5 lg:mt-0" >
           {actualLabel || children}
         </span>
-        {actualTrailingIcon && actualTrailingIcon !== "None" &&  mode!=='bleed' && !leadingIcon &&(
+        {actualTrailingIcon && actualTrailingIcon !== "None" &&  mode!=='nav' && !leadingIcon &&(
           <span>
             <Icon color={iconColor} size={20} icon={actualTrailingIcon} aria-hidden={true} />
           </span>
         )}
-        {actualTrailingIcon && actualTrailingIcon !== "None" &&  mode==='bleed' &&(
+        {actualTrailingIcon && actualTrailingIcon !== "None" &&  mode==='nav' &&(
           <span>
             <Icon color={iconColor} size={20} icon={'chevron-down'} aria-hidden={true} />
           </span>

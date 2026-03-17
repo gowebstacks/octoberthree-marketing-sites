@@ -7,10 +7,10 @@ const STORYBLOK_API_URL = 'https://api.storyblok.com/v2/cdn';
 const getAccessToken = (version: string = 'published') => {
   // For draft/preview content, only use the preview token
   if (version === 'draft') {
-    return process.env.STORYBLOK_PREVIEW_ACCESS_TOKEN;
+    return process.env.STORYBLOK_PREVIEW_ACCESS_TOKEN || 'd0o0iv3cDTMUXB1yItM2FQtt';
   }
   // For published content, use the public token
-  return 'd0o0iv3cDTMUXB1yItM2FQtt';
+  return 'zMsuCF4nOyTCVrNGr1kg0wtt';
 };
 
 // Build URLSearchParams safely from mixed-type params

@@ -10,7 +10,7 @@ export const buttonStyles = cva(
       mode: {
         filled: [], // Base styles for filled mode, tone will determine specific styles
         stroke: [], // Base styles for stroke mode, tone will determine specific styles
-        bleed: [
+        nav: [
           // default - minimal styling, no border, minimal padding for better UX
           "bg-transparent border-0 font-medium text-sm md:text-md cursor-pointer h-auto",
           // hover - very light background
@@ -34,7 +34,7 @@ export const buttonStyles = cva(
         primary: [],
         secondary: [],
         link: [],
-        bleed: [],
+        nav: [],
       },
       fullWidth: {
         true: "w-full",
@@ -92,13 +92,13 @@ export const buttonStyles = cva(
         ],
       },
 
-      // Bleed + Primary
+      // nav + Primary
       {
-        mode: "bleed",
+        mode: "nav",
         tone: "primary",
         className:
           ["rounded-[4px] py-1 px-2 lg:py-2.5 lg:px-3 text-(--text-heading) !font-normal disabled:text-disabled",
-            "hover:text-headline-hover  hover:bg-(--surface-navlink-active)",
+            "hover:text-headline-hover  hover:bg-(--surface-navlink-active-dark)",
           "focus:border-[var(--stroke-primary)] focus:shadow-[0_0_0_4px_var(--stroke-primary)] focus:outline-none",
           "disabled:text-[var(--color-neutral-500)]",
           "disabled:cursor-not-allowed",
@@ -106,6 +106,26 @@ export const buttonStyles = cva(
 
           ]
       },
+      // Nav + dark bg
+      {
+  mode: "nav",
+  tone: "primary",
+  background: "dark",
+  className: [
+    "rounded-[4px] py-1 px-2 lg:py-2.5 lg:px-3",
+    "text-(--text-secondary-link)",
+    "!font-normal",
+    "hover:text-(--text-secondary-link)",
+    "hover:bg-(--surface-navlink-active-dark)",
+    "focus:bg-(--surface-navlink-active-dark)",
+    "focus:border-[var(--surface-navlink-active-light)] focus:border-3",
+    "focus:shadow-none",
+    "focus:outline-none",
+    "disabled:text-(--text-link-disabled)",
+    "disabled:bg-transparent",
+    "disabled:cursor-not-allowed",
+  ],
+},
       // Link + Primary
       {
         mode: "link",
@@ -150,9 +170,9 @@ export const buttonStyles = cva(
         variant: "link",
         className: "text-link hover:text-link-hover disabled:text-neutral-600",
       },
-      // Backward compatibility for variant='bleed'
+      // Backward compatibility for variant='nav'
       {
-        variant: "bleed",
+        variant: "nav",
         className: "text-link hover:text-link-hover disabled:text-neutral-600",
       },
     ],

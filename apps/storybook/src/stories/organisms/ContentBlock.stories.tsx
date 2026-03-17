@@ -36,10 +36,16 @@ const baseBlok = {
       elementType: "h6",
     },
   ],
-  heading: "Where performance meets possibility",
-  subheading:
-    "Every website should be built to evolve. From the first line of code to the final interaction, it’s a living product designed to adapt, scale, and drive growth over time.",
-  content: {
+  heading: [
+    {
+      _uid: "heading-1",
+      component: "heading",
+        heading: "Where performance meets possibility",
+
+    },
+  ],
+  
+  body: {
     type: "doc",
     content: [
       {

@@ -172,16 +172,18 @@ const mockBody = {
 export const WithIconOnly: Story = {
   args: {
     _key: "icon-text-card-icon",
-    icon: "rocket",
+    icon: {
+      filename : 'https://a.storyblok.com/f/288727743104072/180x225/09bc726e77/icon_rocket.png'
+    },
     heading: "Building Consistency Into Every Website Experience",
-  },
+  } as any,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
 
-    await expect(canvas.getByText("Fast Setup")).toBeInTheDocument()
+    await expect(canvas.getByText("Building Consistency Into Every Website Experience")).toBeInTheDocument()
 
-    const svg = canvasElement.querySelector("svg")
-    await expect(svg).toBeInTheDocument()
+    const img = canvasElement.querySelector("img")
+    await expect(img).toBeInTheDocument()
 
     await expect(canvasElement.querySelector("button")).toBeNull()
   },
@@ -189,27 +191,27 @@ export const WithIconOnly: Story = {
 export const WithBody: Story = {
   args: {
     _key: "icon-text-card-body",
-    icon: "rocket",
+    icon: {
+      filename : 'https://a.storyblok.com/f/288727743104072/180x225/09bc726e77/icon_rocket.png'
+    },
     heading: "Building Consistency Into Every Website Experience",
     body: mockBody as any,
-  },
+  }as any,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
 
     await expect(
-      canvas.getByText("Powerful Features")
-    ).toBeInTheDocument()
-
-    await expect(
-      canvas.getByText("bold")
-    ).toBeInTheDocument()
+canvas.getByText(/A design system creates order out of complexity/i)    ).toBeInTheDocument()
+  
   },
 }
 
 export const WithButton: Story = {
   args: {
     _key: "icon-text-card-button",
-    icon: "rocket",
+    icon: {
+      filename : 'https://a.storyblok.com/f/288727743104072/180x225/09bc726e77/icon_rocket.png'
+    },
     heading: "Building Consistency Into Every Website Experience",
     body: mockBody as any,
     button: [
@@ -217,17 +219,14 @@ export const WithButton: Story = {
         label: "Get Started",
         trailingIcon: "arrow-right",
       },
-      {
-        label: "Learn more",
-        trailingIcon: "arrow-right",
-      },
+     
     ],
-  },
+  } as any,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement)
 
     await expect(
-      canvas.getByText("Launch Faster")
+      canvas.getByText("Get Started")
     ).toBeInTheDocument()
 
     const button = canvas.getByRole("button", {

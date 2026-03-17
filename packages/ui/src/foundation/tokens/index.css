@@ -199,7 +199,7 @@
   --stroke-error: var(--color-error-800);
   --surface-secondary-background: var(--color-base-white);
   --text-placeholder: var(--color-neutral-800);
-  --surface-search-button: var(--color-navy-primary-700);
+  --surface-search-button: var(--color-navy-primary-900---p);
   --text-filled: var(--text-body);
   --logo-text: var(--color-base-black);
   --surface-switcher-progress-default: var(--color-navy-primary-100);
@@ -208,7 +208,8 @@
   --surface-switcher-active: var(--color-navy-primary-100);
   --surface-scroll: var(--color-navy-primary-300);
   --surface-navbar: var(--color-base-white);
-  --surface-navlink-active: var(--color-alphas-navy);
+  --surface-navlink-active-dark: var(--color-alphas-navy);
+  --surface-navlink-active-light: var(--color-navy-primary-100);
   --text-button-hover: var(--color-base-white);
   --icon-button-hover: var(--color-navy-primary-900---p);
   --surface-eyebrow: var(--color-alphas-dark-navy);
@@ -268,6 +269,12 @@
   --icon-link: var(--color-navy-primary-900---p);
   --surface-pagination: var(--color-cyan-100---p);
   --surface-image-card: var(--color-navy-primary-900---p);
+  --gradient-right: color-mix(
+    in srgb,
+    var(--color-orange-200---p-light) 80%,
+    transparent
+  );
+  --gradient-left: var(--color-cyan-100---p);
 
   /* Default desktop */
   --stroke-width-none: var(--scale-0);
@@ -887,6 +894,7 @@
 }
 
 @layer utilities {
+  /* Shadows */
   .shadow-xs {
     box-shadow: 0 1px 2px 0 rgba(18, 14, 34, 0.05);
   }
@@ -920,6 +928,7 @@
     box-shadow: 0 32px 64px -12px rgba(18, 14, 34, 0.2);
   }
 
+  /* Blurs */
   .blur-sm {
     border-radius: 8px;
     background: var(--Alpha-Colors-Blue, rgba(42, 138, 198, 0.2));
@@ -940,6 +949,8 @@
     background: var(--Alpha-Colors-Blue, rgba(42, 138, 198, 0.2));
     backdrop-filter: blur(20px);
   }
+
+  /* Text Styles */
   .text-2xs {
     font-size: var(--text-jumper-text-class-text-2xs);
     line-height: var(--line-height-jumper-text-2xs);
@@ -1085,10 +1096,11 @@
   .font-heading-display {
     font-family: var(--type-font-family-display);
   }
-  .font-heading-accent{
+  .font-heading-accent {
     font-family: var(--type-font-family-text);
   }
 
+  /* Focus */
   .focus-primary,
   .focus-error {
     outline: none;
@@ -1122,31 +1134,147 @@
     }
   }
 
-   .section-padding-xl {
+  /* Section padding */
+  .section-padding-xl {
     padding-top: var(--padding-top-down-sectional-96-72-48-xl);
     padding-bottom: var(--padding-top-down-sectional-96-72-48-xl);
     padding-left: var(--padding-side-sectional-80-64-16);
     padding-right: var(--padding-side-sectional-80-64-16);
   }
-  .section-padding-xl-top-bottom{
-     padding-top: var(--padding-top-down-sectional-96-72-48-xl);
+    .section-padding-md {
+    padding: var(--padding-56-48-48) var(--padding-32-24-24);
+  }
+  .section-padding-xl-top-bottom {
+    padding-top: var(--padding-top-down-sectional-96-72-48-xl);
     padding-bottom: var(--padding-top-down-sectional-96-72-48-xl);
   }
-  .section-padding-xl-left-right{
+  .section-padding-xl-left-right {
     padding-left: var(--padding-side-sectional-80-64-16);
     padding-right: var(--padding-side-sectional-80-64-16);
   }
-  .section-padding-md {
-    padding: var(--padding-56-48-48) var(--padding-32-24-24);
-  }
+
 
   .square-pattern-white {
-  @apply absolute inset-0 pointer-events-none opacity-15 bg-repeat bg-auto;
-  background-image: url('/squarePattern/WhitePattern.svg');
+    @apply absolute inset-0 pointer-events-none opacity-15 bg-repeat bg-auto;
+    background-image: url("/squarePattern/WhitePattern.svg");
+  }
+  .square-pattern-image {
+    @apply absolute top-0 left-0 z-10 h-full w-full pointer-events-none bg-no-repeat bg-auto;
+    background-image: url("/squarePattern/SquarePatterForImage.svg");
+  }
+
+  /* Page gradient */
+  .soft-gradient {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .soft-gradient::before,
+  .soft-gradient::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 25%;
+    height: 620px;
+    border-radius: 9999px;
+    background: var(--gradient-left);
+    filter: blur(80px);
+  }
+
+  .soft-gradient::after {
+    transform: translateY(-130%);
+    background: var(--gradient-right);
+  }
+  .soft-gradient::before {
+    left: -12%;
+  }
+
+  .soft-gradient::after {
+    right: -12%;
+  }
+
+
+  /* Square Pattern */
+.pattern-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+
+  background-color: currentColor;
+
+  -webkit-mask-image: url("/squarePattern/pattern.svg");
+  mask-image: url("/squarePattern/pattern.svg");
+
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+
+  -webkit-mask-size: 340px 340px;
+  mask-size: 340px 340px;
+  
 }
-.square-pattern-image {
-  @apply absolute top-0 left-0 z-10 h-full w-full pointer-events-none bg-no-repeat bg-auto;
-  background-image: url('/squarePattern/SquarePatterForImage.svg');
+.pattern-white{
+  color: var(--color-white);
 }
+
+.pattern-yellow {
+  color: var(--color-yellow-300);
+}
+
+.pattern-cyan {
+  color: var(--color-cyan-300);
+}
+.pattern-teal {
+  color: var(--color-teal-300);
+}
+
+.pattern-orange {
+  color: var(--color-orange-400----p);
+}
+
+.pattern-blue {
+  color: var(--color-navy-primary-900---p);
+}
+.pattern-triangle {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+
+  background-color: currentColor;
+
+  -webkit-mask-image: url("/squarePattern/triangle-desktop.svg");
+  mask-image: url("/squarePattern/triangle-desktop.svg");
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  -webkit-mask-size: contain;
+  mask-size: 25%;
+}
+@media (max-width: 1024px) {
+  .pattern-triangle {
+    -webkit-mask-image: url("/squarePattern/triangle-tablet.svg");
+    mask-image: url("/squarePattern/triangle-tablet.svg");
+      mask-size: 30%;
+
+  }
+}
+@media (max-width: 768px) {
+  .pattern-triangle {
+    -webkit-mask-image: url("/squarePattern/triangle-mobile.svg");
+    mask-image: url("/squarePattern/triangle-mobile.svg");
+      mask-size: 35%;
+
+
+  }
+}
+
+
 
 }

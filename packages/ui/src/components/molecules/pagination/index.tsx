@@ -48,7 +48,7 @@ const Pagination:FC<PaginationProps> = ({ totalPages, baseUrl }) => {
             <button
               key={`page-item-${index + 1}`}
               className={twMerge(
-                'flex focus:focus-primary size-10 cursor-pointer items-center justify-center rounded-md border text-md font-semibold transition-all',
+                'flex focus:focus-primary focus:border-3 focus:bg-transparent size-10 cursor-pointer items-center justify-center rounded-md border text-md font-semibold transition-all',
                 index + 1 === currentPage
                   ? 'border-(--stroke-secondary-button-hover) bg-(--surface-pagination) text-button-secondary'
                   : 'border-(--stroke-pagination) text-body hover:bg-(--surface-pagination)'
