@@ -38,7 +38,7 @@ export function DropdownSelectItem({
         </div>
       )}
 
-      <div className="flex min-w-0 flex-col gap-1">
+      <div className="flex min-w-0 text-left flex-col gap-1">
         <span className="truncate text-xs text-(--text-heading)">
           {label}
         </span>

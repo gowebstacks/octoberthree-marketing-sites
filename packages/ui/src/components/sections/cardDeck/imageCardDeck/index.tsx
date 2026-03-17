@@ -42,38 +42,39 @@ export const ImageCardDeck: FC<ImageCardDeckProps> = ({
         </div>
       ) : null}
 
-    {rows?.map((row, rowIndex) => {
-  const isTwoCards = row.cards?.length === 2;
-
-  return (
-    <div
-      key={rowIndex}
-      onMouseLeave={() => setActiveIndex(0)}
-      className="flex w-full gap-4 overflow-hidden"
-    >
-      {row.cards?.map((item, i) => {
-        const key = (item as any)?._uid || (item as any)?._key || i;
-        const isActive = i === activeIndex;
+      {rows?.map((row, rowIndex) => {
+        const isTwoCards = row.cards?.length === 2;
 
         return (
           <div
-            key={key}
-            onMouseEnter={() => setActiveIndex(i)}
-            className={twMerge(
-              "transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) min-w-0",
-              isTwoCards ? "flex-1" : isActive ? "flex-[2]" : "flex-1"
-            )}
+            key={rowIndex}
+            onMouseLeave={() => setActiveIndex(0)}
+            className="flex flex-col sm:flex-row w-full gap-4 overflow-hidden"
           >
-            <ImageTextCard
-              {...(item as any)}
-              isActive={isActive}
-            />
+            {row.cards?.map((item, i) => {
+              const key = (item as any)?._uid || (item as any)?._key || i;
+              const isActive = i === activeIndex;
+
+              return (
+                <div
+                  key={key}
+                  onMouseEnter={() => setActiveIndex(i)}
+                  className={twMerge(
+                    "transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) min-w-0 w-full",
+                    isTwoCards
+                      ? "sm:flex-1"
+                      : isActive
+                      ? "sm:flex-2"
+                      : "sm:flex-1"
+                  )}
+                >
+                  <ImageTextCard {...(item as any)} isActive={isActive} />
+                </div>
+              );
+            })}
           </div>
         );
       })}
-    </div>
-  );
-})}
     </div>
   );
 };

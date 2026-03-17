@@ -1,9 +1,10 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import NextLink from "next/link";
 
 import type { FC } from "react";
-import { Button, Icon, Link } from "../../atoms";
+import { Icon } from "../../atoms";
 import generateBreadcrumbs from "./utils/generateBreadcrumbs";
 
 interface BreadcrumbProps {
@@ -25,13 +26,13 @@ interface BreadcrumbProps {
 
 const Deliminator = () => (
   <div className="text-eyebrow">
-    <Icon icon="chevron-right" className="shrink-0 text-(--icon-disabled)" />
+    <Icon icon="chevron-right" className="shrink-0 text-(--stroke-card)" />
   </div>
 );
 
 const BreadcrumbLink = ({ link, label }: { link: string; label: string }) => (
   <>
-    <Link
+    <NextLink
       href={link}
       className="text-nowrap 
       hover:text-(--text-link-hover) 
@@ -40,12 +41,12 @@ const BreadcrumbLink = ({ link, label }: { link: string; label: string }) => (
       font-normal
       text-(--text-link)
       focus-visible:bg-(--surface-background)
-    focus-visible:shadow-[0_0_0_4px_var(--color-navy-primary-900---p)]
-    focus-visible:outline-none
-   "
+      focus-visible:shadow-[0_0_0_4px_var(--color-navy-primary-900---p)]
+      focus-visible:outline-none
+      "
     >
       {label}
-    </Link>
+    </NextLink>
     <Deliminator />
   </>
 );
@@ -83,46 +84,47 @@ const Breadcrumbs: FC<BreadcrumbProps> = ({
   // Render "back" variant as a button
   if (variant === "back" && breadcrumbs.length > 0) {
     const firstBreadcrumb = breadcrumbs[0];
-  return (
-    <div className="mb-8">
-      <Link
-        href={firstBreadcrumb.link}
-        className="
-          inline-flex items-center gap-2
-          text-[12px] leading-4.5
-          font-(--type-font-family-text)
-          text-(--text-link-active)
-          transition-colors
-
-          hover:text-(--text-link-hover)
-
-          focus-visible:bg-(--surface-background)
-          focus-visible:shadow-[0_0_0_4px_var(--color-navy-primary-900---p)]
-          focus-visible:outline-none
-        "
-      >
-        <Icon
-          icon="arrow-left"
+    return (
+      <div className="mb-8">
+        <NextLink
+          href={firstBreadcrumb.link}
           className="
-            shrink-0
-            text-(--icon-link)
-            group-hover:text-(--icon-link-hover)
+            group inline-flex items-center gap-2
+            text-[12px] leading-4.5
+            font-(--type-font-family-text)
+            text-(--text-link-active)
+            transition-colors
+            hover:text-(--text-link-hover)
+            focus-visible:bg-(--surface-background)
+            focus-visible:shadow-[0_0_0_4px_var(--color-navy-primary-900---p)]
+            focus-visible:outline-none
           "
-        />
-        <span className="truncate">
-          {firstBreadcrumb.label}
-        </span>
-      </Link>
-    </div>
+        >
+          <Icon
+            icon="arrow-left"
+            className="
+              shrink-0
+              text-(--icon-link)
+              group-hover:text-(--icon-link-hover)
+            "
+          />
+          <span className="truncate">{firstBreadcrumb.label}</span>
+        </NextLink>
+      </div>
     );
   }
 
   // Default breadcrumb rendering
   return (
-    <div className="flex items-center gap-3">
-      <Link href="/" className="text-link">
-        <Icon icon="home-05" size={20} className="stroke-2 " />
-      </Link>
+    <div className="flex items-center gap-(--gaps-8-4-4)">
+      <NextLink href="/" aria-label="Home" className="text-link">
+        <Icon
+          icon="home-05"
+          size={20}
+          className="stroke-2"
+          color="var(--icon-link)"
+        />
+      </NextLink>
       <Deliminator />
       {breadcrumbs.map(({ id, link, label }, index) => {
         const isLast = index === breadcrumbs.length - 1;
@@ -130,8 +132,7 @@ const Breadcrumbs: FC<BreadcrumbProps> = ({
         return isLast ? (
           <span
             key={id}
-            className="truncate text-[12px] leading-4.5 font-normal
-    text-(--text-link-active)"
+            className="truncate text-[12px] leading-4.5 font-normal text-(--text-link-active)"
           >
             {breadcrumbTitle || label}
           </span>

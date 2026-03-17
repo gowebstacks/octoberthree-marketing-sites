@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta: Meta = {
-  title: "Atoms/Blur",
-  tags: ["autodocs"],
+  title: "Utilities/Blurs",
   decorators: [
     (Story) => (
       <div
@@ -13,7 +12,7 @@ const meta: Meta = {
           backgroundPosition: "center",
           height: 700,
           display: "grid",
-          placeItems: 'center'
+          placeItems: "center",
         }}
       >
         <Story />
@@ -38,11 +37,10 @@ export const AllBlurs: Story = {
       {blurs.map(({ label, className }) => (
         <div key={label} className="flex flex-col items-center gap-3">
           <span className="text-xs text-neutral-700">{label}</span>
-          <div 
-            style={{height: 100, width: 200}} 
+          <div
+            style={{ height: 100, width: 200 }}
             className={`rounded-md bg-white/60 ${className} overflow-hidden`}
-          >
-          </div>
+          ></div>
         </div>
       ))}
     </div>

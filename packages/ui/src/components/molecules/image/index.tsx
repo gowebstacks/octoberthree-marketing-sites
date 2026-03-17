@@ -83,6 +83,7 @@ const Image: FC<ImageProps> = ({
           : aspectRatio || asset?.metadata?.dimensions?.aspectRatio || `${width}/${height}`,
       }}
     >
+      <div className="pattern-triangle pattern-orange"></div>
       <NextImage
         loader={storyblokLoader}
         src={asset?.url}

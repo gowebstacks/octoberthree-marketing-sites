@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 const meta: Meta = {
-  title: "Atoms/Shadows",
-  tags: ["autodocs"],
+  title: "Utilities/Shadows",
 };
 
 export default meta;

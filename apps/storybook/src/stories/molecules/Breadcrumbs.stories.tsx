@@ -85,12 +85,13 @@ export const HomeBreadcrumb: Story = {
     },
   },
   play: async ({ canvasElement }) => {
-    const homeLink = canvasElement.querySelector('a[href="/"]');
-    const homeIcon = homeLink?.querySelector("svg");
+    const canvas = within(canvasElement);
 
-    await expect(homeLink).toBeInTheDocument();
-    await expect(homeIcon).toBeInTheDocument();
-  }
+    const home = canvas.getByLabelText("Home");
+
+    await expect(home).toBeInTheDocument();
+    await expect(home).toHaveAttribute("href", "/");
+  },
 };
 
 
@@ -130,7 +131,6 @@ export const BreadcrumbTitleOverride: Story = {
   },
 };
 
-
 export const BackVariant: Story = {
   args: {
     variant: "back",
@@ -143,10 +143,9 @@ export const BackVariant: Story = {
     },
   },
   play: async ({ canvasElement }) => {
-    
-    const a = canvasElement.querySelector('a')
+    const text = canvasElement.querySelector("span");
 
-    await expect(a).toBeInTheDocument();
-    await expect(a).toHaveTextContent("Settings");
+    await expect(text).toBeInTheDocument();
+    await expect(text).toHaveTextContent("Settings");
   },
 };

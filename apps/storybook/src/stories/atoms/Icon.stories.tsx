@@ -70,14 +70,17 @@ export const UiSprite: Story = {
 
 export const BrandSprite: Story = {
   args: {
-    icon: "brand-slack",
+    icon: "brand-agent",
     spriteType: "brand",
+    size:48,
+    color: 'var(--illustration-primary)'
   },
   play: async ({ canvasElement }) => {
-     const use = canvasElement.querySelector("use");
+    const use = canvasElement.querySelector("use");
 
     await expect(use).toBeInTheDocument();
     await expect(use?.getAttribute("href")).toContain("/brand-icon-sprite.svg");
+    await expect(use?.getAttribute("href")).toContain("#brand-agent");
   },
 };
 
@@ -117,3 +120,4 @@ export const PassThroughProps: Story = {
     await expect(svg).toBeInTheDocument();
   },
 };
+

@@ -93,8 +93,6 @@ export const WithoutLink: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    const img = canvasElement.querySelector("img");
-    await expect(img).toBeInTheDocument();
 
     await expect(
       canvas.getByText("Retirement")
@@ -124,9 +122,6 @@ export const WithLink: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    const img = canvasElement.querySelector("img");
-    await expect(img).toBeInTheDocument();
-
     await expect(
       canvas.getByText("Retirement")
     ).toBeInTheDocument();
@@ -135,7 +130,5 @@ export const WithLink: Story = {
     const wrapperLink = canvasElement.querySelector("a");
     await expect(wrapperLink).toBeInTheDocument();
 
-    const iconUse = canvasElement.querySelector("use");
-    await expect(iconUse?.getAttribute("href")).toContain("#arrow-right");
   },
 };

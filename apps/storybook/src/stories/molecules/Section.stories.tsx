@@ -30,9 +30,7 @@ const meta: Meta<typeof Section> = {
       description: 'Content inside the section',
     },
   },
-  parameters:{
-    layout : 'centered'
-  },
+ 
   decorators: [
     (Story) => (
       <div

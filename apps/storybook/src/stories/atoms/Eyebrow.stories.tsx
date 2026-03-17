@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { Eyebrow } from "@repo/ui";
-import type { EyebrowProps } from "@repo/ui";
+import type { EyebrowBlockProps } from "@repo/ui";
 import { expect, within } from "@storybook/test";
 
-const meta: Meta<EyebrowProps> = {
+const meta: Meta<EyebrowBlockProps> = {
   title: "Atoms/Eyebrow",
   component: Eyebrow,
   tags: ["autodocs"],
@@ -31,11 +31,11 @@ const meta: Meta<EyebrowProps> = {
 };
 
 export default meta;
-type Story = StoryObj<EyebrowProps>;
+type Story = StoryObj<EyebrowBlockProps>;
 
 export const Default: Story = {
   args: {
-    text: "Section label",
+    eyebrow: "Section label",
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -46,7 +46,7 @@ export const Default: Story = {
 export const AsHeading: Story = {
   name: "Rendered as h6",
   args: {
-    text: "Overview",
+    eyebrow: "Overview",
     as: "h6",
   },
   play: async ({ canvasElement }) => {
@@ -60,7 +60,7 @@ export const AsHeading: Story = {
 export const AsSpan: Story = {
   name: "Rendered as span",
   args: {
-    text: "Metadata",
+    eyebrow: "Metadata",
     as: "span",
   },
   play: async ({ canvasElement }) => {
@@ -74,7 +74,7 @@ export const AsSpan: Story = {
 export const AsDiv: Story = {
   name: "Rendered as div",
   args: {
-    text: "Category",
+    eyebrow: "Category",
     as: "div",
   },
   play: async ({ canvasElement }) => {
@@ -87,13 +87,13 @@ export const AsDiv: Story = {
 
 export const WithClassName: Story = {
   args: {
-    text: "Styled Eyebrow",
-    className: "text-sm",
+    eyebrow: "Styled Eyebrow",
+    className: "text-xl",
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const wrapper = canvas.getByText("Styled Eyebrow").parentElement;
 
-    await expect(wrapper).toHaveClass("text-sm");
+    await expect(wrapper).toHaveClass("text-xl");
   },
 };

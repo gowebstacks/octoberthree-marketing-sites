@@ -22,14 +22,14 @@ const sizeClasses = {
   sm: {
     checkbox: "h-4 w-4",
     icon: "h-2.25 w-[10px]",
-    indeterminate: "h-0.5 w-2.5",
+        indeterminate: "h-[1.05px] w-2.5",
     iconPosition: "left-0.75",
     label: "text-[length:var(--text-jumper-text-class-mono-xs)]",
   },
   md: {
     checkbox: "h-5 w-5",
     icon: "h-3 w-3",
-    indeterminate: "h-0.5 w-3",
+    indeterminate: "h-[1.35px] w-[13px]",
     iconPosition: "left-1",
     label: "text-[length:var(--text-jumper-text-class-mono-sm)]",
   }

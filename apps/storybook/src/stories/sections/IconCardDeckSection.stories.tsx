@@ -15,7 +15,6 @@ const contentBlockBlok: ContentBlockBlok = {
       elementType: 'h6',
     },
   ],
-  heading: 'Everything you need to scale',
   content: {
     type: 'doc',
     content: [
@@ -110,7 +109,9 @@ const card = () => ({
   _uid: crypto.randomUUID(),
   component: 'iconTextCard',
   heading: 'Building Consistency Into Every Website Experience',
-  icon: 'rocket',
+   icon: {
+      filename : 'https://a.storyblok.com/f/288727743104072/180x225/09bc726e77/icon_rocket.png'
+    },
   body: richBody,
   button: [
     {
@@ -146,30 +147,21 @@ const meta: Meta<typeof IconCardDeck> = {
 
 export default meta
 type Story = StoryObj<typeof IconCardDeck>
-
-const basePlay: Story['play'] = async ({ canvasElement }) => {
-  const canvas = within(canvasElement)
-
-  await expect(
-    canvas.getByText('Everything you need to scale')
-  ).toBeInTheDocument()
+const basePlay: Story["play"] = async ({ canvasElement }) => {
+  const canvas = within(canvasElement);
 
   await expect(
-    canvas.getByText('Platform features')
-  ).toBeInTheDocument()
+    canvas.getAllByText("Building Consistency Into Every Website Experience")
+  ).toHaveLength(4);
 
   await expect(
-    canvas.getByText('Powerful building blocks designed for modern product teams.')
-  ).toBeInTheDocument()
+    canvas.getAllByText("Get Started")
+  ).toHaveLength(4);
 
   await expect(
-    canvas.getAllByText('Building Consistency Into Every Website Experience').length
-  ).toBeGreaterThan(0)
-
-  await expect(
-    canvas.getAllByText('Get Started').length
-  ).toBeGreaterThan(0)
-}
+    canvas.getAllByText("Learn more")
+  ).toHaveLength(4);
+};
 
 export const FourCard: Story = {
   args: {

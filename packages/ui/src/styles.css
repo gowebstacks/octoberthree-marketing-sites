@@ -1,3 +1,7 @@
 @import "tailwindcss";
 /* @import './theme/global.css'; */
-@import './foundation/index.css'
+@import './foundation/index.css';
+
+ body{
+    position: relative;
+}
