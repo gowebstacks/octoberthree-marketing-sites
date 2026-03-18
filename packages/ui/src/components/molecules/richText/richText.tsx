@@ -18,7 +18,6 @@ export const RichText: FC<RichTextProps> = ({ doc, className, enableToc }) => {
 
   const renderNode = (node: any, index: number): React.ReactNode => {
     if (node.type === "blok") {
-      console.log("yess its a blok", node.attrs?.body)
       return (
         <div key={`blok-${index}`} className="my-4">
           {node.attrs?.body?.map((blok: any) => (
@@ -93,7 +92,7 @@ export const RichText: FC<RichTextProps> = ({ doc, className, enableToc }) => {
       className={twMerge(
         `
         text-(--text-body-dark)!
-        text-rich-body
+        text-lg
         [&_p:not(:last-child)]:mb-4
         [&_h1]:mb-4 [&_h2]:mb-4 [&_h3]:mb-3 [&_h4]:mb-3
         [&_ul]:mb-4 [&_ol]:mb-4

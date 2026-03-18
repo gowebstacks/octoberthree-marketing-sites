@@ -49,9 +49,8 @@ export function AccordionItem({
         <AccordionPrimitive.Item
           key={item._uid}
           value={item._uid}
-            {...storyblokEditable(item)}
-
-          className="border-b border-(--stroke-secondary) flex flex-col gap-(--gaps-16-12-12) p-(--gaps-24-18-18)"
+          {...storyblokEditable(item)}
+          className="group relative border-b border-(--stroke-secondary) flex flex-col gap-(--gaps-16-12-12) p-(--gaps-24-18-18)"
         >
           <AccordionPrimitive.Header>
             <AccordionPrimitive.Trigger
@@ -64,9 +63,8 @@ export function AccordionItem({
                 data-[state=open]:text-(--text-headings-dark)
               "
             >
-           
-               <div className="flex items-center gap-4">
-                {item?.icon?.filename  && (
+              <div className="flex items-center gap-4">
+                {item?.icon?.filename && (
                   <span
                     className="
       shrink-0 transition-opacity
@@ -84,7 +82,6 @@ export function AccordionItem({
 
                 <span className="text-display-xl">{item.label}</span>
               </div>
-             
 
               <div
                 className="
@@ -111,7 +108,15 @@ export function AccordionItem({
               </div>
             </AccordionPrimitive.Trigger>
           </AccordionPrimitive.Header>
-
+          <div
+            className="
+    absolute bottom-0 left-0
+    w-0
+    border-b-2 border-(--stroke-secondary-button-hover)
+    transition-all duration-300
+    group-data-[state=open]:w-[60%]
+  "
+          />
           <AccordionPrimitive.Content
             className="
               overflow-hidden

@@ -1,78 +1,104 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { ResourceBentoCard } from '@repo/ui'
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { ResourceBentoCard } from "@repo/ui";
 
 const meta: Meta<typeof ResourceBentoCard> = {
-  title: 'Organisms/ResourceBentoCard',
+  title: "Organisms/ResourceBentoCard",
   component: ResourceBentoCard,
-  tags: ['autodocs'],
- parameters:{
-  layout: 'fullscreen'
- },
+  tags: ["autodocs"],
+  parameters: {
+    layout: "fullscreen",
+  },
+  decorators: [
+    (Story) => (
+      <div className=" p-6 ">
+        <Story />
+      </div>
+    ),
+  ],
   argTypes: {
     size: {
-      control: 'radio',
-      options: ['sm', 'md', 'lg'],
+      control: "radio",
+      options: ["sm", "md", "lg"],
       description:
-        'Controls visual size and layout. sm = split, md/lg = stacked.',
+        "Controls visual size and layout. sm = split, md/lg = stacked.",
     },
     _type: { control: false },
     featuredImage: { control: false },
     seo: { control: false },
     slug: { control: false },
     body: { control: false },
-    excerpt: { control: 'text' },
-    showBadge: { control: 'boolean' },
-    publishDate: { control: 'date', description: 'Date when the resource was published.' }
-  },
-}
-
-export default meta
-type Story = StoryObj<typeof ResourceBentoCard>
-const baseArgs = {
-  _id: 'resource-1',
-  _type: 'blogPost' as const,
-  title: 'Design Systems at Scale',
-  excerpt:
-    'Learn how modern teams build and scale design systems that stay consistent across products.',
-  featuredImage: {
-    asset :{
-    url: 'https://images.unsplash.com/photo-1559028012-481c04fa702d',
-
+    publishDate: {
+      control: "text",
+      description: "Date when the resource was published.",
     },
-    alt: 'Design system illustration',
   },
- 
+};
+
+export default meta;
+type Story = StoryObj<typeof ResourceBentoCard>;
+
+const baseArgs = {
+  _id: "resource-1",
+  _uid: "resource-1",
+  _type: "blogPost" as const,
+
+  title: "Design Systems at Scale",
+
+  featuredImage: {
+    filename:
+      "https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&w=1200&q=80",
+    alt: "Design system illustration",
+  },
+
   seo: {
     slug: {
-      current: 'design-systems-at-scale',
+      current: "design-systems-at-scale",
     },
   },
-  showBadge: true,
-  publishDate :  '12.12.2025'
-}
+
+  publishDate: "2025-12-12",
+
+  body: {
+    type: "doc",
+    content: [
+      {
+        type: "paragraph",
+        content: [
+          {
+            type: "text",
+            text: "Learn how modern teams build and scale design systems that stay consistent across products.",
+          },
+        ],
+      },
+    ],
+  },
+};
+
 export const Small: Story = {
   args: {
     ...baseArgs,
-    size: 'sm',
-  },
-}
+    size: "sm",
+   } as any,
+};
+
 export const Medium: Story = {
   args: {
     ...baseArgs,
-    size: 'md',
-  },
-}
+    size: "md",
+   } as any,
+};
+
 export const Large: Story = {
   args: {
     ...baseArgs,
-    size: 'lg',
-  },
-}
+    size: "lg",
+   } as any,
+};
+
 export const WithoutImage: Story = {
   args: {
     ...baseArgs,
-    size: 'md',
+    size: "md",
     featuredImage: undefined,
-    showBadge: false,
-  },
-}
+   } as any,
+};

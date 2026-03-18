@@ -82,7 +82,7 @@ export const ImageTextCard: FC<ImageTextCardProps> = ({
   );
 
   const wrapperClasses =
-    "group block w-full transition-all duration-1000 ease-in-out";
+    "group block w-full transition-all duration-1000 ease-in-out rounded-sm overflow-hidden";
 
   if (hasLink) {
     return (

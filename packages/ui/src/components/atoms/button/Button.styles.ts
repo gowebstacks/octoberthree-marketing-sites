@@ -143,7 +143,7 @@ export const buttonStyles = cva(
         background: "dark",
         className: [
           "text-(--text-secondary-link) hover:text-(--text-secondary-link) disabled:text-neutral-600",
-          "focus:border-[var(--stroke-secondary-button-hover)] focus:text-(--text-link) focus:shadow-[0_0_0_4px_var(--color-navy-primary-900---p)] focus:outline-none",
+          "focus:border-[var(--stroke-secondary-button-hover)] focus:text-(--text-link) focus:shadow-[0_0_0_4px_var(--color-navy-primary-900---p)] focus:outline-none focus:bg-white",
         ],
       },
 

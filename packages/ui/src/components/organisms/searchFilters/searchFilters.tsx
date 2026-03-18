@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
-import { Icon, Button } from "../../atoms";
+import { Icon, Button, Badge } from "../../atoms";
 import { Dropdown } from "../../molecules";
 
 export type SearchSelect = {
@@ -51,19 +51,23 @@ export function SearchFilters({
             />
           </div>
 
-          {onClose && (
-            <button type="button" onClick={onClose} className="p-1">
-              <Icon icon="x" strokeWidth={2.5} className="h-6 w-6 cursor-pointer" />
-            </button>
-          )}
+          <div className="flex">
+            <Button size="sm" label={actionLabel} onClick={onAction} className="sm:block! hidden" />
+
+            {onClose && (
+              <button type="button" onClick={onClose} className="p-1">
+                <Icon
+                  icon="x"
+                  strokeWidth={2.5}
+                  className="h-6 w-6 cursor-pointer"
+                />
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="sm:hidden">
           <Button size="sm" label={actionLabel} onClick={onAction} fullWidth />
-        </div>
-
-        <div className="hidden sm:flex justify-end">
-          <Button size="sm" label={actionLabel} onClick={onAction} />
         </div>
       </div>
 
@@ -78,12 +82,53 @@ export function SearchFilters({
               multiple={select.multiple}
               placeholder={select.placeholder}
               onChange={(val) => select.onChange?.(val)}
-            
             />
           ))}
+        </div>
+      )}
+
+      {(searchValue || selects.some((s) => s.value)) && (
+        <div className="mt-4 flex flex-wrap gap-2">
+          {searchValue && (
+            <Badge label={searchValue} onRemove={() => onSearchChange?.("")} />
+          )}
+
+          {selects.map((select) => {
+            const values = Array.isArray(select.value) ? select.value : [];
+
+            if (values.length) {
+              return values.map((val) => (
+                <Badge
+                  key={`${select.id}-${val}`}
+                  label={
+                    select.options.find((option) => option.value === val)
+                      ?.label || val
+                  }
+                  onRemove={() =>
+                    select.onChange?.(values.filter((item) => item !== val))
+                  }
+                />
+              ));
+            }
+
+            if (typeof select.value === "string" && select.value) {
+              return (
+                <Badge
+                  key={select.id}
+                  label={
+                    select.options.find(
+                      (option) => option.value === select.value
+                    )?.label || select.value
+                  }
+                  onRemove={() => select.onChange?.("")}
+                />
+              );
+            }
+
+            return null;
+          })}
         </div>
       )}
     </div>
   );
 }
-

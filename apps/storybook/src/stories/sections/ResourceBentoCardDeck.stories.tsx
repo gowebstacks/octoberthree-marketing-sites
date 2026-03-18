@@ -1,148 +1,210 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import {
   ResourceBentoCardDeck,
   ResourceBentoCardDeckBlok,
-} from '@repo/ui'
+} from "@repo/ui";
 
 const meta: Meta<typeof ResourceBentoCardDeck> = {
-  title: 'Sections/ResourceBentoCardDeck',
+  title: "Sections/ResourceBentoCardDeck",
   component: ResourceBentoCardDeck,
   parameters: {
-    layout: 'fullscreen',
+    layout: "padded",
   },
-  tags: ['autodocs'],
-}
 
-export default meta
+  tags: ["autodocs"],
+};
 
-type Story = StoryObj<typeof ResourceBentoCardDeck>
+export default meta;
 
-const mockResources = [
-  {
-    _id: 'resource-1',
-    _type: 'blogPost',
-    title: 'Design Systems at Scale',
-    excerpt:
-      'Learn how modern teams build and scale design systems that stay consistent across products.',
-    featuredImage: {
-      alt: 'Design system illustration',
-      asset: {
-        url: 'https://images.unsplash.com/photo-1559028012-481c04fa702d',
-      },
-    },
-    publishDate: '12.12.2025',
-    seo: {
-      slug: {
-        current: 'design-systems-at-scale',
-      },
-    },
-    showBadge: true,
-  },
-  {
-    _id: 'resource-2',
-    _type: 'blogPost',
-    title: 'Building for Performance',
-    excerpt: 'Optimizing modern web experiences for speed and scale.',
-    featuredImage: {
-      alt: 'Performance illustration',
-      asset: {
-        url: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085',
-      },
-    },
-    publishDate: '10.12.2025',
-    seo: {
-      slug: {
-        current: 'building-for-performance',
-      },
-    },
-    showBadge: true,
-  },
-  {
-    _id: 'resource-3',
-    _type: 'caseStudy',
-    title: 'Scaling Enterprise Platforms',
-    excerpt: 'How large teams ship faster without breaking consistency.',
-    featuredImage: {
-      alt: 'Enterprise systems',
-      asset: {
-        url: 'https://images.unsplash.com/photo-1556761175-4b46a572b786',
-      },
-    },
-    publishDate: '08.12.2025',
-    seo: {
-      slug: {
-        current: 'scaling-enterprise-platforms',
-      },
-    },
-    showBadge: true,
-  },
-  {
-    _id: 'resource-4',
-    _type: 'webinar',
-    title: 'Designing for Scale',
-    excerpt: 'A live session on designing systems that grow with your product.',
-    featuredImage: {
-      alt: 'Webinar session',
-      asset: {
-        url: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c',
-      },
-    },
-    publishDate: '05.12.2025',
-    seo: {
-      slug: {
-        current: 'designing-for-scale',
-      },
-    },
-    showBadge: true,
-  },
-]
+type Story = StoryObj<typeof ResourceBentoCardDeck>;
 
-const mockContent = [
-  {
-    _uid: 'content-1',
-    component: 'content_block',
-    layout: 'leading',
-    eyebrow: [
-      {
-        _uid: 'eyebrow-1',
-        text: 'Resources',
-      },
-    ],
-    heading: 'Where performance meets possibility',
-    subheading:
-      'Every website should be built to evolve. From the first line of code to the final interaction.',
-    content: {
-      type: 'doc',
-      content: [
+const mockData: ResourceBentoCardDeckBlok = {
+  _uid: "1f9bfd19-72a5-4738-85ba-38c0e21626ce",
+  component: "resourceBentoCardDeck",
+
+  content: [
+    {
+      _uid: "64e3ad35-2947-4e88-b444-f959dcf6faa2",
+      component: "contentBlock",
+
+      layout: "",
+
+      ctaBar: [],
+
+      eyebrow: [
         {
-          type: 'paragraph',
-          content: [
-            {
-              type: 'text',
-              text:
-                'Explore our latest thinking on design systems, performance, and scalable digital platforms.',
-            },
-          ],
+          _uid: "c800330f-fbe2-4b50-8fc5-6c969eae0dcc",
+          eyebrow: "Eyebrow example",
+          component: "eyebrow",
+          elementType: "",
         },
       ],
+
+      heading: [
+        {
+          _uid: "dc40d00c-f364-41db-ace7-bf49b245bcab",
+          heading: "Where performance meets possibility",
+          component: "heading",
+          fontFamily: "display",
+          elementType: "h2",
+          headingSize: "4xl",
+        },
+      ],
+
+      body: {
+        type: "doc",
+        content: [
+          {
+            type: "paragraph",
+            attrs: {
+              textAlign: null,
+            },
+            content: [
+              {
+                text: "Every website should be built to evolve. From the first line of code to the final interaction, it’s a living product designed to adapt, scale, and drive growth over time.",
+                type: "text",
+              },
+            ],
+          },
+        ],
+      },
     },
-  },
-]
+  ] as any,
+
+  resources: [
+    {
+      _uid: "594e39ea-f2a9-4ff3-87e6-b7196f8dffae",
+      component: "resourceBentoCard",
+
+      title: "Blog/Resource Title",
+      slug: "",
+      publishDate: "2026-03-23 00:00",
+      resourceType: "pressRelease",
+
+      body: {
+        type: "doc",
+        content: [
+          {
+            type: "paragraph",
+            attrs: {
+              textAlign: null,
+            },
+            content: [
+              {
+                text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec efficitur eleifend tortor.",
+                type: "text",
+              },
+            ],
+          },
+        ],
+      },
+
+      featuredImage: {
+        id: 151681123464615,
+        alt: "",
+        title: "shared image",
+        filename:
+          "https://a.storyblok.com/f/288727743104072/713x800/e274e2d7f0/shared-image.jpg",
+        fieldtype: "asset",
+      },
+    },
+
+    {
+      _uid: "5c26fe4e-603c-44f8-9678-50c2513f7516",
+      component: "resourceBentoCard",
+      title: "Blog/Resource Title",
+      slug: "",
+      publishDate: "2026-03-23 00:00",
+      resourceType: "pressRelease",
+      body: {
+        type: "doc",
+        content: [
+          {
+            type: "paragraph",
+            content: [
+              {
+                text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                type: "text",
+              },
+            ],
+          },
+        ],
+      },
+      featuredImage: {
+        id: 151681123464615,
+        alt: "",
+        filename:
+          "https://a.storyblok.com/f/288727743104072/713x800/e274e2d7f0/shared-image.jpg",
+      },
+    },
+
+    {
+      _uid: "28c1645b-2269-4255-a7e1-b4dddfbbd50a",
+      component: "resourceBentoCard",
+      title: "Blog/Resource Title",
+      slug: "",
+      publishDate: "2026-03-23 00:00",
+      resourceType: "pressRelease",
+      body: {
+        type: "doc",
+        content: [
+          {
+            type: "paragraph",
+            content: [
+              {
+                text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                type: "text",
+              },
+            ],
+          },
+        ],
+      },
+      featuredImage: {
+        id: 151681123464615,
+        alt: "",
+        filename:
+          "https://a.storyblok.com/f/288727743104072/713x800/e274e2d7f0/shared-image.jpg",
+      },
+    },
+
+    {
+      _uid: "6801d995-6dd9-4517-9f2d-06e6474e802f",
+      component: "resourceBentoCard",
+      title: "Blog/Resource Title",
+      slug: "",
+      publishDate: "2026-03-23 00:00",
+      resourceType: "pressRelease",
+      body: {
+        type: "doc",
+        content: [
+          {
+            type: "paragraph",
+            content: [
+              {
+                text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+                type: "text",
+              },
+            ],
+          },
+        ],
+      },
+      featuredImage: {
+        id: 151681123464615,
+        alt: "",
+        filename:
+          "https://a.storyblok.com/f/288727743104072/713x800/e274e2d7f0/shared-image.jpg",
+      },
+    },
+  ],
+};
 
 export const Default: Story = {
-  args: {
-    _uid: 'resource-bento-default',
-    component: 'resource_bento_card_deck',
-    content: mockContent as any,
-    resources: mockResources,
-  } satisfies ResourceBentoCardDeckBlok,
-}
+  args: mockData,
+};
 
 export const WithoutContentBlock: Story = {
   args: {
-    _uid: 'resource-bento-no-content',
-    component: 'resource_bento_card_deck',
-    resources: mockResources,
-  } satisfies ResourceBentoCardDeckBlok,
-}
-
+    ...mockData,
+    content: [],
+  },
+};

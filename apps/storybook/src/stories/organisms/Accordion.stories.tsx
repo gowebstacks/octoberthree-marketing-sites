@@ -17,6 +17,7 @@ const meta: Meta<typeof AccordionItem> = {
       <div
         style={{
           background: "#f8f8f8",
+          padding: "24px",
         }}
       >
         <Story />
@@ -26,42 +27,44 @@ const meta: Meta<typeof AccordionItem> = {
   argTypes: {
     items: {
       control: false,
-      description: "AccordionItem items (Storyblok mapped data)",
+      description: "Accordion items (Storyblok mapped data)",
     },
     colorMode: {
       control: "select",
       options: ["light", "dark"],
-      description: "light  | dark",
+      description: "light | dark",
     },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof AccordionItem>;
+
 export const Default: Story = {
   args: {
     items: [
       {
         _uid: "item-1",
-        title: "Design Systems",
+        label: "Design Systems",
         icon: {
           id: "icon-1",
           filename: "https://cdn-icons-png.flaticon.com/512/3524/3524636.png",
           alt: "Settings icon",
         },
-
-        content: [
-          {
-            type: "paragraph",
-            content: [
-              {
-                type: "text",
-                text: "A design system creates order out of complexity. It ensures every component—from buttons to banners—works together seamlessly and reflects a unified brand language.",
-              },
-            ],
-          },
-        ],
-
+        body: {
+          type: "doc",
+          content: [
+            {
+              type: "paragraph",
+              content: [
+                {
+                  type: "text",
+                  text: "A design system creates order out of complexity. It ensures every component—from buttons to banners—works together seamlessly and reflects a unified brand language.",
+                },
+              ],
+            },
+          ],
+        },
         cta: {
           label: "Go to settings",
           href: "/settings",
@@ -69,24 +72,28 @@ export const Default: Story = {
       },
       {
         _uid: "item-2",
-        title: "Billing & invoices",
+        label: "Billing & invoices",
         icon: {
           id: "icon-2",
           filename: "https://cdn-icons-png.flaticon.com/512/3524/3524659.png",
           alt: "Billing icon",
         },
-         content: [
-          {
-            type: "paragraph",
-            content: [
-              {
-                type: "text",
-                text: "View invoices, update payment methods, and more.",
-              },
-            ],
-          } 
-        ],
+        body: {
+          type: "doc",
+          content: [
+            {
+              type: "paragraph",
+              content: [
+                {
+                  type: "text",
+                  text: "View invoices, update payment methods, and more.",
+                },
+              ],
+            },
+          ],
+        },
       },
     ],
+    colorMode: "light",
   } as any,
 };

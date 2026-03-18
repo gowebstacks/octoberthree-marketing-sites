@@ -146,7 +146,7 @@ export const StackLayout: Story = {
   args: {
     eyebrow: mockEyebrow,
     heading: mockHeading,
-    body: mockBody,
+    body: mockBody as any,
     items: mockItems,
     layout: 'stack',
   },
