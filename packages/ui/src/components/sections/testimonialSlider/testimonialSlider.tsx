@@ -120,16 +120,16 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
                           : "border-(--stroke-testimonial-3)"
                       }`}
                     >
-                      {testimonial.brandLogo?.filename && (
+                      {/* {testimonial.brandLogo?.filename && (
                         <div className="mb-8">
-                          {/* <img
+                          <img
                             src={testimonial.brandLogo.filename}
                             alt={testimonial.brandLogo.alt || ""}
                             className="h-8 object-contain"
-                          /> */}
+                          />
                           Logo placeholder
                         </div>
-                      )}
+                      )} */}
 
                       <Heading  size="4xl">
                         <blockquote>“{testimonial.quote}”</blockquote>
@@ -171,7 +171,7 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
                       label: testimonial.author?.role?.label || "",
                       variant: "orange",
                     }}
-                    avatarSrc={testimonial.brandLogo?.filename}
+                    // avatarSrc={testimonial.brandLogo?.filename}
                     rounded={true}
                   />
                 </div>

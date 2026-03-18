@@ -6,18 +6,13 @@ const meta: Meta<typeof ContentBlock> = {
   title: "Organisms/ContentBlock",
   component: ContentBlock,
   tags: ["autodocs"],
-  decorators: [
-    (Story) => (
-      <div className="bg-white px-6 py-20">
-        <Story />
-      </div>
-    ),
-  ],
   argTypes: {
     blok: {
       control: false,
       description: "Storyblok block data",
     },
+
+   
   },
 };
 
@@ -36,15 +31,15 @@ const baseBlok = {
       elementType: "h6",
     },
   ],
+
   heading: [
     {
       _uid: "heading-1",
       component: "heading",
-        heading: "Where performance meets possibility",
-
+      heading: "Where performance meets possibility",
     },
   ],
-  
+
   body: {
     type: "doc",
     content: [
@@ -118,6 +113,7 @@ const baseBlok = {
     },
   ],
 };
+
 const basePlay: Story["play"] = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
 
@@ -129,42 +125,73 @@ const basePlay: Story["play"] = async ({ canvasElement }) => {
 
   await expect(canvas.getByText(/eyebrow example/i)).toBeInTheDocument();
 };
+
 export const Stacked: Story = {
   args: {
     blok: {
       ...baseBlok,
       layout: "stacked",
+      mode: "light",
     } as any,
   },
   play: basePlay,
 };
+
 export const Leading: Story = {
   args: {
     blok: {
       ...baseBlok,
       layout: "leading",
-    },
-  } as any,
+      mode: "light",
+    } as any,
+  },
   play: basePlay,
 };
+
 export const Split: Story = {
   args: {
     blok: {
       ...baseBlok,
       layout: "split",
+      mode: "light",
     } as any,
   },
   play: basePlay,
 };
+
+export const Dark: Story = {
+  decorators: [
+    (Story) => (
+      <div className="bg-black px-6 py-20">
+        <Story />
+      </div>
+    ),
+  ],
+
+  args: {
+    blok: {
+      ...baseBlok,
+      layout: "stacked",
+      mode: "dark",
+    } as any,
+  },
+
+  play: basePlay,
+};
+
 export const Subscribe: Story = {
   args: {
     blok: {
       ...baseBlok,
       layout: "stacked",
+      mode: "light",
+
       ctaBar: [
         {
+          _uid: "cta-subscribe",
           type: "subscribe",
           placeholder: "Enter your email",
+
           buttons: [
             {
               _uid: "btn-subscribe",
@@ -175,8 +202,9 @@ export const Subscribe: Story = {
           ],
         },
       ],
-    },
-  } as any,
+    } as any,
+  },
+
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 

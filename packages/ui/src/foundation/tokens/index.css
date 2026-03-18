@@ -162,7 +162,9 @@
   --text-headings-light: var(--color-base-white);
   --text-body: var(--color-neutral-700---body);
   --text-body-dark: var(--color-neutral-700---body);
+  --text-body-light: var(--color-neutral-100);
   --text-eyebrow: var(--color-navy-primary-900---p);
+  --text-eyebrow-light: var(--color-base-white);
   --text-link: var(--color-navy-primary-900---p);
   --text-link-hover: var(--color-navy-primary-700);
   --text-success: var(--color-success-700);
@@ -174,6 +176,7 @@
   --surface-background: var(--color-cream-50---p-background);
   --surface-card: var(--color-neutral-50----p-background);
   --surface-icon-card: var(--color-orange-200---p-light);
+  /* --surface-accent-card: var(--color-orange-100); */
   --surface-success: var(--color-success-50);
   --surface-disabled: var(--color-neutral-200);
   --surface-warning: var(--color-warning-50);
@@ -1164,41 +1167,83 @@
   }
 
   /* Page gradient */
-  .soft-gradient {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 10;
-    height: 100%;
-    overflow: hidden;
-  }
+/* Page gradient */
+.soft-gradient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  height: 100%;
+  overflow: hidden;
+}
 
-  .soft-gradient::before,
-  .soft-gradient::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 25%;
-    height: 620px;
-    border-radius: 9999px;
-    background: var(--gradient-left);
-    filter: blur(80px);
-  }
+.soft-gradient::before,
+.soft-gradient::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 18%;
+  height: 620px;
+  border-radius: 9999px;
+  filter: blur(80px);
+}
 
-  .soft-gradient::after {
-    transform: translateY(-130%);
-    background: var(--gradient-right);
-  }
-  .soft-gradient::before {
-    left: -12%;
-  }
+/* Left glow only */
+.soft-gradient::before {
+  left: -10%;
+  transform: translateY(-50%);
+  background: var(--gradient-left, transparent);
+}
 
-  .soft-gradient::after {
-    right: -12%;
-  }
+/* Right glow only */
+.soft-gradient::after {
+  right: -10%;
+  transform: translateY(-50%);
+  background: var(--gradient-right, transparent);
+}
 
+/* LEFT VARIANTS */
+.left-orange {
+  --gradient-left: var(--color-orange-200---p-light);
+  --gradient-right: transparent;
+}
 
+.left-yellow {
+  --gradient-left: var(--color-yellow-200);
+  --gradient-right: transparent;
+}
+
+.left-cyan {
+  --gradient-left: var(--color-cyan-100---p);
+  --gradient-right: transparent;
+}
+
+.left-teal {
+  --gradient-left: var(--color-teal-100);
+  --gradient-right: transparent;
+}
+
+/* RIGHT VARIANTS */
+.right-orange {
+  --gradient-left: transparent;
+  --gradient-right: var(--color-orange-200---p-light);
+}
+
+.right-yellow {
+  --gradient-left: transparent;
+  --gradient-right: var(--color-yellow-200);
+}
+
+.right-cyan {
+  --gradient-left: transparent;
+  --gradient-right: var(--color-cyan-100---p);
+}
+
+.right-teal {
+  --gradient-left: transparent;
+  --gradient-right: var(--color-teal-100);
+}
+  
   /* Square Pattern */
 .pattern-grid {
   position: absolute;

@@ -43,7 +43,7 @@ const Pagination:FC<PaginationProps> = ({ totalPages, baseUrl }) => {
           Page {currentPage} of {totalPages}
         </span>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 md:flex!">
           {Array(totalPages).fill(null).map((_, index) => (
             <button
               key={`page-item-${index + 1}`}

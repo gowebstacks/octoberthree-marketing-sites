@@ -33,10 +33,10 @@ export const IconTextCard: FC<IconTextCardProps> = ({
     <div
       {...storyblokEditable(blok)}
       className={twMerge(
-        'flex h-full flex-col  border border-(--stroke-card)  transition-all duration-200',
+        'flex h-full flex-col  border border-(--stroke-card)  transition-all duration-200 rounded-sm',
         'bg-(--surface-card) h-fit',
         hasButtons &&
-          'group cursor-pointer  hover:shadow-lg overflow-hidden rounded-sm'
+          'group cursor-pointer  hover:shadow-lg overflow-hidden '
       )}
     >
       {icon && (

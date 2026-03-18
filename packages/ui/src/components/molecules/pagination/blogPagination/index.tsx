@@ -64,12 +64,12 @@ export const BlogPagination: FC<{
           <span >Back</span>
         </Button>
   
-        <div className="flex items-center gap-3 md:flex">
+        <div className="flex items-center gap-3 md:flex!">
           <span className="text-sm font-medium text-(--text-link) md:hidden">
             Page {currentPage} of {totalPages}
           </span>
   
-          <div className="hidden items-center gap-3 md:flex">
+          <div className="hidden items-center gap-3 md:flex!">
             {getPageNumbers().map((page, index) => {
               // Skip rendering ellipsis as a separate element
               if (page === '…') {

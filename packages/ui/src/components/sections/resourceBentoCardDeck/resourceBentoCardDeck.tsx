@@ -29,7 +29,8 @@ export const ResourceBentoCardDeck: FC<ResourceBentoCardDeckBlok> = ({
       id={htmlId}
       className="
          grid mx-auto max-w-(--widths-1440-834-375) grid-cols-1
-          gap-(--gaps-56-48-48)
+        gap-(--gaps-56-48-48)
+          
         "
     >
       {content?.length ? (
@@ -44,7 +45,7 @@ export const ResourceBentoCardDeck: FC<ResourceBentoCardDeckBlok> = ({
         className="
           flex flex-col
             gap-8
-            lg:flex-row
+            lg:flex-row!
           "
       >
         {primary ? (

@@ -29,7 +29,7 @@ const CTABar: FC<CTABarProps> = ({
     <div
       {...storyblokEditable(actualBlok)}
       className={twMerge(
-        'flex flex-col gap-4 md:flex-row',
+        'flex flex-col gap-4 md:flex-row!',
         className
       )}
     >

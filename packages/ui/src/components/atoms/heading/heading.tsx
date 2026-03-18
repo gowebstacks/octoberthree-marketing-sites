@@ -43,7 +43,7 @@ export const headingVariants = cva(
       },
     },
     defaultVariants: {
-      size: "2xl",
+      size: "3xl",
       weight: "medium",
       fontFamily: "display",
     },

@@ -39,7 +39,7 @@ export const ResourceBentoCard: FC<ResourceBentoCardProps> = ({
     // For larger screens, use the actual size prop
     return {
       container:
-        "flex flex-col gap-(--scale-24) p-(--scale-24) md:flex-row md:gap-4 md:p-4",
+        "flex flex-col gap-(--scale-24) p-(--scale-24) md:flex-row! md:gap-4 md:p-4",
       image: "aspect-video md:w-[140px] md:h-full md:aspect-auto",
       content: "",
       titleSize: "text-display-2xl mb-4 md:text-display-xl md:mb-2",
@@ -60,13 +60,13 @@ export const ResourceBentoCard: FC<ResourceBentoCardProps> = ({
     // Add responsive overrides based on size prop
     const responsiveOverrides = {
       sm: {
-        container: "md:flex-row md:gap-4 md:p-4 md:items-center",
-        image: "md:w-[140px] md:h-full md:aspect-auto",
+        container: "md:flex-row! md:gap-4 md:p-4 md:items-center",
+        image: "md:w-[140px] md:h-[140px] md:aspect-auto shrink-0",
         titleSize: "md:text-display-xl md:mb-2",
         excerptVisibility: "md:hidden",
       },
       md: {
-        container: "md:flex-col md:gap-(--scale-24) md:p-(--scale-24)",
+        container: "md:flex-col md:gap-(--scale-24) md:p-(--scale-24) max-w-[378px]",
         image: "md:aspect-video",
         titleSize: "md:text-display-2xl md:mb-4",
         excerptVisibility: "md:line-clamp-4 md:mb-6",
@@ -111,7 +111,7 @@ export const ResourceBentoCard: FC<ResourceBentoCardProps> = ({
       {featuredImage && (
         <div className={twMerge("relative overflow-hidden", styles.image)}>
           <Image
-          asset={{url:featuredImage.filename}}
+            asset={{ url: featuredImage.filename }}
             {...featuredImage}
             alt={featuredImage?.alt || title || "Resource"}
             className="h-full w-full [&>img]:object-cover transition-transform duration-300 group-hover:scale-105"

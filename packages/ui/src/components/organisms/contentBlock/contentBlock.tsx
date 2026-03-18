@@ -14,6 +14,7 @@ export interface ContentBlockBlok extends SbBlokData {
   body?: RichTextContent;
   ctaBar?: CTABarProps[];
   layout?: "stacked" | "leading" | "split";
+  mode?: "light" | "dark";
 }
 
 interface ContentBlockProps {
@@ -27,6 +28,7 @@ export function ContentBlock({ blok }: ContentBlockProps) {
     body,
     ctaBar,
     layout = "stacked",
+    mode = "light",
   } = blok;
 
   const layoutClasses = {
@@ -34,6 +36,7 @@ export function ContentBlock({ blok }: ContentBlockProps) {
     leading: "",
     split: "grid grid-cols-1 gap-10 md:grid-cols-2 md:items-center",
   };
+
   return (
     <div {...storyblokEditable(blok)}>
       <div
@@ -42,31 +45,35 @@ export function ContentBlock({ blok }: ContentBlockProps) {
           "max-w-(--widths-1280-704-343)"
         )}
       >
-        <div>
-          {eyebrow?.length ? <Eyebrow {...eyebrow[0]} /> : null}
-
-          {!!heading?.length  && (
+        <div className="flex flex-col gap-(--gaps-16-12-12)">
+          {eyebrow?.length ? (
+            <Eyebrow
+              {...eyebrow[0]}
+              className={twMerge(
+                mode === "dark" && "text-(--text-eyebrow-light)"
+              )}
+            />
+          ) : null}
+          {!!heading?.length && (
             <Heading
               blok={heading[0]}
-              className={
-                twMerge(
-                  "mb-4 lg:max-w-200",
-                  layout === 'stacked' && 'mx-auto',
-                )
-              }
+              className={twMerge(
+                "mb-(--gaps-16-12-12) lg:max-w-200",
+                layout === "stacked" && "mx-auto",
+                mode === "dark" && "text-(--text-headings-light)"
+              )}
             />
           )}
-
         </div>
 
         <div>
-
           {body && (
             <RichText
               doc={body}
               className={twMerge(
                 layout === "stacked" &&
-                  "[&_ul]:w-fit [&_ul]:mx-auto [&_ul]:pl-0 max-w-150 mx-auto"
+                  "[&_ul]:w-fit [&_ul]:mx-auto [&_ul]:pl-0 max-w-150 mx-auto",
+                mode === "dark" && "text-(--text-body-light)!"
               )}
             />
           )}
@@ -75,7 +82,10 @@ export function ContentBlock({ blok }: ContentBlockProps) {
             <CTABar
               key={cta._uid}
               blok={cta}
-              className={`${layout === "stacked" && "w-fit m-auto"} mt-8`}
+              className={twMerge(
+                layout === "stacked" && "sm:w-fit m-auto",
+                "mt-(--gaps-32-24-24)"
+              )}
             />
           ))}
         </div>
