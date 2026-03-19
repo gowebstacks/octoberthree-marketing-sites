@@ -174,7 +174,7 @@
   --text-button: var(--color-base-white);
   --text-disabled: var(--color-neutral-600);
   --surface-background: var(--color-cream-50---p-background);
-  --surface-card: var(--color-neutral-50----p-background);
+  --surface-card: var(--color-base-white);
   --surface-icon-card: var(--color-orange-200---p-light);
   /* --surface-accent-card: var(--color-orange-100); */
   --surface-success: var(--color-success-50);
@@ -238,7 +238,7 @@
   --stroke-eyebrow: var(--color-base-black);
   --stroke-pagination: var(--color-neutral-300);
   --stroke-card-hover: var(--color-navy-primary-700);
-  --surface-card-hover: var(--color-neutral-100);
+  --surface-card-hover: var(--color-neutral-50----p-background);
   --icon-contained-icon-hover: var(--color-navy-primary-600);
   --surface-accent-background: var(--color-navy-primary-900---p);
   --surface-accent-background-2: var(--color-cyan-600);
@@ -1166,7 +1166,6 @@
     background-image: url("/squarePattern/SquarePatterForImage.svg");
   }
 
-  /* Page gradient */
 /* Page gradient */
 .soft-gradient {
   position: absolute;
@@ -1300,13 +1299,13 @@
   mask-repeat: no-repeat;
 
   -webkit-mask-size: contain;
-  mask-size: 25%;
+   mask-size: auto 70%;
+
 }
 @media (max-width: 1024px) {
   .pattern-triangle {
     -webkit-mask-image: url("/squarePattern/triangle-tablet.svg");
     mask-image: url("/squarePattern/triangle-tablet.svg");
-      mask-size: 30%;
 
   }
 }
@@ -1314,7 +1313,6 @@
   .pattern-triangle {
     -webkit-mask-image: url("/squarePattern/triangle-mobile.svg");
     mask-image: url("/squarePattern/triangle-mobile.svg");
-      mask-size: 35%;
 
 
   }

@@ -15,6 +15,8 @@ import { Badge } from "../../../atoms";
 
 interface LeadershipCardRow {
   cardsPerRow?: string;
+  cardsPerRowTablet?: string;
+  cardsPerRowMobile?: string;
   cards?: LeadershipCardBlok[];
 }
 
@@ -44,6 +46,7 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
     () => rows?.flatMap((row) => row.cards ?? []) ?? [],
     [rows]
   );
+
   const getContent = (card: LeadershipCardBlok) =>
     card as LeadershipCardBlok & CardContent;
 
@@ -99,6 +102,58 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
       ),
     [filteredByTeamLocation, names]
   );
+
+  const groupedFilteredRows = useMemo(() => {
+    if (!rows) return [];
+
+    return rows
+      .map((row) => {
+        const filteredRowCards = (row.cards ?? []).filter((card) =>
+          filteredCards.some((filteredCard) => filteredCard._uid === card._uid)
+        );
+
+        return {
+          ...row,
+          cards: filteredRowCards,
+        };
+      })
+      .filter((row) => row.cards.length > 0);
+  }, [rows, filteredCards]);
+
+  const getGridClass = (
+    desktop?: string,
+    tablet?: string,
+    mobile?: string
+  ) => {
+    const mobileClass =
+      mobile === "2"
+        ? "grid-cols-2"
+        : mobile === "3"
+        ? "grid-cols-3"
+        : mobile === "4"
+        ? "grid-cols-4"
+        : "grid-cols-1";
+
+    const tabletClass =
+      tablet === "2"
+        ? "sm:grid-cols-2"
+        : tablet === "3"
+        ? "sm:grid-cols-3"
+        : tablet === "4"
+        ? "sm:grid-cols-4"
+        : "sm:grid-cols-3";
+
+    const desktopClass =
+      desktop === "2"
+        ? "lg:grid-cols-2"
+        : desktop === "3"
+        ? "lg:grid-cols-3"
+        : desktop === "4"
+        ? "lg:grid-cols-4"
+        : "lg:grid-cols-4";
+
+    return `${mobileClass} ${tabletClass} ${desktopClass}`;
+  };
 
   return (
     <div
@@ -173,14 +228,25 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
         </div>
       ) : null}
 
-      <div className="grid w-full gap-y-(--gaps-56-48-48) gap-x-(--gaps-16-12-12) grid-cols-1 sm:grid-cols-3 lg:grid-cols-4">
-        {filteredCards.map((card, i) => (
+      <div className="flex flex-col gap-y-(--gaps-56-48-48)">
+        {groupedFilteredRows.map((row, rowIndex) => (
           <div
-            key={card._uid || i}
-            {...storyblokEditable(card)}
-            className="w-full h-full"
+            key={rowIndex}
+            className={`grid w-full gap-y-(--gaps-56-48-48) gap-x-(--gaps-16-12-12) ${getGridClass(
+              row.cardsPerRow,
+              row.cardsPerRowTablet,
+              row.cardsPerRowMobile
+            )}`}
           >
-            <LeadershipCard blok={card} />
+            {row.cards?.map((card, i) => (
+              <div
+                key={card._uid || i}
+                {...storyblokEditable(card)}
+                className="w-full h-full"
+              >
+                <LeadershipCard blok={card} />
+              </div>
+            ))}
           </div>
         ))}
       </div>

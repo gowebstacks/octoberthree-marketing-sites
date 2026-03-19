@@ -653,13 +653,12 @@
   mask-repeat: no-repeat;
 
   -webkit-mask-size: contain;
-  mask-size: 25%;
+  mask-size: 70% auto;
 }
 @media (max-width: 1024px) {
   .pattern-triangle {
     -webkit-mask-image: url("/squarePattern/triangle-tablet.svg");
     mask-image: url("/squarePattern/triangle-tablet.svg");
-      mask-size: 30%;
 
   }
 }
@@ -667,7 +666,6 @@
   .pattern-triangle {
     -webkit-mask-image: url("/squarePattern/triangle-mobile.svg");
     mask-image: url("/squarePattern/triangle-mobile.svg");
-      mask-size: 35%;
 
 
   }

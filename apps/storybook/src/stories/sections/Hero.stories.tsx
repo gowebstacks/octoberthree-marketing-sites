@@ -25,9 +25,15 @@ const contentBlockBlok: ContentBlockBlok = {
       elementType: 'h6',
     },
   ],
-  // heading: 'Where performance meets possibility', 
+   heading: [
+    {
+      _uid: 'heading-1',
+      component: 'heading',
+      heading: 'Where performance meets possibility',
+    },
+  ],
   subheading: 'Everything you need to ship modern interfaces',
-  content: {
+  body: {
     type: 'doc',
     content: [
       {
@@ -59,7 +65,7 @@ const contentBlockBlok: ContentBlockBlok = {
           label: 'Learn more',
           href: '#',
           target: '_self',
-          tone: 'secondary'
+          tone: 'secondary',
         },
       ],
     },
@@ -70,8 +76,8 @@ const contentBlockBlok: ContentBlockBlok = {
 const heroBlok: HeroBlok = {
   _uid: 'hero-1',
   component: 'hero',
-  content: [contentBlockBlok],
-  image: {
+  body: [contentBlockBlok],
+  heroImage: {
     filename:
       'https://images.unsplash.com/photo-1522202176988-66273c2fd55f',
     alt: 'Team collaborating',
@@ -84,12 +90,11 @@ export const Default: Story = {
   },
 }
 
-
 export const SubscribeCTA: Story = {
   args: {
     blok: {
       ...heroBlok,
-      content: [
+      body: [
         {
           ...contentBlockBlok,
           _uid: 'content-block-2',

@@ -61,12 +61,12 @@ export const ResourceBentoCard: FC<ResourceBentoCardProps> = ({
     const responsiveOverrides = {
       sm: {
         container: "md:flex-row! md:gap-4 md:p-4 md:items-center",
-        image: "md:w-[140px] md:h-[140px] md:aspect-auto shrink-0",
+        image: "md:w-[140px] md:h-full md:aspect-auto shrink-0",
         titleSize: "md:text-display-xl md:mb-2",
         excerptVisibility: "md:hidden",
       },
       md: {
-        container: "md:flex-col md:gap-(--scale-24) md:p-(--scale-24) max-w-[378px]",
+        container: "md:flex-col md:gap-(--scale-24) md:p-(--scale-24) ",
         image: "md:aspect-video",
         titleSize: "md:text-display-2xl md:mb-4",
         excerptVisibility: "md:line-clamp-4 md:mb-6",
