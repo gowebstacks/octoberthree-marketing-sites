@@ -33,7 +33,6 @@ export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
     secondary: "bg-[var(--surface-icon-card)]",
     tertiary: "bg-[var(--illustration-secondary)]",
   };
-
   return (
     <div
       className={twMerge(
@@ -59,7 +58,7 @@ export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
         <div
           className={twMerge(
             hasImage || hasVideo
-              ? "px-(--scale-80) py-(--scale-96)"
+              ? "sm:px-(--scale-80) sm:py-(--scale-96) section-padding-xl"
               : "py-(--scale-120)",
             blok.flippedMedia && "lg:order-2"
           )}
