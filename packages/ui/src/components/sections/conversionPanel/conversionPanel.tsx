@@ -10,12 +10,13 @@ export interface ConversionPanelProps extends SbBlokData {
   component?: "conversionPanel";
   body?: ContentBlockBlok[];
   variant?: "light" | "dark";
+  squarePattern? : boolean
 }
 
 export const ConversionPanel: FC<{ blok: ConversionPanelProps }> = ({
   blok,
 }) => {
-  const { body, variant } = blok;
+  const { body, variant, squarePattern } = blok;
 
   return (
     <div
@@ -27,7 +28,7 @@ export const ConversionPanel: FC<{ blok: ConversionPanelProps }> = ({
           : "bg-(--surface-background)"
       )}
     >
-      {variant === "dark" && <div className="square-pattern" />}
+      {squarePattern && <div className="pattern-grid pattern-white opacity-10" />}
       <div className="relative z-10 w-full">
         {body?.[0] && <ContentBlock blok={body[0]} />}
       </div>

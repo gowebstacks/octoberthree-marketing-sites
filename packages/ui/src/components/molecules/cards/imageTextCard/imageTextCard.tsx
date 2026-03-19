@@ -4,6 +4,7 @@ import { getLinkData, Link, LinkFragment } from "../../../atoms/link";
 import { RichTextContent } from "../../../../types/storyblok";
 import { twMerge } from "tailwind-merge";
 import { RichText } from "../../richText/richText";
+import { SbBlokData, storyblokEditable } from "@storyblok/react";
 
 interface StoryblokImage {
   id: string;
@@ -11,7 +12,7 @@ interface StoryblokImage {
   alt?: string;
 }
 
-export interface ImageTextCardProps {
+export interface ImageTextCardProps extends SbBlokData {
   _key: string;
   image?: StoryblokImage;
   heading?: string;
@@ -28,6 +29,7 @@ export const ImageTextCard: FC<ImageTextCardProps> = ({
   body,
   link,
   isActive = false,
+  ...blok
 }) => {
   const url = getLinkData(link);
   const linkData = link as any;
@@ -61,7 +63,7 @@ export const ImageTextCard: FC<ImageTextCardProps> = ({
         >
           <div
             className={twMerge(
-              "overflow-hidden transition-opacity",
+              "overflow-hidden ",
               isActive ? "opacity-100" : "opacity-0 "
             )}
           >
@@ -86,7 +88,7 @@ export const ImageTextCard: FC<ImageTextCardProps> = ({
 
   if (hasLink) {
     return (
-      <Link href={link} className={wrapperClasses}>
+      <Link href={link} className={wrapperClasses} {...storyblokEditable(blok)}>
         <div className="flex h-full cursor-pointer flex-col transition-shadow duration-1000 hover:shadow-lg">
           {CardContent}
         </div>
@@ -95,7 +97,7 @@ export const ImageTextCard: FC<ImageTextCardProps> = ({
   }
 
   return (
-    <div className={wrapperClasses}>
+    <div className={wrapperClasses} {...storyblokEditable(blok)}>
       <div className="flex h-full flex-col">{CardContent}</div>
     </div>
   );

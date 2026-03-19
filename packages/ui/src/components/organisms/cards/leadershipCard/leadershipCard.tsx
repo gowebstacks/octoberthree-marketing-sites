@@ -42,22 +42,24 @@ export const LeadershipCard: FC<LeadershipCardProps> = ({
           aspectRatio="3/4"
           objectCover
           unsetMaxWidth
-          className="w-full bg-gray-100"
+          className="w-full bg-gray-100 h-[308px]"
           sizes="(max-width: 768px) 100vw, 300px"
         />
       )}
 
-      <div className="w-full bg-(--surface-secondary-background) p-(--padding-20-18-18)  border-t border-(--color-cream-200)">
+      <div className="w-full bg-(--surface-secondary-background) p-(--padding-20-18-18)  border-t border-(--color-cream-200) flex flex-col gap-2">
        
         <Heading size={'2xl'} as='h3'>
           {blok.name}
 
         </Heading>
-        <p className="mt-2 text-sm text-(--text-body-dark)">
+        <p className="text-sm text-(--text-body-dark)">
           {blok.role}
         </p>
-        <Badge label={blok.location}>
+       {
+        blok.location &&  <Badge  label={blok.location}>
         </Badge>
+       }
       </div>
     </div>
   )

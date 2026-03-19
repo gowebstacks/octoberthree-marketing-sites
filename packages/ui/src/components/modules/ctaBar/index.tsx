@@ -23,7 +23,7 @@ const CTABar: FC<CTABarProps> = ({
   const actualBlok = (blok as any)?.blok || blok
   const items = buttons || actualBlok?.buttons
   const type = actualBlok?.type ?? 'button'
-  const placeholder = actualBlok?.placeholder ?? 'button'
+  const placeholder = actualBlok?.placeholder ?? 'companyemail@company.com'
 
   return (
     <div

@@ -139,7 +139,7 @@ export const Section: FC<SectionProps> = ({
       id={id}
       className={twMerge(
         theme === 'dark' && 'dark', 
-        "relative scroll-mt-16 text-body overflow-hidden section-padding-xl",
+        "relative scroll-mt-16 text-body overflow-hidden px-2",
         bgGradient && bgGradient !== 'none' ? gradientClass : getThemeClasses(theme),
         getPaddingClass(),
         getMinHeightClass(),

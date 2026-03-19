@@ -6,6 +6,8 @@ import type { SbBlokData } from '@storyblok/react'
 
 import { IconTextCard, IconTextCardProps } from '../../../molecules'
 import { ContentBlock, ContentBlockBlok } from '../../../organisms'
+import CTABar, { CTABarProps } from '../../../modules/ctaBar'
+import { twMerge } from 'tailwind-merge'
 
 interface IconCardRow {
   cardsPerRow?: string
@@ -16,13 +18,15 @@ export interface IconCardDeckProps extends SbBlokData {
   body?: ContentBlockBlok[]
   rows?: IconCardRow[]
   htmlId?: string
-  minHeight?: 'none' | 'sm' | 'md' | 'lg'
+  minHeight?: 'none' | 'sm' | 'md' | 'lg',
+  ctaBar?: CTABarProps[]
 }
 
 export const IconCardDeck: FC<IconCardDeckProps> = ({
   body,
   rows,
   htmlId,
+  ctaBar,
   ...blok
 }) => {
   return (
@@ -51,7 +55,7 @@ export const IconCardDeck: FC<IconCardDeckProps> = ({
               {rows.map((row, rowIndex) => (
                 <div
                   key={rowIndex}
-                  className={`grid w-full grid-cols-1 gap-(--scale-32) justify-items-center ${
+                  className={`grid w-full grid-cols-1 gap-(--scale-24) justify-items-center ${
                     row.cardsPerRow === '2'
                       ? 'sm:grid-cols-2'
                       : row.cardsPerRow === '3'
@@ -81,6 +85,17 @@ export const IconCardDeck: FC<IconCardDeckProps> = ({
               ))}
             </div>
           )}
+
+           {ctaBar && ctaBar?.map((cta) => (
+            <CTABar
+              key={cta._uid}
+              blok={cta}
+              className={twMerge(
+               
+                "mt-(--gaps-56-48-48) w-fit m-auto"
+              )}
+            />
+          ))}
 
         </div>
       </div>

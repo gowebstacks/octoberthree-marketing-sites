@@ -1,11 +1,12 @@
 import type { FC } from "react";
 import { getResourceRoute, RESOURCE_TYPE_LABELS } from "../../../lib";
 import { Button, Heading, Link } from "../../atoms";
-import Image from "../../molecules/image";
 import { SbBlokData, storyblokEditable } from "@storyblok/react";
 import { RichText } from "../../molecules/richText/richText";
 import { RichTextContent } from "../../../types/storyblok";
 import { twMerge } from "tailwind-merge";
+import Image from "next/image";
+import { storyblokLoader } from "../../../utils/storyblokImageLoader";
 
 // Universal resource type that handles blogs, case studies, webinars, and press releases
 export interface ResourceCardProps extends SbBlokData {
@@ -35,6 +36,7 @@ export interface ResourceCardProps extends SbBlokData {
   [key: string]: any;
   // Tocheck if it is used in resource carousel
   carousel?: boolean;
+  mode: "dark" | "light";
 }
 
 // Helper function to extract plain text from portable text body
@@ -89,6 +91,7 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
     companyName,
     showBadge = false,
     carousel = false,
+    mode='light',
   } = props;
 
   // Use featuredImage for all resource types
@@ -111,31 +114,43 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
 
   const resourceUrl = `${getResourceRoute(_type)}/${resourceSlug}`;
 
+  console.log(props, "inside resource card")
   return (
     <Link
       href={resourceUrl}
       {...storyblokEditable(props)}
-      className="group  relative flex h-full flex-col overflow-hidden transition-all duration-200 hover:border-(--stroke-card-hover) bg-(--surface-card) border  border-(--stroke-card)"
+      className={twMerge(
+        "group cursor-pointer relative flex h-full flex-col overflow-hidden transition-all duration-200 bg-(--surface-card) hover:bg-(--surface-card-hover) border border-(--stroke-card)",
+        !displayImage &&
+          (mode === "light"
+            ? "border-t-[8px] border-t-(--color-orange-300)"
+            : "border-t-[8px] border-t-(--surface-accent-background)")
+      )}
     >
       <div className={twMerge(carousel ? "max-w-100" : "")}>
         {/* Featured Image */}
         {displayImage && (
-          <div className="relative aspect-video overflow-hidden">
+          <div
+            className={twMerge(
+              "relative h-24.25 flex justify-center items-center overflow-hidden p-8",
+              mode === "light"
+                ? "bg-(--color-orange-300) group-hover:bg-(--illustration-primary)"
+                : "bg-(--surface-accent-background) group-hover:bg-(--text-blog-cta-card)"
+            )}
+          >
             <Image
-              {...displayImage}
-              asset={{
-                url: displayImage.filename,
-              }}
+            loader={storyblokLoader}
+              src={displayImage.filename}
               alt={displayImage?.alt || title || "Resource"}
-              objectCover
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              aspectRatio="16/9"
+              className="object-cover h-full"
+              width={250}
+              height={10}
             />
           </div>
         )}
 
         {/* Content */}
-        <div className="flex flex-col grow p-6">
+        <div className="flex flex-col grow p-(--padding-24-18-18)">
           {/* Category */}
           <span className="text-xs font-medium text-(--text-link) uppercase tracking-wide mb-2">
             {category}
@@ -160,7 +175,11 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
           )}
 
           {/* Learn More Link */}
-          <Button className="w-fit" mode="link" label="Learn more" />
+          <Button
+            className="w-fit group-hover:text-(--text-link-hover)"
+            mode="link"
+            label="Learn more"
+          />
         </div>
       </div>
     </Link>

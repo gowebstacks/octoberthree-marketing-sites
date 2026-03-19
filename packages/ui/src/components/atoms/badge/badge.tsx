@@ -4,7 +4,7 @@ import type { FC } from "react";
 import { twMerge } from "tailwind-merge";
 import { Icon } from "../../atoms";
 
-type BadgeProps = {
+export type BadgeProps = {
   label: string;
   variant?: "navy" | "cyan" | "yellow" | "teal" | "orange";
   onRemove?: () => void;
@@ -49,6 +49,7 @@ export const Badge: FC<BadgeProps> = ({
           rounded-sm
           px-2 py-0.5
           text-sm font-medium leading-6
+          w-fit
         `,
         variantStyles[variant]
       )}

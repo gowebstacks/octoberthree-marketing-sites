@@ -3,12 +3,13 @@
 import { storyblokEditable, type SbBlokData } from "@storyblok/react";
 import { RichText } from "../../molecules/richText/richText";
 import { twMerge } from "tailwind-merge";
-import { Eyebrow, Heading, type EyebrowBlockProps } from "../../atoms";
+import { Badge, BadgeProps, Eyebrow, Heading, type EyebrowBlockProps } from "../../atoms";
 import type { RichTextContent } from "../../../types/storyblok";
 import CTABar, { CTABarProps } from "../../modules/ctaBar";
 import { HeadingBlok } from "../../atoms/heading";
 
 export interface ContentBlockBlok extends SbBlokData {
+  badge? : BadgeProps[]
   eyebrow?: EyebrowBlockProps[];
   heading?: HeadingBlok[];
   body?: RichTextContent;
@@ -23,6 +24,7 @@ interface ContentBlockProps {
 
 export function ContentBlock({ blok }: ContentBlockProps) {
   const {
+    badge,
     eyebrow,
     heading,
     body,
@@ -46,7 +48,18 @@ export function ContentBlock({ blok }: ContentBlockProps) {
         )}
       >
         <div className="flex flex-col gap-(--gaps-16-12-12)">
-          {eyebrow?.length ? (
+
+         <div className={twMerge(
+          "flex gap-2.5 items-center",
+          layout === 'stacked' ? 'justify-center' :''
+         )}>
+           {badge?.length ? (
+            <Badge
+              {...badge[0]}
+              
+            />
+          ) : null}
+           {eyebrow?.length ? (
             <Eyebrow
               {...eyebrow[0]}
               className={twMerge(
@@ -54,6 +67,7 @@ export function ContentBlock({ blok }: ContentBlockProps) {
               )}
             />
           ) : null}
+         </div>
           {!!heading?.length && (
             <Heading
               blok={heading[0]}
