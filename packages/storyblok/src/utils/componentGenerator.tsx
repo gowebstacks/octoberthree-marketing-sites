@@ -77,7 +77,9 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
     case "switchback":
       return <Switchback key={component._uid} blok={component} />;
     case "resourceCardDeck":
-      return <ResourceCardDeck key={component._uid} {...component} />;
+      return (
+        <ResourceCardDeck key={component._uid} {...component} rels={rels} />
+      );
 
     case "iconCardDeck":
       return (
@@ -157,12 +159,7 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
         />
       );
     case "videoBlock":
-      return (
-        <VideoBlock
-          key={component._uid}
-          blok={component}
-        />
-      );
+      return <VideoBlock key={component._uid} blok={component} />;
 
     case "statisticsPanel":
       return (
@@ -173,12 +170,7 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
         />
       );
     case "portableText":
-      return (
-        <PortableText
-          key={component._uid}
-          blok={component as any}
-        />
-      );
+      return <PortableText key={component._uid} blok={component as any} />;
 
     // Add more Storyblok components as you refactor them
     default:

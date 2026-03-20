@@ -16,6 +16,7 @@ export interface ResourceCardProps extends SbBlokData {
   excerpt?: string;
   body?: RichTextContent;
   featuredImage?: any; // all resource types use featuredImage
+  link: SbBlokData;
   seo?: {
     slug?: {
       current?: string;
@@ -25,6 +26,7 @@ export interface ResourceCardProps extends SbBlokData {
     // case studies use slug directly
     current?: string;
   };
+  tags: string[];
   publishedDate?: string;
   publishedAt?: string; // case studies and press releases use publishedAt
   readTime?: number;
@@ -81,6 +83,7 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
     excerpt,
     body,
     featuredImage,
+    link,
     seo,
     slug,
     publishedDate,
@@ -112,7 +115,7 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
   // Get badge label from centralized constants
   const badgeLabel = RESOURCE_TYPE_LABELS[_type] || "Article";
 
-  const resourceUrl = `${getResourceRoute(_type)}/${resourceSlug}`;
+  const resourceUrl = link  || `${getResourceRoute(_type)}/${resourceSlug}`;
 
   console.log(props, "inside resource card")
   return (
@@ -120,21 +123,21 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
       href={resourceUrl}
       {...storyblokEditable(props)}
       className={twMerge(
-        "group cursor-pointer relative flex h-full flex-col overflow-hidden transition-all duration-200 bg-(--surface-card) hover:bg-(--surface-card-hover) border border-(--stroke-card)",
-        !displayImage &&
-          (mode === "light"
-            ? "border-t-[8px] border-t-(--color-orange-300)"
-            : "border-t-[8px] border-t-(--surface-accent-background)")
+        "group cursor-pointer relative flex h-full flex-col overflow-hidden transition-all duration-200 bg-(--surface-card) hover:bg-(--surface-card-hover) border border-(--stroke-card) rounded-sm",
+       
       )}
     >
-      <div className={twMerge(carousel ? "max-w-100" : "")}>
+      <div className={twMerge(carousel ? "max-w-100" : "",  !displayImage.filename &&
+          (mode === "light"
+            ? "border-t-8 border-t-orange-300"
+            : "border-t-8 border-t-(--surface-accent-background)"))}>
         {/* Featured Image */}
-        {displayImage && (
+        {displayImage.filename && (
           <div
             className={twMerge(
               "relative h-24.25 flex justify-center items-center overflow-hidden p-8",
               mode === "light"
-                ? "bg-(--color-orange-300) group-hover:bg-(--illustration-primary)"
+                ? "bg-orange-300 group-hover:bg-(--illustration-primary)"
                 : "bg-(--surface-accent-background) group-hover:bg-(--text-blog-cta-card)"
             )}
           >

@@ -23,7 +23,7 @@ const Pagination:FC<PaginationProps> = ({ totalPages, baseUrl }) => {
 
   const handlePage = (page: number) => {
     setCurrentPage(page)
-    router.push(`${baseUrl || '/'}?page=${page}`)
+    router.push(`${baseUrl || '/'}?page=${page}`, { scroll: false })
   }
 
   return (
