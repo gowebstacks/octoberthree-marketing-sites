@@ -41,7 +41,7 @@ export const IconTextCard: FC<IconTextCardProps> = ({
     >
       {icon && (
         <div className="relative h-72 w-full p-8 grid  place-items-center bg-(--surface-icon-card)">
-          <div className="pattern-grid pattern-white opacity-20"></div>
+          <div className="pattern-grid pattern-white opacity-20 group-hover:opacity-35"></div>
           <Image
             loader={storyblokLoader}
             src={icon.filename}
