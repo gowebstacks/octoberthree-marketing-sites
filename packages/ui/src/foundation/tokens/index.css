@@ -1144,7 +1144,7 @@
     padding-left: var(--padding-side-sectional-80-64-16);
     padding-right: var(--padding-side-sectional-80-64-16);
   }
-    .section-padding-md {
+  .section-padding-md {
     padding: var(--padding-56-48-48) var(--padding-32-24-24);
   }
   .section-padding-xl-top-bottom {
@@ -1156,7 +1156,6 @@
     padding-right: var(--padding-side-sectional-80-64-16);
   }
 
-
   .square-pattern-white {
     @apply absolute inset-0 pointer-events-none opacity-15 bg-repeat bg-auto;
     background-image: url("/squarePattern/WhitePattern.svg");
@@ -1166,158 +1165,166 @@
     background-image: url("/squarePattern/SquarePatterForImage.svg");
   }
 
-/* Page gradient */
-.soft-gradient {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 10;
-  height: 100%;
-  overflow: hidden;
-}
-
-.soft-gradient::before,
-.soft-gradient::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  width: 18%;
-  height: 620px;
-  border-radius: 9999px;
-  filter: blur(80px);
-}
-
-/* Left glow only */
-.soft-gradient::before {
-  left: -10%;
-  transform: translateY(-50%);
-  background: var(--gradient-left, transparent);
-}
-
-/* Right glow only */
-.soft-gradient::after {
-  right: -10%;
-  transform: translateY(-50%);
-  background: var(--gradient-right, transparent);
-}
-
-/* LEFT VARIANTS */
-.left-orange {
-  --gradient-left: var(--color-orange-200---p-light);
-  --gradient-right: transparent;
-}
-
-.left-yellow {
-  --gradient-left: var(--color-yellow-200);
-  --gradient-right: transparent;
-}
-
-.left-cyan {
-  --gradient-left: var(--color-cyan-100---p);
-  --gradient-right: transparent;
-}
-
-.left-teal {
-  --gradient-left: var(--color-teal-100);
-  --gradient-right: transparent;
-}
-
-/* RIGHT VARIANTS */
-.right-orange {
-  --gradient-left: transparent;
-  --gradient-right: var(--color-orange-200---p-light);
-}
-
-.right-yellow {
-  --gradient-left: transparent;
-  --gradient-right: var(--color-yellow-200);
-}
-
-.right-cyan {
-  --gradient-left: transparent;
-  --gradient-right: var(--color-cyan-100---p);
-}
-
-.right-teal {
-  --gradient-left: transparent;
-  --gradient-right: var(--color-teal-100);
-}
-  
-  /* Square Pattern */
-.pattern-grid {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-
-  background-color: currentColor;
-
-  -webkit-mask-image: url("/squarePattern/pattern.svg");
-  mask-image: url("/squarePattern/pattern.svg");
-
-  -webkit-mask-repeat: repeat;
-  mask-repeat: repeat;
-
-  -webkit-mask-size: 340px 340px;
-  mask-size: 340px 340px;
-  
-}
-.pattern-white{
-  color: var(--color-white);
-}
-
-.pattern-yellow {
-  color: var(--color-yellow-300);
-}
-
-.pattern-cyan {
-  color: var(--color-cyan-300);
-}
-.pattern-teal {
-  color: var(--color-teal-300);
-}
-
-.pattern-orange {
-  color: var(--color-orange-400----p);
-}
-
-.pattern-blue {
-  color: var(--color-navy-primary-900---p);
-}
-.pattern-triangle {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-
-  background-color: currentColor;
-
-  -webkit-mask-image: url("/squarePattern/triangle-desktop.svg");
-  mask-image: url("/squarePattern/triangle-desktop.svg");
-
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-
-  -webkit-mask-size: contain;
-   mask-size: auto 70%;
-
-}
-@media (max-width: 1024px) {
-  .pattern-triangle {
-    -webkit-mask-image: url("/squarePattern/triangle-tablet.svg");
-    mask-image: url("/squarePattern/triangle-tablet.svg");
-
+  /* Page gradient */
+  .soft-gradient {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+    height: 100%;
+    overflow: hidden;
   }
-}
-@media (max-width: 768px) {
-  .pattern-triangle {
+
+  .soft-gradient::before,
+  .soft-gradient::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 18%;
+    height: 620px;
+    border-radius: 9999px;
+    filter: blur(80px);
+  }
+
+  /* Left glow only */
+  .soft-gradient::before {
+    left: -10%;
+    transform: translateY(-50%);
+    background: var(--gradient-left, transparent);
+  }
+
+  /* Right glow only */
+  .soft-gradient::after {
+    right: -10%;
+    transform: translateY(-50%);
+    background: var(--gradient-right, transparent);
+  }
+
+  /* LEFT VARIANTS */
+  .left-orange {
+    --gradient-left: var(--color-orange-200---p-light);
+    --gradient-right: transparent;
+  }
+
+  .left-yellow {
+    --gradient-left: var(--color-yellow-200);
+    --gradient-right: transparent;
+  }
+
+  .left-cyan {
+    --gradient-left: var(--color-cyan-100---p);
+    --gradient-right: transparent;
+  }
+
+  .left-teal {
+    --gradient-left: var(--color-teal-100);
+    --gradient-right: transparent;
+  }
+
+  /* RIGHT VARIANTS */
+  .right-orange {
+    --gradient-left: transparent;
+    --gradient-right: var(--color-orange-200---p-light);
+  }
+
+  .right-yellow {
+    --gradient-left: transparent;
+    --gradient-right: var(--color-yellow-200);
+  }
+
+  .right-cyan {
+    --gradient-left: transparent;
+    --gradient-right: var(--color-cyan-100---p);
+  }
+
+  .right-teal {
+    --gradient-left: transparent;
+    --gradient-right: var(--color-teal-100);
+  }
+
+  /* Square Pattern */
+  .pattern-grid {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+
+    background-color: currentColor;
+
+    -webkit-mask-image: url("/squarePattern/pattern.svg");
+    mask-image: url("/squarePattern/pattern.svg");
+
+    -webkit-mask-repeat: repeat;
+    mask-repeat: repeat;
+
+    -webkit-mask-size: 340px 340px;
+    mask-size: 340px 340px;
+  }
+  .pattern-white {
+    color: var(--color-white);
+  }
+
+  .pattern-yellow {
+    color: var(--color-yellow-300);
+  }
+
+  .pattern-cyan {
+    color: var(--color-cyan-300);
+  }
+  .pattern-teal {
+    color: var(--color-teal-300);
+  }
+
+  .pattern-orange {
+    color: var(--color-orange-400----p);
+  }
+
+  .pattern-blue {
+    color: var(--color-navy-primary-900---p);
+  }
+  .pattern-triangle,
+  .pattern-triangle-sm {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+
+    background-color: currentColor;
+
+    -webkit-mask-image: url("/squarePattern/triangle-desktop.svg");
+    mask-image: url("/squarePattern/triangle-desktop.svg");
+
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+
+    -webkit-mask-size: contain;
+     width: 215px;
+    height: 209px;
+    mask-size: auto;
+  }
+  .pattern-triangle-sm {
     -webkit-mask-image: url("/squarePattern/triangle-mobile.svg");
     mask-image: url("/squarePattern/triangle-mobile.svg");
-
-
+    width: 119px;
+    height: 115px;
+    mask-size: auto;
   }
-}
-
-
-
+  @media (max-width: 1024px) {
+    .pattern-triangle {
+      -webkit-mask-image: url("/squarePattern/triangle-tablet.svg");
+      mask-image: url("/squarePattern/triangle-tablet.svg");
+       width: 181px;
+    height: 175px;
+    mask-size: auto;
+    }
+  }
+  @media (max-width: 768px) {
+    .pattern-triangle {
+      -webkit-mask-image: url("/squarePattern/triangle-mobile.svg");
+      mask-image: url("/squarePattern/triangle-mobile.svg");
+       width: 119px;
+    height: 115px;
+    mask-size: auto;
+    }
+  }
 }

@@ -77,9 +77,8 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
     case "switchback":
       return <Switchback key={component._uid} blok={component} />;
     case "resourceCardDeck":
-      return (
-        <ResourceCardDeck key={component._uid} {...component} rels={rels} />
-      );
+      return <ResourceCardDeck key={component._uid} {...component}     rels={rels}
+ />;
 
     case "iconCardDeck":
       return (
@@ -159,7 +158,12 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
         />
       );
     case "videoBlock":
-      return <VideoBlock key={component._uid} blok={component} />;
+      return (
+        <VideoBlock
+          key={component._uid}
+          blok={component}
+        />
+      );
 
     case "statisticsPanel":
       return (
@@ -170,7 +174,12 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
         />
       );
     case "portableText":
-      return <PortableText key={component._uid} blok={component as any} />;
+      return (
+        <PortableText
+          key={component._uid}
+          blok={component as any}
+        />
+      );
 
     // Add more Storyblok components as you refactor them
     default:
@@ -281,7 +290,7 @@ export const ComponentGenerator: FC<componentGeneratorProps> = ({
             key={section._uid}
             {...sectionProps}
             isFirstSection={!skipFirstSectionSpacing && index === 0}
-            sectionType={section.component}
+            sectionType={section.section?.[0].component || section.component}
             prevTheme={prevSection?.theme as any}
             nextTheme={nextSection?.theme as any}
             id={section.htmlId as string}

@@ -106,7 +106,7 @@ export const AwardsBlade: FC<StoryblokAwardsBlade> = ({
   return (
     <div
       {...storyblokEditable(blok as any)}
-      className="flex w-full flex-col gap-6 items-center max-w-(--widths-1440-834-375) mx-auto"
+      className="flex w-full flex-col gap-6 items-center max-w-360 mx-auto"
     >
       {rows &&
         (variant === "scroll" ? (

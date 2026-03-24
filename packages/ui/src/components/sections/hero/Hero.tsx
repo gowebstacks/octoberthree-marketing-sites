@@ -36,7 +36,7 @@ export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
   return (
     <div
       className={twMerge(
-        "relative mx-auto max-w-(--widths-1440-834-375) rounded-sm",
+        "relative mx-auto max-w-360 rounded-sm",
         themeClasses[blok.theme ?? "primary"]
       )}
       {...storyblokEditable(blok)}
@@ -52,14 +52,14 @@ export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
           "relative z-10 mx-auto grid items-center gap-16",
           hasImage || hasVideo
             ? "grid-cols-1 lg:grid-cols-2"
-            : "max-w-(--widths-1280-704-343)"
+            : ""
         )}
       >
         <div
           className={twMerge(
             hasImage || hasVideo
               ? "sm:px-(--scale-80) sm:py-(--scale-96) section-padding-xl"
-              : "py-(--scale-120)",
+              : "py-(--scale-120)  sm:px-(--scale-80) section-padding-xl",
             blok.flippedMedia && "lg:order-2"
           )}
         >

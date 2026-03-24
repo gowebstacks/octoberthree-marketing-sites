@@ -76,7 +76,7 @@ export const ResourceCardDeck: FC<ResourceCardDeckBlok> = ({
     <div
       {...storyblokEditable(blok)}
       id={htmlId}
-      className="flex max-w-(--widths-1440-834-375) mx-auto flex-col gap-12 sm:gap-16"
+      className="flex max-w-360 mx-auto flex-col gap-12 sm:gap-16"
     >
       {content?.length ? (
         <div className="flex flex-col gap-8">

@@ -28,7 +28,7 @@ export const ResourceBentoCardDeck: FC<ResourceBentoCardDeckBlok> = ({
       {...storyblokEditable(blok)}
       id={htmlId}
       className="
-         grid mx-auto max-w-(--widths-1440-834-375) grid-cols-1
+         grid mx-auto max-w-360 grid-cols-1
         gap-(--gaps-56-48-48)
           
         "

@@ -38,7 +38,7 @@ export const Accordion: FC<AccordionProps> = ({
   return (
   
       <div
-      className='max-w-(--widths-1440-834-375) mx-auto '
+      className='max-w-360 mx-auto '
       >
         {faqSchema && (
         <script type="application/ld+json">
@@ -46,7 +46,7 @@ export const Accordion: FC<AccordionProps> = ({
         </script>
       )}
 
-      <div  {...storyblokEditable(blok)} className={twMerge(containerStyle({ layout }), ' max-w-(--widths-1440-834-375) mx-auto')}>
+      <div  {...storyblokEditable(blok)} className={twMerge(containerStyle({ layout }), ' max-w-360 mx-auto')}>
         {body?.length ? (
           <div>
             {body.map((nestedBlok) => (

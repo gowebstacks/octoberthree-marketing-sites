@@ -31,7 +31,7 @@ export const IconCardDeck: FC<IconCardDeckProps> = ({
 }) => {
   return (
    
-      <div className="max-w-(--widths-1440-834-375) mx-auto"  {...storyblokEditable(blok)}
+      <div className="max-w-360 mx-auto"  {...storyblokEditable(blok)}
       id={htmlId}>
         <div className="flex flex-col gap-12 sm:gap-16">
 

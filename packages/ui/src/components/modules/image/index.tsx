@@ -21,7 +21,7 @@ export const ImageWithDesc: FC<ImageProps> = ({ blok, className }) => {
     <div
   
       className={twMerge(
-        'w-full overflow-hidden max-w-(--widths-1440-834-375) mx-auto',
+        'w-full overflow-hidden max-w-360 mx-auto',
         className
       )}
     >
