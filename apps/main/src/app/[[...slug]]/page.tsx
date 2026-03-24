@@ -69,7 +69,6 @@ export default async function SlugPage(props: {
   const rels = (page as any).rels || []; // Storyblok resolved relations are in rels.content
   const sections = content.sections || [];
   const pageSettings = content.pageSettings || {};
-  console.log(page.rels, "this is the rels")
 
   // Build absolute URL matching the public canonical path
   const siteBase = SITE_CONFIG.urls.domain;
