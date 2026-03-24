@@ -44,7 +44,7 @@ export function ContentBlock({ blok }: ContentBlockProps) {
       <div
         className={twMerge(
           layoutClasses[layout],
-          "max-w-(--widths-1280-704-343)"
+          "max-w-7xl"
         )}
       >
         <div className="flex flex-col gap-(--gaps-16-12-12)">

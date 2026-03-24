@@ -58,7 +58,7 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
   return (
     <div
       {...storyblokEditable(blok)}
-      className="relative section-padding-xl-top-bottom max-w-(--widths-1440-834-375) mx-auto lg:bg-(--surface-accent-background) rounded-lg overflow-hidden"
+      className="relative section-padding-xl-top-bottom max-w-360 mx-auto lg:bg-(--surface-accent-background) rounded-lg overflow-hidden"
     >
       <div
         className="absolute inset-0 opacity-5"

@@ -66,7 +66,7 @@ export const Switchback: FC<{ blok: SwitchbackBlok }> = ({ blok }) => {
           `
           mx-auto
           grid
-          max-w-(--widths-1440-834-375)
+          max-w-360
           grid-cols-1
           gap-16
           items-center

@@ -94,7 +94,7 @@ export const ResourceCarousel: FC<ResourceCarouselBlok> = ({
       {...storyblokEditable(blok)}
       id={htmlId}
       className="
-          mx-auto grid  max-w-(--widths-1440-834-375) grid-cols-1
+          mx-auto grid  max-w-360 grid-cols-1
           gap-y-(--gaps-56-48-48)
           gap-x-(--gaps-56-48-48)
           lg:grid-cols-2

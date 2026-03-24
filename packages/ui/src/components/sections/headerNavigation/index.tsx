@@ -34,7 +34,7 @@ export const HeaderNavigation: React.FC<HeaderNavigationProps> = ({
         className="
           relative
           flex
-          max-w-(--widths-1440-834-375)
+          max-w-360
           mx-auto
           py-(--gaps-32-24-24)
           px-(--padding-side-sectional-80-64-16)

@@ -157,7 +157,7 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
 
   return (
     <div
-      className="flex flex-col gap-12 sm:gap-16 mx-auto max-w-(--widths-1440-834-375)"
+      className="flex flex-col gap-12 sm:gap-16 mx-auto max-w-360"
       {...storyblokEditable(blok)}
       id={htmlId}
     >
