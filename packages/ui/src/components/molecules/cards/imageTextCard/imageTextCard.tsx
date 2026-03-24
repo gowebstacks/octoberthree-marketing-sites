@@ -41,7 +41,7 @@ export const ImageTextCard: FC<ImageTextCardProps> = ({
     <div className="relative h-107.5 w-full overflow-hidden">
       {image && (
         <div
-          className="absolute inset-0 h-full w-full bg-cover bg-center transition-transform duration-500"
+          className="absolute inset-0 h-full w-full bg-cover bg-top transition-transform duration-500"
           style={{ backgroundImage: `url(${image.filename})` }}
         />
       )}
