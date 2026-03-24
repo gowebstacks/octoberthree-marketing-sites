@@ -82,7 +82,7 @@ export const ImageTextCard: FC<ImageTextCardProps> = ({
           </div>
          {button?.[0] && (
           <div className="mt-8">
-            <Button {...button[0]} mode="link" background="dark"/>
+            <Button className="w-fit" {...button[0]} mode="link" background="dark"/>
           </div>
         )}
         </div>

@@ -111,10 +111,11 @@ export const ResourceBentoCard: FC<ResourceBentoCardProps> = ({
       {featuredImage && (
         <div className={twMerge("relative overflow-hidden", styles.image)}>
           <Image
+          patternVariant={size}
             asset={{ url: featuredImage.filename }}
             {...featuredImage}
             alt={featuredImage?.alt || title || "Resource"}
-            className="h-full w-full [&>img]:object-cover transition-transform duration-300 group-hover:scale-105"
+            className="h-full w-full [&>img]:object-cover transition-transform duration-300 "
           />
         </div>
       )}

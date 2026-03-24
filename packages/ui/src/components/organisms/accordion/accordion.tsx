@@ -164,9 +164,7 @@ export function AccordionItem({
               )}
             </div>
 
-           <AccordionPrimitive.Content
-  className="overflow-hidden data-[state=open]:accordion-down data-[state=closed]:accordion-up"
->
+            <AccordionPrimitive.Content className="overflow-hidden data-[state=open]:accordion-down data-[state=closed]:accordion-up">
               <div
                 {...storyblokEditable(item as any)}
                 data-blok-field="content"
@@ -174,11 +172,11 @@ export function AccordionItem({
               >
                 <RichText doc={item.body} />
               </div>
-             {item.button?.[0] && (
-          <div className="mt-8">
-            <Button {...item.button[0]} mode="link" background="dark"/>
-          </div>
-        )}
+              {item.button?.[0] && (
+                <div className="mt-8">
+                  <Button {...item.button[0]} mode="link"  />
+                </div>
+              )}
             </AccordionPrimitive.Content>
           </AccordionPrimitive.Item>
         );

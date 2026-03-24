@@ -52,6 +52,8 @@ export interface ImageProps
    * Determines whether the image should have its maximum width unset, allowing it to fill the container.
    */
   unsetMaxWidth?: boolean;
+
+  patternVariant?: 'sm'| 'md' | 'lg' 
 }
 
 const Image: FC<ImageProps> = ({
@@ -68,6 +70,7 @@ const Image: FC<ImageProps> = ({
   unsetRatio,
   sizes,
   unsetMaxWidth,
+  patternVariant,
   ...props
 }) => {
   const imgWidth = width || asset?.metadata?.dimensions?.width,
@@ -83,7 +86,12 @@ const Image: FC<ImageProps> = ({
           : aspectRatio || asset?.metadata?.dimensions?.aspectRatio || `${width}/${height}`,
       }}
     >
-      <div className="pattern-triangle pattern-orange"></div>
+      <div className={
+        twMerge(
+          ' pattern-orange',
+          patternVariant === 'sm' ? 'pattern-triangle-sm' :'pattern-triangle'
+        )
+      }></div>
       <NextImage
         loader={storyblokLoader}
         src={asset?.url}
