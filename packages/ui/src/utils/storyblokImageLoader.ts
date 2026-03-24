@@ -11,5 +11,7 @@ export const storyblokLoader = ({
     return src
   }
 
+ if (src.includes('.svg')) return src
+
   return `${src}/m/${width}x0/filters:quality(${quality || 75})`
 }

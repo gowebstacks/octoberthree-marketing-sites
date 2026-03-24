@@ -5,6 +5,7 @@ import { RichTextContent } from "../../../../types/storyblok";
 import { twMerge } from "tailwind-merge";
 import { RichText } from "../../richText/richText";
 import { SbBlokData, storyblokEditable } from "@storyblok/react";
+import Button from "../../../atoms/button";
 
 interface StoryblokImage {
   id: string;
@@ -28,12 +29,13 @@ export const ImageTextCard: FC<ImageTextCardProps> = ({
   heading,
   body,
   link,
+  button,
   isActive = false,
   ...blok
 }) => {
   const url = getLinkData(link);
   const linkData = link as any;
-  const hasLink = link && linkData.label && url !== "";
+  const hasLink = (link && linkData.label && url !== "") || button?.length;
 
   const CardContent = (
     <div className="relative h-107.5 w-full overflow-hidden">
@@ -78,6 +80,11 @@ export const ImageTextCard: FC<ImageTextCardProps> = ({
               )}
             </div>
           </div>
+         {button?.[0] && (
+          <div className="mt-8">
+            <Button {...button[0]} mode="link" background="dark"/>
+          </div>
+        )}
         </div>
       </div>
     </div>

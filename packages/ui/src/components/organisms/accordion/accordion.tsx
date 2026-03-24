@@ -1,28 +1,27 @@
 "use client";
 
-import * as React from "react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { twMerge } from "tailwind-merge";
 import type { SbBlokData } from "@storyblok/react";
 import { storyblokEditable } from "@storyblok/react";
-import { Button, Icon } from "../../atoms";
+import { Icon } from "../../atoms";
 import { RichTextContent } from "../../../types/storyblok";
 import { RichText } from "../../molecules/richText/richText";
+import CTABar, { CTABarProps } from "../../modules/ctaBar";
+import { useEffect, useMemo, useState } from "react";
 
 type StoryblokImage = {
   id: string;
   filename: string;
   alt?: string;
 };
+
 export type AccordionItem = {
   _uid: string;
   label: string;
   body: RichTextContent;
-  cta?: {
-    label: string;
-    href: string;
-  };
   icon?: StoryblokImage;
+  cta?: CTABarProps[];
 };
 
 export interface AccordionItemProps extends SbBlokData {
@@ -31,118 +30,173 @@ export interface AccordionItemProps extends SbBlokData {
   className?: string;
 }
 
+function extractText(node: any): string {
+  if (!node) return "";
+  if (typeof node === "string") return node;
+  if (Array.isArray(node)) return node.map(extractText).join(" ");
+  if (node.text) return node.text;
+  if (node.content) return extractText(node.content);
+  return "";
+}
+
+function getReadingDuration(text: string) {
+  if (!text) return 4000;
+
+  const words = text.trim().split(/\s+/).length;
+  const wpm = 220;
+  const ms = (words / wpm) * 60 * 1000;
+
+  return Math.max(ms, 3000);
+}
+
 export function AccordionItem({
   items,
   colorMode = "light",
   className,
   ...blok
 }: AccordionItemProps) {
-  console.log(items, "test blok in accordion");
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const durations = useMemo(() => {
+    return items.map((item) => {
+      if (!item?.body) return 4000;
+      return getReadingDuration(extractText(item.body));
+    });
+  }, [items]);
+
+  const activeItem = items[activeIndex];
+
+  useEffect(() => {
+    if (!items.length) return;
+
+    const duration = durations[activeIndex] || 4000;
+
+    const timeout = setTimeout(() => {
+      setActiveIndex((prev) => (prev + 1) % items.length);
+    }, duration);
+
+    return () => clearTimeout(timeout);
+  }, [activeIndex, durations, items.length]);
 
   return (
     <AccordionPrimitive.Root
       type="single"
       collapsible
+      value={activeItem?._uid}
+      onValueChange={(val) => {
+        const index = items.findIndex((i) => i._uid === val);
+        if (index !== -1) setActiveIndex(index);
+      }}
       className={twMerge("w-full", className)}
     >
-      {items.map((item) => (
-        <AccordionPrimitive.Item
-          key={item._uid}
-          value={item._uid}
-          {...storyblokEditable(item)}
-          className="group relative border-b border-(--stroke-secondary) flex flex-col gap-(--gaps-16-12-12) p-(--gaps-24-18-18)"
-        >
-          <AccordionPrimitive.Header>
-            <AccordionPrimitive.Trigger
-              className="
-                group flex w-full items-center justify-between gap-3 text-left
-                transition-colors
+      {items.map((item, index) => {
+        const isActive = index === activeIndex;
+        const duration = durations[index] || 4000;
 
-                text-neutral-600
-
-                data-[state=open]:text-(--text-headings-dark)
-              "
-            >
-              <div className="flex items-center gap-4">
-                {item?.icon?.filename && (
-                  <span
-                    className="
-      shrink-0 transition-opacity
-      opacity-50
-      group-data-[state=open]:opacity-100
-    "
-                  >
-                    <img
-                      src={item.icon.filename}
-                      alt={item.icon.alt || ""}
-                      className="h-6 w-6 object-contain"
-                    />
-                  </span>
-                )}
-
-                <span className="text-display-xl">{item.label}</span>
-              </div>
-
-              <div
-                className="
-                cursor-pointer
-    flex items-center justify-center rounded-sm p-(--padding-8-6-6) 
-    transition-colors               
-    bg-transparent 
-                
-    group-data-[state=open]:bg-(--surface-button-active)
-    group-data-[state=open]:text-(--icon-on-accent)
-  "
-                aria-hidden
-              >
-                <Icon
-                  size={24}
-                  className="text-neutral-600 group-data-[state=open]:hidden"
-                  icon="plus"
-                />
-                <Icon
-                  size={24}
-                  className="text-(--icon-button) hidden group-data-[state=open]:block"
-                  icon="minus"
-                />
-              </div>
-            </AccordionPrimitive.Trigger>
-          </AccordionPrimitive.Header>
-          <div
-            className="
-    absolute bottom-0 left-0
-    w-0
-    border-b-2 border-(--stroke-secondary-button-hover)
-    transition-all duration-300
-    group-data-[state=open]:w-[60%]
-  "
-          />
-          <AccordionPrimitive.Content
-            className="
-              overflow-hidden
-              data-[state=open]:animate-accordion-down
-              data-[state=closed]:animate-accordion-up
-            "
+        return (
+          <AccordionPrimitive.Item
+            key={item._uid}
+            value={item._uid}
+            {...storyblokEditable(item)}
+            className="group relative border-b border-(--stroke-secondary) flex flex-col gap-(--gaps-16-12-12) p-(--gaps-24-18-18)"
           >
-            <div
-              {...storyblokEditable(item as any)}
-              data-blok-field="content"
-              className=" text-(--text-body-dark) text-sm flex flex-col gap-(--gaps-16-12-12)"
-            >
-              <RichText doc={item.body} />
+            <AccordionPrimitive.Header>
+              <AccordionPrimitive.Trigger
+                className="
+                  group flex w-full items-center justify-between gap-3 text-left
+                  transition-colors
+                  text-neutral-600
+                  data-[state=open]:text-(--text-headings-dark)
+                "
+              >
+                <div className="flex items-center gap-4">
+                  {item?.icon?.filename && (
+                    <span
+                      className="
+                        shrink-0 transition-opacity
+                        opacity-50
+                        group-data-[state=open]:opacity-100
+                      "
+                    >
+                      <img
+                        src={item.icon.filename}
+                        alt={item.icon.alt || ""}
+                        className="h-6 w-6 object-contain"
+                        loading="lazy"
+                      />
+                    </span>
+                  )}
 
-              {/* {item.cta && (
-                <Button
-                  mode="link"
-                  label={item.cta.label}
-                  href={item.cta.href}
-                  className="w-fit"
+                  <span className="text-display-xl">{item.label}</span>
+                </div>
+
+                <div
+                  className="
+                    flex items-center justify-center rounded-sm p-(--padding-8-6-6)
+                    transition-colors               
+                    bg-transparent 
+                    group-data-[state=open]:bg-(--surface-button-active)
+                  "
+                  aria-hidden
+                >
+                  <Icon
+                    size={24}
+                    className="text-neutral-600 group-data-[state=open]:hidden"
+                    icon="plus"
+                  />
+                  <Icon
+                    size={24}
+                    className="hidden group-data-[state=open]:block"
+                    icon="minus"
+                  />
+                </div>
+              </AccordionPrimitive.Trigger>
+            </AccordionPrimitive.Header>
+
+            <div className="absolute bottom-0 left-0 w-full h-0.5 overflow-hidden">
+              {isActive && (
+                <div
+                  key={activeIndex}
+                  className="h-full bg-(--stroke-secondary-button-hover) origin-left"
+                  style={{
+                    animation: `progressBar ${duration}ms linear forwards`,
+                  }}
                 />
-              )} */}
+              )}
             </div>
-          </AccordionPrimitive.Content>
-        </AccordionPrimitive.Item>
-      ))}
+
+           <AccordionPrimitive.Content
+  className="overflow-hidden data-[state=open]:accordion-down data-[state=closed]:accordion-up"
+>
+              <div
+                {...storyblokEditable(item as any)}
+                data-blok-field="content"
+                className="text-(--text-body-dark) text-sm flex flex-col gap-(--gaps-16-12-12)"
+              >
+                <RichText doc={item.body} />
+              </div>
+              {item.cta?.length ? (
+                <div className="mt-(--gaps-16-12-12)">
+                  {item.cta.map((ctaItem) => (
+                    <CTABar key={ctaItem._uid} {...ctaItem} />
+                  ))}
+                </div>
+              ) : null}
+            </AccordionPrimitive.Content>
+          </AccordionPrimitive.Item>
+        );
+      })}
+
+      <style jsx>{`
+        @keyframes progressBar {
+          from {
+            transform: scaleX(0);
+          }
+          to {
+            transform: scaleX(1);
+          }
+        }
+      `}</style>
     </AccordionPrimitive.Root>
   );
 }
