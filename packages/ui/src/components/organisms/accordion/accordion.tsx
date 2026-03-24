@@ -4,10 +4,9 @@ import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { twMerge } from "tailwind-merge";
 import type { SbBlokData } from "@storyblok/react";
 import { storyblokEditable } from "@storyblok/react";
-import { Icon } from "../../atoms";
+import { Button, Icon } from "../../atoms";
 import { RichTextContent } from "../../../types/storyblok";
 import { RichText } from "../../molecules/richText/richText";
-import CTABar, { CTABarProps } from "../../modules/ctaBar";
 import { useEffect, useMemo, useState } from "react";
 
 type StoryblokImage = {
@@ -21,7 +20,7 @@ export type AccordionItem = {
   label: string;
   body: RichTextContent;
   icon?: StoryblokImage;
-  cta?: CTABarProps[];
+  button?: any[];
 };
 
 export interface AccordionItemProps extends SbBlokData {
@@ -175,13 +174,11 @@ export function AccordionItem({
               >
                 <RichText doc={item.body} />
               </div>
-              {item.cta?.length ? (
-                <div className="mt-(--gaps-16-12-12)">
-                  {item.cta.map((ctaItem) => (
-                    <CTABar key={ctaItem._uid} {...ctaItem} />
-                  ))}
-                </div>
-              ) : null}
+             {item.button?.[0] && (
+          <div className="mt-8">
+            <Button {...item.button[0]} mode="link" background="dark"/>
+          </div>
+        )}
             </AccordionPrimitive.Content>
           </AccordionPrimitive.Item>
         );

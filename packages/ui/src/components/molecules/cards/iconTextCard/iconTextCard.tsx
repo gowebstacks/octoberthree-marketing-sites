@@ -34,7 +34,7 @@ export const IconTextCard: FC<IconTextCardProps> = ({
       {...storyblokEditable(blok)}
       className={twMerge(
         'flex h-full flex-col  border border-(--stroke-card)  transition-all duration-200 rounded-sm',
-        'bg-(--surface-card) h-fit',
+        'bg-(--surface-card)',
         hasButtons &&
           'group cursor-pointer  hover:shadow-lg overflow-hidden '
       )}
@@ -53,7 +53,7 @@ export const IconTextCard: FC<IconTextCardProps> = ({
         </div>
       )}
 
-      <div className="flex w-full flex-col gap-4 p-(--padding-24-18-18)">
+      <div className="flex w-full flex-col gap-4 p-(--padding-24-18-18) h-full">
         {heading && (
           <span className="text-display-2xl text-(--text-headings-dark)">
             {heading}
