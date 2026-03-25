@@ -40,12 +40,10 @@ function extractText(node: any): string {
 
 function getReadingDuration(text: string) {
   if (!text) return 4000;
-
   const words = text.trim().split(/\s+/).length;
   const wpm = 220;
-  const ms = (words / wpm) * 60 * 1000;
-
-  return Math.max(ms, 3000);
+  const ms = (words / wpm) * 60000;
+  return ms < 3000 ? 3000 : ms;
 }
 
 export function AccordionItem({
@@ -54,26 +52,28 @@ export function AccordionItem({
   className,
   ...blok
 }: AccordionItemProps) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState<number | null>(0);
 
-  const durations = useMemo(() => {
-    return items.map((item) => {
-      if (!item?.body) return 4000;
-      return getReadingDuration(extractText(item.body));
-    });
-  }, [items]);
+  const durations = useMemo(
+    () =>
+      items.map((item) =>
+        item?.body ? getReadingDuration(extractText(item.body)) : 4000
+      ),
+    [items]
+  );
 
-  const activeItem = items[activeIndex];
+  const value =
+    activeIndex !== null && items[activeIndex]
+      ? items[activeIndex]._uid
+      : "";
 
   useEffect(() => {
-    if (!items.length) return;
-
-    const duration = durations[activeIndex] || 4000;
-
+    if (activeIndex === null || !items.length) return;
     const timeout = setTimeout(() => {
-      setActiveIndex((prev) => (prev + 1) % items.length);
-    }, duration);
-
+      setActiveIndex((prev) =>
+        prev === null ? 0 : (prev + 1) % items.length
+      );
+    }, durations[activeIndex] || 4000);
     return () => clearTimeout(timeout);
   }, [activeIndex, durations, items.length]);
 
@@ -81,8 +81,12 @@ export function AccordionItem({
     <AccordionPrimitive.Root
       type="single"
       collapsible
-      value={activeItem?._uid}
+      value={value}
       onValueChange={(val) => {
+        if (!val) {
+          setActiveIndex(null);
+          return;
+        }
         const index = items.findIndex((i) => i._uid === val);
         if (index !== -1) setActiveIndex(index);
       }}
@@ -101,22 +105,11 @@ export function AccordionItem({
           >
             <AccordionPrimitive.Header>
               <AccordionPrimitive.Trigger
-                className="
-                  group flex w-full items-center justify-between gap-3 text-left
-                  transition-colors
-                  text-neutral-600
-                  data-[state=open]:text-(--text-headings-dark)
-                "
+                className="group flex w-full items-center justify-between gap-3 text-left transition-colors text-neutral-600 data-[state=open]:text-(--text-headings-dark)"
               >
                 <div className="flex items-center gap-4">
                   {item?.icon?.filename && (
-                    <span
-                      className="
-                        shrink-0 transition-opacity
-                        opacity-50
-                        group-data-[state=open]:opacity-100
-                      "
-                    >
+                    <span className="shrink-0 transition-opacity opacity-50 group-data-[state=open]:opacity-100">
                       <img
                         src={item.icon.filename}
                         alt={item.icon.alt || ""}
@@ -125,19 +118,10 @@ export function AccordionItem({
                       />
                     </span>
                   )}
-
                   <span className="text-display-xl">{item.label}</span>
                 </div>
 
-                <div
-                  className="
-                    flex items-center justify-center rounded-sm p-(--padding-8-6-6)
-                    transition-colors               
-                    bg-transparent 
-                    group-data-[state=open]:bg-(--surface-button-active)
-                  "
-                  aria-hidden
-                >
+                <div className="flex items-center justify-center rounded-sm p-(--padding-8-6-6) transition-colors bg-transparent group-data-[state=open]:bg-(--surface-button-active)">
                   <Icon
                     size={24}
                     className="text-neutral-600 group-data-[state=open]:hidden"
@@ -153,7 +137,7 @@ export function AccordionItem({
             </AccordionPrimitive.Header>
 
             <div className="absolute bottom-0 left-0 w-full h-0.5 overflow-hidden">
-              {isActive && (
+              {isActive && activeIndex !== null && (
                 <div
                   key={activeIndex}
                   className="h-full bg-(--stroke-secondary-button-hover) origin-left"
@@ -172,9 +156,10 @@ export function AccordionItem({
               >
                 <RichText doc={item.body} />
               </div>
+
               {item.button?.[0] && (
                 <div className="mt-8">
-                  <Button {...item.button[0]} mode="link"  />
+                  <Button {...item.button[0]} mode="link" />
                 </div>
               )}
             </AccordionPrimitive.Content>
