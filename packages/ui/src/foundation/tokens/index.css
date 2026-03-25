@@ -195,6 +195,7 @@
   --icon-link-hover: var(--color-navy-primary-700);
   --stroke-secondary-button: var(--color-neutral-900---p-dark);
   --stroke-testimonial-1: var(--color-orange-400----p);
+  --stroke-testimonial-2: var(--color-cyan-100---p);
   --stroke-testimonial-3: var(--color-orange-200---p-light);
   --logo-icon: var(--color-navy-primary-600);
   --stroke-card: var(--color-cream-200);
@@ -1283,7 +1284,8 @@
     color: var(--color-navy-primary-900---p);
   }
   .pattern-triangle,
-  .pattern-triangle-sm {
+  .pattern-triangle-sm,
+  .pattern-triangle-md{
     position: absolute;
     inset: 0;
     pointer-events: none;
@@ -1305,16 +1307,23 @@
   .pattern-triangle-sm {
     -webkit-mask-image: url("/squarePattern/triangle-mobile.svg");
     mask-image: url("/squarePattern/triangle-mobile.svg");
-    width: 119px;
-    height: 115px;
+    width: 100%;
+    height: 100%;
+    mask-size: auto;
+  }
+  .pattern-triangle-md {
+         -webkit-mask-image: url("/squarePattern/triangle-tablet.svg");
+      mask-image: url("/squarePattern/triangle-tablet.svg");
+    width: 100%;
+    height: 100%;
     mask-size: auto;
   }
   @media (max-width: 1024px) {
     .pattern-triangle {
       -webkit-mask-image: url("/squarePattern/triangle-tablet.svg");
       mask-image: url("/squarePattern/triangle-tablet.svg");
-       width: 181px;
-    height: 175px;
+       width: 100%;
+    height: 100%;
     mask-size: auto;
     }
   }
@@ -1322,9 +1331,10 @@
     .pattern-triangle {
       -webkit-mask-image: url("/squarePattern/triangle-mobile.svg");
       mask-image: url("/squarePattern/triangle-mobile.svg");
-       width: 119px;
-    height: 115px;
+       width: 100%;
+    height: 100%;
     mask-size: auto;
     }
   }
+
 }

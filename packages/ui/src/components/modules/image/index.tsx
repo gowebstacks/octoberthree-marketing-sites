@@ -12,16 +12,17 @@ export interface ImageBlok extends SbBlokData {
 interface ImageProps {
   blok: ImageBlok
   className?: string
+  patternVariant?: 'sm' | 'md' | 'lg'
 }
 
-export const ImageWithDesc: FC<ImageProps> = ({ blok, className }) => {
+export const ImageWithDesc: FC<ImageProps> = ({ blok, className, patternVariant }) => {
   if (!blok?.image?.asset?.url) return null
 
   return (
     <div
   
       className={twMerge(
-        'w-full overflow-hidden max-w-360 mx-auto',
+        'w-full overflow-hidden max-w-(--widths-1440-834-375) mx-auto',
         className
       )}
     >
@@ -32,6 +33,7 @@ export const ImageWithDesc: FC<ImageProps> = ({ blok, className }) => {
           objectCover
           unsetMaxWidth
           className="w-full"
+          patternVariant={patternVariant}
         />
       </div>
 
