@@ -148,7 +148,7 @@ export async function getWebsitePageBySlug(
     // Now fetch the full story data with resolved relations
     const data = await storyblokFetch(matchingStory.full_slug, {
       version: isDraft ? "draft" : "published",
-      resolve_relations: "testimonial.person", // Resolve testimonial, person, and company relations
+      resolve_relations: "testimonial.person,resourceCard.tags", // Resolve testimonial, person, and company relations
       resolve_level: 2,
     });
     if (!data) {

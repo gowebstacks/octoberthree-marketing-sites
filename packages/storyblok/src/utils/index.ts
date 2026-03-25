@@ -1,1 +1,1 @@
-export * from './componentGenerator'
+export * from './componentGenerator';
