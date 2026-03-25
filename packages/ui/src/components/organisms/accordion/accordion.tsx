@@ -15,7 +15,7 @@ type StoryblokImage = {
   alt?: string;
 };
 
-export type AccordionItemType = {
+export type AccordionItem = {
   _uid: string;
   label: string;
   body: RichTextContent;
@@ -24,7 +24,7 @@ export type AccordionItemType = {
 };
 
 export interface AccordionItemProps extends SbBlokData {
-  items: AccordionItemType[];
+  items: AccordionItem[];
   colorMode?: "light" | "dark";
   className?: string;
 }
