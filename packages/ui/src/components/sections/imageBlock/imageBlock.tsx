@@ -61,6 +61,7 @@ export const ImageBlock: FC<ImageBlockProps> = ({
           description,
         }}
         className="w-full"
+        patternVariant={size==='small' ? 'sm' : size==='medium' ? 'md' : 'lg'}
       />
     )
   }
