@@ -1,5 +1,8 @@
 import type { ISbStoryParams, ISbStoryData } from "@storyblok/react";
-
+type StoryblokResponse<T> = {
+  story: ISbStoryData<T>;
+  rels?: ISbStoryData<any>[];
+};
 // Storyblok API base URL
 const STORYBLOK_API_URL = "https://api.storyblok.com/v2/cdn";
 
@@ -36,7 +39,7 @@ function buildSearchParams(obj: Record<string, any>): URLSearchParams {
 export async function storyblokFetch<T = any>(
   slug: string,
   params: ISbStoryParams = {}
-): Promise<ISbStoryData<T> | null> {
+): Promise<StoryblokResponse<T> | null>  {
   try {
     const defaultParams: ISbStoryParams = {
       version: "published", // Default to published to allow static generation
@@ -74,7 +77,7 @@ export async function storyblokFetch<T = any>(
 
     const data = await response.json();
 
-    return data as ISbStoryData<T>;
+    return data as StoryblokResponse<T>;
   } catch (error) {
     console.error(`Failed to fetch Storyblok story: ${slug}`, error);
     return null;
@@ -392,10 +395,20 @@ export function isStoryblokConfigured(): boolean {
 
 // Mock storyblokApi for compatibility
 export const storyblokApi = {
-  getStory: async (slug: string, params: any = {}) => {
-    const story = await storyblokFetch(slug, params);
-    return { data: { story } };
-  },
+ getStory: async (slug: string, params: any = {}) => {
+  const data = await storyblokFetch(slug, params);
+
+  if (!data) {
+    return { data: { story: null, rels: [] } };
+  }
+
+  return {
+    data: {
+      story: data.story,  
+      rels: data.rels || [],
+    },
+  };
+},
   getStories: async (params: any = {}) => {
     const accessToken = getAccessToken(params.version || "draft");
 

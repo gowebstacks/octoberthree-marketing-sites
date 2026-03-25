@@ -55,15 +55,16 @@ export default async function SlugPage(props: {
     preview
   );
 
-  console.log(
+ 
+  if (!page) {
+    notFound();
+  }
+   console.log(
     "*********************************************************",
     page.rels,
     slugParam
   );
 
-  if (!page) {
-    notFound();
-  }
   // Extract content and settings from Storyblok page
   const { content } = page;
   const rels = (page as any).rels || []; // Storyblok resolved relations are in rels.content
