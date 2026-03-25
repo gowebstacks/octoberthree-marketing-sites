@@ -116,8 +116,6 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
   const badgeLabel = RESOURCE_TYPE_LABELS[_type] || "Article";
 
   const resourceUrl = link  || `${getResourceRoute(_type)}/${resourceSlug}`;
-
-  console.log(props, "inside resource card")
   return (
     <Link
       href={resourceUrl}

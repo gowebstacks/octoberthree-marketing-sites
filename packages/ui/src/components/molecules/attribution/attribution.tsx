@@ -1,47 +1,52 @@
-'use client'
+"use client";
 
-import type { FC } from 'react'
-import { Avatar, Badge } from '../../atoms'
-import { storyblokEditable } from '@storyblok/react'
-import type { SbBlokData } from '@storyblok/react'
+import type { FC } from "react";
+import { Avatar, Badge } from "../../atoms";
+import { storyblokEditable } from "@storyblok/react";
+import type { SbBlokData } from "@storyblok/react";
+import { StoryblokAsset } from "../../../lib";
 
 export interface AttributionBlok extends SbBlokData {
-  name: string
-  avatarSrc?: string
-  role?: {
-    label: string
-    variant: 'navy' | 'cyan' | 'yellow' | 'teal' | 'orange'
-  }
+  name: string;
+  avatar?: StoryblokAsset;
+  role?: string;
+  variant?: "navy" | "cyan" | "yellow" | "teal" | "orange";
 }
 
 interface AttributionProps {
-  blok?: AttributionBlok
-  name?: string
-  avatarSrc?: string
-  role?: AttributionBlok['role']
-  showAvatar?: boolean
-  rounded?:boolean
+  blok?: AttributionBlok;
+  name?: string;
+  avatar?: string;
+  role?: string;
+  showAvatar?: boolean;
+  rounded?: boolean;
+  variant?: AttributionBlok["variant"];
 }
 
 export const Attribution: FC<AttributionProps> = ({
   blok,
   name,
-  avatarSrc,
+  avatar,
   role,
+  variant ='navy',
   showAvatar = true,
-  rounded
+  rounded,
 }) => {
-  const actualBlok = (blok as any)?.blok || blok
+  const actualName = name || blok?.name;
 
-  const actualName = name || actualBlok?.name
-  const actualAvatar = avatarSrc || actualBlok?.avatarSrc
-  const actualRole = role || actualBlok?.role
+  const actualAvatar =
+    avatar ||
+    blok?.avatar?.filename ||
+    undefined;
 
-  if (!actualName) return null
+  const actualRole = role || blok?.role;
+  const actualVariant = variant || blok?.variant;
+
+  if (!actualName) return null;
 
   return (
     <div
-      {...(actualBlok ? storyblokEditable(actualBlok) : {})}
+      {...(blok ? storyblokEditable(blok) : {})}
       className="inline-flex items-center gap-1.5 lg:gap-3"
     >
       {showAvatar && actualAvatar && (
@@ -53,15 +58,12 @@ export const Attribution: FC<AttributionProps> = ({
           {actualName}
         </div>
 
-        {actualRole && (
+        {actualRole && actualVariant && (
           <div className="[&_span]:text-[12px] [&_span]:leading-4.5 lg:[&_span]:text-[14px] lg:[&_span]:leading-6">
-            <Badge
-              label={actualRole.label}
-              variant={actualRole.variant}
-            />
+            <Badge label={actualRole} variant={actualVariant} />
           </div>
         )}
       </div>
     </div>
-  )
-}
+  );
+};

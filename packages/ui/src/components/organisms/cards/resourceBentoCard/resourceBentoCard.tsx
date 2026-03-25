@@ -103,7 +103,7 @@ export const ResourceBentoCard: FC<ResourceBentoCardProps> = ({
       href={resourceUrl}
       {...storyblokEditable(props)}
       className={twMerge(
-        "group relative overflow-hidden border border-(--stroke-secondary)",
+        "group relative overflow-hidden border border-(--stroke-secondary) max-h-144.75 min-h-42.75",
         "transition-all duration-200 max-h[580px] h-full hover:shadow-lg bg-(--surface-card)",
         styles.container
       )}

@@ -59,13 +59,14 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
       return <FormBlock key={component._uid} {...component} />;
     case "hero":
       return <Hero key={component._uid} blok={component} />;
-    case "testimonialSlider":
-      return (
-        <TestimonialSlider
-          key={component._uid}
-          blok={component as unknown as TestimonialSliderBlok}
-        />
-      );
+   case "testimonialSlider":
+  return (
+    <TestimonialSlider
+      key={component._uid}
+      blok={component  as TestimonialSliderBlok}
+      rels={rels} 
+    />
+  );
     case "conversionPanel":
       return (
         <ConversionPanel
