@@ -4,19 +4,11 @@ import type { FC } from 'react'
 import { storyblokEditable } from '@storyblok/react'
 import type { SbBlokData } from '@storyblok/react'
 import { twMerge } from 'tailwind-merge'
-import { Attribution } from '../../molecules'
+import { Attribution, AttributionBlok } from '../../molecules'
 
 export interface TestimonialBlok extends SbBlokData {
   quote: string
-  author: {
-    name: string
-    avatarSrc?: string
-    role?: {
-      label: string
-      variant: 'navy' | 'cyan' | 'yellow' | 'teal' | 'orange'
-    }
-  }
- 
+  author: AttributionBlok
 }
 
 interface TestimonialItemProps {
@@ -45,6 +37,7 @@ export const TestimonialItem: FC<TestimonialItemProps> = ({
       className={twMerge(baseClasses, variantClasses[variant])}
     >
       <div className='pattern-grid pattern-white opacity-30'></div>
+
       <blockquote className="text-(--text-headings) text-lg">
         “{quote}”
       </blockquote>
@@ -56,8 +49,6 @@ export const TestimonialItem: FC<TestimonialItemProps> = ({
           blok={author}
           showAvatar={variant !== 'card'}
         />
-
-       
       </div>
     </div>
   )

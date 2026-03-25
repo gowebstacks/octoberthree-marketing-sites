@@ -30,7 +30,7 @@ export const ImageCardDeck: FC<ImageCardDeckProps> = ({
 
   return (
     <div
-      className="mx-auto flex max-w-360 flex-col gap-12 sm:gap-16"
+      className="mx-auto flex max-w-(--widths-1440-834-375) flex-col gap-12 sm:gap-16"
       {...storyblokEditable(blok)}
       id={htmlId}
     >

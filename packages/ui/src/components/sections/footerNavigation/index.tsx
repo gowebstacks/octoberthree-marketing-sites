@@ -59,7 +59,7 @@ export const FooterNavigation: React.FC<FooterNavigationProps> = ({
 
   return (
     <footer className="overflow-hidden relative bg-(--surface-background) section-padding-xl-left-right py-10">
-      <div className="max-w-360 mx-auto">
+      <div className="max-w-(--widths-1440-834-375) mx-auto">
         <nav className="mb-16 lg:mb-20" aria-label="Global">
           <div className="flex flex-col gap-12 lg:flex-row lg:gap-16 items-center sm:items-start">
             {footerData?.logo?.asset?.url && (

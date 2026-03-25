@@ -12,7 +12,8 @@ import {
   ResourceCardProps,
 } from "../../../organisms";
 import { Pagination } from "../../../molecules";
-
+import { buildRelMap } from "../../../../utils";
+import { Button, Icon } from "../../../atoms";
 
 export interface ResourceCardDeckBlok extends SbBlokData {
   content?: ContentBlockBlok[];
@@ -20,12 +21,17 @@ export interface ResourceCardDeckBlok extends SbBlokData {
   htmlId?: string;
 }
 
+interface Props extends ResourceCardDeckBlok {
+  rels?: any[];
+}
+
 const ITEMS_PER_PAGE = 6;
 
-export const ResourceCardDeck: FC<ResourceCardDeckBlok> = ({
+export const ResourceCardDeck: FC<Props> = ({
   content,
   resources,
   htmlId,
+  rels = [],
   ...blok
 }) => {
   const pathname = usePathname();
@@ -35,13 +41,61 @@ export const ResourceCardDeck: FC<ResourceCardDeckBlok> = ({
   const [activeFilter, setActiveFilter] = useState<string>("all");
   const [showAllFilters, setShowAllFilters] = useState(false);
 
+  const relMap = useMemo(() => buildRelMap(rels), [rels]);
+
+  const tagNameMap = useMemo(() => {
+    const map: Record<string, string> = {};
+
+    if (!resources) return map;
+
+    for (const r of resources as any[]) {
+      const tags = r?.tags || [];
+
+      for (const tag of tags) {
+        const resolved = typeof tag === "string" ? relMap[tag] : tag;
+
+        const name =
+          resolved?.name ||
+          resolved?.title ||
+          resolved?.label ||
+          resolved?.slug;
+
+        if (name) {
+          map[name] = name;
+        }
+      }
+    }
+
+    return map;
+  }, [resources, relMap]);
+
+  const filterOptions = useMemo(() => {
+    const keys = Object.keys(tagNameMap);
+    return keys.length ? ["all", ...keys] : ["all"];
+  }, [tagNameMap]);
+
   const filteredResources = useMemo(() => {
     if (!resources) return [];
     if (activeFilter === "all") return resources;
-    return resources.filter((r: any) =>
-  (r.tags || []).includes(activeFilter)
-);
-  }, [resources, activeFilter]);
+
+    return (resources as any[]).filter((r) => {
+      const tags = r?.tags || [];
+
+      for (const tag of tags) {
+        const resolved = typeof tag === "string" ? relMap[tag] : tag;
+
+        const name =
+          resolved?.name ||
+          resolved?.title ||
+          resolved?.label ||
+          resolved?.slug;
+
+        if (name === activeFilter) return true;
+      }
+
+      return false;
+    });
+  }, [resources, activeFilter, relMap]);
 
   const totalPages = Math.ceil(filteredResources.length / ITEMS_PER_PAGE);
 
@@ -49,17 +103,6 @@ export const ResourceCardDeck: FC<ResourceCardDeckBlok> = ({
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
     return filteredResources.slice(start, start + ITEMS_PER_PAGE);
   }, [filteredResources, currentPage]);
-
-  const filterOptions = useMemo(() => {
-  if (!resources) return [];
-  const tags = resources
-    .flatMap((r: any) => r.tags || [])
-    .filter(Boolean);
-
-  const uniqueTags = Array.from(new Set(tags));
-
-  return ["all", ...uniqueTags];
-}, [resources]);
 
   const visibleFilters = useMemo(() => {
     if (showAllFilters) return filterOptions;
@@ -72,11 +115,33 @@ export const ResourceCardDeck: FC<ResourceCardDeckBlok> = ({
     }
   }, [currentPage, totalPages]);
 
+  useEffect(() => {
+    if (!resources) {
+      console.log("❌ resources missing");
+      return;
+    }
+
+    console.log("📦 resources:", resources);
+    console.log("🧩 rels:", rels);
+    console.log("🗺 relMap:", relMap);
+
+    resources.forEach((r: any, i: number) => {
+      console.log(`🔹 resource[${i}] tags:`, r?.tags);
+
+      (r?.tags || []).forEach((tag: any, j: number) => {
+        const resolved = typeof tag === "string" ? relMap[tag] : tag;
+
+        console.log(`🏷 tag[${i}-${j}] raw:`, tag);
+        console.log(`🏷 tag[${i}-${j}] resolved:`, resolved);
+      });
+    });
+  }, [resources, rels, relMap]);
+
   return (
     <div
       {...storyblokEditable(blok)}
       id={htmlId}
-      className="flex max-w-360 mx-auto flex-col gap-12 sm:gap-16"
+      className="flex max-w-(--widths-1440-834-375) mx-auto flex-col gap-12 sm:gap-16"
     >
       {content?.length ? (
         <div className="flex flex-col gap-8">
@@ -87,21 +152,32 @@ export const ResourceCardDeck: FC<ResourceCardDeckBlok> = ({
       ) : null}
 
       {filterOptions.length > 1 ? (
-        <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div className="border border-(--stroke-secondary) p-4 sm:px-8 sm:py-4.5 lg:py-8 flex flex-col-reverse lg:flex-row gap-4 justify-between">
           <div className="flex flex-wrap gap-3">
-            {visibleFilters.map((option) => (
-              <button
-                key={option}
-                onClick={() => setActiveFilter(option)}
-                className={`px-4 py-2 rounded-md border text-sm ${
-                  activeFilter === option
-                    ? "bg-(--surface-pagination) border-(--stroke-secondary-button-hover)"
-                    : "border-(--stroke-pagination) bg-white"
-                }`}
-              >
-                {option}
-              </button>
-            ))}
+            {visibleFilters.map((option) => {
+              const isActive = activeFilter === option;
+
+              const label =
+                option === "all"
+                  ? "All"
+                  : option.charAt(0).toUpperCase() + option.slice(1);
+
+              return (
+                <Button
+                  key={option}
+                  trailingIcon="None"
+                  tone="secondary"
+                  onClick={() => setActiveFilter(option)}
+                  className={
+                    isActive
+                      ? " border-(--stroke-secondary-button-hover) ring-4 ring-(--stroke-secondary-button-hover)"
+                      : ""
+                  }
+                >
+                  {label}
+                </Button>
+              );
+            })}
 
             {filterOptions.length > 5 ? (
               <button
@@ -109,20 +185,27 @@ export const ResourceCardDeck: FC<ResourceCardDeckBlok> = ({
                 className="px-4 py-2 rounded-md border text-sm border-(--stroke-pagination) bg-white flex items-center gap-2"
               >
                 More
-                <span className={`transition-transform ${showAllFilters ? "rotate-180" : ""}`}>
+                <span
+                  className={`transition-transform ${
+                    showAllFilters ? "rotate-180" : ""
+                  }`}
+                >
                   ▾
                 </span>
               </button>
             ) : null}
           </div>
 
-          <div className="flex items-center gap-2 border rounded-md px-4 py-2 w-full sm:w-[320px] bg-white">
+          <div className="flex items-center gap-1 border border-(--stroke-primary) rounded-md  bg-white lg:w-[320px] w-full px-1.5 py-1">
+            <Icon size={16} color="var(--icon-primary-dark)" icon="search-lg" className="shrink-0" />
+
             <input
               type="text"
               placeholder="type your question"
-              className="outline-none text-sm w-full bg-transparent"
+              className="outline-none text-sm w-full bg-transparent h-8"
             />
-            <button className="text-sm font-medium px-3 py-1 rounded bg-(--surface-pagination)">
+
+            <button className="text-xs h-8 px-2 rounded-xs bg-(--surface-search-button) text-white">
               Search
             </button>
           </div>
@@ -143,7 +226,9 @@ export const ResourceCardDeck: FC<ResourceCardDeckBlok> = ({
         </div>
       ) : null}
 
-      {totalPages > 1 ? <Pagination totalPages={totalPages} baseUrl={pathname} /> : null}
+      {totalPages > 1 ? (
+        <Pagination totalPages={totalPages} baseUrl={pathname} />
+      ) : null}
     </div>
   );
 };

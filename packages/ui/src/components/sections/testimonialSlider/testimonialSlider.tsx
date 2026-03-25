@@ -1,16 +1,16 @@
 "use client";
 
 import { useRef, useState, useMemo, useEffect, useCallback } from "react";
-import Slider from "react-slick";
 import { storyblokEditable } from "@storyblok/react";
 import type { SbBlokData } from "@storyblok/react";
 import { Attribution, SliderControls } from "../../molecules";
 import { Eyebrow, EyebrowBlockProps, Heading } from "../../atoms";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { TestimonialBlok } from "../../modules";
 import { HeadingBlok } from "../../atoms/heading";
 import { twMerge } from "tailwind-merge";
+import { getAllTestimonials } from "../../../lib";
+import { buildRelMap, resolveRel } from "../../../utils";
+import { Person } from "../../../types/storyblok";
 
 export interface TestimonialSliderBlok extends SbBlokData {
   eyebrow?: EyebrowBlockProps[];
@@ -20,13 +20,15 @@ export interface TestimonialSliderBlok extends SbBlokData {
 
 interface TestimonialSliderProps {
   blok: TestimonialSliderBlok;
+  rels?: any[];
 }
 
-export function TestimonialSlider({ blok }: TestimonialSliderProps) {
-  const mobileSliderRef = useRef<Slider | null>(null);
+export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
   const activeCardRef = useRef<HTMLDivElement | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeHeight, setActiveHeight] = useState(0);
+
+  const relMap = useMemo(() => buildRelMap(rels), [rels]);
 
   const total = blok.testimonials.length;
   const getIndex = useCallback((i: number) => (i + total) % total, [total]);
@@ -34,28 +36,13 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
   const prevIndex = getIndex(currentIndex - 1);
   const nextIndex = getIndex(currentIndex + 1);
 
-  const mobileSettings = useMemo(
-    () => ({
-      arrows: false,
-      dots: false,
-      infinite: true,
-      speed: 400,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      swipe: true,
-      adaptiveHeight: true,
-      beforeChange: (_: number, next: number) => setCurrentIndex(next),
-    }),
-    []
-  );
-
   useEffect(() => {
     const el = activeCardRef.current;
     if (!el) return;
 
     const observer = new ResizeObserver((entries) => {
       const entry = entries[0];
-      if (entry) setActiveHeight(entry.contentRect.height);
+      if (entry) setActiveHeight(Math.ceil(entry.contentRect.height));
     });
 
     observer.observe(el);
@@ -66,6 +53,10 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
 
   const desktopSlides = useMemo(() => {
     return blok.testimonials.map((testimonial, index) => {
+      const person = resolveRel<Person>(
+        testimonial.person as string | Person | undefined,
+        relMap
+      );
       const isActive = index === currentIndex;
       const isPrev = index === prevIndex;
       const isNext = index === nextIndex;
@@ -74,9 +65,11 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
       if (isActive) {
         stateClasses = "z-30 scale-100 opacity-100 translate-x-0";
       } else if (isPrev) {
-        stateClasses = "z-20 scale-90 opacity-70 -translate-x-32";
+        stateClasses =
+          "z-20 scale-90 opacity-0 md:opacity-70 lg:-translate-x-28 md:-translate-x-20 -translate-x-24";
       } else if (isNext) {
-        stateClasses = "z-20 scale-90 opacity-70 translate-x-32";
+        stateClasses =
+          "z-20 scale-90 opacity-0 md:opacity-70 lg:translate-x-28 md:translate-x-20 translate-x-24";
       } else {
         stateClasses = "z-10 scale-75 opacity-0";
       }
@@ -85,6 +78,15 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
         !isActive && activeHeight
           ? { height: `calc(${activeHeight}px - ${offset}px)` }
           : undefined;
+
+      const contentProps = {
+        quote: testimonial.quote,
+        name: person?.firstName + " " + (person?.lastName || ""),
+        role: person?.role,
+        variant: person?.variant,
+        displayName: person?.name || "",
+        displayTitle: person?.title || "",
+      };
 
       return (
         <div
@@ -104,40 +106,39 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
             style={dynamicHeight}
             className={twMerge(
               "relative bg-white rounded-md shadow-xl border-b-10 mx-auto overflow-hidden",
-              "w-full max-w-[606px] lg:max-w-[1057px]",
+              "w-full max-w-151.5 lg:max-w-264.25",
               isActive
                 ? "border-(--stroke-testimonial-1)"
                 : isPrev
-                ? "border-(--stroke-testimonial-3)"
-                : isNext
-                ? "border-(--stroke-testimonial-2)"
-                : "border-transparent"
+                  ? "border-(--stroke-testimonial-3)"
+                  : isNext
+                    ? "border-(--stroke-testimonial-2)"
+                    : "border-transparent"
             )}
           >
-            {/* FIXED: Use visibility + opacity instead of pointer-events-none + opacity */}
             <div
               className={twMerge(
-                "px-14 py-18 md:px-16 md:py-16 transition-opacity duration-300",
-                isActive 
-                  ? "opacity-100 visible" 
-                  : "opacity-0 invisible"
+                "py-(--scale-24) px-(--scale-16) sm:px-14 sm:py-18 md:px-16 md:py-16 transition-opacity duration-300",
+                isActive ? "opacity-100" : "opacity-0"
               )}
             >
               <Heading size="4xl">
-                <blockquote>“{testimonial.quote}”</blockquote>
+                <blockquote>“{contentProps.quote}”</blockquote>
               </Heading>
 
               <div className="mt-10 border-t pt-6">
                 <p className="text-(--text-headings) text-md">
-                  {testimonial.author?.name}{" "}
-                  {testimonial.author?.role?.label}
+                  {contentProps.displayName} {contentProps.displayTitle}
                 </p>
               </div>
 
-              <Attribution
-                name={testimonial.author?.name}
-                role={testimonial.author?.role}
-              />
+              {person && (
+                <Attribution
+                  name={contentProps.name}
+                  role={contentProps.role}
+                  variant={contentProps.variant}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -150,38 +151,26 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
     nextIndex,
     activeHeight,
     offset,
+    relMap,
   ]);
 
-  const mobileSlides = useMemo(() => {
-    return blok.testimonials.map((testimonial) => (
-      <div key={testimonial._uid}>
-        <Heading size="4xl" className="mb-6">
-          <blockquote>“{testimonial.quote}”</blockquote>
-        </Heading>
-        <Attribution
-          name={testimonial.author?.name}
-          role={{
-            label: testimonial.author?.role?.label || "",
-            variant: "orange",
-          }}
-          rounded
-        />
-      </div>
-    ));
-  }, [blok.testimonials]);
+  useEffect(() => {
+    const func = async () => {
+      const test = await getAllTestimonials();
+      console.log(test, "all test with rels");
+    };
+    func();
+  }, []);
 
   return (
     <div
       {...storyblokEditable(blok)}
-      className="relative section-padding-xl-top-bottom max-w-360 mx-auto lg:bg-(--surface-accent-background) rounded-lg overflow-hidden"
+      className="relative max-w-360 mx-auto bg-(--surface-accent-background) rounded-lg overflow-hidden px-(--scale-16) py-(--scale-48) sm:px-(--scale-48) sm:py-(--scale-72) lg:p-23"
     >
-      <div
-        className="absolute inset-0 opacity-5"
-        style={{ backgroundImage: "url(/squarePattern/WhitePattern.svg)" }}
-      />
+      <div className="pattern-grid pattern-white opacity-5" />
 
-      <div className="relative mx-auto max-w-7xl w-full flex flex-col items-center gap-12">
-        <div className="text-center hidden lg:block">
+      <div className="relative mx-auto max-w-7xl md:w-[90%]! lg:w-full flex flex-col items-center gap-12">
+        <div className="text-center">
           {blok.eyebrow?.[0] && (
             <Eyebrow
               {...blok.eyebrow[0]}
@@ -196,37 +185,22 @@ export function TestimonialSlider({ blok }: TestimonialSliderProps) {
           )}
         </div>
 
-        <div className="relative w-full hidden lg:flex items-center justify-center h-[520px]">
+        <div
+          className="relative w-full flex items-center justify-center"
+          style={{ height: activeHeight || "auto" }}
+        >
           {desktopSlides}
         </div>
 
-        <div className="relative w-full lg:hidden">
-          {blok.eyebrow?.[0] && (
-            <Eyebrow {...blok.eyebrow[0]} className="mb-4" />
-          )}
-          <Slider ref={mobileSliderRef} {...mobileSettings}>
-            {mobileSlides}
-          </Slider>
-        </div>
-
-        <div className="w-full max-w-[1200px] mx-auto mt-12">
+        <div className="w-full max-w-300 mx-auto mt-12">
           <SliderControls
             className="flex justify-center"
             currentIndex={currentIndex}
             totalSlides={total}
             mode="dark"
-            onNext={() => {
-              setCurrentIndex(nextIndex);
-              mobileSliderRef.current?.slickNext();
-            }}
-            onPrevious={() => {
-              setCurrentIndex(prevIndex);
-              mobileSliderRef.current?.slickPrev();
-            }}
-            onGoTo={(index) => {
-              setCurrentIndex(index);
-              mobileSliderRef.current?.slickGoTo(index);
-            }}
+            onNext={() => setCurrentIndex(nextIndex)}
+            onPrevious={() => setCurrentIndex(prevIndex)}
+            onGoTo={(index) => setCurrentIndex(index)}
           />
         </div>
       </div>

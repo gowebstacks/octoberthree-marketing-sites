@@ -18,7 +18,7 @@ export const HeadingBlock: FC<HeadingBlockSectionProps> = ({
 }) => {
   return (
   
-     <div  {...storyblokEditable(blok)} className="mx-auto max-w-360">
+     <div  {...storyblokEditable(blok)} className="mx-auto max-w-(--widths-1440-834-375)">
        <ContentBlock
         blok={{
           eyebrow,

@@ -165,5 +165,12 @@ export interface StoryblokNavigationFeaturedCard {
   submenuBlocks?: any[];
   submenuLayout?: string;
 }
-
+export type Person = {
+  firstName?: string;
+  lastName?: string;
+  role?: string;
+   variant?: "navy" | "cyan" | "yellow" | "teal" | "orange";
+  name?: string;
+  title?: string;
+};
 export type RichTextContent = StoryblokRichTextNode<any>;

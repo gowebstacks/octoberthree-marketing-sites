@@ -15,7 +15,7 @@ export interface VideoBlockBlok extends SbBlokData {
 const videoWrapperStyle = cva(['w-full', 'mx-auto'], {
   variants: {
     size: {
-      full: 'max-w-360',
+      full: 'max-w-(--widths-1440-834-375)',
       large: 'max-w-[1008px]',
       medium: 'max-w-[768px]',
       small: 'max-w-[576px]',
