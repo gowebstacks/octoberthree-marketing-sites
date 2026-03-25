@@ -68,13 +68,16 @@ export function Toast({
           )}
         </div>
 
-          <button
+         {
+          actionLabel &&
+           <button
             onClick={onAction}
             className="rounded-md bg-(--surface-search-button) px-1 py-0.5 text-mono-xs font-(--font-medium) text-(--text-button)"
           >
             {actionLabel}
           </button>
         
+         }
       </div>
     </div>
   )
