@@ -59,14 +59,15 @@ export const ImageTextCard: FC<ImageTextCardProps> = ({
 
         <div
           className={twMerge(
-            "grid transition-[grid-template-rows] duration-500 ease-in-out",
-            isActive ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+            "grid transition-[grid-template-rows] duration-200 ease-in-out ",
+            isActive ? "grid-rows-[1fr] delay-200" : "grid-rows-[0fr]"
           )}
         >
           <div
             className={twMerge(
               "overflow-hidden ",
-              isActive ? "opacity-100" : "opacity-0 "
+              isActive ? "opacity-100" : "opacity-0 ",
+              'delay-100'
             )}
           >
             <div className="overflow-hidden min-w-0">

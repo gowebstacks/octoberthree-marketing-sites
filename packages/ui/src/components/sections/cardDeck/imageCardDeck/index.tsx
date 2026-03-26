@@ -7,7 +7,6 @@ import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 import { ImageTextCard, ImageTextCardProps } from "../../../molecules";
-import { ContentBlock, ContentBlockBlok } from "../../../organisms";
 
 interface ImageCardRow {
   cardsPerRow?: string;
@@ -15,13 +14,11 @@ interface ImageCardRow {
 }
 
 export interface ImageCardDeckProps extends SbBlokData {
-  content?: ContentBlockBlok[];
   rows?: ImageCardRow[];
   htmlId?: string;
 }
 
 export const ImageCardDeck: FC<ImageCardDeckProps> = ({
-  content,
   rows,
   htmlId,
   ...blok
@@ -30,17 +27,10 @@ export const ImageCardDeck: FC<ImageCardDeckProps> = ({
 
   return (
     <div
-      className="mx-auto flex max-w-(--widths-1440-834-375) flex-col gap-12 sm:gap-16"
+      className="mx-auto flex max-w-360 flex-col gap-12 sm:gap-16"
       {...storyblokEditable(blok)}
       id={htmlId}
     >
-      {content?.length ? (
-        <div className="flex flex-col gap-8">
-          {content.map((nestedBlok) => (
-            <ContentBlock key={nestedBlok._uid} blok={nestedBlok} />
-          ))}
-        </div>
-      ) : null}
 
       {rows?.map((row, rowIndex) => {
         const isTwoCards = row.cards?.length === 2;
@@ -60,7 +50,7 @@ export const ImageCardDeck: FC<ImageCardDeckProps> = ({
                   key={key}
                   onMouseEnter={() => setActiveIndex(i)}
                   className={twMerge(
-                    "transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1) min-w-0 w-full",
+                    "transition-flex duration-400  ease-in-out min-w-0 w-full",
                     isTwoCards
                       ? "sm:flex-1"
                       : isActive

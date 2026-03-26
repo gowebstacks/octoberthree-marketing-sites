@@ -5,7 +5,6 @@ import type { FC } from 'react'
 import type { SbBlokData } from '@storyblok/react'
 
 import { IconTextCard, IconTextCardProps } from '../../../molecules'
-import { ContentBlock, ContentBlockBlok } from '../../../organisms'
 import CTABar, { CTABarProps } from '../../../modules/ctaBar'
 import { twMerge } from 'tailwind-merge'
 
@@ -15,7 +14,6 @@ interface IconCardRow {
 }
 
 export interface IconCardDeckProps extends SbBlokData {
-  body?: ContentBlockBlok[]
   rows?: IconCardRow[]
   htmlId?: string
   minHeight?: 'none' | 'sm' | 'md' | 'lg',
@@ -23,7 +21,6 @@ export interface IconCardDeckProps extends SbBlokData {
 }
 
 export const IconCardDeck: FC<IconCardDeckProps> = ({
-  body,
   rows,
   htmlId,
   ctaBar,
@@ -31,20 +28,9 @@ export const IconCardDeck: FC<IconCardDeckProps> = ({
 }) => {
   return (
    
-      <div className="max-w-(--widths-1440-834-375) mx-auto"  {...storyblokEditable(blok)}
+      <div className="max-w-360 mx-auto"  {...storyblokEditable(blok)}
       id={htmlId}>
         <div className="flex flex-col gap-12 sm:gap-16">
-
-          {body?.length ? (
-            <div className="flex flex-col gap-8">
-              {body.map((nestedBlok) => (
-                <ContentBlock
-                  key={nestedBlok._uid}
-                  blok={nestedBlok}
-                />
-              ))}
-            </div>
-          ) : null}
 
           {rows && (
             <div

@@ -125,7 +125,7 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
        
       )}
     >
-      <div className={twMerge('h-full',carousel ? "max-w-100" : "",  !displayImage.filename &&
+      <div className={twMerge('h-full flex flex-col',carousel ? "max-w-100" : "",  !displayImage.filename &&
           (mode === "light"
             ? "border-t-8 border-t-orange-300"
             : "border-t-8 border-t-(--surface-accent-background)"))}>
@@ -151,7 +151,7 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
         )}
 
         {/* Content */}
-        <div className="flex flex-col grow p-(--padding-24-18-18) justify-between h-full">
+        <div className="flex flex-col p-(--padding-24-18-18)  h-full">
           {/* Category */}
           <span className="text-xs font-medium text-(--text-link) uppercase tracking-wide mb-2">
             {category}
@@ -170,17 +170,20 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
 
           {/* Description */}
           {body && (
-            <div className="text-sm text-(--text-body-dark) line-clamdiv-4 grow mb-4">
+            <div className="text-sm text-(--text-body-dark) line-clamp-4 mb-4">
               <RichText doc={body} />
             </div>
           )}
 
           {/* Learn More Link */}
-          <Button
-            className="w-fit group-hover:text-(--text-link-hover)"
+         {
+          resourceUrl.url &&
+           <Button
+            className="w-fit group-hover:text-(--text-link-hover) mt-auto"
             mode="link"
             label="Learn more"
           />
+         }
         </div>
       </div>
     </Link>

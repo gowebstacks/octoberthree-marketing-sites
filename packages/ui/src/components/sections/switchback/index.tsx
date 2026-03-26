@@ -1,13 +1,13 @@
 'use client'
 
 import type { FC } from 'react'
-import Image from 'next/image'
 import { storyblokEditable, type SbBlokData } from '@storyblok/react'
 import { twMerge } from 'tailwind-merge'
 
 import { ContentBlock, type ContentBlockBlok } from '../../organisms'
 import { Video, type VideoBlok } from '../../modules'
 import { storyblokLoader } from '../../../utils/storyblokImageLoader'
+import { Image } from '../../molecules'
 
 export interface SwitchbackBlok extends SbBlokData {
   content?: ContentBlockBlok[]
@@ -40,8 +40,9 @@ export const Switchback: FC<{ blok: SwitchbackBlok }> = ({ blok }) => {
 
       return (
         <Image
-        loader={storyblokLoader}
-          src={image.filename}
+          asset={{
+            url:image.filename
+          }}
           alt={image.alt ?? ''}
           width={width}
           height={height}
@@ -66,7 +67,7 @@ export const Switchback: FC<{ blok: SwitchbackBlok }> = ({ blok }) => {
           `
           mx-auto
           grid
-          max-w-(--widths-1440-834-375)
+          max-w-360
           grid-cols-1
           gap-16
           items-center

@@ -1145,6 +1145,10 @@
     padding-left: var(--padding-side-sectional-80-64-16);
     padding-right: var(--padding-side-sectional-80-64-16);
   }
+  .section-padding-xl-left-right {
+    padding-left: var(--padding-side-sectional-80-64-16);
+    padding-right: var(--padding-side-sectional-80-64-16);
+  }
   .section-padding-md {
     padding: var(--padding-56-48-48) var(--padding-32-24-24);
   }

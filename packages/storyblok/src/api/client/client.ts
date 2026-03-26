@@ -39,7 +39,7 @@ function buildSearchParams(obj: Record<string, any>): URLSearchParams {
 export async function storyblokFetch<T = any>(
   slug: string,
   params: ISbStoryParams = {}
-): Promise<StoryblokResponse<T> | null>  {
+): Promise<StoryblokResponse<T> | null> {
   try {
     const defaultParams: ISbStoryParams = {
       version: "published", // Default to published to allow static generation
@@ -395,20 +395,20 @@ export function isStoryblokConfigured(): boolean {
 
 // Mock storyblokApi for compatibility
 export const storyblokApi = {
- getStory: async (slug: string, params: any = {}) => {
-  const data = await storyblokFetch(slug, params);
+  getStory: async (slug: string, params: any = {}) => {
+    const data = await storyblokFetch(slug, params);
 
-  if (!data) {
-    return { data: { story: null, rels: [] } };
-  }
+    if (!data) {
+      return { data: { story: null, rels: [] } };
+    }
 
-  return {
-    data: {
-      story: data.story,  
-      rels: data.rels || [],
-    },
-  };
-},
+    return {
+      data: {
+        story: data.story,
+        rels: data.rels || [],
+      },
+    };
+  },
   getStories: async (params: any = {}) => {
     const accessToken = getAccessToken(params.version || "draft");
 

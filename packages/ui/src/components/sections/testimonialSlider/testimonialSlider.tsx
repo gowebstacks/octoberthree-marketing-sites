@@ -27,6 +27,7 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
   const activeCardRef = useRef<HTMLDivElement | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeHeight, setActiveHeight] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   const relMap = useMemo(() => buildRelMap(rels), [rels]);
 
@@ -50,7 +51,21 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
   }, [currentIndex]);
 
   const offset = 56;
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 639px)");
 
+    const handleChange = (e: MediaQueryListEvent) => {
+      setIsMobile(e.matches);
+    };
+
+    setIsMobile(media.matches);
+
+    media.addEventListener("change", handleChange);
+
+    return () => {
+      media.removeEventListener("change", handleChange);
+    };
+  }, []);
   const desktopSlides = useMemo(() => {
     return blok.testimonials.map((testimonial, index) => {
       const person = resolveRel<Person>(
@@ -66,10 +81,10 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
         stateClasses = "z-30 scale-100 opacity-100 translate-x-0";
       } else if (isPrev) {
         stateClasses =
-          "z-20 scale-90 opacity-0 md:opacity-70 lg:-translate-x-28 md:-translate-x-20 -translate-x-24";
+          "z-20 scale-90 opacity-0 md:opacity-100 lg:-translate-x-28 md:-translate-x-20 -translate-x-24";
       } else if (isNext) {
         stateClasses =
-          "z-20 scale-90 opacity-0 md:opacity-70 lg:translate-x-28 md:translate-x-20 translate-x-24";
+          "z-20 scale-90 opacity-0 md:opacity-100 lg:translate-x-28 md:translate-x-20 translate-x-24";
       } else {
         stateClasses = "z-10 scale-75 opacity-0";
       }
@@ -106,7 +121,7 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
             style={dynamicHeight}
             className={twMerge(
               "relative bg-white rounded-md shadow-xl border-b-10 mx-auto overflow-hidden",
-              "w-full max-w-151.5 lg:max-w-264.25",
+              "w-full max-w-175.5 lg:max-w-264.25",
               isActive
                 ? "border-(--stroke-testimonial-1)"
                 : isPrev
@@ -118,7 +133,7 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
           >
             <div
               className={twMerge(
-                "py-(--scale-24) px-(--scale-16) sm:px-14 sm:py-18 md:px-16 md:py-16 transition-opacity duration-300",
+                "py-(--scale-24) px-(--scale-16) sm:px-14 sm:py-18 md:py-18 md:px-14 transition-opacity duration-300",
                 isActive ? "opacity-100" : "opacity-0"
               )}
             >
@@ -126,7 +141,7 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
                 <blockquote>“{contentProps.quote}”</blockquote>
               </Heading>
 
-              <div className="mt-10 border-t pt-6">
+              <div className="mt-10 border-t border-(--color-neutral-700---body) pt-6">
                 <p className="text-(--text-headings) text-md">
                   {contentProps.displayName} {contentProps.displayTitle}
                 </p>
@@ -165,11 +180,11 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
   return (
     <div
       {...storyblokEditable(blok)}
-      className="relative max-w-360 mx-auto bg-(--surface-accent-background) rounded-lg overflow-hidden px-(--scale-16) py-(--scale-48) sm:px-(--scale-48) sm:py-(--scale-72) lg:p-23"
+      className="relative max-w-360 mx-auto bg-(--surface-accent-background-2) rounded-lg overflow-hidden px-(--scale-16) py-(--scale-48) sm:px-(--scale-48) sm:py-(--scale-72) lg:p-24"
     >
       <div className="pattern-grid pattern-white opacity-5" />
 
-      <div className="relative mx-auto max-w-7xl md:w-[90%]! lg:w-full flex flex-col items-center gap-12">
+      <div className="relative mx-auto max-w-7xl md:w-[90%]! lg:w-full flex flex-col items-center">
         <div className="text-center">
           {blok.eyebrow?.[0] && (
             <Eyebrow
@@ -180,7 +195,7 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
           {blok.heading?.[0] && (
             <Heading
               blok={blok.heading[0]}
-              className="text-(--text-headings-light)! mt-4 mb-18 max-w-200 mx-auto"
+              className="text-(--text-headings-light)! mt-4 mb-12 lg:mb-18  max-w-200 mx-auto"
             />
           )}
         </div>
@@ -191,18 +206,19 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
         >
           {desktopSlides}
         </div>
-
-        <div className="w-full max-w-300 mx-auto mt-12">
-          <SliderControls
-            className="flex justify-center"
-            currentIndex={currentIndex}
-            totalSlides={total}
-            mode="dark"
-            onNext={() => setCurrentIndex(nextIndex)}
-            onPrevious={() => setCurrentIndex(prevIndex)}
-            onGoTo={(index) => setCurrentIndex(index)}
-          />
-        </div>
+      </div>
+      <div className="w-full mx-auto mt-12">
+        <SliderControls
+          className="flex justify-center"
+          currentIndex={currentIndex}
+          totalSlides={total}
+          mode="dark"
+          onNext={() => setCurrentIndex(nextIndex)}
+          onPrevious={() => setCurrentIndex(prevIndex)}
+          onGoTo={(index) => setCurrentIndex(index)}
+          showArrows={isMobile}
+          alignment="center"
+        />
       </div>
     </div>
   );
