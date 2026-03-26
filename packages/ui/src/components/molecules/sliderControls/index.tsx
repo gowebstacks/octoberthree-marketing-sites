@@ -1,5 +1,5 @@
-import { FC } from 'react';
-import { Button, Icon } from '../../atoms';
+import { FC } from "react";
+import { Button, CarouselButton, Icon } from "../../atoms";
 
 export interface SliderControlsProps {
   currentIndex: number;
@@ -10,7 +10,8 @@ export interface SliderControlsProps {
   showDots?: boolean;
   showArrows?: boolean;
   className?: string;
-  mode? : 'dark' | 'light'
+  mode?: "dark" | "light";
+  alignment?: "center";
 }
 
 export const SliderControls: FC<SliderControlsProps> = ({
@@ -21,14 +22,58 @@ export const SliderControls: FC<SliderControlsProps> = ({
   onGoTo,
   showDots = true,
   showArrows = false,
-  className = '',
-  mode = 'light'
+  className = "",
+  mode = "light",
+  alignment,
 }) => {
   if (totalSlides <= 1) return null;
 
+  const isCenter = alignment === "center";
+
   return (
-    <div className={`w-full flex items-center justify-between ${className}`}>
-      {/* Progress Indicators */}
+   <div className={`w-full flex items-center ${className}`}>
+  {alignment === "center" ? (
+    <>
+      <div className="flex-1 flex justify-start">
+        {showArrows && (
+          <CarouselButton
+            direction="left"
+            onClick={onPrevious}
+            disabled={currentIndex === 0}
+          />
+        )}
+      </div>
+
+      <div className="flex items-center justify-center gap-2">
+        {showDots &&
+          Array.from({ length: totalSlides }).map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              aria-label={`Go to slide ${i + 1}`}
+              aria-current={i === currentIndex}
+              onClick={() => onGoTo?.(i)}
+              className={`h-1.5 rounded-sm transition-all cursor-pointer ${
+                i === currentIndex
+                  ? `w-16 lg:w-56 ${mode === "dark" ? "bg-(--color-base-white)" : "bg-(--)"}`
+                  : `w-16 opacity-50 ${mode === "dark" ? "bg-(--color-base-white)" : "bg-(--)"}`
+              }`}
+            />
+          ))}
+      </div>
+
+      <div className="flex-1 flex justify-end">
+        {showArrows && (
+          <CarouselButton
+            direction="right"
+            onClick={onNext}
+            disabled={currentIndex === totalSlides - 1}
+          />
+        )}
+      </div>
+    </>
+  ) : (
+    <>
       {showDots && (
         <div className="flex items-center gap-2">
           {Array.from({ length: totalSlides }).map((_, i) => (
@@ -39,41 +84,32 @@ export const SliderControls: FC<SliderControlsProps> = ({
               aria-current={i === currentIndex}
               onClick={() => onGoTo?.(i)}
               className={`h-1.5 rounded-sm transition-all ${
-                i === currentIndex 
-                  ? `w-16 lg:w-56 ${mode === 'dark'? 'bg-(--color-base-white)' : 'bg-(--color-neutral-700---body)' }`
-                  : `w-16 opacity-50 ${mode === 'dark'? 'bg-(--color-base-white)' : 'bg-(--color-neutral-700---body)'}`
+                i === currentIndex
+                  ? `w-16 lg:w-56 ${mode === "dark" ? "bg-(--color-base-white)" : "bg-(--)"}`
+                  : `w-16 opacity-50 ${mode === "dark" ? "bg-(--color-base-white)" : "bg-(--)"}`
               }`}
             />
           ))}
         </div>
       )}
 
-      {/* Navigation Arrows */}
       {showArrows && (
         <div className="flex items-center gap-3 ml-auto">
-          <Button
-            type="button"
+          <CarouselButton
+            direction="left"
             onClick={onPrevious}
-            aria-label="Previous slide"
-            mode="filled"
-            tone="secondary"
-            size="sm"
-            leadingIcon="arrow-left"
-            className="w-10! h-10! min-w-10! px-0!"
+            disabled={currentIndex === 0}
           />
-          <Button
-            type="button"
+          <CarouselButton
+            direction="right"
             onClick={onNext}
-            aria-label="Next slide"
-            mode="filled"
-            tone="primary"
-            size="sm"
-            trailingIcon="arrow-right"
-            className="w-10! h-10! min-w-10! px-0!"
+            disabled={currentIndex === totalSlides - 1}
           />
         </div>
       )}
-    </div>
+    </>
+  )}
+</div>
   );
 };
 

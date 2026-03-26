@@ -61,7 +61,7 @@ export default async function SlugPage(props: {
   }
    console.log(
     "*********************************************************",
-    page.rels,
+    page.content.sections,
     slugParam
   );
 

@@ -36,30 +36,31 @@ export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
   return (
     <div
       className={twMerge(
-        "relative mx-auto max-w-360 rounded-sm",
+        "relative mx-auto max-w-360 rounded-sm overflow-hidden",
         themeClasses[blok.theme ?? "primary"]
       )}
       {...storyblokEditable(blok)}
     >
       {blok.squarePattern && (
-        <div className={
-          twMerge("pattern-grid pattern-white", blok.theme === 'primary' ? 'opacity-10' : 'opacity-20')
-        } />
+        <div
+          className={twMerge(
+            "pattern-grid pattern-white",
+            blok.theme === "primary" ? "opacity-10" : "opacity-20"
+          )}
+        />
       )}
 
       <div
         className={twMerge(
-          "relative z-10 mx-auto grid items-center gap-16",
-          hasImage || hasVideo
-            ? "grid-cols-1 lg:grid-cols-2"
-            : ""
+          "relative z-10 mx-auto grid items-center",
+          hasImage || hasVideo ? "grid-cols-1 lg:grid-cols-[57%_43%]" : ""
         )}
       >
         <div
           className={twMerge(
             hasImage || hasVideo
-              ? "sm:px-(--scale-80) sm:py-(--scale-96) section-padding-xl"
-              : "py-(--scale-120)  sm:px-(--scale-80) section-padding-xl",
+              ? "px-4 py-12 sm:px-(--scale-80) sm:py-(--scale-72) lg:py-(--scale-96)"
+              : "section-padding-xl sm:px-(--scale-80) sm:py-(--scale-120)",
             blok.flippedMedia && "lg:order-2"
           )}
         >
@@ -94,17 +95,18 @@ export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
                 src={blok.heroImage!.filename}
                 alt={blok.heroImage!.alt ?? ""}
                 fill
-                className="object-cover"
+                className="object-cover object-[23%]"
               />
             )}
 
             {blok.logoPopout?.filename && (
               <div
                 className={twMerge(
-                  "absolute bottom-[15%] z-20 flex h-22.5 items-center overflow-hidden bg-(--color-orange-700---p-dark) p-2 md:h-37.5",
+                  "absolute bottom-[15%] z-20 flex h-22.5 items-center overflow-hidden bg-(--color-orange-700---p-dark) p-3 md:h-37.5",
                   blok.flippedMedia
                     ? "left-px rounded-[0_999px_999px_0]"
-                    : "right-px rounded-[999px_0_0_999px]"
+                    : " rounded-[999px_0_0_999px]",
+                    hasVideo ? 'right-px' : 'right-0'
                 )}
               >
                 <div className="absolute inset-0 bg-[linear-gradient(-80deg,var(--color-orange-300)_0%,transparent_15%)] opacity-50" />

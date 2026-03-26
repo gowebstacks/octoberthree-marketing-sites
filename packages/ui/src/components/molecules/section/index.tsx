@@ -1,12 +1,69 @@
-import { twMerge } from 'tailwind-merge';
+import { twMerge } from "tailwind-merge";
 
-import type { ComponentPropsWithoutRef, ElementType, FC, ReactNode } from 'react';
-import Image from '../image';
-import { storyblokEditable } from '@storyblok/react';
+import type {
+  ComponentPropsWithoutRef,
+  ElementType,
+  FC,
+  ReactNode,
+} from "react";
+import Image from "../image";
+import { storyblokEditable } from "@storyblok/react";
 
 type PaddingVariants = {
-  top?: 0 | 2 | 4 | 6 | 8 | 12 | 16 | 20 | 24 | 28 | 32 | 36 | 40 | 44 | 48 | 56 | 64 | 72 | 80 | 96 | 112 | 128 | 144 | 160 | 176 | 192;
-  bottom?: 0 | 2 | 4 | 6 | 8 | 12 | 16 | 20 | 24 | 28 | 32 | 36 | 40 | 44 | 48 | 56 | 64 | 72 | 80 | 96 | 112 | 128 | 144 | 160 | 176 | 192;
+  top?:
+    | 0
+    | 2
+    | 4
+    | 6
+    | 8
+    | 12
+    | 16
+    | 20
+    | 24
+    | 28
+    | 32
+    | 36
+    | 40
+    | 44
+    | 48
+    | 56
+    | 64
+    | 72
+    | 80
+    | 96
+    | 112
+    | 128
+    | 144
+    | 160
+    | 176
+    | 192;
+  bottom?:
+    | 0
+    | 2
+    | 4
+    | 6
+    | 8
+    | 12
+    | 16
+    | 20
+    | 24
+    | 28
+    | 32
+    | 36
+    | 40
+    | 44
+    | 48
+    | 56
+    | 64
+    | 72
+    | 80
+    | 96
+    | 112
+    | 128
+    | 144
+    | 160
+    | 176
+    | 192;
 };
 interface ResponsivePadding {
   default?: PaddingVariants;
@@ -18,9 +75,9 @@ interface ResponsivePadding {
 }
 
 type PaddingProps = keyof ResponsivePadding;
-type ThemeProps = 'light' | 'dark' | 'sugar' | 'bright';
+type ThemeProps = "light" | "dark" | "sugar" | "bright";
 
-interface SectionProps extends ComponentPropsWithoutRef<'section'> {
+interface SectionProps extends ComponentPropsWithoutRef<"section"> {
   /**
    * An optional alternative HTML element type to render the section with.
    */
@@ -39,7 +96,7 @@ interface SectionProps extends ComponentPropsWithoutRef<'section'> {
   /**
    * Background gradient for the section
    */
-  bgGradient?: 'none' | 'purple' | 'teal' | 'blue' | 'pink';
+  bgGradient?: "none" | "purple" | "teal" | "blue" | "pink";
   /**
    * Whether to use inverse gradient
    */
@@ -51,7 +108,7 @@ interface SectionProps extends ComponentPropsWithoutRef<'section'> {
   /**
    * Minimum height for the section
    */
-  minHeight?: 'none' | 'sm' | 'md' | 'lg';
+  minHeight?: "none" | "sm" | "md" | "lg";
   /**
    * The content to be rendered inside the section.
    */
@@ -60,13 +117,12 @@ interface SectionProps extends ComponentPropsWithoutRef<'section'> {
   sectionType?: string;
 }
 
-
 export const Section: FC<SectionProps> = ({
   as,
   id,
   children,
   responsivePadding,
-  theme = 'light',
+  theme = "light",
   prevTheme,
   nextTheme,
   bgGradient,
@@ -78,70 +134,73 @@ export const Section: FC<SectionProps> = ({
   sectionType,
   ...rest
 }) => {
-  const Component = as || 'section';
+  const Component = as || "section";
 
   const getMinHeightClass = () => {
     switch (minHeight) {
-      case 'sm':
-        return 'min-h-96'; // 384px / 24rem
-      case 'md':
-        return 'min-h-[32rem]'; // 512px / 32rem
-      case 'lg':
-        return 'min-h-[40rem]'; // 640px / 40rem
-      case 'none':
+      case "sm":
+        return "min-h-96"; // 384px / 24rem
+      case "md":
+        return "min-h-[32rem]"; // 512px / 32rem
+      case "lg":
+        return "min-h-[40rem]"; // 640px / 40rem
+      case "none":
       default:
-        return '';
+        return "";
     }
   };
 
   const getThemeClasses = (currentTheme?: ThemeProps) => {
     // Use semantic token for background
-    if (currentTheme === 'light') {
-      return 'bg-(--surface-background)';
+    if (currentTheme === "light") {
+      return "bg-(--surface-background)";
     }
     // Default to semantic surface background token
-    return 'bg-background';
-  }
+    return "bg-background";
+  };
 
   const getPaddingClass = () => {
     const classNames: string[] = [];
 
-    if (responsivePadding) 
-      Object.keys(responsivePadding).map(key => {
+    if (responsivePadding)
+      Object.keys(responsivePadding).map((key) => {
         const topPadding = responsivePadding[key as PaddingProps]?.top;
         const bottomPadding = responsivePadding[key as PaddingProps]?.bottom;
         let breakpoint = `${key}:`;
-        if (key === 'default') 
-          breakpoint = ''
-        
-        if (key === 'xxl') 
-          breakpoint = '2xl:'
-        
-        if(topPadding)
-          classNames.push(`${breakpoint}pt-${Math.round(topPadding / 4)}`)
-        if(bottomPadding)
-          classNames.push(`${breakpoint}pb-${Math.round(bottomPadding / 4)}`)
+        if (key === "default") breakpoint = "";
+
+        if (key === "xxl") breakpoint = "2xl:";
+
+        if (topPadding)
+          classNames.push(`${breakpoint}pt-${Math.round(topPadding / 4)}`);
+        if (bottomPadding)
+          classNames.push(`${breakpoint}pb-${Math.round(bottomPadding / 4)}`);
 
         return;
-      })
-    // No default padding - only use values from Sanity
-    
-    return classNames.join(' ');
-  }
+      });
+
+    return classNames.join(" ");
+  };
 
   // Regular themes
-  const gradientClass = bgGradient && bgGradient !== 'none' ? 
-    `bg-primary bg-(image:--gradient-hero-${bgGradient}${inverseGradient ? '-inverse' : ''})` : '';
+  const gradientClass =
+    bgGradient && bgGradient !== "none"
+      ? `bg-primary bg-(image:--gradient-hero-${bgGradient}${inverseGradient ? "-inverse" : ""})`
+      : "";
 
   return (
     <Component
-    
       id={id}
       className={twMerge(
-        theme === 'dark' && 'dark', 
+        theme === "dark" && "dark",
         "relative scroll-mt-16 text-body overflow-hidden",
-        sectionType==='hero' ?  'section-padding-xl sm:px-(--scale-24)! ' : 'section-padding-xl',
-        bgGradient && bgGradient !== 'none' ? gradientClass : getThemeClasses(theme),
+        sectionType === "hero" || sectionType === "testimonialSlider"
+          ? "px-(--scale-16) sm:px-(--scale-18) lg:px-(--scale-24)" 
+          : sectionType === "conversionPanel" ? '' :
+          "section-padding-xl-left-right",
+        bgGradient && bgGradient !== "none"
+          ? gradientClass
+          : getThemeClasses(theme),
         getPaddingClass(),
         getMinHeightClass(),
         className
@@ -162,17 +221,16 @@ export const Section: FC<SectionProps> = ({
           />
         </div>
       )}
-      
+
       {/** Content wrapper with z-index */}
       <div className="relative z-10">
         {/** Render Header Height - Static height to prevent layout shift */}
-        {isFirstSection && sectionType !== 'heroMarquee' &&
-          <div className="relative"/>
-        }
-        
+        {isFirstSection && sectionType !== "heroMarquee" && (
+          <div className="relative" />
+        )}
+
         {children}
       </div>
     </Component>
   );
 };
-

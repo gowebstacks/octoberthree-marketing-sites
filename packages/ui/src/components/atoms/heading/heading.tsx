@@ -1,6 +1,7 @@
 import React, { forwardRef, Ref } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { storyblokEditable, SbBlokData } from "@storyblok/react";
+import { Icon } from "../icon";
 
 const HeadingTags = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
 type HeadingTag = (typeof HeadingTags)[number];
@@ -80,6 +81,7 @@ export interface HeadingProps
   heading?: string;
   headingSize?: HeadingBlok["headingSize"];
   children?: React.ReactNode;
+  icon?:string
 }
 
 export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
@@ -95,6 +97,7 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
       className = "",
       heading,
       children,
+      icon,
       ...rest
     },
     ref: Ref<HTMLHeadingElement>
@@ -107,7 +110,6 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
       );
       return null;
     }
-
     const finalSize = blok?.headingSize || headingSize || size;
     const finalWeight = blok?.weight || weight;
     const finalFontFamily = blok?.fontFamily || fontFamily;
@@ -115,6 +117,8 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
       blok?.heading ||
       heading ||
       children
+
+    const finalIcon = blok?.icon || icon;
     return (
       <HeadingComponent
         ref={ref}
@@ -127,7 +131,14 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
         {...rest}
         {...(blok ? storyblokEditable(blok) : {})}
       >
+
+       <span className="flex gap-2 items-center">
+         {
+          finalIcon && 
+          <Icon size={32} color="var(--illustration-primary)" icon={finalIcon as string}/>
+        }
         {finalText}
+       </span>
       </HeadingComponent>
     );
   }

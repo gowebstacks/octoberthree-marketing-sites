@@ -17,9 +17,8 @@ export const HeadingBlock: FC<HeadingBlockSectionProps> = ({
   ...blok
 }) => {
   return (
-  
-     <div  {...storyblokEditable(blok)} className="mx-auto max-w-(--widths-1440-834-375)">
-       <ContentBlock
+    <div {...storyblokEditable(blok)} className="mx-auto md:max-w-200">
+      <ContentBlock
         blok={{
           eyebrow,
           heading: heading,
@@ -27,7 +26,6 @@ export const HeadingBlock: FC<HeadingBlockSectionProps> = ({
           layout: variant === "centered" ? "stacked" : variant,
         }}
       />
-     </div>
-   
+    </div>
   );
 };

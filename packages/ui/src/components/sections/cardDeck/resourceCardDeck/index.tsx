@@ -117,22 +117,14 @@ export const ResourceCardDeck: FC<Props> = ({
 
   useEffect(() => {
     if (!resources) {
-      console.log("❌ resources missing");
+      
       return;
     }
 
-    console.log("📦 resources:", resources);
-    console.log("🧩 rels:", rels);
-    console.log("🗺 relMap:", relMap);
-
     resources.forEach((r: any, i: number) => {
-      console.log(`🔹 resource[${i}] tags:`, r?.tags);
 
       (r?.tags || []).forEach((tag: any, j: number) => {
         const resolved = typeof tag === "string" ? relMap[tag] : tag;
-
-        console.log(`🏷 tag[${i}-${j}] raw:`, tag);
-        console.log(`🏷 tag[${i}-${j}] resolved:`, resolved);
       });
     });
   }, [resources, rels, relMap]);
@@ -141,7 +133,7 @@ export const ResourceCardDeck: FC<Props> = ({
     <div
       {...storyblokEditable(blok)}
       id={htmlId}
-      className="flex max-w-(--widths-1440-834-375) mx-auto flex-col gap-12 sm:gap-16"
+      className="flex max-w-360 mx-auto flex-col gap-12 sm:gap-16"
     >
       {content?.length ? (
         <div className="flex flex-col gap-8">
