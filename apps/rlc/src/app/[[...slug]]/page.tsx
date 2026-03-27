@@ -55,18 +55,19 @@ export default async function SlugPage(props: {
     preview
   );
 
-  console.log(
-    "*********************************************************",
-    page,
-    slugParam
-  );
-
+ 
   if (!page) {
     notFound();
   }
+   console.log(
+    "*********************************************************",
+    page.content.sections,
+    slugParam
+  );
+
   // Extract content and settings from Storyblok page
   const { content } = page;
-  const rels = (page as any).rels?.content || {}; // Storyblok resolved relations are in rels.content
+  const rels = (page as any).rels || []; // Storyblok resolved relations are in rels.content
   const sections = content.sections || [];
   const pageSettings = content.pageSettings || {};
 
@@ -77,6 +78,40 @@ export default async function SlugPage(props: {
 
   let updatedSections = sections;
 
+  if (slugParam === "meet-our-team") {
+    const teamMembers = (
+      await getAllTeamMembers(preview, "rlc")
+    ).map((member: any) => ({
+      _uid: member.uuid,
+      component: "leadershipCard",
+      name: member.content.name,
+      role: member.content.title,
+      location: member.content.location,
+      image: member.content.headshotImage,
+      team: member.content.team,
+    }));
+
+    updatedSections = sections.map((layout: any) => ({
+      ...layout,
+      section: layout.section?.map((section: any) => {
+        if (section.component === "leadershipCardDeck") {
+          return {
+            ...section,
+            rows: [
+              {
+                ...(section.rows?.[0] || {}),
+                _uid: section.rows?.[0]?._uid || section._uid,
+                component: "leadershipCardDeckRow",
+                cards: teamMembers,
+              },
+            ],
+          };
+        }
+
+        return section;
+      }),
+    }));
+  }
 
   return (
     <>

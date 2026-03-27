@@ -243,6 +243,8 @@
   --icon-contained-icon-hover: var(--color-navy-primary-600);
   --surface-accent-background: var(--color-navy-primary-900---p);
   --surface-accent-background-2: var(--color-cyan-600);
+  --text-eyebrow-on-surface-accent: var(--color-base-white);
+  --text-heading-on-surface-accent: var(--color-base-white);
   --stroke-secondary: var(--color-neutral-300);
   --surface-primary-outline-button: var(--surface-background);
   --surface-primary-outline-button-hover: var(--color-neutral-100);
@@ -273,6 +275,7 @@
   --icon-link: var(--color-navy-primary-900---p);
   --surface-pagination: var(--color-cyan-100---p);
   --surface-image-card: var(--color-navy-primary-900---p);
+  --text-on-surface-image-card: var(--color-base-white);
   --gradient-right: color-mix(
     in srgb,
     var(--color-orange-200---p-light) 80%,

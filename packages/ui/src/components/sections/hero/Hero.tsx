@@ -102,14 +102,14 @@ export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
             {blok.logoPopout?.filename && (
               <div
                 className={twMerge(
-                  "absolute bottom-[15%] z-20 flex h-22.5 items-center overflow-hidden bg-(--color-orange-700---p-dark) p-3 md:h-37.5",
+                  "absolute bottom-[15%] z-20 flex h-22.5 items-center overflow-hidden bg-(--surface-button) p-3 md:h-37.5",
                   blok.flippedMedia
                     ? "left-px rounded-[0_999px_999px_0]"
                     : " rounded-[999px_0_0_999px]",
                     hasVideo ? 'right-px' : 'right-0'
                 )}
               >
-                <div className="absolute inset-0 bg-[linear-gradient(-80deg,var(--color-orange-300)_0%,transparent_15%)] opacity-50" />
+                <div className="absolute inset-0 bg-[linear-gradient(-80deg,var(--illustration-primary)_0%,transparent_15%)] opacity-50" />
 
                 <Image
                   loader={storyblokLoader}

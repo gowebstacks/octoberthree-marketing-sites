@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "@repo/ui/styles.css";
 import "./globals.css";
 // import "../lib/storyblok";
-import { getLatestGlobalNavigation, StoryblokBridge } from "@repo/storyblok";
+import { getLatestGlobalNavigation, storyblokApi, StoryblokBridge } from "@repo/storyblok";
 import { FooterNavigation, HeaderNavigation, Layout } from "@repo/ui";
 
 const geistSans = Geist({
@@ -27,25 +27,49 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
 
-    // Fetch header navigation data from Storyblok only
-  let headerNavigation = null;
-  
+  const getGlobalLayoutData = async () => {
   try {
-    console.log("calling latest global nav")
-    const storyblokNav = await getLatestGlobalNavigation(true, 'octoberthree-main');
-    if (storyblokNav) {
-      headerNavigation = storyblokNav.story.content 
+    const [headerRes, footerRes] = await Promise.allSettled([
+      getLatestGlobalNavigation(true, "octoberthree-main/globals/header-navigation"),
+      storyblokApi.getStory("octoberthree-main/globals/o3-footer", { version: "draft" }),
+    ]);
+
+    const header =
+      headerRes.status === "fulfilled"
+        ? headerRes.value?.story?.content ?? null
+        : null;
+
+    const footer =
+      footerRes.status === "fulfilled"
+        ? footerRes.value?.data?.story?.content ?? null
+        : null;
+
+    if (headerRes.status === "rejected") {
+      console.error("Header fetch failed:", headerRes.reason);
     }
+
+    if (footerRes.status === "rejected") {
+      console.error("Footer fetch failed:", footerRes.reason);
+    }
+
+    return { header, footer };
   } catch (error) {
-    console.error('Error fetching headerNavigation from Storyblok:', error);
+    console.error("Unexpected error in getGlobalLayoutData:", error);
+
+    return {
+      header: null,
+      footer: null,
+    };
   }
+};
+  const { header, footer } = await getGlobalLayoutData();
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <StoryblokBridge>
-          <HeaderNavigation headerNavigation={headerNavigation} />
+          <HeaderNavigation headerNavigation={header} />
           <main className="grow">{children}</main>
-          <FooterNavigation />
+          <FooterNavigation  footerNavigation={footer}/>
         </StoryblokBridge>
       </body>
     </html>

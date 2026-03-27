@@ -185,17 +185,17 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
       <div className="pattern-grid pattern-white opacity-5" />
 
       <div className="relative mx-auto max-w-7xl md:w-[90%]! lg:w-full flex flex-col items-center">
-        <div className="text-center">
+        <div className="text-center" >
           {blok.eyebrow?.[0] && (
             <Eyebrow
               {...blok.eyebrow[0]}
-              className="text-(--text-headings-light)! text-center"
+              className="text-(--text-eyebrow-on-surface-accent)! text-center"
             />
           )}
           {blok.heading?.[0] && (
             <Heading
               blok={blok.heading[0]}
-              className="text-(--text-headings-light)! mt-4 mb-12 lg:mb-18  max-w-200 mx-auto"
+              className="text-(--text-heading-on-surface-accent)! mt-4 mb-12 lg:mb-18  max-w-200 mx-auto"
             />
           )}
         </div>
@@ -207,7 +207,7 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
           {desktopSlides}
         </div>
       </div>
-      <div className="w-full mx-auto mt-12">
+      <div className="w-[95%] mx-auto mt-12">
         <SliderControls
           className="flex justify-center"
           currentIndex={currentIndex}
