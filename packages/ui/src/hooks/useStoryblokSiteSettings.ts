@@ -4,7 +4,7 @@ import { StoryblokSiteSettings } from '../types/storyblok-site-settings';
 import { storyblokFetch } from '../lib/storyblok/client';
 
 
-export function useStoryblokSiteSettings() {
+export function useStoryblokSiteSettings(slug:string) {
   console.log('useStoryblokSiteSettings hook called');
   const [siteSettings, setSiteSettings] = useState<StoryblokSiteSettings | null>(null);
   const [loading, setLoading] = useState(true);
@@ -22,7 +22,7 @@ export function useStoryblokSiteSettings() {
           const storyblokApi = getStoryblokApi();
           console.log('Got Storyblok API:', !!storyblokApi);
           if (storyblokApi && typeof storyblokApi.get === 'function') {
-            const response = await storyblokApi.get('cdn/stories/site-settings', {
+            const response = await storyblokApi.get(`cdn/stories/${slug}`, {
               version: 'published'
             });
             console.log('Storyblok site settings response:', response.data);
@@ -35,7 +35,7 @@ export function useStoryblokSiteSettings() {
         // Fallback to direct fetch using public token
         if (!content) {
           console.log('Falling back to storyblokFetch(public, published) for site-settings');
-          const story = await storyblokFetch<any>('site-settings', { version: 'published' });
+          const story = await storyblokFetch<any>(slug, { version: 'published' });
           content = (story?.content as StoryblokSiteSettings) || null;
         }
 

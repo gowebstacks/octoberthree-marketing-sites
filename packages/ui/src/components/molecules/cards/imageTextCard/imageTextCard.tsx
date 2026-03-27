@@ -46,7 +46,7 @@ export const ImageTextCard: FC<ImageTextCardProps> = ({
         />
       )}
 
-      <div className="absolute bottom-0 flex w-full flex-col justify-end bg-(--color-navy-primary-900---p) p-(--padding-24-18-18)">
+      <div className="absolute bottom-0 flex w-full flex-col justify-end bg-(--surface-image-card) p-(--padding-24-18-18)">
         {heading && (
           <span
             className={twMerge(
