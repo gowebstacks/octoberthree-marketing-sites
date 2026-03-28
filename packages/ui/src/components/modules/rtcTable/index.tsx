@@ -1,89 +1,120 @@
-'use client'
+"use client";
 
-import { FC, useMemo, useState } from 'react'
-import { Icon } from '../../atoms'
-import { BlogPagination } from '../../molecules'
+import type { FC } from "react";
+import { Icon } from "../../atoms";
+import { ContentBlock } from "../../organisms";
 
-type RTTextNode = { type: 'text'; text?: string }
-type RTParagraphNode = { type: 'paragraph'; content?: RTTextNode[] }
-type RTTableCellNode = {
-  type: 'tableCell' | 'tableHeader'
-  attrs?: { colspan?: number; rowspan?: number; colwidth?: number[] | null; backgroundColor?: string | null }
-  content?: RTParagraphNode[]
-}
-type RTTableRowNode = { type: 'tableRow'; content?: RTTableCellNode[] }
-export type RTTableNode = { type: 'table'; content?: RTTableRowNode[] }
+export type RTCTableProps = {
+  _type?: string;
+  _key?: string;
+  headers?: {
+    _key: string;
+    text?: string;
+    alignment?: "left" | "center";
+  }[];
+  rows?: {
+    _key: string;
+    cells?: {
+      _key: string;
+      content?: any;
+    }[];
+  }[];
+};
 
-interface RTCTableProps {
-  node: RTTableNode
-  pageSize?: number
-}
+const renderCell = (content: any) => {
+  if (!content) {
+    return <div className="h-0.5 w-4 bg-(--text-headings) mx-auto" />;
+  }
 
-const getCellText = (cell?: RTTableCellNode): string =>
-  cell?.content?.[0]?.content?.map(n => n.text || '').join('') || ''
+  if (typeof content === "string") {
+    const v = content.trim().toLowerCase();
 
-const parseTableNode = (node: RTTableNode) => {
-  const headers: string[] = []
-  const rows: string[][] = []
+    if (!v || v === "-" || v === "—") {
+      return <div className="h-0.5 w-4 bg-(--text-headings) mx-auto" />;
+    }
 
-  node.content?.forEach((row, i) => {
-    const cells: string[] = []
-    row.content?.forEach(cell => {
-      const value = getCellText(cell)
-      if (cell.type === 'tableHeader' && i === 0) headers.push(value)
-      if (cell.type === 'tableCell') cells.push(value)
-    })
-    if (cells.length) rows.push(cells)
-  })
+    if (["yes", "true", "check"].includes(v)) {
+      return (
+        <Icon
+          icon="check-circle-filled"
+          size={24}
+          className="mx-auto text-(--text-headings)"
+        />
+      );
+    }
 
-  return { headers, rows }
-}
+   
+    if (["no", "false", "indeterminate", "partial"].includes(v)) {
+      return (
+        <div className="relative w-6 h-6 mx-auto">
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-0.5 bg-(--text-headings)" />
+        </div>
+      );
+    }
 
-const renderCell = (value: string) => {
-  const v = value.trim().toLowerCase()
-  if (!v || v === '-' || v === '—') return <div className="h-0.5 w-4 bg-(--text-headings) mx-auto" />
-  if (['yes', 'true', 'check'].includes(v)) return <Icon icon="check-circle-filled" size={18} className="mx-auto text-(--text-headings)" />
-  return value
-}
+    return content;
+  }
 
-export const RTCTable: FC<RTCTableProps> = ({ node, pageSize = 6 }) => {
-  const { headers, rows } = useMemo(() => parseTableNode(node), [node])
-  const [page, setPage] = useState(1)
 
-  if (!headers.length || !rows.length) return null
+  return <ContentBlock blok={content} />;
+};
 
-  const start = (page - 1) * pageSize
-  const paginatedRows = rows.slice(start, start + pageSize)
+export const RTCTable: FC<RTCTableProps> = ({ headers, rows }) => {
+  if (!headers?.length || !rows?.length) return null;
 
   return (
-    <div className="my-12 space-y-10">
-      <div className="overflow-x-auto bg-(--surface-background) md:p-(--padding-40-32-32) py-(--padding-top-bottom-sectional-full) section-padding-xl-left-right">
-        <table className="w-full border-collapse">
-          <thead>
-            <tr>
-              {headers.map((h, i) => (
-                <th key={i} className="px-(--scale-24) py-(--gaps-24-18-18) text-md font-medium text-(--text-headings) text-center">
-                  {h}
-                </th>
+    <div className="w-full overflow-x-auto border border-(--stroke-primary) rounded-sm max-w-360 mx-auto">
+      <table className="w-full border-collapse min-w-[640px]">
+        <thead className="bg-(--surface-secondary-background)">
+          <tr>
+            {headers.map((header) => (
+              <th
+                key={header._key}
+                className={`
+                  py-(--gaps-18-16-16)
+                  px-(--gaps-16-12-12)
+                  text-md
+                  font-medium
+                  text-(--text-headings)
+                  max-w-[256px]
+                  min-w-28.5
+                  ${header.alignment === "left" ? "text-left" : "text-center"}
+                `}
+              >
+                {header.text}
+              </th>
+            ))}
+          </tr>
+        </thead>
+
+        <tbody>
+          {rows.map((row, rowIndex) => (
+            <tr
+              key={row._key}
+              className={`
+                border-t border-(--stroke-primary)
+                ${rowIndex % 2 === 0 ? "bg-(--surface-table-cell)/60" : ""}
+              `}
+            >
+              {row.cells?.map((cell) => (
+                <td
+                  key={`cell-${row._key}-${cell._key}`}
+                  className="
+                    py-(--gaps-18-16-16)
+                    px-(--gaps-16-12-12)
+                    text-md
+                    text-(--text-headings)
+                    max-w-[256px]
+                    min-w-28.5
+                  "
+                >
+                  {renderCell(cell.content)}
+                </td>
               ))}
             </tr>
-          </thead>
-          <tbody>
-            {paginatedRows.map((row, i) => (
-              <tr key={`${page}-${i}`} className={i % 2 === 0 ? 'bg-(--surface-table-cell)/60 border-t border-b border-(--stroke-primary)' : ''}>
-                {row.map((cell, j) => (
-                  <td key={j} className="px-(--scale-24) py-(--gaps-24-18-18) text-md text-(--text-headings) text-center">
-                    {renderCell(cell)}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {rows.length > pageSize && (
-        <BlogPagination currentPage={page} totalItems={rows.length} itemsPerPage={pageSize} onPageChange={setPage} />
-      )}
+          ))}
+        </tbody>
+      </table>
     </div>
-  )
-}
+  );
+};

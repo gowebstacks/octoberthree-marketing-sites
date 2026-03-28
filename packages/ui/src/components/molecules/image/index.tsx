@@ -88,7 +88,7 @@ const Image: FC<ImageProps> = ({
     >
       <div className={
         twMerge(
-          ' pattern-orange',
+          'pattern-primary',
           patternVariant === 'sm' ? 'pattern-triangle-sm' : patternVariant === 'md' ? 'pattern-triangle-md' :'pattern-triangle'
         )
       }></div>

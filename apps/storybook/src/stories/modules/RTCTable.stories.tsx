@@ -1,133 +1,78 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { RTCTable } from "@repo/ui";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import {RTCTable} from '@repo/ui'
 
 const meta: Meta<typeof RTCTable> = {
-  title: "Modules/RTCTable",
+  title: 'Modules/RTCTable',
   component: RTCTable,
-  tags: ["autodocs"],
- args: {
-  node: {
-    type: 'table',
-    content: [
+  tags: ['autodocs'],
+  args: {
+    headers: [
+      { _key: 'h1', text: 'Features', alignment: 'left' },
+      { _key: 'h2', text: 'Basic' },
+      { _key: 'h3', text: 'Pro' },
+      { _key: 'h4', text: 'Enterprise' },
+    ],
+
+    rows: [
       {
-        type: 'tableRow',
-        content: [
-          {
-            type: 'tableHeader',
-            content: [
-              {
-                type: 'paragraph',
-                content: [{ type: 'text', text: 'Placeholder' }],
-              },
-            ],
-          },
-          {
-            type: 'tableHeader',
-            content: [
-              {
-                type: 'paragraph',
-                content: [{ type: 'text', text: 'Placeholder' }],
-              },
-            ],
-          },
-          {
-            type: 'tableHeader',
-            content: [
-              {
-                type: 'paragraph',
-                content: [{ type: 'text', text: 'Placeholder' }],
-              },
-            ],
-          },
-          {
-            type: 'tableHeader',
-            content: [
-              {
-                type: 'paragraph',
-                content: [{ type: 'text', text: 'Placeholder' }],
-              },
-            ],
-          },
+        _key: 'r1',
+        cells: [
+          { _key: 'c1', content: 'Authentication' },
+          { _key: 'c2', content: 'check' },
+          { _key: 'c3', content: 'check' },
+          { _key: 'c4', content: 'check' },
         ],
       },
-
       {
-        type: 'tableRow',
-        content: [
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Authentication' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'check' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'check' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'check' }] }] },
+        _key: 'r2',
+        cells: [
+          { _key: 'c1', content: 'Single Sign-On' },
+          { _key: 'c2', content: '' },
+          { _key: 'c3', content: 'check' },
+          { _key: 'c4', content: 'check' },
         ],
       },
-
       {
-        type: 'tableRow',
-        content: [
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Single SignOn' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: '' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'check' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'check' }] }] },
+        _key: 'r3',
+        cells: [
+          { _key: 'c1', content: 'Audit Logs' },
+          { _key: 'c2', content: '' },
+          { _key: 'c3', content: '' },
+          { _key: 'c4', content: 'check' },
         ],
       },
-
       {
-        type: 'tableRow',
-        content: [
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Audit Logs' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: '' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: '' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'check' }] }] },
+        _key: 'r4',
+        cells: [
+          { _key: 'c1', content: 'Custom Roles' },
+          { _key: 'c2', content: '' },
+          { _key: 'c3', content: 'check' },
+          { _key: 'c4', content: 'check' },
         ],
       },
-
       {
-        type: 'tableRow',
-        content: [
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Custom Roles' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: '' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'check' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'check' }] }] },
+        _key: 'r5',
+        cells: [
+          { _key: 'c1', content: 'Priority Support' },
+          { _key: 'c2', content: '' },
+          { _key: 'c3', content: 'check' },
+          { _key: 'c4', content: 'check' },
         ],
       },
-
       {
-        type: 'tableRow',
-        content: [
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'SLA' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: '' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: '' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'check' }] }] },
-        ],
-      },
-
-      {
-        type: 'tableRow',
-        content: [
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Priority Support' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: '' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'check' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'check' }] }] },
-        ],
-      },
-
-      {
-        type: 'tableRow',
-        content: [
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Compliance (SOC2)' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: '' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: '' }] }] },
-          { type: 'tableCell', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'check' }] }] },
+        _key: 'r6',
+        cells: [
+          { _key: 'c1', content: 'Compliance (SOC2)' },
+          { _key: 'c2', content: '' },
+          { _key: 'c3', content: '' },
+          { _key: 'c4', content: 'check' },
         ],
       },
     ],
   },
-  pageSize: 4,
 }
 
-};
+export default meta
+type Story = StoryObj<typeof RTCTable>
 
-export default meta;
-type Story = StoryObj<typeof RTCTable>;
-
-export const Default: Story = {};
+export const Default: Story = {}

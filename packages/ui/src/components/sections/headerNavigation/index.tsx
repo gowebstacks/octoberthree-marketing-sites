@@ -12,7 +12,8 @@ import CTABar from "../../modules/ctaBar";
 import Hamburger from "./components/hamburger";
 import Navigation from "./components/navigation";
 import MobileNavigation from "./components/mobile";
-import { Image } from "../../molecules";
+import Image from "next/image";
+import { storyblokLoader } from "../../../utils/storyblokImageLoader";
 
 export interface HeaderNavigationProps {
   headerNavigation: StoryblokGlobalNavigation | null;
@@ -42,19 +43,20 @@ export const HeaderNavigation: React.FC<HeaderNavigationProps> = ({
         "
       >
         <div className="h-full lg:basis-auto lg:shrink-0 lg:grow-0 flex items-center text-black!">
-          {/* {headerNavigation?.logo?.filename ? (
+          {headerNavigation?.logo?.filename ? (
             <Link href={"/"} aria-label="Home">
               <Image
-                asset={{
-                  url: headerNavigation?.logo?.filename,
-                }}
-                className="h-8 w-auto"
-                priority
+              loader={storyblokLoader}
+                src={headerNavigation?.logo?.filename}
+                className="max-h-13.75 w-fit min-w-26.5  max-w-49"
+                width={193}
+                height={55}
+                alt="logo"
               />
             </Link>
           ) : 'Logo Placeholder'
-        } */}
-        Logo Placeholder
+        }
+       
         </div>
 
         {headerNavigation?.menuItems && (

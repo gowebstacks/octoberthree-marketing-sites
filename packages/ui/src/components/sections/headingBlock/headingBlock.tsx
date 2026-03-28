@@ -4,6 +4,7 @@ import { ContentBlock } from "../../organisms/contentBlock";
 import { CTABarProps } from "../../modules/ctaBar";
 import { EyebrowBlockProps } from "../../atoms";
 import { HeadingBlok } from "../../atoms/heading";
+import { twMerge } from "tailwind-merge";
 
 export interface HeadingBlockSectionProps extends SbBlokData {
   eyebrow?: EyebrowBlockProps[];
@@ -22,7 +23,12 @@ export const HeadingBlock: FC<HeadingBlockSectionProps> = ({
   ...blok
 }) => {
   return (
-    <div {...storyblokEditable(blok)} className="mx-auto md:max-w-200">
+    <div {...storyblokEditable(blok)} className={
+      twMerge(
+        "mx-auto",
+        variant === "centered" ? " md:max-w-200" : "max-w-360"
+      )
+    }>
       <ContentBlock
         blok={{
           eyebrow,
