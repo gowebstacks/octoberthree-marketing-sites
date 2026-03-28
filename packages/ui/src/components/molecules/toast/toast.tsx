@@ -52,7 +52,7 @@ export function Toast({
   if (!visible) return null
 
   return (
-    <div className={`fixed z-50 ${positionClasses[position]}`}>
+    <div className={`fixed z-100 ${positionClasses[position]}`}>
       <div
         className={`flex items-start justify-between gap-2 rounded-xs border bg-(--surface-card) p-(--padding-18-16-16) shadow-md ${variantClasses[variant]}`}
       >
