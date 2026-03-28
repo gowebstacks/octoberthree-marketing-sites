@@ -135,7 +135,7 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
        <span className="flex gap-2 items-center">
          {
           finalIcon && 
-          <Icon size={32} color="var(--illustration-primary)" icon={finalIcon as string}/>
+          <Icon size={32} color="var(--switchback-icon-color)" icon={finalIcon as string}/>
         }
         {finalText}
        </span>

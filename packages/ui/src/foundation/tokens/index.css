@@ -268,6 +268,7 @@
   --illustration-dark: var(--color-navy-primary-900---p);
   --illustration-light: var(--color-cyan-500);
   --illustration-secondary: var(--color-cyan-100---p);
+  --switchback-icon-color:var(--color-orange-400----p);
   --surface-checkmark-hover: var(--color-navy-primary-50);
   --surface-carousel: var(--color-cyan-100---p);
   --surface-carousel-hover: var(--color-cyan-200);
@@ -1285,6 +1286,9 @@
 
   .pattern-orange {
     color: var(--color-orange-400----p);
+  }
+   .pattern-primary {
+    color: var(--switchback-icon-color);
   }
 
   .pattern-blue {

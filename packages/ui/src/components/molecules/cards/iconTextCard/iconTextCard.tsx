@@ -1,22 +1,22 @@
-'use client'
+"use client";
 
-import type { FC } from 'react'
-import { twMerge } from 'tailwind-merge'
-import { storyblokEditable } from '@storyblok/react'
-import { Button } from '../../../atoms'
-import { RichText } from '../../richText/richText'
-import { RichTextContent } from '../../../../types/storyblok'
-import { StoryblokAsset } from '../../../../lib'
-import Image from 'next/image'
-import { storyblokLoader } from '../../../../utils/storyblokImageLoader'
+import type { FC } from "react";
+import { twMerge } from "tailwind-merge";
+import { storyblokEditable } from "@storyblok/react";
+import { Button } from "../../../atoms";
+import { RichText } from "../../richText/richText";
+import { RichTextContent } from "../../../../types/storyblok";
+import { StoryblokAsset } from "../../../../lib";
+import Image from "next/image";
+import { storyblokLoader } from "../../../../utils/storyblokImageLoader";
 
 export interface IconTextCardProps {
-  _key: string
-  icon?: StoryblokAsset
-  heading?: string
-  body?: RichTextContent
-  button?: any[]
-  theme?: 'light' | 'dark'
+  _key: string;
+  icon?: StoryblokAsset;
+  heading?: string;
+  body?: RichTextContent;
+  button?: any[];
+  theme?: "light" | "dark";
 }
 
 export const IconTextCard: FC<IconTextCardProps> = ({
@@ -24,22 +24,23 @@ export const IconTextCard: FC<IconTextCardProps> = ({
   heading,
   body,
   button = [],
-  theme = 'light',
+  theme = "light",
   ...blok
 }) => {
-  const hasButtons = button.length > 0
-
+  const hasButtons = button.length > 0;
+  const isBodyEmpty =
+    !body?.content ||
+    body.content.every((node) => !node.content || node.content.length === 0);
   return (
     <div
       {...storyblokEditable(blok)}
       className={twMerge(
-        'flex h-full flex-col  border border-(--stroke-card)  transition-all duration-200 rounded-sm',
-        'bg-(--surface-card)',
-        hasButtons &&
-          'group cursor-pointer  hover:shadow-lg overflow-hidden '
+        "flex h-full flex-col  border border-(--stroke-card)  transition-all duration-200 rounded-sm",
+        "bg-(--surface-card)",
+        hasButtons && "group cursor-pointer  hover:shadow-lg overflow-hidden "
       )}
     >
-      {icon && (
+      {icon?.filename && (
         <div className="relative h-72 w-full p-8 grid  place-items-center bg-(--surface-icon-card)">
           <div className="pattern-grid pattern-white opacity-20 group-hover:opacity-35"></div>
           <Image
@@ -48,7 +49,7 @@ export const IconTextCard: FC<IconTextCardProps> = ({
             alt="icon"
             width={200}
             height={225}
-  className="h-56.25 w-50 object-contain z-12"
+            className="h-56.25 w-50 object-contain z-12"
           />
         </div>
       )}
@@ -60,7 +61,7 @@ export const IconTextCard: FC<IconTextCardProps> = ({
           </span>
         )}
 
-        {body && (
+        {!isBodyEmpty && (
           <div className="mt-4 text-(--text-body-dark)">
             <RichText
               doc={body}
@@ -73,22 +74,20 @@ export const IconTextCard: FC<IconTextCardProps> = ({
             />
           </div>
         )}
-           {hasButtons && (
-        <div className="mt-auto flex flex-col gap-3">
-          {button.slice(0, 2).map((btn, index) => (
-            <Button
-              key={btn._uid || index}
-              {...btn}
-              tone={index === 0 ? 'primary' : 'secondary'}
-              mode="filled"
-              size="sm"
-            />
-          ))}
-        </div>
-      )}
+        {hasButtons && (
+          <div className="mt-auto flex flex-col gap-3">
+            {button.slice(0, 2).map((btn, index) => (
+              <Button
+                key={btn._uid || index}
+                {...btn}
+                tone={index === 0 ? "primary" : "secondary"}
+                mode="filled"
+                size="sm"
+              />
+            ))}
+          </div>
+        )}
       </div>
-
-   
     </div>
-  )
-}
+  );
+};

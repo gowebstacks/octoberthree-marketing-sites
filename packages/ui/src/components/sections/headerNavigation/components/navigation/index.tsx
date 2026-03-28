@@ -109,7 +109,7 @@ const Navigation: FC<NavigationProps> = ({ menuItems }) => {
               <Item value={item._uid} asChild>
                 <a
                   href={getLinkHref(item.link)}
-                  className="text-sm text-(--text-headings) transition-colors hover:text-primary"
+                  className="text-sm font-medium text-(--text-headings) transition-colors hover:text-primary"
                 >
                   {item.label || item.link?.label}
 

@@ -96,13 +96,14 @@ export const FooterNavigation: React.FC<FooterNavigationProps> = ({
       <div className="max-w-360 mx-auto">
         <div className="flex flex-col gap-14">
           {footer?.footerImage?.filename && (
-            <div className="w-58">
+            <div className="">
               <Link href={homeHref}>
                 <Image
                   src={footer.footerImage.filename}
                   alt="Footer logo"
                   width={233}
                   height={31}
+                  className="w-fit max-w-58 max-h-15"
                 />
               </Link>
             </div>
