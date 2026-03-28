@@ -88,7 +88,7 @@ const CTABar: FC<CTABarProps> = ({ buttons, className = "", ...blok }) => {
             />
 
             {success && (
-              <Toast title="Subscribed successfully" actionLabel="Done" />
+              <Toast title="Subscribed successfully" actionLabel="Done" position="top-right"/>
             )}
             {error && <Toast title={error} actionLabel="" />}
           </div>
