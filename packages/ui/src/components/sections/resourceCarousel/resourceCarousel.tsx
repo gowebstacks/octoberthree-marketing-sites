@@ -13,13 +13,13 @@ import { SliderControls } from "../../molecules";
 
 export interface ResourceCarouselBlok extends SbBlokData {
   content?: ContentBlockBlok[];
-  resources?: ResourceCardProps[];
+  cards?: ResourceCardProps[];
   htmlId?: string;
 }
 
 export const ResourceCarousel: FC<ResourceCarouselBlok> = ({
   content,
-  resources = [],
+  cards = [],
   htmlId,
   ...blok
 }) => {
@@ -118,20 +118,20 @@ export const ResourceCarousel: FC<ResourceCarouselBlok> = ({
               pb-4
             "
         >
-          {resources.map((resource) => (
+          {cards.map((resource) => (
             <div key={resource._id} data-card className="snap-start shrink-0">
               <ResourceCard {...resource} carousel={true} />
             </div>
           ))}
         </div>
 
-        {!!resources.length && (
+        {!!cards.length && (
           <>
             <div className="mt-6 flex justify-between gap-3">
                <div className="mt-4">
                 <SliderControls
                   currentIndex={currentSlide}
-                  totalSlides={resources.length}
+                  totalSlides={cards.length}
                   onPrevious={handlePrevious}
                   onNext={handleNext}
                   onGoTo={handleGoTo}
