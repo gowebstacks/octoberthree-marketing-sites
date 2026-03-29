@@ -89,7 +89,9 @@ export default async function SlugPage(props: {
       location: member.content.location,
       image: member.content.headshotImage,
       team: member.content.team,
+      ...member
     }));
+    console.log(teamMembers, "team members")
 
     updatedSections = sections.map((layout: any) => ({
       ...layout,

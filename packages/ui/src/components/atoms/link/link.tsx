@@ -41,7 +41,7 @@ export type LinkFragment = {
   linkType?: 'external' | 'internal' | 'popup' | 'anchor' | null;
   label?: string | null;
   openInNewTab?: boolean;
-  popupForm?: {
+  popupform?: {
     _id?: string;
     formId?: string;
     name?: string;

@@ -177,6 +177,10 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
       return <PortableText key={component._uid} blok={component as any} />;
     case "table":
       return <RTCTable key={component._uid} {...component as RTCTableProps} />;
+    case "formBlock":
+      return <FormBlock key={component._uid} {...component} />;
+
+    
 
     // Add more Storyblok components as you refactor them
     default:

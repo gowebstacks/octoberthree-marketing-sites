@@ -2,12 +2,12 @@
 
 import { storyblokEditable } from '@storyblok/react'
 import type { SbBlokData } from '@storyblok/react'
-import { TestimonialItem, TestimonialBlok } from '../../modules'
+import { TestimonialItem, TestimonialBlokProp } from '../../modules'
 import { CTABar } from '../../molecules'
 import * as styles from './styles'
 
 interface TestimonialWallBlok extends SbBlokData {
-  testimonials: TestimonialBlok[]
+  testimonials: TestimonialBlokProp[]
   ctaBar?: SbBlokData[]
   rows?: number
 }

@@ -16,7 +16,7 @@ export interface SwitchbackBlok extends SbBlokData {
     filename?: string
     alt?: string
   }
-  video?: VideoBlok
+  video?: VideoBlok[]
   reverse?: boolean
 }
 
@@ -53,7 +53,8 @@ export const Switchback: FC<{ blok: SwitchbackBlok }> = ({ blok }) => {
     }
 
     if (mediaType === 'video' && video) {
-      return <Video blok={video} />
+      console.log(video, "video here")
+      return <Video blok={video[0]} />
     }
 
     return null
