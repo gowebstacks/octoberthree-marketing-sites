@@ -6,13 +6,13 @@ import type { SbBlokData } from '@storyblok/react'
 import { twMerge } from 'tailwind-merge'
 import { Attribution, AttributionBlok } from '../../molecules'
 
-export interface TestimonialBlok extends SbBlokData {
+export interface TestimonialBlokProp extends SbBlokData {
   quote: string
   author: AttributionBlok
 }
 
 interface TestimonialItemProps {
-  blok: TestimonialBlok
+  blok: TestimonialBlokProp
   variant?: 'default' | 'card'
 }
 

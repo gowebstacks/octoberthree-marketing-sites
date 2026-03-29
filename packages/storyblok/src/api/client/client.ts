@@ -151,7 +151,7 @@ export async function getWebsitePageBySlug(
     // Now fetch the full story data with resolved relations
     const data = await storyblokFetch(matchingStory.full_slug, {
       version: isDraft ? "draft" : "published",
-      resolve_relations: "testimonial.person,resourceCard.tags", // Resolve testimonial, person, and company relations
+      resolve_relations: "testimonial.person,resourceCard.tags,testimonialSlide.testimonial", // Resolve testimonial, person, and company relations
       resolve_level: 2,
     });
     if (!data) {
@@ -462,7 +462,7 @@ export async function getAllTeamMembers(
         starts_with: `${sitename}/team/`,
         per_page: "100",
         page: String(page),
-        version: "draft",
+        version: isDraft ? 'draft' : 'published',
       });
 
       const response = await fetch(
@@ -487,11 +487,71 @@ export async function getAllTeamMembers(
       page++;
     } while (allStories.length < total);
 
-    console.log(allStories, "all team members");
 
     return allStories;
   } catch (error) {
     console.error("Failed to fetch all team members", error);
+    return [];
+  }
+}
+
+
+// Add this to your storyblok package (e.g., in a team.ts or similar file)
+
+// Get a single team member by slug
+// Get a single team member by slug
+export async function getTeamMemberBySlug(
+  slug: string,
+  isDraft: boolean = false,
+  sitename: string
+) {
+  try {
+    const accessToken = getAccessToken(isDraft ? "draft" : "published");
+
+    if (!accessToken) {
+      console.warn("Storyblok token not configured");
+      return null;
+    }
+
+    // Construct the full path: sitename/team/slug
+    const fullSlug = `${sitename}/team/${slug}`;
+    
+    const url = `${STORYBLOK_API_URL}/stories/${fullSlug}?token=${accessToken}&version=${isDraft ? 'draft' : 'published'}`;
+    
+    console.log(`[getTeamMemberBySlug] Fetching: ${url}`);
+    
+    const response = await fetch(url, {
+      cache: isDraft ? "no-store" : undefined,
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        console.log(`[getTeamMemberBySlug] Team member not found: ${fullSlug}`);
+        return null;
+      }
+      throw new Error(
+        `Storyblok API error: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const data = await response.json();
+    console.log(`[getTeamMemberBySlug] Successfully fetched: ${fullSlug}`);
+    return data.story;
+  } catch (error) {
+    console.error(`[getTeamMemberBySlug] Failed to fetch team member with slug ${slug}:`, error);
+    return null;
+  }
+}
+
+// Optional: Get all team member slugs for static generation
+export async function getAllTeamMemberSlugs(sitename: string, isDraft: boolean = false) {
+  try {
+    const teamMembers = await getAllTeamMembers(isDraft, sitename);
+    return teamMembers.map((member: any) => ({
+      slug: member.slug.split('/').pop(), // Extract the last part of the slug
+    }));
+  } catch (error) {
+    console.error('Failed to fetch team member slugs', error);
     return [];
   }
 }

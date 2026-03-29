@@ -46,7 +46,7 @@ export type ButtonProps = NativeButtonProps & {
   };
   externalUrl?: string;
   anchorLinkId?: string;
-  popupForm?: string;
+  popupform?: string;
   openInNewTab?: boolean;
   iconColor?:string
 } & SbBlokData;
@@ -70,7 +70,7 @@ const Button: FC<ButtonProps> = ({
   internalLink,
   externalUrl,
   anchorLinkId,
-  popupForm,
+  popupform,
   openInNewTab,
   iconColor,
   ...props
@@ -86,7 +86,7 @@ const Button: FC<ButtonProps> = ({
   const actualInternalLink = internalLink || actualBlok?.internalLink;
   const actualExternalUrl = externalUrl || actualBlok?.externalUrl;
   const actualAnchorLinkId = anchorLinkId || actualBlok?.anchorLinkId;
-  const actualPopupForm = popupForm || actualBlok?.popupForm;
+  const actualpopupform = popupform || actualBlok?.popupform;
   const actualOpenInNewTab =
     openInNewTab !== undefined ? openInNewTab : actualBlok?.openInNewTab;
   const actualMode = mode || actualBlok?.mode || "filled";
@@ -109,7 +109,7 @@ const Button: FC<ButtonProps> = ({
   } else if (!finalLink && actualLinkType === "popup") {
     finalLink = {
       linkType: "popup",
-      popupForm: actualPopupForm,
+      popupform: actualpopupform,
       label: actualLabel,
     };
   }
@@ -299,7 +299,7 @@ const Button: FC<ButtonProps> = ({
           onClose={() => setOpenPopup(false)}
           formId={
             typeof finalLink !== "string"
-              ? (finalLink as any)?.popupForm?.formId
+              ? (finalLink as any)?.popupform?.formId
               : undefined
           }
           title={

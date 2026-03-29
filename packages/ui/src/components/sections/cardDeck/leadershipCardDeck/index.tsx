@@ -46,6 +46,8 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
     () => rows?.flatMap((row) => row.cards ?? []) ?? [],
     [rows]
   );
+    console.log(cards, "test")
+
 
   const getContent = (card: LeadershipCardBlok) =>
     card as LeadershipCardBlok & CardContent;
@@ -239,13 +241,18 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
             )}`}
           >
             {row.cards?.map((card, i) => (
-              <div
+             
+              <a
                 key={card._uid || i}
                 {...storyblokEditable(card)}
-                className="w-full h-full"
+                className="w-full h-full cursor-pointer"
+                href={
+                  `/team/${card.slug}`
+                }
+
               >
                 <LeadershipCard blok={card} />
-              </div>
+              </a>
             ))}
           </div>
         ))}

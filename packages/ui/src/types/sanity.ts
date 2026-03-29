@@ -106,7 +106,7 @@ export interface SanityExternalLink {
 
 export interface SanityPopupLink {
   linkType: 'popup';
-  popupForm?: {
+  popupform?: {
     _id?: string;
     name?: string;
     formId?: string;

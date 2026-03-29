@@ -159,7 +159,7 @@ export const FullWidth: Story = {
   },
 };
 
-const PopupForm = () => (
+const popupform = () => (
   <form aria-label="contact form">
     <label>
       Email

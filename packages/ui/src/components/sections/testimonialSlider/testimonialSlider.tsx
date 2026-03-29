@@ -4,18 +4,35 @@ import { useRef, useState, useMemo, useEffect, useCallback } from "react";
 import { storyblokEditable } from "@storyblok/react";
 import type { SbBlokData } from "@storyblok/react";
 import { Attribution, SliderControls } from "../../molecules";
-import { Eyebrow, EyebrowBlockProps, Heading } from "../../atoms";
-import { TestimonialBlok } from "../../modules";
+import { Eyebrow, Heading } from "../../atoms";
 import { HeadingBlok } from "../../atoms/heading";
 import { twMerge } from "tailwind-merge";
-import { getAllTestimonials } from "../../../lib";
 import { buildRelMap, resolveRel } from "../../../utils";
-import { Person } from "../../../types/storyblok";
+import type { Person } from "../../../types/storyblok";
+
+export interface TestimonialBlok extends SbBlokData {
+  quote?: string;
+  title?: string;
+  person?: string | Person;
+  component: "testimonial";
+}
+
+export interface TestimonialSlideBlok extends SbBlokData {
+  testimonial?: string;
+  component: "testimonialSlide";
+}
 
 export interface TestimonialSliderBlok extends SbBlokData {
-  eyebrow?: EyebrowBlockProps[];
+  eyebrow?: any[];
   heading?: HeadingBlok[];
-  testimonials: TestimonialBlok[];
+  testimonials: (TestimonialBlok | TestimonialSlideBlok)[];
+  autoplay?: boolean;
+  autoplaySpeed?: string;
+  showDots?: boolean;
+  showArrows?: boolean;
+  showAvatar?: boolean;
+  showCompany?: boolean;
+  displayStyle?: string[];
 }
 
 interface TestimonialSliderProps {
@@ -30,8 +47,25 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
   const [isMobile, setIsMobile] = useState(false);
 
   const relMap = useMemo(() => buildRelMap(rels), [rels]);
+console.log(blok.testimonials.map((t)=>t._uid), "blok",rels)
+  const resolvedTestimonials = useMemo(() => {
+    return blok.testimonials
+      .map((item) => {
+        if (item.component === "testimonial") {
+          return item;
+        }
+        if (item.component === "testimonialSlide" && item.testimonial) {
+          const resolved = resolveRel<any>(item.testimonial, relMap);
+          if (resolved?.component === "testimonial") {
+            return resolved as TestimonialBlok;
+          }
+        }
+        return null;
+      })
+      .filter((item): item is TestimonialBlok => item !== null);
+  }, [blok.testimonials, relMap]);
 
-  const total = blok.testimonials.length;
+  const total = resolvedTestimonials.length;
   const getIndex = useCallback((i: number) => (i + total) % total, [total]);
 
   const prevIndex = getIndex(currentIndex - 1);
@@ -50,24 +84,16 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
     return () => observer.disconnect();
   }, [currentIndex]);
 
-  const offset = 56;
   useEffect(() => {
     const media = window.matchMedia("(max-width: 639px)");
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      setIsMobile(e.matches);
-    };
-
+    const handleChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     setIsMobile(media.matches);
-
     media.addEventListener("change", handleChange);
-
-    return () => {
-      media.removeEventListener("change", handleChange);
-    };
+    return () => media.removeEventListener("change", handleChange);
   }, []);
+
   const desktopSlides = useMemo(() => {
-    return blok.testimonials.map((testimonial, index) => {
+    return resolvedTestimonials.map((testimonial, index) => {
       const person = resolveRel<Person>(
         testimonial.person as string | Person | undefined,
         relMap
@@ -80,32 +106,26 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
       if (isActive) {
         stateClasses = "z-30 scale-100 opacity-100 translate-x-0";
       } else if (isPrev) {
-        stateClasses =
-          "z-20 scale-90 opacity-0 md:opacity-100 lg:-translate-x-28 md:-translate-x-20 -translate-x-24";
+        stateClasses = "z-20 scale-90 opacity-0 md:opacity-100 lg:-translate-x-28 md:-translate-x-20 -translate-x-24";
       } else if (isNext) {
-        stateClasses =
-          "z-20 scale-90 opacity-0 md:opacity-100 lg:translate-x-28 md:translate-x-20 translate-x-24";
+        stateClasses = "z-20 scale-90 opacity-0 md:opacity-100 lg:translate-x-28 md:translate-x-20 translate-x-24";
       } else {
         stateClasses = "z-10 scale-75 opacity-0";
       }
 
-      const dynamicHeight =
-        !isActive && activeHeight
-          ? { height: `calc(${activeHeight}px - ${offset}px)` }
-          : undefined;
+      const dynamicHeight = !isActive && activeHeight
+        ? { height: `calc(${activeHeight}px - 56px)` }
+        : undefined;
 
-      const contentProps = {
-        quote: testimonial.quote,
-        name: person?.firstName + " " + (person?.lastName || ""),
-        role: person?.role,
-        variant: person?.variant,
-        displayName: person?.name || "",
-        displayTitle: person?.title || "",
-      };
+      const displayName = person?.firstName 
+        ? `${person.firstName} ${person?.lastName || ""}`
+        : person?.name || "";
+
+      const displayTitle = person?.role || person?.title || "";
 
       return (
         <div
-          key={testimonial._uid}
+          key={`${testimonial._uid} ${index}`}
           {...storyblokEditable(testimonial)}
           className={twMerge(
             "absolute transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] cursor-pointer",
@@ -138,44 +158,28 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
               )}
             >
               <Heading size="4xl">
-                <blockquote>“{contentProps.quote}”</blockquote>
+                <blockquote>“{testimonial.quote}”</blockquote>
               </Heading>
 
               <div className="mt-10 border-t border-(--color-neutral-700---body) pt-6">
-                <p className="text-(--text-headings) text-md">
-                  {contentProps.displayName} {contentProps.displayTitle}
-                </p>
-              </div>
-
+                
               {person && (
                 <Attribution
-                  name={contentProps.name}
-                  role={contentProps.role}
-                  variant={contentProps.variant}
+                  name={displayName}
+                  role={displayTitle}
+                  variant={person.variant}
                 />
               )}
+              </div>
+
             </div>
           </div>
         </div>
       );
     });
-  }, [
-    blok.testimonials,
-    currentIndex,
-    prevIndex,
-    nextIndex,
-    activeHeight,
-    offset,
-    relMap,
-  ]);
+  }, [resolvedTestimonials, currentIndex, prevIndex, nextIndex, activeHeight, relMap]);
 
-  useEffect(() => {
-    const func = async () => {
-      const test = await getAllTestimonials();
-      console.log(test, "all test with rels");
-    };
-    func();
-  }, []);
+  if (resolvedTestimonials.length === 0) return null;
 
   return (
     <div
@@ -185,7 +189,7 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
       <div className="pattern-grid pattern-white opacity-5" />
 
       <div className="relative mx-auto max-w-7xl md:w-[90%]! lg:w-full flex flex-col items-center">
-        <div className="text-center" >
+        <div className="text-center">
           {blok.eyebrow?.[0] && (
             <Eyebrow
               {...blok.eyebrow[0]}
@@ -195,7 +199,7 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
           {blok.heading?.[0] && (
             <Heading
               blok={blok.heading[0]}
-              className="text-(--text-heading-on-surface-accent)! mt-4 mb-12 lg:mb-18  max-w-200 mx-auto"
+              className="text-(--text-heading-on-surface-accent)! mt-4 mb-12 lg:mb-18 max-w-200 mx-auto"
             />
           )}
         </div>
@@ -207,6 +211,7 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
           {desktopSlides}
         </div>
       </div>
+
       <div className="w-[95%] mx-auto mt-12">
         <SliderControls
           className="flex justify-center"
