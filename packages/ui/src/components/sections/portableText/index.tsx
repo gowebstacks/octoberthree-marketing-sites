@@ -34,7 +34,7 @@ export const PortableText: FC<{ blok: PortableTextProps }> = ({ blok }) => {
   const hasToc = tocItems.length > 0;
 
   return (
-    <section {...storyblokEditable(blok)} className="px-4 sm:px-6 lg:px-16">
+    <section {...storyblokEditable(blok)} className="px-4 sm:px-6 lg:px-16 max-w-360 mx-auto">
       <div className="relative flex flex-col lg:flex-row gap-12">
        {
         hasToc &&

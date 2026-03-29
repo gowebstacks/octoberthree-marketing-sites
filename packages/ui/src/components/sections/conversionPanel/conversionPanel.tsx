@@ -38,7 +38,7 @@ backgroundImage ? 'section-padding-xl' : 'section-padding-xl-left-right'
       className={twMerge(
         "z-2 relative overflow-hidden w-full mx-auto max-w-360 rounded-md flex flex-col md:items-center text-center",
         variant === "dark" || backgroundImage?.filename
-          ? "bg-(--surface-accent-background-2) [&_*:not(button):not(button_*)]:!text-white section-padding-xl-top-bottom md:px-12 px-4"
+          ? "bg-(--surface-accent-background-2) [&_*:not(button):not(button_*)]:text-white! section-padding-xl-top-bottom md:px-12 px-4"
           : "bg-(--surface-background)"
       )}
       style={
