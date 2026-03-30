@@ -8,7 +8,7 @@ import { StoryblokComponent } from "@storyblok/react";
 
 
 export interface RichTextProps {
-  doc?: RichTextContent;
+  doc?: any;
   className?: string;
   enableToc?: boolean;
 }

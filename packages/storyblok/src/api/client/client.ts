@@ -102,6 +102,7 @@ export async function getAllWebsitePages(isDraft: boolean = true) {
       content_type: "websitePage",
       per_page: "100",
       version: isDraft ? "draft" : "published",
+      excluding_slugs: "*/team/*",
     });
 
     const response = await fetch(
@@ -110,6 +111,7 @@ export async function getAllWebsitePages(isDraft: boolean = true) {
         cache: isDraft ? "no-store" : undefined,
       } as any
     );
+
     if (!response.ok) {
       throw new Error(
         `Storyblok API error: ${response.status} ${response.statusText}`
@@ -117,6 +119,7 @@ export async function getAllWebsitePages(isDraft: boolean = true) {
     }
 
     const data = await response.json();
+    console.log(data, "All website pages data");
     return data.stories || [];
   } catch (error) {
     console.error("Failed to fetch all website pages", error);
@@ -151,7 +154,8 @@ export async function getWebsitePageBySlug(
     // Now fetch the full story data with resolved relations
     const data = await storyblokFetch(matchingStory.full_slug, {
       version: isDraft ? "draft" : "published",
-      resolve_relations: "testimonial.person,resourceCard.tags,testimonialSlide.testimonial", // Resolve testimonial, person, and company relations
+      resolve_relations:
+        "testimonial.person,resourceCard.tags,testimonialSlide.testimonial", // Resolve testimonial, person, and company relations
       resolve_level: 2,
     });
     if (!data) {
@@ -462,7 +466,7 @@ export async function getAllTeamMembers(
         starts_with: `${sitename}/team/`,
         per_page: "100",
         page: String(page),
-        version: isDraft ? 'draft' : 'published',
+        version: isDraft ? "draft" : "published",
       });
 
       const response = await fetch(
@@ -487,7 +491,6 @@ export async function getAllTeamMembers(
       page++;
     } while (allStories.length < total);
 
-
     return allStories;
   } catch (error) {
     console.error("Failed to fetch all team members", error);
@@ -495,10 +498,6 @@ export async function getAllTeamMembers(
   }
 }
 
-
-// Add this to your storyblok package (e.g., in a team.ts or similar file)
-
-// Get a single team member by slug
 // Get a single team member by slug
 export async function getTeamMemberBySlug(
   slug: string,
@@ -513,13 +512,18 @@ export async function getTeamMemberBySlug(
       return null;
     }
 
-    // Construct the full path: sitename/team/slug
     const fullSlug = `${sitename}/team/${slug}`;
-    
-    const url = `${STORYBLOK_API_URL}/stories/${fullSlug}?token=${accessToken}&version=${isDraft ? 'draft' : 'published'}`;
-    
+
+    const params = new URLSearchParams({
+      token: accessToken,
+      version: isDraft ? "draft" : "published",
+      resolve_relations: "relatedBios.relatedBio",
+    });
+
+    const url = `${STORYBLOK_API_URL}/stories/${fullSlug}?${params.toString()}`;
+
     console.log(`[getTeamMemberBySlug] Fetching: ${url}`);
-    
+
     const response = await fetch(url, {
       cache: isDraft ? "no-store" : undefined,
     });
@@ -536,22 +540,31 @@ export async function getTeamMemberBySlug(
 
     const data = await response.json();
     console.log(`[getTeamMemberBySlug] Successfully fetched: ${fullSlug}`);
-    return data.story;
+     return {
+      ...data.story,
+      rels: data.rels || [],
+    };
   } catch (error) {
-    console.error(`[getTeamMemberBySlug] Failed to fetch team member with slug ${slug}:`, error);
+    console.error(
+      `[getTeamMemberBySlug] Failed to fetch team member with slug ${slug}:`,
+      error
+    );
     return null;
   }
 }
 
 // Optional: Get all team member slugs for static generation
-export async function getAllTeamMemberSlugs(sitename: string, isDraft: boolean = false) {
+export async function getAllTeamMemberSlugs(
+  sitename: string,
+  isDraft: boolean = false
+) {
   try {
     const teamMembers = await getAllTeamMembers(isDraft, sitename);
     return teamMembers.map((member: any) => ({
-      slug: member.slug.split('/').pop(), // Extract the last part of the slug
+      slug: member.slug.split("/").pop(), // Extract the last part of the slug
     }));
   } catch (error) {
-    console.error('Failed to fetch team member slugs', error);
+    console.error("Failed to fetch team member slugs", error);
     return [];
   }
 }

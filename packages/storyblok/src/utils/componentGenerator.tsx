@@ -27,6 +27,8 @@ import {
   PortableText,
   RTCTable,
   RTCTableProps,
+  AuthorCard,
+  AuthorCardProps,
 } from "@repo/ui";
 import type { SbBlokData } from "@storyblok/react/rsc";
 import type { FC } from "react";
@@ -59,7 +61,7 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
     case "headingBlock":
       return <HeadingBlock key={component._uid} {...component as HeadingBlockSectionProps} />;
     case "formBlock":
-      return <FormBlock key={component._uid} {...component} />;
+      return <FormBlock key={component._uid} blok={component} />;
     case "hero":
       return <Hero key={component._uid} blok={component} />;
    case "testimonialSlider":
@@ -177,8 +179,7 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
       return <PortableText key={component._uid} blok={component as any} />;
     case "table":
       return <RTCTable key={component._uid} {...component as RTCTableProps} />;
-    case "formBlock":
-      return <FormBlock key={component._uid} {...component} />;
+   
 
     
 
