@@ -3,254 +3,154 @@
 import type { FC } from "react";
 import { useMemo, useState } from "react";
 import { storyblokEditable, type SbBlokData } from "@storyblok/react";
-
-import {
-  ContentBlock,
-  ContentBlockBlok,
-  LeadershipCard,
-  LeadershipCardBlok,
-} from "../../../organisms";
+import { ContentBlock, LeadershipCard } from "../../../organisms";
 import { Dropdown } from "../../../molecules";
 import { Badge } from "../../../atoms";
+import { buildRelMap } from "../../../../utils";
+
+type StoryblokRel = {
+  uuid: string;
+  content: any;
+  slug?: string;
+};
 
 interface LeadershipCardRow {
   cardsPerRow?: string;
   cardsPerRowTablet?: string;
   cardsPerRowMobile?: string;
-  cards?: LeadershipCardBlok[];
+  cards?: any[];
 }
 
-type CardContent = {
-  name?: string;
-  location?: string;
-  team?: string[];
-};
-
-export interface LeadershipCardDeckBlok extends SbBlokData {
-  content?: ContentBlockBlok[];
+interface LeadershipCardDeckBlok extends SbBlokData {
+  content?: any[];
   rows?: LeadershipCardRow[];
   htmlId?: string;
+  rels?: StoryblokRel[];
 }
+
+const getGridClass = (desktop?: string, tablet?: string, mobile?: string) => {
+  const m = mobile === "2" ? "grid-cols-2" : mobile === "3" ? "grid-cols-3" : mobile === "4" ? "grid-cols-4" : "grid-cols-1";
+  const t = tablet === "2" ? "sm:grid-cols-2" : tablet === "3" ? "sm:grid-cols-3" : tablet === "4" ? "sm:grid-cols-4" : "sm:grid-cols-3";
+  const d = desktop === "2" ? "lg:grid-cols-2" : desktop === "3" ? "lg:grid-cols-3" : desktop === "4" ? "lg:grid-cols-4" : "lg:grid-cols-4";
+  return `${m} ${t} ${d}`;
+};
+
+const extractCardContent = (card: any) => ({
+  name: card.name,
+  location: card.location,
+  team: card.team || [],
+});
+
+const resolveRelatedBios = (card: any, relMap: Record<string, any>) => {
+  if (card.component !== "relatedBios" || !card.relatedBio) return [card];
+  return card.relatedBio
+    .map((uuid: string) => {
+      const content = relMap[uuid];
+      if (!content) return null;
+      return {
+        _uid: uuid,
+        component: "leadershipCard",
+        name: content.name,
+        location: content.location,
+        team: content.team,
+        image: content.headshotImage,
+        role: content.title,
+        slug: content.slug,
+      };
+    })
+    .filter(Boolean);
+};
 
 export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
   content,
   rows,
   htmlId,
+  rels = [],
   ...blok
 }) => {
   const [teams, setTeams] = useState<string[]>([]);
   const [locations, setLocations] = useState<string[]>([]);
   const [names, setNames] = useState<string[]>([]);
 
-  const cards = useMemo(
-    () => rows?.flatMap((row) => row.cards ?? []) ?? [],
-    [rows]
-  );
-    console.log(cards, "test")
+  const relMap = useMemo(() => buildRelMap(rels), [rels]);
 
+  const allCards = useMemo(() => {
+    if (!rows) return [];
+    return rows.flatMap((row) => 
+      (row.cards ?? []).flatMap((card) => resolveRelatedBios(card, relMap))
+    );
+  }, [rows, relMap]);
 
-  const getContent = (card: LeadershipCardBlok) =>
-    card as LeadershipCardBlok & CardContent;
-
-  const teamOptions = useMemo(
-    () =>
-      [...new Set(cards.flatMap((card) => getContent(card).team ?? []))].map(
-        (team) => ({
-          label: team,
-          value: team,
-        })
-      ),
-    [cards]
+  const teamOptions = useMemo(() => 
+    [...new Set(allCards.flatMap((c) => extractCardContent(c).team))].map((t) => ({ label: t, value: t })),
+    [allCards]
   );
 
-  const locationOptions = useMemo(
-    () =>
-      [
-        ...new Set(
-          cards.map((card) => getContent(card).location).filter(Boolean)
-        ),
-      ].map((location) => ({ label: location!, value: location! })),
-    [cards]
+  const locationOptions = useMemo(() => 
+    [...new Set(allCards.map((c) => extractCardContent(c).location).filter(Boolean))].map((l) => ({ label: l!, value: l! })),
+    [allCards]
   );
 
-  const filteredByTeamLocation = useMemo(
-    () =>
-      cards.filter((card) => {
-        const { team = [], location } = getContent(card);
-        return (
-          (!teams.length || teams.some((t) => team.includes(t))) &&
-          (!locations.length || locations.includes(location ?? ""))
-        );
-      }),
-    [cards, teams, locations]
+  const filteredByTeamLocation = useMemo(() => 
+    allCards.filter((card) => {
+      const { team, location } = extractCardContent(card);
+      return (!teams.length || teams.some((t) => team.includes(t))) &&
+             (!locations.length || locations.includes(location ?? ""));
+    }),
+    [allCards, teams, locations]
   );
 
-  const nameOptions = useMemo(
-    () =>
-      [
-        ...new Set(
-          filteredByTeamLocation
-            .map((card) => getContent(card).name)
-            .filter(Boolean)
-        ),
-      ].map((name) => ({ label: name!, value: name! })),
+  const nameOptions = useMemo(() => 
+    [...new Set(filteredByTeamLocation.map((c) => extractCardContent(c).name).filter(Boolean))].map((n) => ({ label: n!, value: n! })),
     [filteredByTeamLocation]
   );
 
-  const filteredCards = useMemo(
-    () =>
-      filteredByTeamLocation.filter(
-        (card) => !names.length || names.includes(getContent(card).name ?? "")
-      ),
+  const filteredCards = useMemo(() => 
+    filteredByTeamLocation.filter((card) => 
+      !names.length || names.includes(extractCardContent(card).name ?? "")
+    ),
     [filteredByTeamLocation, names]
   );
 
   const groupedFilteredRows = useMemo(() => {
     if (!rows) return [];
-
+    const filteredUids = new Set(filteredCards.map((c) => c._uid));
+    
     return rows
       .map((row) => {
-        const filteredRowCards = (row.cards ?? []).filter((card) =>
-          filteredCards.some((filteredCard) => filteredCard._uid === card._uid)
-        );
-
-        return {
-          ...row,
-          cards: filteredRowCards,
-        };
+        const expandedCards = (row.cards ?? []).flatMap((card) => resolveRelatedBios(card, relMap));
+        const filteredRowCards = expandedCards.filter((card) => filteredUids.has(card._uid));
+        return { ...row, cards: filteredRowCards };
       })
       .filter((row) => row.cards.length > 0);
-  }, [rows, filteredCards]);
-
-  const getGridClass = (
-    desktop?: string,
-    tablet?: string,
-    mobile?: string
-  ) => {
-    const mobileClass =
-      mobile === "2"
-        ? "grid-cols-2"
-        : mobile === "3"
-        ? "grid-cols-3"
-        : mobile === "4"
-        ? "grid-cols-4"
-        : "grid-cols-1";
-
-    const tabletClass =
-      tablet === "2"
-        ? "sm:grid-cols-2"
-        : tablet === "3"
-        ? "sm:grid-cols-3"
-        : tablet === "4"
-        ? "sm:grid-cols-4"
-        : "sm:grid-cols-3";
-
-    const desktopClass =
-      desktop === "2"
-        ? "lg:grid-cols-2"
-        : desktop === "3"
-        ? "lg:grid-cols-3"
-        : desktop === "4"
-        ? "lg:grid-cols-4"
-        : "lg:grid-cols-4";
-
-    return `${mobileClass} ${tabletClass} ${desktopClass}`;
-  };
+  }, [rows, filteredCards, relMap]);
 
   return (
-    <div
-      className="flex flex-col gap-12 sm:gap-16 mx-auto max-w-360"
-      {...storyblokEditable(blok)}
-      id={htmlId}
-    >
+    <div className="flex flex-col gap-12 sm:gap-16 mx-auto max-w-360" {...storyblokEditable(blok)} id={htmlId}>
       <div className="border border-(--stroke-secondary) p-4 sm:px-8 sm:py-4.5 lg:py-8 flex flex-col gap-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 ">
-          <Dropdown
-            label="Select a Team"
-            multiple
-            value={teams}
-            onChange={(v) => setTeams(v as string[])}
-            options={teamOptions}
-            placeholder="All"
-          />
-          <Dropdown
-            label="Location"
-            multiple
-            value={locations}
-            onChange={(v) => setLocations(v as string[])}
-            options={locationOptions}
-            placeholder="All"
-          />
-          <Dropdown
-            label="Search by Name"
-            multiple
-            value={names}
-            onChange={(v) => setNames(v as string[])}
-            options={nameOptions}
-            placeholder="Search"
-          />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Dropdown label="Select a Team" multiple value={teams} onChange={(v) => setTeams(v as string[])} options={teamOptions} placeholder="All" />
+          <Dropdown label="Location" multiple value={locations} onChange={(v) => setLocations(v as string[])} options={locationOptions} placeholder="All" />
+          <Dropdown label="Search by Name" multiple value={names} onChange={(v) => setNames(v as string[])} options={nameOptions} placeholder="Search" />
         </div>
-
         <div className="flex flex-wrap gap-2">
-          {teams.map((team) => (
-            <Badge
-              key={team}
-              label={team}
-              onRemove={() =>
-                setTeams((prev) => prev.filter((t) => t !== team))
-              }
-            />
-          ))}
-          {locations.map((location) => (
-            <Badge
-              key={location}
-              label={location}
-              onRemove={() =>
-                setLocations((prev) => prev.filter((l) => l !== location))
-              }
-            />
-          ))}
-          {names.map((name) => (
-            <Badge
-              key={name}
-              label={name}
-              onRemove={() =>
-                setNames((prev) => prev.filter((n) => n !== name))
-              }
-            />
-          ))}
+          {teams.map((team) => <Badge key={team} label={team} onRemove={() => setTeams((p) => p.filter((t) => t !== team))} />)}
+          {locations.map((loc) => <Badge key={loc} label={loc} onRemove={() => setLocations((p) => p.filter((l) => l !== loc))} />)}
+          {names.map((name) => <Badge key={name} label={name} onRemove={() => setNames((p) => p.filter((n) => n !== name))} />)}
         </div>
       </div>
 
       {content?.length ? (
         <div className="flex flex-col gap-8">
-          {content.map((nestedBlok) => (
-            <ContentBlock key={nestedBlok._uid} blok={nestedBlok} />
-          ))}
+          {content.map((nestedBlok) => <ContentBlock key={nestedBlok._uid} blok={nestedBlok} />)}
         </div>
       ) : null}
 
       <div className="flex flex-col gap-y-(--gaps-56-48-48)">
         {groupedFilteredRows.map((row, rowIndex) => (
-          <div
-            key={rowIndex}
-            className={`grid w-full gap-y-(--gaps-56-48-48) gap-x-(--gaps-16-12-12) ${getGridClass(
-              row.cardsPerRow,
-              row.cardsPerRowTablet,
-              row.cardsPerRowMobile
-            )}`}
-          >
+          <div key={rowIndex} className={`grid w-full gap-y-(--gaps-56-48-48) gap-x-(--gaps-16-12-12) ${getGridClass(row.cardsPerRow, row.cardsPerRowTablet, row.cardsPerRowMobile)}`}>
             {row.cards?.map((card, i) => (
-             
-              <a
-                key={card._uid || i}
-                {...storyblokEditable(card)}
-                className="w-full h-full cursor-pointer"
-                href={
-                  `/team/${card.slug}`
-                }
-
-              >
+              <a key={card._uid || i} {...storyblokEditable(card)} className="w-full h-full cursor-pointer" href={`/team/${card.slug}`}>
                 <LeadershipCard blok={card} />
               </a>
             ))}

@@ -29,7 +29,7 @@ export const AuthorCard: FC<{ blok: AuthorCardProps }> = ({ blok }) => {
   const { name, company, bio, location, socials = [],headshotImage,variant = 'bioInside'} = blok;
 console.log(blok, "test")
   return (
-    <div>
+    <div className="max-w-187.5 ">
       <div
       {...storyblokEditable(blok)}
       className="

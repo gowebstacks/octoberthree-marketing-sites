@@ -3,17 +3,27 @@ import { storyblokEditable, SbBlokData } from "@storyblok/react";
 import { Form } from "../../organisms/form";
 import { ContentBlock, ContentBlockBlok } from "../../organisms";
 
-interface FormBlockProps extends SbBlokData {
+interface FormBlockBlok extends SbBlokData {
   content?: ContentBlockBlok[];
 }
 
-export const FormBlock: FC<FormBlockProps> = ({ content, ...blok }) => {
+interface FormBlockProps {
+  blok: FormBlockBlok;
+}
+
+export const FormBlock: FC<FormBlockProps> = ({ blok }) => {
+  console.log(blok, "form block here");
+
   return (
     <div
       {...storyblokEditable(blok)}
-      className="max-w-(--widths-1440-834-375) mx-auto grid grid-cols-1 lg:grid-cols-2 gap-(--gaps-48-40-40) section-padding-md rounded-md bg-(--surface-secondary-background)"
+      className="max-w-360 w-full mx-auto flex flex-col gap-(--gaps-48-40-40) rounded-md"
     >
-      <div>{content?.[0] && <ContentBlock blok={content[0]} />}</div>
+      {blok.content?.length ? (
+        <div>
+          <ContentBlock blok={blok.content[0]} />
+        </div>
+      ) : null}
 
       <div>
         <Form />
