@@ -22,25 +22,39 @@ export interface HeroBlok extends SbBlokData {
   squarePattern?: boolean;
   logoPopout?: StoryblokAsset;
   flippedMedia?: boolean;
+  isBackgroundImage?: boolean;
 }
 
 export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
   const hasImage = Boolean(blok.heroImage?.filename);
   const hasVideo = Boolean(blok.video?.length);
 
+  const useBg = Boolean(blok.isBackgroundImage && blok.heroImage?.filename);
+
   const themeClasses = {
     primary: "bg-[var(--surface-accent-background)]",
     secondary: "bg-[var(--surface-icon-card)]",
     tertiary: "bg-[var(--illustration-secondary)]",
   };
+
   return (
     <div
       className={twMerge(
         "relative mx-auto max-w-360 rounded-sm overflow-hidden",
         themeClasses[blok.theme ?? "primary"]
       )}
+      style={
+        useBg
+          ? {
+              backgroundImage: `url(${blok.heroImage!.filename})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }
+          : undefined
+      }
       {...storyblokEditable(blok)}
     >
+      {useBg && <div className="absolute inset-0 bg-black/60 z-0" />}
       {blok.squarePattern && (
         <div
           className={twMerge(
@@ -53,29 +67,35 @@ export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
       <div
         className={twMerge(
           "relative z-10 mx-auto grid items-center",
-          hasImage || hasVideo ? "grid-cols-1 lg:grid-cols-[57%_43%]" : ""
+          hasVideo || (hasImage && !useBg)
+            ? "grid-cols-1 lg:grid-cols-[57%_43%]"
+            : ""
         )}
       >
         <div
           className={twMerge(
-            hasImage || hasVideo
+            hasVideo || (hasImage && !useBg)
               ? "px-4 py-12 sm:px-(--scale-80) sm:py-(--scale-72) lg:py-(--scale-96)"
               : "section-padding-xl sm:px-(--scale-80) sm:py-(--scale-120)",
             blok.flippedMedia && "lg:order-2"
           )}
         >
           {blok.body?.map((nestedBlok) => (
-            <ContentBlock
+           <div className={twMerge(
+           useBg? 'max-w-200' : ''
+           )}>
+             <ContentBlock
               key={nestedBlok._uid}
               blok={{
                 ...nestedBlok,
                 mode: blok.theme === "primary" ? "dark" : "light",
               }}
             />
+           </div>
           ))}
         </div>
 
-        {(hasVideo || hasImage) && (
+        {(hasVideo || (hasImage && !useBg)) && (
           <div
             className={twMerge(
               "relative h-full w-full overflow-hidden aspect-4/3",
@@ -105,8 +125,8 @@ export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
                   "absolute bottom-[15%] z-20 flex h-22.5 items-center overflow-hidden bg-(--surface-button) p-3 md:h-37.5",
                   blok.flippedMedia
                     ? "left-px rounded-[0_999px_999px_0]"
-                    : " rounded-[999px_0_0_999px]",
-                    hasVideo ? 'right-px' : 'right-0'
+                    : "rounded-[999px_0_0_999px]",
+                  hasVideo ? "right-px" : "right-0"
                 )}
               >
                 <div className="absolute inset-0 bg-[linear-gradient(-80deg,var(--illustration-primary)_0%,transparent_15%)] opacity-50" />
