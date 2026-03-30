@@ -28,6 +28,7 @@ import {
   RTCTable,
   RTCTableProps,
   AuthorCard,
+  AuthorCardProps,
 } from "@repo/ui";
 import type { SbBlokData } from "@storyblok/react/rsc";
 import type { FC } from "react";
@@ -178,9 +179,6 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
       return <PortableText key={component._uid} blok={component as any} />;
     case "table":
       return <RTCTable key={component._uid} {...component as RTCTableProps} />;
-
-    case 'authorCard':
-      return <AuthorCard key={component._uid} blok={component} />;
    
 
     

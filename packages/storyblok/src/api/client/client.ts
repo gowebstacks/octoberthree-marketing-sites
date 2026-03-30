@@ -102,6 +102,7 @@ export async function getAllWebsitePages(isDraft: boolean = true) {
       content_type: "websitePage",
       per_page: "100",
       version: isDraft ? "draft" : "published",
+      excluding_slugs: "*/team/*",
     });
 
     const response = await fetch(
@@ -110,6 +111,7 @@ export async function getAllWebsitePages(isDraft: boolean = true) {
         cache: isDraft ? "no-store" : undefined,
       } as any
     );
+
     if (!response.ok) {
       throw new Error(
         `Storyblok API error: ${response.status} ${response.statusText}`
@@ -117,6 +119,7 @@ export async function getAllWebsitePages(isDraft: boolean = true) {
     }
 
     const data = await response.json();
+    console.log(data, "All website pages data");
     return data.stories || [];
   } catch (error) {
     console.error("Failed to fetch all website pages", error);
