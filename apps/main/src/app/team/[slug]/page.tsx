@@ -63,8 +63,7 @@ const TeamMemberContent = async ({
       image: authorData.headshotImage.filename,
     }),
   };
-  console.log(jsonLd, "JSON-LD for team member:", teamMember);
-
+console.log(teamMember, "team member data");
   return (
     <>
       <script

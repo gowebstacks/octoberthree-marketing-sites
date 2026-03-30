@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { storyblokEditable, type SbBlokData } from "@storyblok/react";
 import { ContentBlock, LeadershipCard } from "../../../organisms";
 import { Dropdown } from "../../../molecules";
-import { Badge } from "../../../atoms";
+import { Badge, Heading } from "../../../atoms";
 import { buildRelMap } from "../../../../utils";
 
 type StoryblokRel = {
@@ -26,6 +26,7 @@ interface LeadershipCardDeckBlok extends SbBlokData {
   rows?: LeadershipCardRow[];
   htmlId?: string;
   rels?: StoryblokRel[];
+  filterable?: boolean;
 }
 
 const getGridClass = (desktop?: string, tablet?: string, mobile?: string) => {
@@ -40,21 +41,36 @@ const extractCardContent = (card: any) => ({
   location: card.location,
   team: card.team || [],
 });
-
+const getAuthorCard = (content: any) => {
+  return content?.sections
+    ?.flatMap((layout: any) => layout.section || [])
+    ?.find((section: any) => section.component === "portableText")
+    ?.body?.content
+    ?.find((node: any) => node.type === "blok")
+    ?.attrs?.body
+    ?.find((blok: any) => blok.component === "authorCard");
+};
 const resolveRelatedBios = (card: any, relMap: Record<string, any>) => {
   if (card.component !== "relatedBios" || !card.relatedBio) return [card];
+
   return card.relatedBio
     .map((uuid: string) => {
-      const content = relMap[uuid];
+      const content = relMap[uuid]; 
+
       if (!content) return null;
+
+      const authorCard = getAuthorCard(content);
+
+      if (!authorCard) return null;
+
       return {
         _uid: uuid,
         component: "leadershipCard",
-        name: content.name,
-        location: content.location,
-        team: content.team,
-        image: content.headshotImage,
-        role: content.title,
+        name: authorCard.name,
+        location: authorCard.location,
+        team: authorCard.team || [],
+        image: authorCard.headshotImage,
+        role: authorCard.designation,
         slug: content.slug,
       };
     })
@@ -66,6 +82,7 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
   rows,
   htmlId,
   rels = [],
+  filterable,
   ...blok
 }) => {
   const [teams, setTeams] = useState<string[]>([]);
@@ -124,10 +141,26 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
       })
       .filter((row) => row.cards.length > 0);
   }, [rows, filteredCards, relMap]);
+const hasRelatedBios = useMemo(() => {
+  if (!rows) return false;
+
+  return rows.some((row) =>
+    (row.cards || []).some((card) => card.component === "relatedBios")
+  );
+}, [rows]);
+  console.log(allCards,"leadership",rels);
 
   return (
     <div className="flex flex-col gap-12 sm:gap-16 mx-auto max-w-360" {...storyblokEditable(blok)} id={htmlId}>
-      <div className="border border-(--stroke-secondary) p-4 sm:px-8 sm:py-4.5 lg:py-8 flex flex-col gap-4">
+     
+     {
+      hasRelatedBios && (
+       <Heading as={'h3'} size={'4xl'}>Related People</Heading>
+      )
+     }
+     {
+      filterable && 
+       <div className="border border-(--stroke-secondary) p-4 sm:px-8 sm:py-4.5 lg:py-8 flex flex-col gap-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Dropdown label="Select a Team" multiple value={teams} onChange={(v) => setTeams(v as string[])} options={teamOptions} placeholder="All" />
           <Dropdown label="Location" multiple value={locations} onChange={(v) => setLocations(v as string[])} options={locationOptions} placeholder="All" />
@@ -139,6 +172,7 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
           {names.map((name) => <Badge key={name} label={name} onRemove={() => setNames((p) => p.filter((n) => n !== name))} />)}
         </div>
       </div>
+     }
 
       {content?.length ? (
         <div className="flex flex-col gap-8">

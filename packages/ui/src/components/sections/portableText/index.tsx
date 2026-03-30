@@ -70,7 +70,7 @@ const extractAuthorAndForm = (body: any) => {
 };
 
 const renderSideBySide = (authorCard: any, formBlock: any) => (
-  <section className="py-16">
+  
     <div className="max-w-360 mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex  flex-col lg:flex-row gap-8 justify-between ">
         <div >
@@ -101,7 +101,7 @@ const renderSideBySide = (authorCard: any, formBlock: any) => (
         </div>
       </div>
     </div>
-  </section>
+
 );
 
 const renderDefault = (blok: any, body: any, hasToc: boolean) => (
