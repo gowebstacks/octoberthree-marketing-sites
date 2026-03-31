@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@repo/ui/styles.css";
 import "./globals.css";
-// import "../lib/storyblok";
 import { getLatestGlobalNavigation, storyblokApi, StoryblokBridge } from "@repo/storyblok";
 import { FooterNavigation, HeaderNavigation, Layout } from "@repo/ui";
+import Script from "next/script";
+import StoryblokInit from "../lib/storyblok";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -62,10 +63,18 @@ export default async function RootLayout({
     };
   }
 };
+
+
   const { header, footer } = await getGlobalLayoutData();
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+         <Script
+          src="https://app.storyblok.com/f/storyblok-v2-latest.js"
+          strategy="afterInteractive"
+        />
+          <StoryblokInit/>
+
         <StoryblokBridge>
           <HeaderNavigation headerNavigation={header} />
           <main className="grow">{children}</main>

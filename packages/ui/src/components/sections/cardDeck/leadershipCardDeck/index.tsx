@@ -107,6 +107,12 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
   filterable,
   ...blok
 }) => {
+
+  console.log(
+    {rows,
+  ...blok
+}, "leadership card deck data"
+  )
   const [teams, setTeams] = useState<string[]>([]);
   const [locations, setLocations] = useState<string[]>([]);
   const [names, setNames] = useState<string[]>([]);
@@ -194,7 +200,6 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
       (row.cards || []).some((card) => card.component === "relatedBios")
     );
   }, [rows]);
-  console.log(allCards, "leadership", rels);
 
   return (
     <div

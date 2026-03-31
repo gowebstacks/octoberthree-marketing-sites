@@ -106,7 +106,7 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
         />
       );
     case "leadershipCardDeck":
-      console.log(rels, "rels in leadership card deck")
+      console.log(component, "rels in leadership card deck")
       return (
         <LeadershipCardDeck
           key={component._uid}

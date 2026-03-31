@@ -2,8 +2,14 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "@repo/ui/styles.css";
 import "./globals.css";
-import { getLatestGlobalNavigation, storyblokApi, StoryblokBridge } from "@repo/storyblok";
+import {
+  getLatestGlobalNavigation,
+  storyblokApi,
+  StoryblokBridge,
+} from "@repo/storyblok";
 import { FooterNavigation, HeaderNavigation, Layout } from "@repo/ui";
+import Script from "next/script";
+import StoryblokInit from "./lib/storyblok";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,50 +31,54 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   const getGlobalLayoutData = async () => {
-  try {
-    const [headerRes, footerRes] = await Promise.allSettled([
-      getLatestGlobalNavigation(true, "rlc/globals/header-navigation"),
-      storyblokApi.getStory("rlc/globals/rlc-footer", { version: "draft" }),
-    ]);
+    try {
+      const [headerRes, footerRes] = await Promise.allSettled([
+        getLatestGlobalNavigation(true, "rlc/globals/header-navigation"),
+        storyblokApi.getStory("rlc/globals/rlc-footer", { version: "draft" }),
+      ]);
 
-    const header =
-      headerRes.status === "fulfilled"
-        ? headerRes.value?.story?.content ?? null
-        : null;
+      const header =
+        headerRes.status === "fulfilled"
+          ? (headerRes.value?.story?.content ?? null)
+          : null;
 
-    const footer =
-      footerRes.status === "fulfilled"
-        ? footerRes.value?.data?.story?.content ?? null
-        : null;
+      const footer =
+        footerRes.status === "fulfilled"
+          ? (footerRes.value?.data?.story?.content ?? null)
+          : null;
 
-    if (headerRes.status === "rejected") {
-      console.error("Header fetch failed:", headerRes.reason);
+      if (headerRes.status === "rejected") {
+        console.error("Header fetch failed:", headerRes.reason);
+      }
+
+      if (footerRes.status === "rejected") {
+        console.error("Footer fetch failed:", footerRes.reason);
+      }
+
+      return { header, footer };
+    } catch (error) {
+      console.error("Unexpected error in getGlobalLayoutData:", error);
+
+      return {
+        header: null,
+        footer: null,
+      };
     }
-
-    if (footerRes.status === "rejected") {
-      console.error("Footer fetch failed:", footerRes.reason);
-    }
-
-    return { header, footer };
-  } catch (error) {
-    console.error("Unexpected error in getGlobalLayoutData:", error);
-
-    return {
-      header: null,
-      footer: null,
-    };
-  }
-};
+  };
   const { header, footer } = await getGlobalLayoutData();
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <Script
+          src="https://app.storyblok.com/f/storyblok-v2-latest.js"
+          strategy="afterInteractive"
+        />
+        <StoryblokInit />
         <StoryblokBridge>
           <HeaderNavigation headerNavigation={header} />
           <main className="grow">{children}</main>
-          <FooterNavigation  footerNavigation={footer}/>
+          <FooterNavigation footerNavigation={footer} />
         </StoryblokBridge>
       </body>
     </html>

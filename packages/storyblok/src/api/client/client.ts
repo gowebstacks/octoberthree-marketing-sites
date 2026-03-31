@@ -119,7 +119,6 @@ export async function getAllWebsitePages(isDraft: boolean = true) {
     }
 
     const data = await response.json();
-    console.log(data, "All website pages data");
     return data.stories || [];
   } catch (error) {
     console.error("Failed to fetch all website pages", error);
@@ -522,15 +521,12 @@ export async function getTeamMemberBySlug(
 
     const url = `${STORYBLOK_API_URL}/stories/${fullSlug}?${params.toString()}`;
 
-    console.log(`[getTeamMemberBySlug] Fetching: ${url}`);
-
     const response = await fetch(url, {
       cache: isDraft ? "no-store" : undefined,
     });
 
     if (!response.ok) {
       if (response.status === 404) {
-        console.log(`[getTeamMemberBySlug] Team member not found: ${fullSlug}`);
         return null;
       }
       throw new Error(
@@ -539,7 +535,6 @@ export async function getTeamMemberBySlug(
     }
 
     const data = await response.json();
-    console.log(`[getTeamMemberBySlug] Successfully fetched: ${fullSlug}`);
      return {
       ...data.story,
       rels: data.rels || [],
