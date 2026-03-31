@@ -97,7 +97,6 @@ const DrawerWrapper = (args: any) => {
         isOpen={open}
         onClose={() => setOpen(false)}
         onApply={(data) => {
-          console.log('Applied filters:', data)
           setOpen(false)
         }}
       />

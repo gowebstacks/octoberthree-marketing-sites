@@ -48,18 +48,18 @@ export default async function SlugPage(props: {
   const slugParam =
     params.slug && params.slug.length > 0 ? params.slug.join("/") : "home";
   const inEditor = isStoryblokEditor(searchParams);
-  const preview = inEditor;
+  const preview = true; // For development, we can set this to true. In production, you might want to determine this based on environment variables or other logic.
 
   const page = await getWebsitePageBySlug(
     `rlc/${slugParam}`,
     preview
   );
+  console.log(page, slugParam, "page data");
 
- 
   if (!page) {
     notFound();
   }
-   console.log(
+  console.log(
     "*********************************************************",
     page.content.sections,
     slugParam
@@ -77,19 +77,35 @@ export default async function SlugPage(props: {
   const absoluteUrl = `${siteBase}${pathPart}`;
 
   let updatedSections = sections;
+  console.log(slugParam, "slug param");
+  if (slugParam === "meet-the-team") {
+    const getAuthorCard = (content: any) => {
+      return content?.sections
+        ?.flatMap((layout: any) => layout.section || [])
+        ?.find((section: any) => section.component === "portableText")
+        ?.body?.content?.find((node: any) => node.type === "blok")
+        ?.attrs?.body?.find((blok: any) => blok.component === "authorCard");
+    };
 
-  if (slugParam === "meet-our-team") {
     const teamMembers = (
       await getAllTeamMembers(preview, "rlc")
-    ).map((member: any) => ({
-      _uid: member.uuid,
-      component: "leadershipCard",
-      name: member.content.name,
-      role: member.content.title,
-      location: member.content.location,
-      image: member.content.headshotImage,
-      team: member.content.team,
-    }));
+    ).map((member: any) => {
+      const authorCard = getAuthorCard(member.content);
+
+      return {
+        _uid: member.uuid,
+        component: "leadershipCard",
+
+        name: authorCard?.name || "",
+        role: authorCard?.designation || "",
+        location: authorCard?.location || "",
+        image: authorCard?.headshotImage || {},
+
+        team: authorCard?.team || [],
+        ...member,
+      };
+    });
+    console.log(teamMembers, "team members data");
 
     updatedSections = sections.map((layout: any) => ({
       ...layout,
@@ -111,20 +127,21 @@ export default async function SlugPage(props: {
         return section;
       }),
     }));
-  }
 
+    console.log(updatedSections, "updated sections with team members");
+  }
+const updatedStory = {
+  ...page,
+  content: {
+    ...page.content,
+    sections: updatedSections,
+  },
+};
+  console.log(preview, "preview mode ______--------------------");
   return (
     <>
       {preview ? (
-        <StoryblokBridge
-          story={{
-            ...page,
-            content: {
-              ...page.content,
-              sections: updatedSections,
-            },
-          }}
-        />
+        <StoryblokBridge story={updatedStory} />
       ) : (
         <ComponentGenerator
           sections={updatedSections}

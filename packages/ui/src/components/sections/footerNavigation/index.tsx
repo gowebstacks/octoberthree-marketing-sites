@@ -89,7 +89,6 @@ export const FooterNavigation: React.FC<FooterNavigationProps> = ({
   const contact = groups.find((g) => g.component === "footerContactColumn");
 
   const bottom = footer?.bottomSection?.[0];
-  console.log(footer, "footer data ");
 
   return (
     <footer className="bg-(--surface-accent-background) section-padding-xl-left-right py-12 text-white">

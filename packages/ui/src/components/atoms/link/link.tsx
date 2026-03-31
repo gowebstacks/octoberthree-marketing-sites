@@ -114,7 +114,6 @@ export const Link: FC<LinkProps> = ({ children, href, className, disableFocus, .
   
   const openInNewTab = shouldOpenInNewTab(href); 
   const { as: Component, ...rest } = parseUrl(linkData, openInNewTab);
-
   return (
     <Component
       {...rest}
