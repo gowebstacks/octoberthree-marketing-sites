@@ -1,9 +1,9 @@
-import NextImage from 'next/image';
-import { twJoin, twMerge } from 'tailwind-merge';
+import NextImage from "next/image";
+import { twJoin, twMerge } from "tailwind-merge";
 
-import type { ImageProps as NextImageProps } from 'next/image';
-import type { FC } from 'react';
-import { storyblokLoader } from '../../../utils/storyblokImageLoader';
+import type { ImageProps as NextImageProps } from "next/image";
+import type { FC } from "react";
+import { storyblokLoader } from "../../../utils/storyblokImageLoader";
 
 export type ImageFragment = {
   _type?: string;
@@ -11,7 +11,7 @@ export type ImageFragment = {
   asset?: {
     _id?: string;
     _ref?: string;
-    _type?: 'reference';
+    _type?: "reference";
     url?: string;
     metadata?: {
       dimensions?: {
@@ -21,13 +21,17 @@ export type ImageFragment = {
       };
       lqip?: string;
       blurHash?: string;
-    }
+    };
   };
   caption?: string;
 };
 export interface ImageProps
-  extends ImageFragment,
-    Pick<NextImageProps, 'height' | 'width' | 'className' | 'priority' | 'sizes'> {
+  extends
+    ImageFragment,
+    Pick<
+      NextImageProps,
+      "height" | "width" | "className" | "priority" | "sizes"
+    > {
   /**
    * The `aspectRatio` prop allows you to specify the aspect ratio of the image. The aspect ratio should be provided as a string in the format `"${number}/${number}"`, where the two numbers represent the width and height of the image, respectively.
    */
@@ -53,7 +57,9 @@ export interface ImageProps
    */
   unsetMaxWidth?: boolean;
 
-  patternVariant?: 'sm'| 'md' | 'lg' 
+  patternVariant?: "sm" | "md" | "lg";
+
+  isSquarePattern?: boolean;
 }
 
 const Image: FC<ImageProps> = ({
@@ -71,45 +77,56 @@ const Image: FC<ImageProps> = ({
   sizes,
   unsetMaxWidth,
   patternVariant,
+  isSquarePattern = true,
   ...props
 }) => {
   const imgWidth = width || asset?.metadata?.dimensions?.width,
     imgHeight = height || asset?.metadata?.dimensions?.height;
 
-  return asset?.url && (
-    <picture
-      className={twMerge('relative block', className)}
-      style={{
-        maxWidth: unsetMaxWidth ? undefined : `${imgWidth}px`,
-        aspectRatio: unsetRatio
-          ? undefined
-          : aspectRatio || asset?.metadata?.dimensions?.aspectRatio || `${width}/${height}`,
-      }}
-    >
-      <div className={
-        twMerge(
-          'pattern-primary',
-          patternVariant === 'sm' ? 'pattern-triangle-sm' : patternVariant === 'md' ? 'pattern-triangle-md' :'pattern-triangle'
-        )
-      }></div>
-      <NextImage
-        loader={storyblokLoader}
-        src={asset?.url}
-        alt={alt || ''}
-        title={caption || ''}
-        fill={!noFill}
-        width={noFill ? imgWidth : undefined}
-        height={noFill ? imgHeight : undefined}
-        placeholder={asset?.metadata?.lqip ? 'blur' : 'empty'}
-        blurDataURL={asset?.metadata?.lqip ?? undefined}
-        className={twJoin(
-          objectCover && 'size-full object-cover',
-          objectContain && 'object-contain'
+  return (
+    asset?.url && (
+      <picture
+        className={twMerge("relative block", className)}
+        style={{
+          maxWidth: unsetMaxWidth ? undefined : `${imgWidth}px`,
+          aspectRatio: unsetRatio
+            ? undefined
+            : aspectRatio ||
+              asset?.metadata?.dimensions?.aspectRatio ||
+              `${width}/${height}`,
+        }}
+      >
+        {isSquarePattern && (
+          <div
+            className={twMerge(
+              "pattern-primary",
+              patternVariant === "sm"
+                ? "pattern-triangle-sm"
+                : patternVariant === "md"
+                  ? "pattern-triangle-md"
+                  : "pattern-triangle"
+            )}
+          ></div>
         )}
-        sizes={sizes || '(max-width: 64em) 100vw, 1280px'}
-        {...props}
-      />
-    </picture>
+        <NextImage
+          loader={storyblokLoader}
+          src={asset?.url}
+          alt={alt || ""}
+          title={caption || ""}
+          fill={!noFill}
+          width={noFill ? imgWidth : undefined}
+          height={noFill ? imgHeight : undefined}
+          placeholder={asset?.metadata?.lqip ? "blur" : "empty"}
+          blurDataURL={asset?.metadata?.lqip ?? undefined}
+          className={twJoin(
+            objectCover && "size-full object-cover",
+            objectContain && "object-contain"
+          )}
+          sizes={sizes || "(max-width: 64em) 100vw, 1280px"}
+          {...props}
+        />
+      </picture>
+    )
   );
 };
 
