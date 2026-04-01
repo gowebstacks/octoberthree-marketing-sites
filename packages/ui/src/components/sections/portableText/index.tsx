@@ -105,7 +105,7 @@ const renderSideBySide = (authorCard: any, formBlock: any) => (
 );
 
 const renderDefault = (blok: any, body: any, hasToc: boolean) => (
-  <section {...storyblokEditable(blok)} className="px-4 sm:px-6 lg:px-16 max-w-360 mx-auto">
+  <div {...storyblokEditable(blok)} className="px-4 sm:px-6 lg:px-16 max-w-360 mx-auto">
     <div className="relative flex flex-col lg:flex-row gap-12">
       {hasToc && (
         <aside className="lg:w-[320px] shrink-0">
@@ -118,7 +118,7 @@ const renderDefault = (blok: any, body: any, hasToc: boolean) => (
         <RichText doc={body} enableToc className="prose prose-lg dark:prose-invert" />
       </div>
     </div>
-  </section>
+  </div>
 );
 
 export const PortableText: FC<{ blok: PortableTextProps }> = ({ blok }) => {

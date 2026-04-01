@@ -193,7 +193,7 @@ export const Section: FC<SectionProps> = ({
       id={id}
       className={twMerge(
         theme === "dark" && "dark",
-        "relative scroll-mt-16 text-body overflow-hidden",
+        "relative scroll-mt-16 text-body ",
         sectionType === "hero" || sectionType === "testimonialSlider"
           ? "px-(--scale-16) sm:px-(--scale-18) lg:px-(--scale-24)"
           : sectionType === "conversionPanel"
@@ -209,10 +209,10 @@ export const Section: FC<SectionProps> = ({
       {...rest}
       {...storyblokEditable}
     >
-      <div className="relative rounded-sm overflow-hidden">
+      <div className="relative">
         {/** Background Image */}
         {backgroundImage?.filename && (
-          <div className="absolute inset-0 z-11">
+          <div className="absolute inset-0 z-11 overflow-hidden rounded-sm">
             <Image
               asset={{ url: backgroundImage.filename }}
               objectCover
