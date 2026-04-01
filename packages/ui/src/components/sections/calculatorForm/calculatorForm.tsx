@@ -3,12 +3,15 @@
 import { useState } from "react";
 import { InputField } from "../../molecules";
 import { Icon } from "../../atoms";
-
-type CalculatorFormProps = {
-  blok: {
-    variant: "simple" | "slider";
-  };
-};
+import { SbBlokData, storyblokEditable } from "@storyblok/react";
+export interface CalculatorFormBlok extends SbBlokData{
+  _uid: string;
+  component: "calculatorForm";
+  variant: "simple" | "slider";
+}
+export interface CalculatorFormProps {
+  blok: CalculatorFormBlok;
+}
 
 export const CalculatorForm = ({ blok }: CalculatorFormProps) => {
   var [age, setAge] = useState(50);
@@ -24,7 +27,7 @@ export const CalculatorForm = ({ blok }: CalculatorFormProps) => {
 
   if (blok.variant === "simple") {
     return (
-      <div className="bg-[#EFE9E3] border border-(--stroke-card) rounded-sm max-w-4xl mx-auto py-(--scale-24) px-(--padding-24-18-18)">
+      <div {...storyblokEditable(blok)} className="bg-[#EFE9E3] border border-(--stroke-card) rounded-sm max-w-187.5 mx-auto py-(--scale-24) px-(--padding-24-18-18)">
         <div className="mb-4">
           <InputField
             label="EIN"
@@ -81,45 +84,8 @@ export const CalculatorForm = ({ blok }: CalculatorFormProps) => {
   }
 
   return (
-    <div className="bg-[#EFE9E3] border border-(--stroke-card) rounded-sm max-w-4xl mx-auto py-(--scale-24) px-(--padding-24-18-18)">
-      <style>{`
-        .slider {
-          -webkit-appearance: none;
-          width: 100%;
-          height: 4px;
-          border-radius: 999px;
-          background: linear-gradient(
-            to right,
-            var(--surface-accent-background) 0%,
-            var(--surface-accent-background) var(--value, 50%),
-            #d1d5db var(--value, 50%),
-            #d1d5db 100%
-          );
-          outline: none;
-        }
-
-        .slider::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          height: 18px;
-          width: 18px;
-          border-radius: 999px;
-          background: white;
-          border: 3px solid var(--surface-accent-background);
-          cursor: pointer;
-          margin-top: -3px;
-          box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-        }
-
-        .slider::-moz-range-thumb {
-          height: 18px;
-          width: 18px;
-          border-radius: 999px;
-          background: white;
-          border: 3px solid var(--surface-accent-background);
-          cursor: pointer;
-        }
-      `}</style>
-
+    <div {...storyblokEditable(blok)} className="bg-[#EFE9E3] max-w-187.5 border border-(--stroke-card) rounded-sm max-w-4xl mx-auto py-(--scale-24) px-(--padding-24-18-18)">
+     
       <h2 className="text-display-xl mb-4">Cash Balance Calculator</h2>
 
       <div className="mb-6">
@@ -263,6 +229,44 @@ export const CalculatorForm = ({ blok }: CalculatorFormProps) => {
           ${Number(result).toLocaleString()}
         </p>
       </div>
+       <style>{`
+        .slider {
+          -webkit-appearance: none;
+          width: 100%;
+          height: 4px;
+          border-radius: 999px;
+          background: linear-gradient(
+            to right,
+            var(--surface-accent-background) 0%,
+            var(--surface-accent-background) var(--value, 50%),
+            #d1d5db var(--value, 50%),
+            #d1d5db 100%
+          );
+          outline: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          height: 18px;
+          width: 18px;
+          border-radius: 999px;
+          background: white;
+          border: 3px solid var(--surface-accent-background);
+          cursor: pointer;
+          margin-top: -3px;
+          box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .slider::-moz-range-thumb {
+          height: 18px;
+          width: 18px;
+          border-radius: 999px;
+          background: white;
+          border: 3px solid var(--surface-accent-background);
+          cursor: pointer;
+        }
+      `}</style>
+
     </div>
   );
 };

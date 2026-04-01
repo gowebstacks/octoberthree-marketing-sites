@@ -30,6 +30,8 @@ import {
   AuthorCard,
   AuthorCardProps,
   CalculatorForm,
+  CalculatorFormProps,
+  CalculatorFormBlok,
 } from "@repo/ui";
 import type { SbBlokData } from "@storyblok/react/rsc";
 import type { FC } from "react";
@@ -190,7 +192,7 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
       );
 
     case "calculatorForm":
-      return <CalculatorForm key={component._uid} blok={component} />;
+      return <CalculatorForm key={component._uid} blok={component as CalculatorFormBlok} />;
 
     // Add more Storyblok components as you refactor them
     default:
