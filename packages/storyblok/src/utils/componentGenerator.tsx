@@ -29,6 +29,9 @@ import {
   RTCTableProps,
   AuthorCard,
   AuthorCardProps,
+  CalculatorForm,
+  CalculatorFormProps,
+  CalculatorFormBlok,
 } from "@repo/ui";
 import type { SbBlokData } from "@storyblok/react/rsc";
 import type { FC } from "react";
@@ -59,19 +62,24 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
       return null;
 
     case "headingBlock":
-      return <HeadingBlock key={component._uid} {...component as HeadingBlockSectionProps} />;
+      return (
+        <HeadingBlock
+          key={component._uid}
+          {...(component as HeadingBlockSectionProps)}
+        />
+      );
     case "formBlock":
-      return <FormBlock key={component._uid} blok={component} />;
+      return <FormBlock key={component._uid} {...component} />;
     case "hero":
       return <Hero key={component._uid} blok={component} />;
-   case "testimonialSlider":
-  return (
-    <TestimonialSlider
-      key={component._uid}
-      blok={component  as TestimonialSliderBlok}
-      rels={rels} 
-    />
-  );
+    case "testimonialSlider":
+      return (
+        <TestimonialSlider
+          key={component._uid}
+          blok={component as TestimonialSliderBlok}
+          rels={rels}
+        />
+      );
     case "conversionPanel":
       return (
         <ConversionPanel
@@ -106,7 +114,7 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
         />
       );
     case "leadershipCardDeck":
-      console.log(component, "rels in leadership card deck")
+      console.log(component, "rels in leadership card deck");
       return (
         <LeadershipCardDeck
           key={component._uid}
@@ -179,10 +187,12 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
     case "portableText":
       return <PortableText key={component._uid} blok={component as any} />;
     case "table":
-      return <RTCTable key={component._uid} {...component as RTCTableProps} />;
-   
+      return (
+        <RTCTable key={component._uid} {...(component as RTCTableProps)} />
+      );
 
-    
+    case "calculatorForm":
+      return <CalculatorForm key={component._uid} blok={component as CalculatorFormBlok} />;
 
     // Add more Storyblok components as you refactor them
     default:
