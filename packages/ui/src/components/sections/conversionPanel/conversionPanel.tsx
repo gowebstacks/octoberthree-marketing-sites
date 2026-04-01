@@ -57,7 +57,7 @@ backgroundImage ? 'section-padding-xl' : 'section-padding-xl-left-right'
       {squarePattern && (
         <div className="pattern-grid pattern-white opacity-10" />
       )}
-      <div className="relative z-10 w-full">
+      <div className="relative z-10">
         {body?.[0] && <ContentBlock blok={body[0]} />}
       </div>
 
