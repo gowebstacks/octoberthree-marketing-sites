@@ -32,10 +32,7 @@ export const FeatureCard: FC<FeatureCardProps> = ({
   return (
     <div
       {...storyblokEditable(blok)}
-      className={twMerge(
-        "px-6 py-8",
-        "group flex h-full flex-col rounded-sm ",
-      )}
+      className={twMerge("px-6 py-8", "group flex h-full flex-col rounded-sm ")}
     >
       {/* Icon */}
       {icon && (
@@ -52,13 +49,15 @@ export const FeatureCard: FC<FeatureCardProps> = ({
           </h3>
         )}
 
-
         {!isBodyEmpty && (
           <div className="text-(--text-body-dark)">
             <RichText
               doc={body}
               className="
                 [&_p]:mb-0
+              [&_p]:text-sm
+               [&_li]:text-sm
+               [&_span]:text-sm
                 [&_a]:inline-flex [&_a]:items-center [&_a]:gap-2
                 [&_a]:text-(--text-accent) [&_a]:font-medium
                 [&_a]:mt-4

@@ -139,10 +139,10 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
                 finalIconColor === "primary"
                   ? "var(--illustration-dark)"
                   : iconColor === "secondary"
-                    ? "var(--switchback-icon-color)"
+                    ? "var(--switchback-icon-color-secondary)"
                     : iconColor === "tertiary"
                       ? "var(--color-tertiary)"
-                      : "var(--switchback-icon-color)"
+                      : "var(--switchback-icon-color-secondary)"
               }
               icon={finalIcon as string}
             />
