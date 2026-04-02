@@ -47,7 +47,6 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
   const [isMobile, setIsMobile] = useState(false);
 
   const relMap = useMemo(() => buildRelMap(rels), [rels]);
-console.log(blok.testimonials.map((t)=>t._uid), "blok",rels)
   const resolvedTestimonials = useMemo(() => {
     return blok.testimonials
       .map((item) => {
@@ -184,7 +183,7 @@ console.log(blok.testimonials.map((t)=>t._uid), "blok",rels)
   return (
     <div
       {...storyblokEditable(blok)}
-      className="relative max-w-360 mx-auto bg-(--surface-accent-background-2) rounded-lg overflow-hidden px-(--scale-16) py-(--scale-48) sm:px-(--scale-48) sm:py-(--scale-72) lg:p-24"
+      className="relative max-w-360 mx-auto bg-(--surface-testimonial-background) rounded-lg overflow-hidden px-(--scale-16) py-(--scale-48) sm:px-(--scale-48) sm:py-(--scale-72) lg:p-24"
     >
       <div className="pattern-grid pattern-white opacity-5" />
 

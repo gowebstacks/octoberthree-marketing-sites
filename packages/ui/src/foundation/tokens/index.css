@@ -230,7 +230,7 @@
   --text-blog-cta-card: var(--color-navy-primary-800);
   --text-blog-cta-button: var(--color-base-white);
   --stroke-table-of-contents: var(--color-navy-primary-600);
-  --surface-table-cell: var(--color-alphas-dark-navy);
+  --surface-table-cell: var(--color-cream-100);
   --text-nav-item: var(--color-base-black);
   --stroke-secondary-button-hover: var(--color-navy-primary-900---p);
   --surface-secondary-button: var(--color-base-white);
@@ -276,16 +276,15 @@
   --surface-pagination: var(--color-cyan-100---p);
   --surface-image-card: var(--color-navy-primary-900---p);
   --text-on-surface-image-card: var(--color-base-white);
-    --switchback-icon-color-primary: var(--color-navy-primary-900---p);
+  --switchback-icon-color-primary: var(--color-navy-primary-900---p);
   --switchback-icon-color-secondary: var(--color-orange-400----p);
-  --text-nested-stat : #C03813;
+  --text-nested-stat: #c03813;
+  --surface-testimonial-background: var(--color-navy-primary-900---p);
+  --icon-primary-dark: var(--color-neutral-900---p-dark);
   --gradient-right: color-mix(
     in srgb,
     var(--color-orange-200---p-light) 80%,
     transparent
-
-
-
   );
   --gradient-left: var(--color-cyan-100---p);
 
@@ -1179,40 +1178,45 @@
     background-image: url("/squarePattern/SquarePatterForImage.svg");
   }
 
-  /* Page gradient */
-  .soft-gradient {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 10;
-    height: 100%;
-    overflow: hidden;
-  }
+/* Page gradient */
+.soft-gradient {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100vw;             
+  pointer-events: none;
+  z-index: 1;
+  height: 1000px;
+  overflow: visible;
+}
 
-  .soft-gradient::before,
-  .soft-gradient::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    width: 18%;
-    height: 620px;
-    border-radius: 9999px;
-    filter: blur(80px);
-  }
+.soft-gradient::before,
+.soft-gradient::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 450px;              
+  height: 1400px;
+  border-radius: 9999px;
+  filter: blur(300px);
+  transform: translateY(-50%);
+}
 
-  /* Left glow only */
-  .soft-gradient::before {
-    left: -10%;
-    transform: translateY(-50%);
-    background: var(--gradient-left, transparent);
-  }
+/* Left glow only */
+.soft-gradient::before {
+  left: 0;
+  transform: translate(-50%, -50%); 
+  background: var(--gradient-left, transparent);
+  filter: blur(260px);
+}
 
-  /* Right glow only */
-  .soft-gradient::after {
-    right: -10%;
-    transform: translateY(-50%);
-    background: var(--gradient-right, transparent);
-  }
+/* Right glow only */
+.soft-gradient::after {
+  right: 0;
+  transform: translate(50%, -50%);
+  background: var(--gradient-right, transparent);
+}
 
   /* LEFT VARIANTS */
   .left-orange {

@@ -50,9 +50,9 @@ export const FeatureCardDeck: FC<FeatureCardDeckProps> = ({
                 url : image.filename
               }}
               alt={image.alt || 'image'}
-              width={800}
+              width={900}
               height={900}
-              className='max-h-166 w-full h-auto'
+              className='max-h-166 h-full w-300 h-auto'
               objectCover
             />
           </div>
@@ -61,7 +61,7 @@ export const FeatureCardDeck: FC<FeatureCardDeckProps> = ({
         <div
           className={twMerge(
             'flex flex-col gap-8',
-            hasImage && 'max-h-166 overflow-y-auto pr-2'
+            hasImage && 'lg:max-h-166 lg:overflow-y-auto lg:pr-2'
           )}
         >
           {rows?.map((row, rowIndex) => {

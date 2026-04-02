@@ -96,7 +96,7 @@ interface SectionProps extends ComponentPropsWithoutRef<"section"> {
   /**
    * Background gradient for the section
    */
-  bgGradient?: "none" | "purple" | "teal" | "blue" | "pink";
+  bgGradient?: string;
   /**
    * Whether to use inverse gradient
    */
@@ -115,6 +115,7 @@ interface SectionProps extends ComponentPropsWithoutRef<"section"> {
   children: ReactNode;
   isFirstSection?: boolean;
   sectionType?: string;
+  gradient?: string;
 }
 
 export const Section: FC<SectionProps> = ({
@@ -182,11 +183,7 @@ export const Section: FC<SectionProps> = ({
     return classNames.join(" ");
   };
 
-  // Regular themes
-  const gradientClass =
-    bgGradient && bgGradient !== "none"
-      ? `bg-primary bg-(image:--gradient-hero-${bgGradient}${inverseGradient ? "-inverse" : ""})`
-      : "";
+ 
 
   return (
     <Component
@@ -199,17 +196,20 @@ export const Section: FC<SectionProps> = ({
           : sectionType === "conversionPanel"
             ? ""
             : "section-padding-xl-left-right",
-        bgGradient && bgGradient !== "none"
-          ? gradientClass
-          : getThemeClasses(theme),
+      getThemeClasses(theme),
         getPaddingClass(),
         getMinHeightClass(),
-        className
+        className,
+        'overflow-visible'
       )}
       {...rest}
       {...storyblokEditable}
     >
-      <div className="relative">
+      {bgGradient && <div className={twMerge("soft-gradient", bgGradient)}></div>}
+
+    
+
+      <div className="relative z-2">
         {/** Background Image */}
         {backgroundImage?.filename && (
           <div className="absolute inset-0 z-11 overflow-hidden rounded-sm">

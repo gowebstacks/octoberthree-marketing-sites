@@ -27,7 +27,7 @@ function VisualEditorContent({ story }: { story: any }) {
   const s = (liveStory as any) || story;
   const content = s?.content || {};
   const sections = content.sections || [];
-  const rels = s?.rels?.content;
+  const rels = s?.rels;
 
   return (
     <div {...storyblokEditable(content)}>
