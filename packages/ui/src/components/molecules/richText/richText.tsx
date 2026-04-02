@@ -3,19 +3,62 @@
 import React, { type FC } from "react";
 import { twMerge } from "tailwind-merge";
 import { generateSlug } from "../../../utils/slugs";
-import { RichTextContent } from "../../../types/storyblok";
-import { StoryblokComponent } from "@storyblok/react";
-
+import { StoryblokComponent, storyblokEditable } from "@storyblok/react";
 
 export interface RichTextProps {
   doc?: any;
   className?: string;
   enableToc?: boolean;
+  blok?: any;
 }
 
-export const RichText: FC<RichTextProps> = ({ doc, className, enableToc }) => {
-  console.log(doc, "rich text doc");
+export const RichText: FC<RichTextProps> = ({ doc, className, enableToc, blok }) => {
   if (!doc?.content) return null;
+
+  const renderText = (node: any, index: number): React.ReactNode => {
+    let element: React.ReactNode = node.text;
+
+    if (node.marks) {
+      node.marks.forEach((mark: any) => {
+        if (mark.type === "link") {
+          let href = mark.attrs?.href || "#";
+          if (!href.startsWith("http")) {
+            href = `https://${href}`;
+          }
+          element = (
+            <a
+              href={href}
+              target={mark.attrs?.target || "_self"}
+              rel="noopener noreferrer"
+              className="text-link hover:underline"
+            >
+              {element}
+            </a>
+          );
+        }
+
+        if (mark.type === "bold") {
+          element = <strong>{element}</strong>;
+        }
+
+        if (mark.type === "italic") {
+          element = <em>{element}</em>;
+        }
+
+        if (mark.type === "underline") {
+          element = <u>{element}</u>;
+        }
+      });
+    }
+
+    return <React.Fragment key={index}>{element}</React.Fragment>;
+  };
+
+  const renderInline = (content: any[]) =>
+    content?.map((child: any, i: number) => {
+      if (child.type === "text") return renderText(child, i);
+      return null;
+    });
 
   const renderNode = (node: any, index: number): React.ReactNode => {
     if (node.type === "blok") {
@@ -27,27 +70,26 @@ export const RichText: FC<RichTextProps> = ({ doc, className, enableToc }) => {
         </div>
       );
     }
+
     if (node.type === "paragraph") {
-      const text =
-        node.content?.map((child: any) => child.text || "").join("") || "";
-      return <p key={`paragraph-${index}`}>{text}</p>;
+      return <p key={`paragraph-${index}`}>{renderInline(node.content)}</p>;
     }
 
     if (node.type === "heading") {
       const level = Number(node.attrs?.level || 2);
       const text =
         node.content?.map((child: any) => child.text || "").join("") || "";
-
       const slug = `toc-${generateSlug(text)}`;
 
       const headingClasses: Record<number, string> = {
-        1: "text-display-4xl",
-        2: "text-display-3xl",
-        3: "text-display-2xl",
-        4: "text-display-xl",
-        5: "text-display-xl",
-        6: "text-display-xl",
+        1: "text-(--text-headings) text-display-4xl",
+        2: "text-(--text-headings) text-display-3xl",
+        3: "text-(--text-headings) text-display-2xl",
+        4: "text-(--text-headings) text-display-xl",
+        5: "text-(--text-headings) text-display-xl",
+        6: "text-(--text-headings) text-display-xl",
       };
+
       const Tag = `h${level}` as keyof React.JSX.IntrinsicElements;
 
       return React.createElement(
@@ -57,7 +99,7 @@ export const RichText: FC<RichTextProps> = ({ doc, className, enableToc }) => {
           id: enableToc && level === 2 ? slug : undefined,
           className: headingClasses[level],
         },
-        text
+        renderInline(node.content)
       );
     }
 
@@ -90,10 +132,11 @@ export const RichText: FC<RichTextProps> = ({ doc, className, enableToc }) => {
 
   return (
     <div
+      {...(blok ? storyblokEditable(blok) : {})}
       className={twMerge(
         `
         text-(--text-body-dark)!
-        text-lg
+        text-rich-body
         [&_p:not(:last-child)]:mb-4
         [&_h1]:mb-4 [&_h2]:mb-4 [&_h3]:mb-3 [&_h4]:mb-3
         [&_ul]:mb-4 [&_ol]:mb-4

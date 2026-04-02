@@ -23,6 +23,7 @@ export { SelectComponent} from './select'
 export type { SelectItem } from './select';
 export { Section} from './section'
 export { InlineIcon,StaticInlineIcon} from './richText/inlineIcon'
+export { RichTextContent} from './richText/RichTextContent'
 export { default as RichHeading} from './richText/richHeading'
 export { default as  ReadingTime } from './readingTime'
 export { default as Pagination } from './pagination'

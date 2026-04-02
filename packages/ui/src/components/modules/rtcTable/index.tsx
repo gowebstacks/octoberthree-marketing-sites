@@ -6,8 +6,6 @@ import { ContentBlock } from "../../organisms";
 import { SbBlokData, storyblokEditable } from "@storyblok/react";
 
 export interface RTCTableProps extends SbBlokData {
-  _type?: string;
-  _key?: string;
   headers?: {
     _key: string;
     text?: string;
@@ -44,7 +42,6 @@ const renderCell = (content: any) => {
       );
     }
 
-   
     if (["no", "false", "indeterminate", "partial"].includes(v)) {
       return (
         <div className="relative w-6 h-6 mx-auto">
@@ -56,21 +53,24 @@ const renderCell = (content: any) => {
     return content;
   }
 
-
   return <ContentBlock blok={content} />;
 };
 
-export const RTCTable: FC<RTCTableProps> = ({ headers, rows  , ...blok}) => {
+export const RTCTable: FC<RTCTableProps> = ({ headers, rows, ...blok }) => {
   if (!headers?.length || !rows?.length) return null;
 
   return (
-    <div {...storyblokEditable(blok)} className="w-full overflow-x-auto border border-(--stroke-primary) rounded-sm max-w-360 mx-auto">
+    <div
+      {...storyblokEditable(blok)}
+      className="w-full bg-(--surface-background) overflow-x-auto border border-(--stroke-primary) rounded-sm max-w-360 mx-auto"
+    >
       <table className="w-full border-collapse min-w-160">
         <thead className="bg-(--surface-secondary-background)">
           <tr>
             {headers.map((header) => (
               <th
                 key={header._key}
+                {...storyblokEditable(header)}
                 className={`
                   py-(--gaps-18-16-16)
                   px-(--gaps-16-12-12)
@@ -92,6 +92,7 @@ export const RTCTable: FC<RTCTableProps> = ({ headers, rows  , ...blok}) => {
           {rows.map((row, rowIndex) => (
             <tr
               key={row._key}
+              {...storyblokEditable(row)}
               className={`
                 border-t border-(--stroke-primary)
                 ${rowIndex % 2 === 0 ? "bg-(--surface-table-cell)/60" : ""}
@@ -100,6 +101,7 @@ export const RTCTable: FC<RTCTableProps> = ({ headers, rows  , ...blok}) => {
               {row.cells?.map((cell) => (
                 <td
                   key={`cell-${row._key}-${cell._key}`}
+                  {...storyblokEditable(cell)}
                   className="
                     py-(--gaps-18-16-16)
                     px-(--gaps-16-12-12)

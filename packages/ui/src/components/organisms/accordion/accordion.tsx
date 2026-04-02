@@ -105,7 +105,7 @@ export function AccordionItem({
           >
             <AccordionPrimitive.Header>
               <AccordionPrimitive.Trigger
-                className="group flex w-full items-center justify-between gap-3 text-left transition-colors text-neutral-600 data-[state=open]:text-(--text-headings-dark)"
+                className="group cursor-pointer flex w-full items-center justify-between gap-3 text-left transition-colors text-neutral-600 data-[state=open]:text-(--text-headings-dark)"
               >
                 <div className="flex items-center gap-4">
                   {item?.icon?.filename && (
@@ -121,15 +121,15 @@ export function AccordionItem({
                   <span className="text-display-xl">{item.label}</span>
                 </div>
 
-                <div className="flex items-center justify-center rounded-sm p-(--padding-8-6-6) transition-colors bg-transparent group-data-[state=open]:bg-(--surface-button-active)">
+                <div className="flex items-center justify-center rounded-sm p-(--padding-8-6-6) transition-colors bg-transparent ">
                   <Icon
                     size={24}
-                    className="text-neutral-600 group-data-[state=open]:hidden"
+                    className="text-(--icon-primary-dark) group-data-[state=open]:hidden"
                     icon="plus"
                   />
                   <Icon
                     size={24}
-                    className="hidden group-data-[state=open]:block"
+                    className="text-(--icon-primary-dark) hidden group-data-[state=open]:block"
                     icon="minus"
                   />
                 </div>

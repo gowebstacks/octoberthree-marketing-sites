@@ -36,6 +36,7 @@ import {
   RichTextProps,
   FeatureCardDeck,
   FeatureCardDeckProps,
+  RichTextContent,
 } from "@repo/ui";
 import type { SbBlokData } from "@storyblok/react/rsc";
 import type { FC } from "react";
@@ -196,11 +197,30 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
       );
 
     case "calculatorForm":
-      return <CalculatorForm key={component._uid} blok={component as CalculatorFormBlok} />;
+      return (
+        <CalculatorForm
+          key={component._uid}
+          blok={component as CalculatorFormBlok}
+        />
+      );
     case "richText":
-      return <RichText key={component._uid} doc={component.body as RichTextProps} />;
+      return (
+        <RichTextContent
+          key={component._uid}
+          content={{
+            doc: component.body,
+            blok: component,
+          }}
+        />
+      );
+
     case "featureCardDeck":
-      return <FeatureCardDeck key={component._uid} {...component as FeatureCardDeckProps} />;
+      return (
+        <FeatureCardDeck
+          key={component._uid}
+          {...(component as FeatureCardDeckProps)}
+        />
+      );
 
     // Add more Storyblok components as you refactor them
     default:
@@ -270,8 +290,7 @@ const getSectionProps = (section: SbBlokData) => {
     return {
       ...baseProps,
       bgGradient: section.bgGradient as any,
-      // Only use inverse gradient for textRevealBlock
-      inverseGradient: section.component === "textRevealBlock",
+ 
     };
   }
 
