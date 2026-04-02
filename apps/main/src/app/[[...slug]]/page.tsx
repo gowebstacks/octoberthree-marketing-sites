@@ -48,7 +48,7 @@ export default async function SlugPage(props: {
   const slugParam =
     params.slug && params.slug.length > 0 ? params.slug.join("/") : "home";
   const inEditor = isStoryblokEditor(searchParams);
-  const preview = true; // For development, we can set this to true. In production, you might want to determine this based on environment variables or other logic.
+  const preview = inEditor; 
 
   const page = await getWebsitePageBySlug(
     `octoberthree-main/${slugParam}`,

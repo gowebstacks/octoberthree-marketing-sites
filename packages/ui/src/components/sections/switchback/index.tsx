@@ -18,6 +18,7 @@ export interface SwitchbackBlok extends SbBlokData {
   }
   video?: VideoBlok[]
   reverse?: boolean
+  accentColor?: 'primary' | 'secondary' | 'tertiary'
 }
 
 export const Switchback: FC<{ blok: SwitchbackBlok }> = ({ blok }) => {
@@ -27,8 +28,8 @@ export const Switchback: FC<{ blok: SwitchbackBlok }> = ({ blok }) => {
     image,
     video,
     reverse = 'right',
+    accentColor = 'secondary',
   } = blok
-
   const isReversed = reverse 
 
 
@@ -46,14 +47,15 @@ export const Switchback: FC<{ blok: SwitchbackBlok }> = ({ blok }) => {
           alt={image.alt ?? ''}
           width={width}
           height={height}
-          className="w-full h-auto object-cover"
+          className="w-full h-auto object-cover sm:m-h-[467px]"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
+          patternColor={accentColor}
         />
+        
       )
     }
 
     if (mediaType === 'video' && video) {
-      console.log(video, "video here")
       return <Video blok={video[0]} />
     }
 
@@ -77,9 +79,10 @@ export const Switchback: FC<{ blok: SwitchbackBlok }> = ({ blok }) => {
           isReversed && 'lg:[&>*:first-child]:order-2'
         )}
       >
+        
         <div>
           {content?.map((nestedBlok) => (
-            <ContentBlock key={nestedBlok._uid} blok={nestedBlok} />
+            <ContentBlock key={nestedBlok._uid} blok={{ ...nestedBlok, iconColor: accentColor }} />
           ))}
         </div>
 

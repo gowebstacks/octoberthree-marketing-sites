@@ -60,6 +60,8 @@ export interface ImageProps
   patternVariant?: "sm" | "md" | "lg";
 
   isSquarePattern?: boolean;
+
+  patternColor?: "primary" | "secondary" | "tertiary";
 }
 
 const Image: FC<ImageProps> = ({
@@ -78,10 +80,17 @@ const Image: FC<ImageProps> = ({
   unsetMaxWidth,
   patternVariant,
   isSquarePattern = true,
+  patternColor = "secondary",
   ...props
 }) => {
   const imgWidth = width || asset?.metadata?.dimensions?.width,
     imgHeight = height || asset?.metadata?.dimensions?.height;
+
+    const patternColorClass = {
+      primary: "pattern-primary",
+      secondary: "pattern-secondary",
+      tertiary: "pattern-tertiary",
+    }[patternColor || "secondary"];
 
   return (
     asset?.url && (
@@ -99,7 +108,7 @@ const Image: FC<ImageProps> = ({
         {isSquarePattern && (
           <div
             className={twMerge(
-              "pattern-primary",
+              patternColorClass,
               patternVariant === "sm"
                 ? "pattern-triangle-sm"
                 : patternVariant === "md"

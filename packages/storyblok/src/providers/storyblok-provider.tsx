@@ -1,6 +1,6 @@
 
 
-import { AuthorCard, ContentBlock, ConversionPanel, CTABar, FormBlock, VideoBlock } from '@repo/ui';
+import { AuthorCard, ContentBlock, ConversionPanel, CTABar, FormBlock, Statistic, VideoBlock } from '@repo/ui';
 import { apiPlugin, storyblokInit } from '@storyblok/react/rsc';
 
 export const getStoryblokApi = storyblokInit({
@@ -15,8 +15,9 @@ export const getStoryblokApi = storyblokInit({
     videoBlock:VideoBlock,
     conversionPanel : ConversionPanel,
     authorCard :AuthorCard,
-    formBlock : FormBlock
-    
+    formBlock : FormBlock,
+    statistic : Statistic,
+
   },
 
 } as any);
