@@ -11,7 +11,7 @@ export interface ConversionPanelProps extends SbBlokData {
   component?: "conversionPanel";
   body?: ContentBlockBlok[];
   variant?: "light" | "dark";
-  squarePattern?: boolean;
+  pattern?: 'square';
   backgroundImage?: StoryblokAsset;
   showBackgroundStrip?: boolean;
   fullWidth?: boolean;
@@ -20,9 +20,9 @@ export interface ConversionPanelProps extends SbBlokData {
 export const ConversionPanel: FC<{ blok: ConversionPanelProps }> = ({
   blok,
 }) => {
-  const { body, variant, squarePattern, backgroundImage, showBackgroundStrip, fullWidth = false } =
+  const { body, variant, pattern, backgroundImage, showBackgroundStrip, fullWidth = false } =
     blok;
-
+console.log(pattern, "conversion panel")
   return (
     <div
       className={twMerge(
@@ -53,7 +53,7 @@ export const ConversionPanel: FC<{ blok: ConversionPanelProps }> = ({
         {backgroundImage?.filename && (
           <div className="absolute inset-0 bg-black/60" />
         )}
-        {squarePattern && (
+        {(pattern === 'square' || pattern) && (
           <div className="pattern-grid pattern-white opacity-10" />
         )}
         <div className="relative z-10">

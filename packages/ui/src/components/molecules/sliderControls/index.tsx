@@ -55,8 +55,8 @@ export const SliderControls: FC<SliderControlsProps> = ({
               onClick={() => onGoTo?.(i)}
               className={`h-1.5 rounded-sm transition-all cursor-pointer ${
                 i === currentIndex
-                  ? `w-16 lg:w-56 ${mode === "dark" ? "bg-(--color-base-white)" : "bg-(--)"}`
-                  : `w-16 opacity-50 ${mode === "dark" ? "bg-(--color-base-white)" : "bg-(--)"}`
+                  ? `w-16 lg:w-56 ${mode === "dark" ? "bg-(--color-base-white)" : "bg-(--color-neutral-700)"}`
+                  : `w-16 opacity-50 ${mode === "dark" ? "bg-(--color-base-white)" : "bg-(--color-neutral-700)"}`
               }`}
             />
           ))}
@@ -83,10 +83,10 @@ export const SliderControls: FC<SliderControlsProps> = ({
               aria-label={`Go to slide ${i + 1}`}
               aria-current={i === currentIndex}
               onClick={() => onGoTo?.(i)}
-              className={`h-1.5 rounded-sm transition-all ${
+              className={`h-1.5 rounded-sm transition-all cursor-pointer ${
                 i === currentIndex
-                  ? `w-16 lg:w-56 ${mode === "dark" ? "bg-(--color-base-white)" : "bg-(--)"}`
-                  : `w-16 opacity-50 ${mode === "dark" ? "bg-(--color-base-white)" : "bg-(--)"}`
+                  ? `w-16 lg:w-56 ${mode === "dark" ? "bg-(--color-base-white)" : "bg-(--color-neutral-700)"}`
+                  : `w-16 opacity-50 ${mode === "dark" ? "bg-(--color-base-white)" : "bg-(--color-neutral-700)"}`
               }`}
             />
           ))}

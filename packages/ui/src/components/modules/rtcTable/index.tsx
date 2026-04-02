@@ -3,8 +3,9 @@
 import type { FC } from "react";
 import { Icon } from "../../atoms";
 import { ContentBlock } from "../../organisms";
+import { SbBlokData, storyblokEditable } from "@storyblok/react";
 
-export type RTCTableProps = {
+export interface RTCTableProps extends SbBlokData {
   _type?: string;
   _key?: string;
   headers?: {
@@ -59,12 +60,12 @@ const renderCell = (content: any) => {
   return <ContentBlock blok={content} />;
 };
 
-export const RTCTable: FC<RTCTableProps> = ({ headers, rows }) => {
+export const RTCTable: FC<RTCTableProps> = ({ headers, rows  , ...blok}) => {
   if (!headers?.length || !rows?.length) return null;
 
   return (
-    <div className="w-full overflow-x-auto border border-(--stroke-primary) rounded-sm max-w-360 mx-auto">
-      <table className="w-full border-collapse min-w-[640px]">
+    <div {...storyblokEditable(blok)} className="w-full overflow-x-auto border border-(--stroke-primary) rounded-sm max-w-360 mx-auto">
+      <table className="w-full border-collapse min-w-160">
         <thead className="bg-(--surface-secondary-background)">
           <tr>
             {headers.map((header) => (
