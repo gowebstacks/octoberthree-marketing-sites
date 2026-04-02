@@ -268,7 +268,6 @@
   --illustration-dark: var(--color-navy-primary-900---p);
   --illustration-light: var(--color-cyan-500);
   --illustration-secondary: var(--color-cyan-100---p);
-  --switchback-icon-color:var(--color-orange-400----p);
   --surface-checkmark-hover: var(--color-navy-primary-50);
   --surface-carousel: var(--color-cyan-100---p);
   --surface-carousel-hover: var(--color-cyan-200);
@@ -277,10 +276,16 @@
   --surface-pagination: var(--color-cyan-100---p);
   --surface-image-card: var(--color-navy-primary-900---p);
   --text-on-surface-image-card: var(--color-base-white);
+    --switchback-icon-color-primary: var(--color-navy-primary-900---p);
+  --switchback-icon-color-secondary: var(--color-orange-400----p);
+  --text-nested-stat : #C03813;
   --gradient-right: color-mix(
     in srgb,
     var(--color-orange-200---p-light) 80%,
     transparent
+
+
+
   );
   --gradient-left: var(--color-cyan-100---p);
 
@@ -1287,16 +1292,20 @@
   .pattern-orange {
     color: var(--color-orange-400----p);
   }
-   .pattern-primary {
-    color: var(--switchback-icon-color);
-  }
 
   .pattern-blue {
     color: var(--color-navy-primary-900---p);
   }
+  .pattern-primary {
+    color: var(--switchback-icon-color-primary);
+  }
+  .pattern-secondary {
+    color: var(--switchback-icon-color-secondary);
+  }
+
   .pattern-triangle,
   .pattern-triangle-sm,
-  .pattern-triangle-md{
+  .pattern-triangle-md {
     position: absolute;
     inset: 0;
     pointer-events: none;
@@ -1311,7 +1320,7 @@
     mask-repeat: no-repeat;
 
     -webkit-mask-size: contain;
-     width: 215px;
+    width: 215px;
     height: 209px;
     mask-size: auto;
   }
@@ -1323,8 +1332,8 @@
     mask-size: auto;
   }
   .pattern-triangle-md {
-         -webkit-mask-image: url("/squarePattern/triangle-tablet.svg");
-      mask-image: url("/squarePattern/triangle-tablet.svg");
+    -webkit-mask-image: url("/squarePattern/triangle-tablet.svg");
+    mask-image: url("/squarePattern/triangle-tablet.svg");
     width: 100%;
     height: 100%;
     mask-size: auto;
@@ -1333,19 +1342,18 @@
     .pattern-triangle {
       -webkit-mask-image: url("/squarePattern/triangle-tablet.svg");
       mask-image: url("/squarePattern/triangle-tablet.svg");
-       width: 100%;
-    height: 100%;
-    mask-size: auto;
+      width: 100%;
+      height: 100%;
+      mask-size: auto;
     }
   }
   @media (max-width: 768px) {
     .pattern-triangle {
       -webkit-mask-image: url("/squarePattern/triangle-mobile.svg");
       mask-image: url("/squarePattern/triangle-mobile.svg");
-       width: 100%;
-    height: 100%;
-    mask-size: auto;
+      width: 100%;
+      height: 100%;
+      mask-size: auto;
     }
   }
-
 }

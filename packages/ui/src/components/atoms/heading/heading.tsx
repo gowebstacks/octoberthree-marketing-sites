@@ -81,7 +81,8 @@ export interface HeadingProps
   heading?: string;
   headingSize?: HeadingBlok["headingSize"];
   children?: React.ReactNode;
-  icon?:string
+  icon?: string;
+  iconColor?: "primary" | "secondary" | "tertiary";
 }
 
 export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
@@ -98,6 +99,7 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
       heading,
       children,
       icon,
+      iconColor,
       ...rest
     },
     ref: Ref<HTMLHeadingElement>
@@ -113,10 +115,8 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
     const finalSize = blok?.headingSize || headingSize || size;
     const finalWeight = blok?.weight || weight;
     const finalFontFamily = blok?.fontFamily || fontFamily;
-    const finalText =
-      blok?.heading ||
-      heading ||
-      children
+    const finalText = blok?.heading || heading || children;
+    const finalIconColor = blok?.iconColor || iconColor;
 
     const finalIcon = blok?.icon || icon;
     return (
@@ -131,14 +131,24 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
         {...rest}
         {...(blok ? storyblokEditable(blok) : {})}
       >
-
-       <span className="flex gap-2 items-center">
-         {
-          finalIcon && 
-          <Icon size={32} color="var(--switchback-icon-color)" icon={finalIcon as string}/>
-        }
-        {finalText}
-       </span>
+        <span className="flex gap-2 items-center">
+          {finalIcon && (
+            <Icon
+              size={32}
+              color={
+                finalIconColor === "primary"
+                  ? "var(--illustration-dark)"
+                  : iconColor === "secondary"
+                    ? "var(--switchback-icon-color)"
+                    : iconColor === "tertiary"
+                      ? "var(--color-tertiary)"
+                      : "var(--switchback-icon-color)"
+              }
+              icon={finalIcon as string}
+            />
+          )}
+          {finalText}
+        </span>
       </HeadingComponent>
     );
   }

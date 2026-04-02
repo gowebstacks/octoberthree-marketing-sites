@@ -32,6 +32,10 @@ import {
   CalculatorForm,
   CalculatorFormProps,
   CalculatorFormBlok,
+  RichText,
+  RichTextProps,
+  FeatureCardDeck,
+  FeatureCardDeckProps,
 } from "@repo/ui";
 import type { SbBlokData } from "@storyblok/react/rsc";
 import type { FC } from "react";
@@ -193,6 +197,10 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
 
     case "calculatorForm":
       return <CalculatorForm key={component._uid} blok={component as CalculatorFormBlok} />;
+    case "richText":
+      return <RichText key={component._uid} doc={component.body as RichTextProps} />;
+    case "featureCardDeck":
+      return <FeatureCardDeck key={component._uid} {...component as FeatureCardDeckProps} />;
 
     // Add more Storyblok components as you refactor them
     default:

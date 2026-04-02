@@ -14,12 +14,13 @@ export interface RichTextProps {
 }
 
 export const RichText: FC<RichTextProps> = ({ doc, className, enableToc }) => {
+  console.log(doc, "rich text doc");
   if (!doc?.content) return null;
 
   const renderNode = (node: any, index: number): React.ReactNode => {
     if (node.type === "blok") {
       return (
-        <div key={`blok-${index}`} className="my-4">
+        <div key={`blok-${index}`} className="mt-4 not-last:mb-4">
           {node.attrs?.body?.map((blok: any) => (
             <StoryblokComponent blok={blok} key={blok._uid} />
           ))}

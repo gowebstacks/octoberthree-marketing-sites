@@ -65,6 +65,7 @@ const CTABar: FC<CTABarProps> = ({ buttons, className = "", ...blok }) => {
 
   return (
     <div
+      data-component="cta-bar"
       {...storyblokEditable(actualBlok)}
       className={twMerge("flex sm:flex-row! flex-col gap-3 mt-6 lg:mt-8 w-fit", className)}
     >

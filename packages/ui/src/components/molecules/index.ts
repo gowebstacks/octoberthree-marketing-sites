@@ -40,7 +40,7 @@ export * from './inputField'
 export * from './tab'
 export * from './toast'
 export * from './tooltip'
-
+export * from './richText'
 // Example:
 // export { default as SearchForm } from './SearchForm';
 // export { default as Card } from './Card';

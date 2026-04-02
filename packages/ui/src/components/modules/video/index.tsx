@@ -66,7 +66,7 @@ export const Video: FC<{ blok: VideoBlok }> = ({ blok }) => {
     <div
       {...storyblokEditable(blok)}
       className={twMerge(
-        'relative aspect-video bg-(--color-neutral-300) border border-(--stroke-primary) rounded-sm overflow-hidden',
+        'relative  aspect-video sm:min-h-116.75 bg-neutral-300 border border-(--stroke-primary) rounded-sm overflow-hidden',
         classname
       )}
     >
