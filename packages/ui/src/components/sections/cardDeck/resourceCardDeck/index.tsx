@@ -25,7 +25,7 @@ interface Props extends ResourceCardDeckBlok {
   rels?: any[];
 }
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 1000;
 
 export const ResourceCardDeck: FC<Props> = ({
   content,
@@ -193,7 +193,7 @@ export const ResourceCardDeck: FC<Props> = ({
 
             <input
               type="text"
-              placeholder="type your question"
+              placeholder="Search"
               className="outline-none text-sm w-full bg-transparent h-8"
             />
 
@@ -218,9 +218,9 @@ export const ResourceCardDeck: FC<Props> = ({
         </div>
       ) : null}
 
-      {totalPages > 1 ? (
+      {/* {totalPages > 1 ? (
         <Pagination totalPages={totalPages} baseUrl={pathname} />
-      ) : null}
+      ) : null} */}
     </div>
   );
 };

@@ -33,6 +33,7 @@ export interface TestimonialSliderBlok extends SbBlokData {
   showAvatar?: boolean;
   showCompany?: boolean;
   displayStyle?: string[];
+  mode: "light" | "dark";
 }
 
 interface TestimonialSliderProps {
@@ -45,6 +46,7 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeHeight, setActiveHeight] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const mode = blok.mode || "dark";
 
   const relMap = useMemo(() => buildRelMap(rels), [rels]);
   const resolvedTestimonials = useMemo(() => {
@@ -105,18 +107,21 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
       if (isActive) {
         stateClasses = "z-30 scale-100 opacity-100 translate-x-0";
       } else if (isPrev) {
-        stateClasses = "z-20 scale-90 opacity-0 md:opacity-100 lg:-translate-x-28 md:-translate-x-20 -translate-x-24";
+        stateClasses =
+          "z-20 scale-90 opacity-0 md:opacity-100 lg:-translate-x-28 md:-translate-x-20 -translate-x-24";
       } else if (isNext) {
-        stateClasses = "z-20 scale-90 opacity-0 md:opacity-100 lg:translate-x-28 md:translate-x-20 translate-x-24";
+        stateClasses =
+          "z-20 scale-90 opacity-0 md:opacity-100 lg:translate-x-28 md:translate-x-20 translate-x-24";
       } else {
         stateClasses = "z-10 scale-75 opacity-0";
       }
 
-      const dynamicHeight = !isActive && activeHeight
-        ? { height: `calc(${activeHeight}px - 56px)` }
-        : undefined;
+      const dynamicHeight =
+        !isActive && activeHeight
+          ? { height: `calc(${activeHeight}px - 56px)` }
+          : undefined;
 
-      const displayName = person?.firstName 
+      const displayName = person?.firstName
         ? `${person.firstName} ${person?.lastName || ""}`
         : person?.name || "";
 
@@ -161,29 +166,39 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
               </Heading>
 
               <div className="mt-10 border-t border-(--color-neutral-700---body) pt-6">
-                
-              {person && (
-                <Attribution
-                  name={displayName}
-                  role={displayTitle}
-                  variant={person.variant}
-                />
-              )}
+                {person && (
+                  <Attribution
+                    name={displayName}
+                    role={displayTitle}
+                    variant={person.variant}
+                  />
+                )}
               </div>
-
             </div>
           </div>
         </div>
       );
     });
-  }, [resolvedTestimonials, currentIndex, prevIndex, nextIndex, activeHeight, relMap]);
+  }, [
+    resolvedTestimonials,
+    currentIndex,
+    prevIndex,
+    nextIndex,
+    activeHeight,
+    relMap,
+  ]);
 
   if (resolvedTestimonials.length === 0) return null;
 
   return (
     <div
       {...storyblokEditable(blok)}
-      className="relative max-w-360 mx-auto bg-(--surface-testimonial-background) rounded-lg overflow-hidden px-(--scale-16) py-(--scale-48) sm:px-(--scale-48) sm:py-(--scale-72) lg:p-24"
+      className={twMerge(
+        "relative max-w-360 mx-auto  rounded-lg overflow-hidden px-(--scale-16) py-(--scale-48) sm:px-(--scale-48) sm:py-(--scale-72) lg:p-24",
+        mode === "dark"
+          ? "bg-(--surface-accent-background)"
+          : "bg-(--color-cream-200)"
+      )}
     >
       <div className="pattern-grid pattern-white opacity-5" />
 
@@ -192,13 +207,23 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
           {blok.eyebrow?.[0] && (
             <Eyebrow
               {...blok.eyebrow[0]}
-              className="text-(--text-eyebrow-on-surface-accent)! text-center"
+              className={
+                twMerge(
+                  "text-center", 
+                  mode=== 'dark' && 'text-(--text-eyebrow-on-surface-accent)! '
+                )
+              }
             />
           )}
           {blok.heading?.[0] && (
             <Heading
               blok={blok.heading[0]}
-              className="text-(--text-heading-on-surface-accent)! mt-4 mb-12 lg:mb-18 max-w-200 mx-auto"
+              className={
+                twMerge(
+                  " mt-4 mb-12 lg:mb-18 max-w-200 mx-auto",
+                  mode=== 'dark' && 'text-(--text-heading-on-surface-accent)!'
+                )
+              }
             />
           )}
         </div>
@@ -216,12 +241,13 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
           className="flex justify-center"
           currentIndex={currentIndex}
           totalSlides={total}
-          mode="dark"
+          mode={mode}
           onNext={() => setCurrentIndex(nextIndex)}
           onPrevious={() => setCurrentIndex(prevIndex)}
           onGoTo={(index) => setCurrentIndex(index)}
           showArrows={isMobile}
           alignment="center"
+          
         />
       </div>
     </div>

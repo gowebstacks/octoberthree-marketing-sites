@@ -212,7 +212,7 @@ export const Section: FC<SectionProps> = ({
       <div className="relative z-2">
         {/** Background Image */}
         {backgroundImage?.filename && (
-          <div className="absolute inset-0 z-0 overflow-hidden">
+          <div className="absolute inset-0 z-11 overflow-hidden rounded-sm">
             <Image
               asset={{ url: backgroundImage.filename }}
               objectCover
