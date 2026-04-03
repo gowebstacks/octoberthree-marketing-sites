@@ -1,6 +1,9 @@
 @import 'tailwindcss';
 @import '@repo/tailwind-config';
 
+html{
+    overflow-x: hidden !important;
+}
 
 /* Mapped token for RLC */
 :root{

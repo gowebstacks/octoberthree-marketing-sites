@@ -3,15 +3,18 @@ import { storyblokEditable, SbBlokData } from "@storyblok/react";
 import { Form } from "../../organisms/form";
 import { ContentBlock, ContentBlockBlok } from "../../organisms";
 import { twMerge } from "tailwind-merge";
+import { StoryblokAsset } from "../../../lib";
 
 interface FormBlockProps extends SbBlokData {
   content?: ContentBlockBlok[];
   pattern?: "square";
+  image?: StoryblokAsset
 }
 
 export const FormBlock: FC<FormBlockProps> = ({
   content,
   pattern = 'square',
+  image,
   ...blok
 }) => {
   return (

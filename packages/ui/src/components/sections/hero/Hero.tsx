@@ -11,7 +11,7 @@ export interface HeroBlok extends SbBlokData {
   heroImage?: { filename: string; alt?: string };
   video?: VideoBlok[];
   theme?: "primary" | "secondary" | "tertiary";
-  pattern?: 'square';
+  pattern?: "square";
   logoPopout?: StoryblokAsset;
   reverse?: boolean;
 }
@@ -31,8 +31,7 @@ export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
       )}
       {...storyblokEditable(blok)}
     >
-      
-      {blok.pattern === 'square' && (
+      {blok.pattern === "square" && (
         <div
           className={twMerge(
             "pattern-grid pattern-white",
@@ -46,17 +45,15 @@ export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
           hasImage || hasVideo ? "grid-cols-1 lg:grid-cols-[57%_43%]" : ""
         )}
       >
-        
         <div
           className={twMerge(
-            'z-12 relative',
+            "z-12 relative",
             hasImage || hasVideo
               ? "px-4 py-12 sm:px-(--scale-80) sm:py-(--scale-72) lg:py-(--scale-96)"
               : "section-padding-xl sm:px-(--scale-80) sm:py-(--scale-120)",
             blok.reverse && "lg:order-2"
           )}
         >
-          
           {blok.body?.map((nestedBlok) => (
             <ContentBlock
               key={nestedBlok._uid}
@@ -74,7 +71,6 @@ export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
               blok.reverse && "lg:order-1"
             )}
           >
-            
             {hasVideo ? (
               <Video
                 blok={{
@@ -91,28 +87,28 @@ export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
                 className="object-cover object-[23%]"
               />
             )}
-            {blok.logoPopout?.filename && (
-              <div
-                className={twMerge(
-                  "absolute bottom-[15%] z-20 flex h-22.5 items-center overflow-hidden bg-(--surface-button) p-3 md:h-37.5",
-                  blok.reverse
-                    ? "left-px rounded-[0_999px_999px_0]"
-                    : " rounded-[999px_0_0_999px]",
-                  hasVideo ? "right-px" : "right-0"
-                )}
-              >
-                
-                <div className="absolute inset-0 bg-[linear-gradient(-80deg,var(--illustration-primary)_0%,transparent_15%)] opacity-50" />
-                <Image
-                  loader={storyblokLoader}
-                  src={blok.logoPopout.filename}
-                  alt={blok.logoPopout.alt ?? ""}
-                  width={72}
-                  height={72}
-                  className="relative z-12 h-full w-full object-contain"
-                />
-              </div>
+          </div>
+        )}
+
+        {blok.logoPopout?.filename && (
+          <div
+            className={twMerge(
+              "absolute bottom-[15%] z-20 flex h-22.5 items-center overflow-hidden bg-(--surface-button) p-3 md:h-37.5",
+              blok.reverse
+                ? "left-px rounded-[0_999px_999px_0]"
+                : " rounded-[999px_0_0_999px]",
+              hasVideo ? "right-px" : "right-0"
             )}
+          >
+            <div className="absolute inset-0 bg-[linear-gradient(-80deg,var(--illustration-primary)_0%,transparent_15%)] opacity-50" />
+            <Image
+              loader={storyblokLoader}
+              src={blok.logoPopout.filename}
+              alt={blok.logoPopout.alt ?? ""}
+              width={72}
+              height={72}
+              className="relative z-12 h-full w-full object-contain"
+            />
           </div>
         )}
       </div>
