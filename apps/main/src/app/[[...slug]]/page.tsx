@@ -49,9 +49,10 @@ export default async function SlugPage(props: {
     params.slug && params.slug.length > 0 ? params.slug.join("/") : "home";
   const inEditor = isStoryblokEditor(searchParams);
   const preview = inEditor; 
+console.log(slugParam)
 
   const page = await getWebsitePageBySlug(
-    `octoberthree-main/${slugParam}`,
+    `octoberthree-main/${slugParam}${slugParam === 'articles' ? '/' :''}`,
     preview
   );
   console.log(page, slugParam, "page data");

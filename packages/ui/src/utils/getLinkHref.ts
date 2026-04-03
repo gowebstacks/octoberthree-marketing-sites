@@ -11,6 +11,9 @@ export const getLinkHref = (link: any) => {
       link.cached_url
     return `/${slug }`;
   }
+if (typeof link === "string") {
+    return link;
+  }
 
   return "#";
 };

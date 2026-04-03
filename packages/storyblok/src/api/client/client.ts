@@ -563,3 +563,55 @@ export async function getAllTeamMemberSlugs(
     return [];
   }
 }
+
+// Get a single team member by slug
+export async function getArticleBySlug(
+  slug: string,
+  isDraft: boolean = false,
+  sitename: string
+) {
+  console.log('article slug ******************', slug)
+  try {
+    const accessToken = getAccessToken(isDraft ? "draft" : "published");
+
+    if (!accessToken) {
+      console.warn("Storyblok token not configured");
+      return null;
+    }
+
+    const fullSlug = `${sitename}/articles/${slug}`;
+console.log(fullSlug, "test full slug")
+    const params = new URLSearchParams({
+      token: accessToken,
+      version: isDraft ? "draft" : "published",
+      resolve_relations: "relatedBios.relatedBio",
+    });
+
+    const url = `${STORYBLOK_API_URL}/stories/${fullSlug}?${params.toString()}`;
+
+    const response = await fetch(url, {
+      cache: isDraft ? "no-store" : undefined,
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        return null;
+      }
+      throw new Error(
+        `Storyblok API error: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const data = await response.json();
+     return {
+      ...data.story,
+      rels: data.rels || [],
+    };
+  } catch (error) {
+    console.error(
+      `[getArticleBySlug] Failed to fetch article with slug ${slug}:`,
+      error
+    );
+    return null;
+  }
+}
