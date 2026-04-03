@@ -51,8 +51,8 @@ export default async function SlugPage(props: {
   const preview = inEditor;
 
   const page = await getWebsitePageBySlug(
-    `rlc/${slugParam}`,
-    preview
+`rlc/${slugParam}${slugParam === 'resources' || slugParam === 'services' ? '/' : ''}`  ,
+  preview
   );
   console.log(page, slugParam, "page data");
 

@@ -210,7 +210,7 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
               className={
                 twMerge(
                   "text-center", 
-                  mode=== 'dark' && 'text-(--text-eyebrow-on-surface-accent)! '
+                  mode=== 'dark' && 'text-white'
                 )
               }
             />
@@ -221,7 +221,7 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
               className={
                 twMerge(
                   " mt-4 mb-12 lg:mb-18 max-w-200 mx-auto",
-                  mode=== 'dark' && 'text-(--text-heading-on-surface-accent)!'
+                  mode=== 'dark' && 'text-white'
                 )
               }
             />
