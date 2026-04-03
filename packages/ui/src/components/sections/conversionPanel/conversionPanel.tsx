@@ -15,30 +15,34 @@ export interface ConversionPanelProps extends SbBlokData {
   backgroundImage?: StoryblokAsset;
   showBackgroundStrip?: boolean;
   fullWidth?: boolean;
+  rtc?: boolean;
 }
 
 export const ConversionPanel: FC<{ blok: ConversionPanelProps }> = ({
   blok,
 }) => {
-  const { body, variant, pattern, backgroundImage, showBackgroundStrip, fullWidth = false } =
+  const { body, variant, pattern, backgroundImage, showBackgroundStrip, fullWidth = false, rtc=true } =
     blok;
-console.log(pattern, "conversion panel")
   return (
     <div
       className={twMerge(
-        "relative",
-        fullWidth && 'bg-(--color-cream-100)',
-        backgroundImage ? "section-padding-xl" : "section-padding-xl-left-right"
+        rtc && 'p-8! relative rounded-sm',
+        fullWidth  && variant !== "dark" && 'bg-(--color-cream-100)',
+        fullWidth  && variant === "dark" && 'bg-(--surface-accent-background)',
+        backgroundImage ? "section-padding-xl" : "section-padding-xl-left-right",
+        
       )}
     >
       <div
         {...storyblokEditable(blok)}
         className={twMerge(
-          "z-2 relative overflow-hidden w-full mx-auto max-w-360 rounded-md flex flex-col md:items-center text-center",
+          "z-2  overflow-hidden w-full mx-auto max-w-360 rounded-md flex flex-col md:items-center text-center",
           variant === "dark" || backgroundImage?.filename
-            ? "bg-(--surface-accent-background) [&_*:not(button):not(button_*)]:text-white! section-padding-xl-top-bottom md:px-12 px-4"
+            ? "bg-(--surface-accent-background) [&_*:not(button):not(button_*)]:text-white!"
             : "bg-(--surface-background)",
-             fullWidth && 'bg-(--color-cream-100)',
+             fullWidth && variant !== "dark" && 'bg-(--color-cream-100)',
+          rtc ? '' : 'section-padding-xl-top-bottom md:px-12 px-4 relative'
+
         )}
         style={
           backgroundImage?.filename
@@ -53,7 +57,7 @@ console.log(pattern, "conversion panel")
         {backgroundImage?.filename && (
           <div className="absolute inset-0 bg-black/60" />
         )}
-        {(pattern === 'square' || pattern) && (
+        {(pattern === 'square') && (
           <div className="pattern-grid pattern-white opacity-10" />
         )}
         <div className="relative z-10">

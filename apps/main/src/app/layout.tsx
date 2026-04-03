@@ -77,7 +77,7 @@ export default async function RootLayout({
 
         <StoryblokBridge>
           <HeaderNavigation headerNavigation={header} />
-          <main className="grow overflow-hidden">{children}</main>
+          <main className="grow">{children}</main>
           <FooterNavigation  footerNavigation={footer}/>
         </StoryblokBridge>
       </body>

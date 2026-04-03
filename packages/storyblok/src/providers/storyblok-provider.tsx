@@ -1,8 +1,14 @@
 
 
-import { AuthorCard, ContentBlock, ConversionPanel, CTABar, FormBlock, Statistic, VideoBlock } from '@repo/ui';
+import { Accordion, AuthorCard, ContentBlock, ConversionPanel, CTABar, FeatureCardDeck, FormBlock, ImageBlock, ImageWithDesc, RTCTable, Statistic, VideoBlock } from '@repo/ui';
 import { apiPlugin, storyblokInit } from '@storyblok/react/rsc';
 
+
+console.log({
+  imageBlock: ImageWithDesc,
+  featureCardDeck: FeatureCardDeck,
+  rtcTable: RTCTable,
+});
 export const getStoryblokApi = storyblokInit({
   accessToken: process.env.STORYBLOK_PREVIEW_ACCESS_TOKEN || 'd0o0iv3cDTMUXB1yItM2FQtt',
   use: [apiPlugin],
@@ -10,6 +16,7 @@ export const getStoryblokApi = storyblokInit({
     region: 'us',
   },
   components: {
+     
     ctaBar: CTABar,
     contentBlock:ContentBlock,
     videoBlock:VideoBlock,
@@ -17,6 +24,12 @@ export const getStoryblokApi = storyblokInit({
     authorCard :AuthorCard,
     formBlock : FormBlock,
     statistic : Statistic,
+    imageBlock :  ImageBlock,
+    featureCardDeck : FeatureCardDeck,
+    table : RTCTable,
+    accordion : Accordion
+   
+    
 
   },
 

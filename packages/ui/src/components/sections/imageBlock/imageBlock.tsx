@@ -35,12 +35,16 @@ const imageWrapperStyle = cva(['w-full', 'mx-auto'], {
   },
 })
 
-export const ImageBlock: FC<ImageBlockProps> = ({
-  image,
-  description,
-  size,
-  ...blok
-}) => {
+export const ImageBlock: FC<ImageBlockProps> = (props) => {
+
+    const blok = (props as any)?.blok || props;
+
+  const {
+    image,
+    description,
+    size,
+    _uid,
+  } = blok;
   // Helper function to render image for both Sanity and Storyblok (following switchback pattern)
   const renderImage = () => {
     if (!image?.filename) return null

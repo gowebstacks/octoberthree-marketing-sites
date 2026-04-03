@@ -21,13 +21,11 @@ export interface FeatureCardDeckProps extends SbBlokData {
   ctaBar?: CTABarProps[]
 }
 
-export const FeatureCardDeck: FC<FeatureCardDeckProps> = ({
-  rows,
-  htmlId,
-  image,
-  ctaBar,
-  ...blok
-}) => {
+export const FeatureCardDeck: FC<FeatureCardDeckProps> = (props) => {
+    const blok = (props as any)?.blok || props;
+      const { rows, htmlId, image, ctaBar } = blok;
+
+
   const hasImage = !!image?.filename
 
   return (
@@ -64,7 +62,7 @@ export const FeatureCardDeck: FC<FeatureCardDeckProps> = ({
             hasImage && 'lg:max-h-166 lg:overflow-y-auto lg:pr-2'
           )}
         >
-          {rows?.map((row, rowIndex) => {
+          {rows?.map((row : FeatureCardRow, rowIndex : number) => {
             const cols =
               row.cardsPerRow === '2'
                 ? 'sm:grid-cols-2'
@@ -102,7 +100,7 @@ export const FeatureCardDeck: FC<FeatureCardDeckProps> = ({
             )
           })}
 
-          {ctaBar?.map((cta) => (
+          {ctaBar?.map((cta : CTABarProps) => (
             <CTABar
               key={cta._uid}
               blok={cta}

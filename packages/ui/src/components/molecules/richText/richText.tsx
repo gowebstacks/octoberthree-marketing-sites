@@ -12,7 +12,12 @@ export interface RichTextProps {
   blok?: any;
 }
 
-export const RichText: FC<RichTextProps> = ({ doc, className, enableToc, blok }) => {
+export const RichText: FC<RichTextProps> = ({
+  doc,
+  className,
+  enableToc,
+  blok,
+}) => {
   if (!doc?.content) return null;
 
   const renderText = (node: any, index: number): React.ReactNode => {
@@ -63,7 +68,7 @@ export const RichText: FC<RichTextProps> = ({ doc, className, enableToc, blok })
   const renderNode = (node: any, index: number): React.ReactNode => {
     if (node.type === "blok") {
       return (
-        <div key={`blok-${index}`} className="mt-4 not-last:mb-4">
+        <div key={`blok-${index}`} className="mt-6 not-last:mb-6">
           {node.attrs?.body?.map((blok: any) => (
             <StoryblokComponent blok={blok} key={blok._uid} />
           ))}
@@ -137,10 +142,10 @@ export const RichText: FC<RichTextProps> = ({ doc, className, enableToc, blok })
         `
         text-(--text-body-dark)!
         text-rich-body
-        [&_p:not(:last-child)]:mb-4
-        [&_h1]:mb-4 [&_h2]:mb-4 [&_h3]:mb-3 [&_h4]:mb-3
-        [&_ul]:mb-4 [&_ol]:mb-4
-        [&_li]:mb-1.5
+        [&_p:not(:last-child)]:mb-6
+        [&_h1]:mb-3 [&_h2]:mb-3 [&_h3]:mb-3 [&_h4]:mb-3
+        [&_ul]:mb-4 [&_ol]:mb-6
+        [&_li]:mb-4
         [&_li_p]:mb-0!
 
         [&_ul]:list-disc
@@ -155,6 +160,8 @@ export const RichText: FC<RichTextProps> = ({ doc, className, enableToc, blok })
         [&_strong]:font-semibold
         [&_em]:italic
         [&_u]:underline
+                [&>div]:flex [&>div]:flex-col [&>div]:gap-6
+
         `,
         className
       )}
