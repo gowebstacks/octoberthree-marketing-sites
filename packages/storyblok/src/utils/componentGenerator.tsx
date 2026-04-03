@@ -89,7 +89,7 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
       return (
         <ConversionPanel
           key={component._uid}
-          blok={component as ConversionPanelProps}
+          blok={{...component, rtc:false} as ConversionPanelProps}
         />
       );
 

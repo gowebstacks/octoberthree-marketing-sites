@@ -17,13 +17,15 @@ export interface AccordionProps extends SbBlokData {
   layout?: 'stack' | 'split'
 }
 
-export const Accordion: FC<AccordionProps> = ({
-  body,
-  items = [],
-  layout,
-  ...blok
-}) => {
+export const Accordion: FC<AccordionProps> = (props) => {
 
+    const blok = (props as any)?.blok || props;
+
+  const {
+    body, 
+    items = [],
+    layout,
+  } = blok;
   const faqSchema =
     items.length > 0 &&
     getFaqSchema(
@@ -38,7 +40,7 @@ export const Accordion: FC<AccordionProps> = ({
   return (
   
       <div
-      className='max-w-360 mx-auto '
+      className='max-w-360 mx-auto w-full'
       >
         {faqSchema && (
         <script type="application/ld+json">
@@ -48,15 +50,15 @@ export const Accordion: FC<AccordionProps> = ({
 
       <div  {...storyblokEditable(blok)} className={twMerge(containerStyle({ layout }), ' max-w-360 mx-auto')}>
         {body?.length ? (
-          <div>
-            {body.map((nestedBlok) => (
+          <div className='flex-1'>
+            {body.map((nestedBlok : ContentBlockBlok) => (
               <ContentBlock key={nestedBlok._uid} blok={nestedBlok} />
             ))}
           </div>
         ) : null}
 
         {items.length > 0 && (
-          <div className="w-full lg:flex-1">
+          <div className="w-full flex-1">
             <AccordionItem items={items} />
           </div>
         )}

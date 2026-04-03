@@ -86,6 +86,7 @@ export function ContentBlock({ blok }: ContentBlockProps) {
             <RichText
               doc={body}
               className={twMerge(
+                'max-w-200',
                 layout === "stacked" &&
                   `[&_ul]:w-fit [&_ul]:mx-auto [&_ul]:pl-0 max-w-150 mx-auto **:data-[component="cta-bar"]:mx-auto`,
                 mode === "dark" && "text-(--text-body-light)!"

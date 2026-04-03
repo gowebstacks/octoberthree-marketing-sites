@@ -35,7 +35,7 @@ export function Form() {
  return (
   <>
     {status === "idle" && (
-      <div className="bg-(--surface-background) border border-(--stroke-primary) p-(--padding-24-18-18) ">
+      <div className="z-10 relative bg-(--color-cream-100) rounded-sm p-(--padding-24-18-18) ">
         <form onSubmit={handleSubmit} className="space-y-4">
           <InputField
             label="YOUR NAME"

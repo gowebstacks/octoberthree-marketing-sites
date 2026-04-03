@@ -526,7 +526,8 @@
   pointer-events: none;
   z-index: 10;
   height: 100%;
-  overflow: hidden;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .soft-gradient::before,

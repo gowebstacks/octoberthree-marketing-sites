@@ -5,20 +5,23 @@ import { Icon } from "../../atoms";
 import { ContentBlock } from "../../organisms";
 import { SbBlokData, storyblokEditable } from "@storyblok/react";
 
+interface TableHeader extends SbBlokData {
+  _key: string;
+  text?: string;
+  alignment?: "left" | "center";
+}
+interface TableCell extends SbBlokData {
+  _key: string;
+  content?: any;
+}
+interface TableRow extends SbBlokData {
+  _key: string;
+  cells?: TableCell[];
+}
 export interface RTCTableProps extends SbBlokData {
-  headers?: {
-    _key: string;
-    text?: string;
-    alignment?: "left" | "center";
-  }[];
-  rows?: {
-    _key: string;
-    cells?: {
-      _key: string;
-      content?: any;
-    }[];
-  }[];
-};
+  headers?: TableHeader[];
+  rows?: TableRow[];
+}
 
 const renderCell = (content: any) => {
   if (!content) {
@@ -56,7 +59,10 @@ const renderCell = (content: any) => {
   return <ContentBlock blok={content} />;
 };
 
-export const RTCTable: FC<RTCTableProps> = ({ headers, rows, ...blok }) => {
+export const RTCTable: FC<RTCTableProps> = (props) => {
+  const blok = (props as any)?.blok || props;
+  const { headers, rows } = blok;
+
   if (!headers?.length || !rows?.length) return null;
 
   return (
@@ -67,7 +73,7 @@ export const RTCTable: FC<RTCTableProps> = ({ headers, rows, ...blok }) => {
       <table className="w-full border-collapse min-w-160">
         <thead className="bg-(--surface-secondary-background)">
           <tr>
-            {headers.map((header) => (
+            {headers.map((header : TableHeader) => (
               <th
                 key={header._key}
                 {...storyblokEditable(header)}
@@ -89,9 +95,9 @@ export const RTCTable: FC<RTCTableProps> = ({ headers, rows, ...blok }) => {
         </thead>
 
         <tbody>
-          {rows.map((row, rowIndex) => (
+          {rows.map((row :TableRow, rowIndex : number)  => (
             <tr
-              key={row._key}
+              key={row._uid}
               {...storyblokEditable(row)}
               className={`
                 border-t border-(--stroke-primary)
@@ -100,7 +106,7 @@ export const RTCTable: FC<RTCTableProps> = ({ headers, rows, ...blok }) => {
             >
               {row.cells?.map((cell) => (
                 <td
-                  key={`cell-${row._key}-${cell._key}`}
+                  key={`cell-${row._uid}-${cell._uid}`}
                   {...storyblokEditable(cell)}
                   className="
                     py-(--gaps-18-16-16)

@@ -36,7 +36,7 @@ export function InputField({
   const isTextarea = variant === "textarea";
 
   const commonClasses = twMerge(
-    "flex shadow-xs w-full items-center justify-between rounded-none border py-(--padding-8-6-6) px-(--padding-12-8-8) text-sm outline-none transition",
+    "flex rounded-sm shadow-xs w-full items-center justify-between  border py-(--padding-8-6-6) px-(--padding-12-8-8) text-sm outline-none transition",
     "bg-(--surface-input) text-(--text-body) placeholder:text-(--text-placeholder)",
     error
       ? "border-(--stroke-error) bg-(--surface-error)"
