@@ -54,7 +54,7 @@ export const AuthorCard: FC<{ blok: AuthorCardProps }> = ({ blok }) => {
 
             <div className="flex gap-4 items-center">
               {company && (
-                <span className="text-lg tracking-wide text-(--text-body-dark)">
+                <span className="text-lg tracking-wide text-(--text-body-dark) flex-1">
                   {company}
                 </span>
               )}
@@ -66,7 +66,6 @@ export const AuthorCard: FC<{ blok: AuthorCardProps }> = ({ blok }) => {
           variant !== 'bioOutside' &&
             <p className="mt-4  text-rich-body  text-(--text-body-dark)">
             {bio}
-            bcsdbcdhjwbdjdhszbjkweb
           </p>
         }
 
