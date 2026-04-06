@@ -91,7 +91,7 @@ export const FooterNavigation: React.FC<FooterNavigationProps> = ({
   const bottom = footer?.bottomSection?.[0];
 
   return (
-    <footer className="bg-(--surface-accent-background) section-padding-xl-left-right py-12 text-white">
+    <footer className="bg-(--color-navy-primary-900---p) section-padding-xl-left-right py-12 text-white">
       <div className="max-w-360 mx-auto">
         <div className="flex flex-col gap-14">
           {footer?.footerImage?.filename && (
@@ -120,7 +120,7 @@ export const FooterNavigation: React.FC<FooterNavigationProps> = ({
                     <Link
                       key={link._uid}
                       href={getLinkHref(link.link)}
-                      className="text-sm  hover:opacity-90 text-(--color-neutral-100) cursor-pointer"
+                      className="text-sm  hover:text-(--color-navy-primary-100) text-(--color-neutral-100) cursor-pointer"
                     >
                       {link.label}
                     </Link>

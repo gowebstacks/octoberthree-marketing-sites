@@ -29,7 +29,7 @@ export const LeadershipCard: FC<LeadershipCardProps> = ({
     <div
       {...storyblokEditable(blok)}
       className={twMerge(
-        'flex flex-col overflow-hidden bg-white border border-(--color-cream-200) rounded-sm hover:shadow-md transi',
+        'flex h-full flex-col overflow-hidden bg-white border border-(--color-cream-200) rounded-sm hover:shadow-md transi',
         className
       )}
     >

@@ -97,7 +97,6 @@ const Image: FC<ImageProps> = ({
       <picture
         className={twMerge("relative block", className, 'rounded-sm overflow-hidden',)}
         style={{
-          maxWidth: unsetMaxWidth ? undefined : `${imgWidth}px`,
           aspectRatio: unsetRatio
             ? undefined
             : aspectRatio ||

@@ -278,7 +278,7 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
         {groupedFilteredRows.map((row, rowIndex) => (
           <div
             key={rowIndex}
-            className={`grid w-full gap-y-(--gaps-56-48-48) gap-x-(--gaps-16-12-12) ${getGridClass(row.cardsPerRow, row.cardsPerRowTablet, row.cardsPerRowMobile)}`}
+            className={`grid  w-full gap-y-(--gaps-56-48-48) gap-x-(--gaps-16-12-12) ${getGridClass(row.cardsPerRow, row.cardsPerRowTablet, row.cardsPerRowMobile)}`}
           >
             {row.cards?.map((card, i) => (
               <a
