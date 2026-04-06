@@ -23,7 +23,7 @@ export const HeaderNavigation: React.FC<HeaderNavigationProps> = ({
   headerNavigation,
 }) => {
   return (
-    <header className="w-full transition-all duration-300 ease-in-out bg-(--surface-navbar)">
+    <header className="w-full transition-all duration-300 ease-in-out bg-(--surface-navbar) relative z-10">
       {headerNavigation?.announcement && (
         <AnnouncementBar
           announcement={headerNavigation.announcement}

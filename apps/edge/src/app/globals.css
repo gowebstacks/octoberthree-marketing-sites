@@ -1,11 +1,8 @@
 @import 'tailwindcss';
 @import '@repo/tailwind-config';
 
-html{
-    overflow-x: hidden !important;
-}
 
-/* Mapped token for RLC */
+/* Mapped token for Edge (Same as RLC) */
 :root{
   --text-headings-dark: var(--color-neutral-900---p-dark);
 --text-body-dark: var(--color-neutral-700---body);
