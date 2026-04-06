@@ -615,3 +615,40 @@ console.log(fullSlug, "test full slug")
     return null;
   }
 }
+
+// Get layout data
+export const getGlobalLayoutData = async (headerSlug:string, footerSlug:string) => {
+    try {
+      const [headerRes, footerRes] = await Promise.allSettled([
+        storyblokApi.getStory(headerSlug, { version: "published" }),
+        storyblokApi.getStory(footerSlug, { version: "published" }),
+      ]);
+
+      const header =
+        headerRes.status === "fulfilled"
+          ? (headerRes.value?.data.story?.content ?? null)
+          : null;
+
+      const footer =
+        footerRes.status === "fulfilled"
+          ? (footerRes.value?.data?.story?.content ?? null)
+          : null;
+
+      if (headerRes.status === "rejected") {
+        console.error("Header fetch failed:", headerRes.reason);
+      }
+
+      if (footerRes.status === "rejected") {
+        console.error("Footer fetch failed:", footerRes.reason);
+      }
+
+      return { header, footer };
+    } catch (error) {
+      console.error("Unexpected error in getGlobalLayoutData:", error);
+
+      return {
+        header: null,
+        footer: null,
+      };
+    }
+  };

@@ -1,3 +1,4 @@
+
 :root {
   /* Primitives */
   --color-navy-primary-50: #e2f5fc;
@@ -63,8 +64,8 @@
   --color-base-white: #ffffff;
   --color-base-black: #000000;
   --type-font-family-display: "Castoro";
-  --type-font-family-text: "Avenir";
-  --type-font-family-mono: "Avenir";
+  --type-font-family-text: "Lato";
+  --type-font-family-mono: "Lato";
   --type-font-weight-regular: "Regular";
   --type-font-weight-light: "Light";
   --type-font-weight-light-italic: "Light Italic";
