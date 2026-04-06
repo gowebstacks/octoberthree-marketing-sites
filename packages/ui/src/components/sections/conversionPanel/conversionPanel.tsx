@@ -33,10 +33,11 @@ export const ConversionPanel: FC<{ blok: ConversionPanelProps }> = ({
   return (
     <div
       className={twMerge(
+        "section-padding-xl-left-right",
         rtc && "p-8! relative rounded-sm",
         fullWidth && variant !== "dark" && "bg-(--color-cream-100)",
         fullWidth && variant === "dark" && "bg-(--surface-accent-background)",
-        backgroundImage ? "section-padding-xl" : "section-padding-xl-left-right"
+        showBackgroundStrip && 'pb-(--padding-top-down-sectional-96-72-48-xl)'
       )}
     >
       <div
@@ -44,7 +45,7 @@ export const ConversionPanel: FC<{ blok: ConversionPanelProps }> = ({
         className={twMerge(
           "z-2  overflow-hidden w-full mx-auto max-w-360 rounded-md flex flex-col md:items-center text-center",
           variant === "dark" || backgroundImage?.filename
-            ? "bg-(--surface-accent-background) [&_*:not(button):not(button_*)]:text-white! section-padding-xl-top-bottom md:px-12 px-4 relative"
+            ? "bg-(--surface-accent-background) [&_*:not(button):not(button_*):not(a):not(a_*)]:text-white! section-padding-xl-top-bottom md:px-12 px-4 relative"
             : "bg-(--surface-background)",
           fullWidth && variant !== "dark" && "bg-(--color-cream-100)",
         )}
@@ -69,7 +70,7 @@ export const ConversionPanel: FC<{ blok: ConversionPanelProps }> = ({
         </div>
       </div>
       {showBackgroundStrip && (
-        <div className="absolute inset-x-0 z-1 bottom-0 h-1/2 bg-(--surface-accent-background)" />
+        <div className="absolute inset-x-0 z-1 bottom-0 h-6/10 bg-(--color-navy-primary-900---p)" />
       )}
     </div>
   );

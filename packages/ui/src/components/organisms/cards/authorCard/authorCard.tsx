@@ -41,7 +41,7 @@ export const AuthorCard: FC<{ blok: AuthorCardProps }> = ({ blok }) => {
       <div className="flex gap-(--gaps-32-24-24) items-center">
         {headshotImage.filename && (
           <div>
-            <Image loader={storyblokLoader} src={headshotImage.filename} height={240} width={240} alt={name + " headshot"}/>
+            <Image className="rounded-sm" loader={storyblokLoader} src={headshotImage.filename} height={240} width={240} alt={name + " headshot"}/>
           </div>
         )}
         <div className="flex-1">

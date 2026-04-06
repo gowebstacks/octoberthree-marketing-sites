@@ -47,7 +47,6 @@ export const Switchback: FC<{ blok: SwitchbackBlok }> = ({ blok }) => {
           width={width}
           height={height}
           className="w-full h-auto object-cover sm:min-h-116.75! rounded-sm overflow-hidden"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
           patternColor={accentColor}
           objectCover
         />

@@ -131,7 +131,7 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
         {...rest}
         {...(blok ? storyblokEditable(blok) : {})}
       >
-        <span className="flex gap-2 items-center">
+        <span className="flex gap-2 items-start">
           {finalIcon && (
             <Icon
               size={32}
@@ -144,10 +144,13 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
                       ? "var(--color-tertiary)"
                       : "var(--switchback-icon-color-secondary)"
               }
-              icon={finalIcon as string}
+              icon={finalIcon as string} 
+              className="lg:translate-y-[0.25em] translate-y-[0.1em]"
             />
           )}
-          {finalText}
+          <span className="flex-1">
+            {finalText}
+          </span>
         </span>
       </HeadingComponent>
     );
