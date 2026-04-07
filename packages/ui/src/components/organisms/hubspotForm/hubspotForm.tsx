@@ -17,7 +17,7 @@ export type HubspotFormProps = {
   onReady?: () => void;
 };
 
-export function HubspotForm({
+export function HubspotFormComponent({
   portalId = "4293115", 
   formId,
   className,
