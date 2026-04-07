@@ -58,6 +58,7 @@ export const ResourceCardDeck: FC<Props> = ({
           resolved?.name ||
           resolved?.title ||
           resolved?.label ||
+          resolved?.tagName ||
           resolved?.slug;
 
         if (name) {
@@ -88,6 +89,7 @@ export const ResourceCardDeck: FC<Props> = ({
           resolved?.name ||
           resolved?.title ||
           resolved?.label ||
+           resolved?.tagName ||
           resolved?.slug;
 
         if (name === activeFilter) return true;
