@@ -2,6 +2,175 @@
 @import '@repo/tailwind-config';
 
 html{
-    overflow-x: hidden !important;
+    overflow-x: hidden;
 }
 
+
+/* =========================
+   FORM CARD (OUTER)
+========================= */
+
+[data-hs-forms-root] {
+  background: #f3eee9; /* page bg */
+  padding: 24px;
+}
+
+.hs-form {
+  background: #e7e1db; /* card bg */
+  padding: 24px;
+  border-radius: 6px;
+  max-width: 520px;
+  margin: 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* =========================
+   LABELS
+========================= */
+
+.hs-form label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #2d2d2d;
+  text-transform: uppercase;
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+.hs-input {
+  width: 100%;
+
+  padding: 12px 14px;
+
+  border-radius: 6px;
+  border: 1px solid #d1d1d1;
+
+  background: #f1f1f1;
+  color: #333;
+
+  font-size: 14px;
+  outline: none;
+
+  transition: all 0.2s ease;
+}
+
+/* Placeholder */
+.hs-input::placeholder {
+  color: #7a7a7a;
+}
+
+/* Focus */
+.hs-input:focus {
+  border-color: #999;
+  background: #fff;
+}
+
+/* Textarea */
+textarea.hs-input {
+  min-height: 120px;
+  resize: none;
+}
+
+/* =========================
+   TWO COLUMN (name fields)
+========================= */
+
+.form-columns-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* =========================
+   HINT TEXT
+========================= */
+
+.hs-form-field p,
+.hs-richtext {
+  font-size: 12px;
+  color: #6b6b6b;
+}
+
+/* =========================
+   CHECKBOX GROUP
+========================= */
+
+.hs-form-checkbox {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.hs-form-checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: none;
+}
+
+/* Checkbox */
+.hs-form-checkbox input {
+  width: 14px;
+  height: 14px;
+  accent-color: #1d4ed8; /* blue */
+}
+
+/* =========================
+   SUBMIT BUTTON
+========================= */
+
+.hs-button {
+  width: 100%;
+  margin-top: 8px;
+
+  background: #d84315; /* orange/red */
+  color: white;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  padding: 12px;
+  border-radius: 6px;
+
+  border: none;
+  cursor: pointer;
+
+  transition: background 0.2s ease;
+}
+
+.hs-button:hover {
+  background: #bf360c;
+}
+
+/* =========================
+   TERMS TEXT
+========================= */
+
+.hs-form .legal-consent-container,
+.hs-form .hs-richtext {
+  font-size: 12px;
+  color: #4a4a4a;
+}
+
+/* =========================
+   REMOVE DEFAULT SPACING
+========================= */
+
+.hs-form fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hs-form .input {
+  margin: 0;
+}

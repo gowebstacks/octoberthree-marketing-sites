@@ -1,6 +1,6 @@
 
 
-import { Accordion, AuthorCard, ContentBlock, ConversionPanel, CTABar, FeatureCardDeck, FormBlock, ImageBlock, ImageWithDesc, RTCTable, Statistic, VideoBlock } from '@repo/ui';
+import { Accordion, AuthorCard, ContentBlock, ConversionPanel, CTABar, FeatureCardDeck, FormBlock, ImageBlock, ImageWithDesc, RTCTable, Statistic, Subscribe, VideoBlock } from '@repo/ui';
 import { apiPlugin, storyblokInit } from '@storyblok/react/rsc';
 
 
@@ -27,7 +27,8 @@ export const getStoryblokApi = storyblokInit({
     imageBlock :  ImageBlock,
     featureCardDeck : FeatureCardDeck,
     table : RTCTable,
-    accordion : Accordion
+    accordion : Accordion,
+    subscribe : Subscribe
    
     
 

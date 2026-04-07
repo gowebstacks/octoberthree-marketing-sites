@@ -5,4 +5,5 @@ export * from './testimonial';
 export * from './nestedCards';
 export * from './rtcTable';
 export * from './bio';
-export * from './statistic'
+export * from './statistic';
+export * from './rtcSubscribe'

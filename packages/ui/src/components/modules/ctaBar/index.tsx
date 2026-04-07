@@ -13,9 +13,10 @@ export interface CTABarProps extends SbBlokData {
   className?: string;
   type?: "button" | "subscribe";
   placeholder?: string;
+  layout? : string
 }
 
-const CTABar: FC<CTABarProps> = ({ buttons, className = "", ...blok }) => {
+const CTABar: FC<CTABarProps> = ({ buttons, className = "", layout,...blok }) => {
   const actualBlok = (blok as any)?.blok || blok;
   const items = buttons || actualBlok?.buttons;
   const type = actualBlok?.type ?? "button";
@@ -67,12 +68,18 @@ const CTABar: FC<CTABarProps> = ({ buttons, className = "", ...blok }) => {
     <div
       data-component="cta-bar"
       {...storyblokEditable(actualBlok)}
-      className={twMerge("flex sm:flex-row! flex-col gap-3 lg:mt-2 w-full sm:w-fit", className)}
+      className={twMerge("flex sm:flex-row! flex-col gap-3 lg:mt-2", className, layout==='split' ? 'w-full!' :'w-full sm:w-fit')}
     >
       {type === "subscribe" ? (
         <form
           onSubmit={handleSubmit}
-          className="flex flex-col gap-3 md:flex-row w-full"
+          className={
+           
+            twMerge(
+               'flex  gap-3',
+              layout === 'split' ? "flex-col w-full" :"flex-col sm:flex-row w-full"
+            )
+          }
         >
           <div className="flex flex-col gap-2 w-full">
             <InputField
@@ -94,7 +101,7 @@ const CTABar: FC<CTABarProps> = ({ buttons, className = "", ...blok }) => {
             {error && <Toast title={error} actionLabel="" />}
           </div>
 
-          <Button type="submit" disabled={loading}>
+          <Button fullWidth={layout==='split'} type="submit" disabled={loading}>
             {loading ? "Submitting..." : "Subscribe"}
           </Button>
         </form>
