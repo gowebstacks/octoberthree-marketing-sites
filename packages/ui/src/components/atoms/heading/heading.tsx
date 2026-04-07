@@ -127,7 +127,7 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
           weight: finalWeight,
           fontFamily: finalFontFamily,
           textTransform,
-        })} ${className} mb-0!`}
+        })} ${className} `}
         {...rest}
         {...(blok ? storyblokEditable(blok) : {})}
       >
