@@ -176,6 +176,7 @@
   --text-disabled: var(--color-neutral-600);
   --surface-background: var(--color-cream-50---p-background);
   --surface-card: var(--color-base-white);
+  --surface-icon-card-secondary: var(--color-navy-primary-700);
   --surface-icon-card: var(--color-orange-200---p-light);
   /* --surface-accent-card: var(--color-orange-100); */
   --surface-success: var(--color-success-50);

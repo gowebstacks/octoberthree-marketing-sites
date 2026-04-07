@@ -166,7 +166,7 @@ export const FooterNavigation: React.FC<FooterNavigationProps> = ({
                         className="hover:opacity-90 cursor-pointer bg-(--surface-background) p-2.5 rounded-sm"
                       >
                         <Icon
-                          color="var(--icon-contained-icon)"
+                          color="var(--color-navy-primary-900---p)"
                           icon={s.platform}
                         />
                       </Link>

@@ -31,6 +31,8 @@ export const IconTextCard: FC<IconTextCardProps> = ({
   const isBodyEmpty =
     !body?.content ||
     body.content.every((node) => !node.content || node.content.length === 0);
+
+
   return (
     <div
       {...storyblokEditable(blok)}
@@ -41,8 +43,18 @@ export const IconTextCard: FC<IconTextCardProps> = ({
       )}
     >
       {icon?.filename && (
-        <div className="relative h-72 w-full p-8 grid  place-items-center bg-(--surface-icon-card)">
-          <div className="pattern-grid pattern-white opacity-20 group-hover:opacity-35"></div>
+        <div className={
+          twMerge(
+            "relative h-72 w-full p-8 grid  place-items-center ",
+            hasButtons ? 'bg-(--surface-icon-card)' : 'bg-(--surface-icon-card-secondary)'
+          )
+        }>
+          <div className={
+            twMerge(
+              "pattern-grid pattern-white opacity-20 group-hover:opacity-35",
+              hasButtons ? '' : 'icon-card-secondary-opacity'
+            )
+          }></div>
           <Image
             loader={storyblokLoader}
             src={icon.filename}
