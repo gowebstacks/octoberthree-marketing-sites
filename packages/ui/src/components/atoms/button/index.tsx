@@ -91,7 +91,7 @@ const Button: FC<ButtonProps> = ({
     openInNewTab !== undefined ? openInNewTab : actualBlok?.openInNewTab;
   const actualMode = mode || actualBlok?.mode || "filled";
   const actualTone = tone || actualBlok?.tone || "primary";
-  const actualTrailingIcon = trailingIcon || actualBlok?.trailingIcon;
+  const actualTrailingIcon = trailingIcon || actualBlok?.trailingIcon ||  (actualTone === "secondary" ? "arrow-up-right" : undefined);
   const actualLeadingIcon = leadingIcon || actualBlok?.leadingIcon;
 
   // Build link from Storyblok data if available
