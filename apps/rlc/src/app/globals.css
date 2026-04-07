@@ -127,6 +127,7 @@ html{
 --text-eyebrow-on-surface-accent:var(--color-teal-800---p);
 --text-heading-on-surface-accent: var(--color-neutral-900---p-dark);
 --surface-icon-card: var(--color-teal-300);
+--surface-icon-card-secondary: var(--color-teal-300);
 --text-nav-item-dark: var(--color-base-black);
 --surface-nav-dropdown-hover: var(--color-cream-50---p-background);
 --stroke-nav-dropdown-hover: var(--color-cream-100);

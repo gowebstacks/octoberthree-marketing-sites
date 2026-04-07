@@ -1,10 +1,17 @@
-@import 'tailwindcss';
-@import '@repo/tailwind-config';
+@import "tailwindcss";
+@import "@repo/tailwind-config";
 
-html{
-    overflow-x: hidden;
+html {
+  overflow-x: hidden;
 }
-
+@layer utilities {
+  .icon-card-secondary-opacity {
+    opacity: 0.1;
+  }
+  .icon-card-secondary-opacity:hover {
+    opacity: 0.2;
+  }
+}
 
 /* =========================
    FORM CARD (OUTER)
