@@ -50,7 +50,7 @@ export const FeatureCardDeck: FC<FeatureCardDeckProps> = (props) => {
               alt={image.alt || 'image'}
               width={900}
               height={900}
-              className='max-h-166 h-full w-300 h-auto'
+              className='max-h-166 h-full max-w-300 w-full'
               objectCover
             />
           </div>

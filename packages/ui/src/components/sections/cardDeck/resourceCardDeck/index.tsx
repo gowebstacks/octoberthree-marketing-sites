@@ -190,7 +190,7 @@ export const ResourceCardDeck: FC<Props> = ({
             ) : null}
           </div>
 
-          <div className="flex items-center gap-1 border border-(--stroke-primary) rounded-md  bg-white lg:w-[320px] w-full px-1.5 py-1">
+          <div className="flex items-center gap-1 border border-(--stroke-primary) rounded-md  bg-white w-full lg:w-[320px]!  px-1.5 py-1">
             <Icon size={16} color="var(--icon-primary-dark)" icon="search-lg" className="shrink-0" />
 
             <input

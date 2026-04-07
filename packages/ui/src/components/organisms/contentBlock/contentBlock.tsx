@@ -51,7 +51,7 @@ export function ContentBlock({ blok }: ContentBlockProps) {
     <div {...storyblokEditable(blok)}>
       <div className={twMerge(layoutClasses[layout], "max-w-360")}>
         <div className="flex flex-col gap-(--gaps-16-12-12)">
-          {(badge?.length || eyebrow?.length || heading?.length) && (
+          {(badge?.length || eyebrow?.length) ?(
             <div
               className={twMerge(
                 "flex gap-2.5 items-center",
@@ -68,17 +68,17 @@ export function ContentBlock({ blok }: ContentBlockProps) {
                 />
               ) : null}
             </div>
-          )}
-          {!!heading?.length && (
+          ):null}
+          {!!heading?.length ? (
             <Heading
               blok={{ ...heading[0], iconColor }}
               className={twMerge(
-                "mb-(--gaps-16-12-12) lg:max-w-200",
+                "lg:max-w-200",
                 layout === "stacked" && "mx-auto",
                 mode === "dark" && "text-(--text-headings-light)"
               )}
             />
-          )}
+          ) : null}
         </div>
 
         <div>
@@ -86,7 +86,7 @@ export function ContentBlock({ blok }: ContentBlockProps) {
             <RichText
               doc={body}
               className={twMerge(
-                'max-w-200',
+                'max-w-200 mt-(--gaps-16-12-12)',
                 layout === "stacked" &&
                   `[&_ul]:w-fit [&_ul]:mx-auto [&_ul]:pl-0 max-w-150 mx-auto **:data-[component="cta-bar"]:mx-auto`,
                 mode === "dark" && "text-(--text-body-light)!"
@@ -97,11 +97,12 @@ export function ContentBlock({ blok }: ContentBlockProps) {
           {ctaBar?.map((cta) => (
             <CTABar
               key={cta._uid}
-              blok={cta}
+              layout={layout}
               className={twMerge(
                 layout === "stacked" && "sm:w-fit m-auto",
                 "mt-(--gaps-32-24-24)"
               )}
+               blok={cta}
             />
           ))}
         </div>

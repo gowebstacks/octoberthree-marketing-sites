@@ -35,7 +35,7 @@ export const RichText: FC<RichTextProps> = ({
               href={href}
               target={mark.attrs?.target || "_self"}
               rel="noopener noreferrer"
-              className="text-link hover:underline"
+              className="text-link underline"
             >
               {element}
             </a>
