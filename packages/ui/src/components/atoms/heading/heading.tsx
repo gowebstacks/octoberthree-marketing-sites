@@ -77,7 +77,7 @@ export interface HeadingProps
     React.HTMLAttributes<HTMLHeadingElement>,
     VariantProps<typeof headingVariants> {
   blok?: HeadingBlok;
-  as?: HeadingTag;
+  elementType?: HeadingTag;
   heading?: string;
   headingSize?: HeadingBlok["headingSize"];
   children?: React.ReactNode;
@@ -89,7 +89,7 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
   (
     {
       blok,
-      as,
+      elementType,
       size,
       weight,
       headingSize,
@@ -104,9 +104,9 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
     },
     ref: Ref<HTMLHeadingElement>
   ) => {
-    const HeadingComponent = blok?.as || as || "h2";
+    const HeadingComponent = blok?.elementType  || "h2";
 
-    if (!HeadingTags.includes(HeadingComponent)) {
+    if (!HeadingTags.includes(HeadingComponent as HeadingTag)) {
       console.error(
         `Heading: 'as' prop must be one of ${HeadingTags.join(", ")}`
       );
@@ -119,6 +119,10 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
     const finalIconColor = blok?.iconColor || iconColor;
 
     const finalIcon = blok?.icon || icon;
+
+    if (finalText == "Unique Features") {
+      console.log(blok, "heading ");
+    }
     return (
       <HeadingComponent
         ref={ref}
@@ -144,13 +148,11 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
                       ? "var(--color-tertiary)"
                       : "var(--switchback-icon-color-secondary)"
               }
-              icon={finalIcon as string} 
+              icon={finalIcon as string}
               className="lg:translate-y-[0.25em] translate-y-[0.1em]"
             />
           )}
-          <span className="flex-1">
-            {finalText}
-          </span>
+          <span className="flex-1">{finalText}</span>
         </span>
       </HeadingComponent>
     );
