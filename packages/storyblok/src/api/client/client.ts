@@ -652,3 +652,67 @@ export const getGlobalLayoutData = async (headerSlug:string, footerSlug:string) 
       };
     }
   };
+
+
+
+// Get All blogs
+export async function getAllBlogs(
+  sitename: string,
+  isDraft: boolean = false
+) {
+  try {
+    const res = await storyblokApi.getStories({
+      version: isDraft ? "draft" : "published",
+      starts_with: `${sitename}`, 
+      per_page: 100,
+    });
+
+    return res.stories || [];
+  } catch (error) {
+    console.error("Failed to fetch blogs", error);
+    return [];
+  }
+}
+
+export async function getAllStoriesByFolder(
+  folderPath: string,
+  isDraft: boolean = false
+): Promise<ISbStoryData<any>[]> {
+  const version = isDraft ? "draft" : "published";
+  let allStories: ISbStoryData<any>[] = [];
+  let page = 1;
+  let total = 0;
+
+  do {
+    const data = await storyblokApi.getStories({
+      version,
+      starts_with: folderPath,
+      per_page: 100,
+      page,
+    });
+
+    const stories = data.stories || [];
+    total = data.total || 0;
+    allStories.push(...stories);
+    page++;
+  } while (allStories.length < total);
+
+  return allStories;
+}
+
+export async function getStoryBySlug(
+  slug: string,
+  isDraft: boolean = false
+): Promise<{ story: ISbStoryData<any>; rels?: ISbStoryData<any>[] } | null> {
+  const version = isDraft ? "draft" : "published";
+  try {
+    const result = await storyblokApi.getStory(slug, { version });
+    if (!result?.data?.story) return null;
+    return {
+      story: result.data.story,
+      rels: result.data.rels || [],
+    };
+  } catch {
+    return null;
+  }
+}

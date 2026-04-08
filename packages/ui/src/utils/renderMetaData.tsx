@@ -1,5 +1,5 @@
 
-import type { Viewport } from 'next';
+import type {  Viewport } from 'next';
 import { SanityMetadata } from '../types/sanity';
 import { SITE_CONFIG, StoryblokSiteSettings } from '../lib';
 
@@ -51,4 +51,5 @@ export const renderViewport = (): Viewport => {
     initialScale: 1.0,
   };
 };
+
 
