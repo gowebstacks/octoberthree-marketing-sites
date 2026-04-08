@@ -45,6 +45,7 @@ export const LeadershipCard: FC<LeadershipCardProps> = ({
           className="w-full bg-gray-100 h-77"
           sizes="(max-width: 768px) 100vw, 300px"
           patternVariant='sm'
+          showPatternOnHover
         />
       )}
 

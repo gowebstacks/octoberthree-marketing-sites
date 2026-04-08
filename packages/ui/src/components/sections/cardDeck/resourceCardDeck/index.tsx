@@ -210,8 +210,7 @@ export const ResourceCardDeck: FC<Props> = ({
         <div
           className="
           grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] 
-          gap-y-(--gaps-56-48-48)
-          gap-x-(--gaps-16-12-12)
+          gap-(--gaps-16-12-12)
         "
         >
           {paginatedResources.map((resource) => (
