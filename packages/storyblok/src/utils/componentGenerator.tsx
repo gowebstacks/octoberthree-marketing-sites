@@ -41,7 +41,6 @@ import {
 import type { SbBlokData } from "@storyblok/react/rsc";
 import type { FC } from "react";
 import { useOptimistic } from "react";
-import { HeadingBlockSectionProps } from "../../../ui/dist/components/sections/headingBlock/headingBlock";
 
 interface componentGeneratorProps {
   sections?: SbBlokData[] | null;
@@ -70,7 +69,7 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
       return (
         <HeadingBlock
           key={component._uid}
-          {...(component as HeadingBlockSectionProps)}
+          {...(component)}
         />
       );
     case "formBlock":
