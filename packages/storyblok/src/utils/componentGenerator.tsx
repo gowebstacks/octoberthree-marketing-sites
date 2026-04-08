@@ -69,7 +69,7 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
       return (
         <HeadingBlock
           key={component._uid}
-          {...(component)}
+          {...(component as any)}
         />
       );
     case "formBlock":
