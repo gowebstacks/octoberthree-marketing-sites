@@ -12,7 +12,7 @@ import {
 } from "@repo/storyblok";
 import { isStoryblokEditor } from "../../lib/helper";
 
-type PageParams = {
+export type PageParams = {
   slug: string;
 };
 
