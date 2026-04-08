@@ -54,6 +54,7 @@ export const headingVariants = cva(
 export interface HeadingBlok extends SbBlokData {
   heading?: string;
   as?: HeadingTag;
+  elementType?: HeadingTag;
   headingSize?:
     | "2xs"
     | "xs"
@@ -77,6 +78,7 @@ export interface HeadingProps
     React.HTMLAttributes<HTMLHeadingElement>,
     VariantProps<typeof headingVariants> {
   blok?: HeadingBlok;
+  as?: HeadingTag;
   elementType?: HeadingTag;
   heading?: string;
   headingSize?: HeadingBlok["headingSize"];
@@ -89,6 +91,7 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
   (
     {
       blok,
+      as,
       elementType,
       size,
       weight,
@@ -100,13 +103,14 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
       children,
       icon,
       iconColor,
+  
       ...rest
     },
     ref: Ref<HTMLHeadingElement>
   ) => {
-    const HeadingComponent = blok?.elementType  || "h2";
+    const HeadingComponent = blok?.elementType || elementType || blok?.as || as || "h2";
 
-    if (!HeadingTags.includes(HeadingComponent as HeadingTag)) {
+    if (!HeadingTags.includes(HeadingComponent)) {
       console.error(
         `Heading: 'as' prop must be one of ${HeadingTags.join(", ")}`
       );
@@ -120,10 +124,10 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
 
     const finalIcon = blok?.icon || icon;
 
-    if (finalText == "Unique Features") {
-      console.log(blok, "heading ");
-    }
-    return (
+if(finalText == 'Unique Features'){
+      console.log(blok, "heading ", )
+
+}    return (
       <HeadingComponent
         ref={ref}
         className={`${headingVariants({
@@ -148,11 +152,13 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
                       ? "var(--color-tertiary)"
                       : "var(--switchback-icon-color-secondary)"
               }
-              icon={finalIcon as string}
+              icon={finalIcon as string} 
               className="lg:translate-y-[0.25em] translate-y-[0.1em]"
             />
           )}
-          <span className="flex-1">{finalText}</span>
+          <span className="flex-1">
+            {finalText}
+          </span>
         </span>
       </HeadingComponent>
     );
