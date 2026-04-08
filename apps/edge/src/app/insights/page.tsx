@@ -79,10 +79,9 @@ export const generateMetadata = async (props: {
     if (!result) {
       return { title: "Insight Not Found" };
     }
+   const seo = result.story.content.seo?.[0];
 
-    const seo = result.story.content.seo?.[0];
-
-    return renderMetadataFromStoryblok(`insights`, process.env.NEXT_PUBLIC_SITE_URL || '', seo, {}as any);
+    return renderMetadataFromStoryblok(`insights`, process.env.NEXT_PUBLIC_SITE_URL || 'https://o3-edge-webstacks.vercel.app/', seo, {}as any);
   } catch (error) {
     console.error("Metadata generation failed:", error);
     return {
