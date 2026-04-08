@@ -25,6 +25,7 @@ const INSIGHTS_FOLDER = 'edge/insights';
 const InsightContent = async ({ slug, preview }: { slug: string; preview: boolean }) => {
   const fullSlug = `${INSIGHTS_FOLDER}/${slug}`;
   const result = await getStoryBySlug(fullSlug, preview);
+  console.log(result, "insight data")
   if (!result) return notFound();
 
   const { story, rels } = result;

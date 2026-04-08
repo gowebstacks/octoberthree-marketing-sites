@@ -708,8 +708,9 @@ export async function getStoryBySlug(
   try {
     const result = await storyblokApi.getStory(slug, {
       version,
-      resolve_relations: ["resourceCard.tags"], // 👈 resolves tag UUIDs to tag objects
+      resolve_relations: ["resourceCard.tags"], 
     });
+    console.log(result, "test the api data")
     if (!result?.data?.story) return null;
     return {
       story: result.data.story,
