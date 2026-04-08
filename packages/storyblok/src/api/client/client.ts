@@ -706,7 +706,10 @@ export async function getStoryBySlug(
 ): Promise<{ story: ISbStoryData<any>; rels?: ISbStoryData<any>[] } | null> {
   const version = isDraft ? "draft" : "published";
   try {
-    const result = await storyblokApi.getStory(slug, { version });
+    const result = await storyblokApi.getStory(slug, {
+      version,
+      resolve_relations: ["resourceCard.tags"], // 👈 resolves tag UUIDs to tag objects
+    });
     if (!result?.data?.story) return null;
     return {
       story: result.data.story,

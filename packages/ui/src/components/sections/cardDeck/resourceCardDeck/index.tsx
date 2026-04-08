@@ -14,6 +14,7 @@ import {
 import { Pagination } from "../../../molecules";
 import { buildRelMap } from "../../../../utils";
 import { Button, Icon } from "../../../atoms";
+import { twMerge } from "tailwind-merge";
 
 export interface ResourceCardDeckBlok extends SbBlokData {
   content?: ContentBlockBlok[];
@@ -34,6 +35,7 @@ export const ResourceCardDeck: FC<Props> = ({
   rels = [],
   ...blok
 }) => {
+  console.log(resources, rels,"test blokkkkk")
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
@@ -146,7 +148,7 @@ export const ResourceCardDeck: FC<Props> = ({
       ) : null}
 
       {filterOptions.length > 1 ? (
-        <div className="border border-(--stroke-secondary) p-4 sm:px-8 sm:py-4.5 lg:py-8 flex flex-col-reverse lg:flex-row gap-4 justify-between">
+        <div className="border items-start border-(--stroke-secondary) p-4 sm:px-8 sm:py-4.5 lg:py-8 flex flex-col-reverse lg:flex-row gap-4 justify-between">
           <div className="flex flex-wrap gap-3">
             {visibleFilters.map((option) => {
               const isActive = activeFilter === option;
@@ -163,9 +165,12 @@ export const ResourceCardDeck: FC<Props> = ({
                   tone="secondary"
                   onClick={() => setActiveFilter(option)}
                   className={
-                    isActive
+                    twMerge(
+                      isActive
                       ? " border-(--stroke-secondary-button-hover) ring-4 ring-(--stroke-secondary-button-hover)"
-                      : ""
+                      : "",
+                      'h-10!'
+                    )
                   }
                 >
                   {label}
@@ -176,7 +181,7 @@ export const ResourceCardDeck: FC<Props> = ({
             {filterOptions.length > 5 ? (
               <button
                 onClick={() => setShowAllFilters((prev) => !prev)}
-                className="px-4 py-2 rounded-md border text-sm border-(--stroke-pagination) bg-white flex items-center gap-2"
+                className="px-4 py-2 rounded-md border text-sm border-(--stroke-pagination) bg-white flex items-center gap-2 h-10!"
               >
                 More
                 <span
@@ -190,7 +195,7 @@ export const ResourceCardDeck: FC<Props> = ({
             ) : null}
           </div>
 
-          <div className="flex items-center gap-1 border border-(--stroke-primary) rounded-md  bg-white w-full lg:w-[320px]!  px-1.5 py-1">
+          <div className="flex items-center gap-1 border border-(--stroke-primary) rounded-md  bg-white w-full lg:w-[320px]!  px-1.5 py-1 h-10">
             <Icon size={16} color="var(--icon-primary-dark)" icon="search-lg" className="shrink-0" />
 
             <input
