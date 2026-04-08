@@ -11,7 +11,7 @@ export interface EyebrowBlockProps extends SbBlokData {
 
 export const Eyebrow: FC<EyebrowBlockProps> = ({
   eyebrow,
-  elementType = "h6",
+  elementType = "span",
   className='',
   ...blok
 }) => {
