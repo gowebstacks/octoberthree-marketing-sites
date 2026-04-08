@@ -1,15 +1,18 @@
-import { notFound } from 'next/navigation';
-import { Metadata } from 'next';
-import { Suspense } from 'react';
+import { notFound } from "next/navigation";
+import { Metadata } from "next";
+import { Suspense } from "react";
 import {
   ComponentGenerator,
   getAllStoriesByFolder,
+  getInsightBySlug,
   getStoryBySlug,
   isStoryblokConfigured,
+  renderMetadataFromStoryblok,
   StoryblokBridge,
-} from '@repo/storyblok';
-import { renderMetadata } from '@repo/ui';
-import { isStoryblokEditor } from '../../../lib/helper';
+} from "@repo/storyblok";
+import { renderMetadata } from "@repo/ui";
+import { isStoryblokEditor } from "../../../lib/helper";
+import { PageParams } from "../page";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -20,45 +23,29 @@ export const dynamicParams = true;
 export const revalidate = 3600;
 
 // Folder where insight stories live (e.g., 'edge/insights')
-const INSIGHTS_FOLDER = 'edge/insights';
+const INSIGHTS_FOLDER = "edge/insights";
 
-const InsightContent = async ({ slug, preview }: { slug: string; preview: boolean }) => {
+const InsightContent = async ({
+  slug,
+  preview,
+}: {
+  slug: string;
+  preview: boolean;
+}) => {
   const fullSlug = `${INSIGHTS_FOLDER}/${slug}`;
-  const result = await getStoryBySlug(fullSlug, preview);
-  console.log(result, "insight data")
-  if (!result) return notFound();
+  const story = await getInsightBySlug(slug, preview, INSIGHTS_FOLDER);
+  if (!story) return notFound();
 
-  const { story, rels } = result;
   const { content } = story;
   const sections = content.sections || [];
-
-  // Optional: extract author data if your insight schema includes it
-  const authorData = sections[1]?.section?.[0]?.body?.content?.[0]?.attrs?.body?.[0] || null;
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: content.title || content.name || 'Insight',
-    author: {
-      '@type': 'Person',
-      name: authorData?.name || 'October Three',
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'October Three',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://www.octoberthree.com/logo.png',
-      },
-    },
-    ...(content.slug && { url: `https://www.octoberthree.com/insights/${content.slug}` }),
-  };
-
+  const rels = (story as any).rels || [];
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       {preview ? (
-        <StoryblokBridge story={{ ...story, content: { ...story.content, sections } }} />
+        <StoryblokBridge
+          story={{ ...story, content: { ...story.content, sections } }}
+        />
       ) : (
         <ComponentGenerator
           sections={sections}
@@ -76,42 +63,44 @@ export async function generateStaticParams() {
   try {
     const stories = await getAllStoriesByFolder(INSIGHTS_FOLDER, false);
     return stories.map((story: any) => ({
-      slug: story.slug.split('/').pop(), // extract last part as slug
+      slug: story.slug.split("/").pop(), // extract last part as slug
     }));
   } catch {
     return [];
   }
 }
 
-export const generateMetadata = async (props: { params: Promise<PageProps['params']> }): Promise<Metadata> => {
+export const generateMetadata = async (props: {
+  params: Promise<PageParams>;
+}): Promise<Metadata> => {
   const { slug } = await props.params;
-  const fullSlug = `${INSIGHTS_FOLDER}/${slug}`;
+  const fullSlug = `${INSIGHTS_FOLDER}`;
+
   try {
     const result = await getStoryBySlug(fullSlug, false);
     if (!result) {
-      return {
-        title: 'Insight Not Found',
-        description: 'The requested insight could not be found',
-      };
+      return { title: "Insight Not Found" };
     }
-    const { content } = result.story;
-    const title = content.title || content.name || 'Insight';
-    const description = content.excerpt || content.description || `Read our latest insight: ${title}`;
-    return renderMetadata(`insights/${slug}`, {
-      title: `${title} | October Three Insights`,
-      description,
-    });
-  } catch {
-    return { title: 'Insight', description: 'Explore our insights' };
+   const seo = result.story.content.seo?.[0];
+
+    return renderMetadataFromStoryblok(`insights`, process.env.NEXT_PUBLIC_SITE_URL || 'https://o3-edge-webstacks.vercel.app/', seo, {}as any);
+  } catch (error) {
+    console.error("Metadata generation failed:", error);
+    return {
+      title: "Insight",
+      description: "Explore our insights",
+    };
   }
 };
 
 const InsightPageContainer = async (props: {
-  params: Promise<PageProps['params']>;
-  searchParams?: Promise<PageProps['searchParams']>;
+  params: Promise<PageProps["params"]>;
+  searchParams?: Promise<PageProps["searchParams"]>;
 }) => {
   const { slug } = await props.params;
-  const preview = isStoryblokEditor(props.searchParams ? await props.searchParams : undefined);
+  const preview = isStoryblokEditor(
+    props.searchParams ? await props.searchParams : undefined
+  );
   try {
     return (
       <Suspense fallback={<div>Loading insight...</div>}>

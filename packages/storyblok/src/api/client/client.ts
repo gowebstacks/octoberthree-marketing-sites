@@ -720,3 +720,42 @@ export async function getStoryBySlug(
     return null;
   }
 }
+
+
+export async function getInsightBySlug(
+  slug: string,
+  isDraft: boolean = false,
+  folder: string = 'edge/insights'
+) {
+  try {
+    const accessToken = getAccessToken(isDraft ? 'draft' : 'published');
+    if (!accessToken) return null;
+
+    const fullSlug = `${folder}/${slug}`;
+    const params = new URLSearchParams({
+      token: accessToken,
+      version: isDraft ? 'draft' : 'published',
+      resolve_relations: 'resourceCard.tags', 
+    });
+
+    const url = `${STORYBLOK_API_URL}/stories/${fullSlug}?${params.toString()}`;
+    const response = await fetch(url, {
+      cache: isDraft ? 'no-store' : undefined,
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) return null;
+      throw new Error(`Storyblok API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log(data, "test data coming from api")
+    return {
+      ...data.story,
+      rels: data.rels || [],
+    };
+  } catch (error) {
+    console.error(`[getInsightBySlug] Failed for slug ${slug}:`, error);
+    return null;
+  }
+}
