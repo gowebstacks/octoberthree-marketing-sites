@@ -52,6 +52,7 @@ const InsightContent = async ({ slug, preview }: { slug: string; preview: boolea
     ...(content.slug && { url: `https://www.octoberthree.com/insights/${content.slug}` }),
   };
 
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
