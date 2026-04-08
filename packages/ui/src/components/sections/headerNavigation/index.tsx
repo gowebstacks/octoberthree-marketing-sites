@@ -23,7 +23,7 @@ export const HeaderNavigation: React.FC<HeaderNavigationProps> = ({
   headerNavigation,
 }) => {
   return (
-    <header className="w-full transition-all duration-300 ease-in-out bg-(--surface-navbar) relative z-10">
+    <header className="w-full transition-all duration-300 ease-in-out bg-(--surface-navbar) relative shadow-sm z-10">
       {headerNavigation?.announcement && (
         <AnnouncementBar
           announcement={headerNavigation.announcement}
@@ -35,7 +35,7 @@ export const HeaderNavigation: React.FC<HeaderNavigationProps> = ({
         className="
           relative
           flex
-          max-w-(--widths-1440-834-375)
+          max-w-360
           mx-auto
           py-(--gaps-32-24-24)
           px-(--padding-side-sectional-80-64-16)

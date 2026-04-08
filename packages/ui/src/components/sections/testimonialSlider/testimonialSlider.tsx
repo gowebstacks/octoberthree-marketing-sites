@@ -4,16 +4,16 @@ import { useRef, useState, useMemo, useEffect, useCallback } from "react";
 import { storyblokEditable } from "@storyblok/react";
 import type { SbBlokData } from "@storyblok/react";
 import { Attribution, SliderControls } from "../../molecules";
-import { Eyebrow, Heading } from "../../atoms";
+import { Badge, Eyebrow, Heading } from "../../atoms";
 import { HeadingBlok } from "../../atoms/heading";
 import { twMerge } from "tailwind-merge";
 import { buildRelMap, resolveRel } from "../../../utils";
-import type { Person } from "../../../types/storyblok";
 
 export interface TestimonialBlok extends SbBlokData {
   quote?: string;
   title?: string;
-  person?: string | Person;
+  jobTitle?: string;
+  companyName?: string;
   component: "testimonial";
 }
 
@@ -95,10 +95,6 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
 
   const desktopSlides = useMemo(() => {
     return resolvedTestimonials.map((testimonial, index) => {
-      const person = resolveRel<Person>(
-        testimonial.person as string | Person | undefined,
-        relMap
-      );
       const isActive = index === currentIndex;
       const isPrev = index === prevIndex;
       const isNext = index === nextIndex;
@@ -120,12 +116,6 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
         !isActive && activeHeight
           ? { height: `calc(${activeHeight}px - 56px)` }
           : undefined;
-
-      const displayName = person?.firstName
-        ? `${person.firstName} ${person?.lastName || ""}`
-        : person?.name || "";
-
-      const displayTitle = person?.role || person?.title || "";
 
       return (
         <div
@@ -166,13 +156,19 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
               </Heading>
 
               <div className="mt-10 border-t border-(--color-neutral-700---body) pt-6">
-                {person && (
-                  <Attribution
-                    name={displayName}
-                    role={displayTitle}
-                    variant={person.variant}
-                  />
-                )}
+                <div className="flex flex-col items-start gap-1">
+                  {testimonial.companyName && (
+                    <div className="font-normal text-[16px] leading-6 lg:text-[18px] lg:leading-7 text-(--text-headings)">
+                      {testimonial.companyName}
+                    </div>
+                  )}
+
+                  {testimonial.jobTitle && (
+                    <div className="[&_span]:text-[12px] [&_span]:leading-4.5 lg:[&_span]:text-[14px] lg:[&_span]:leading-6">
+                      <Badge label={testimonial.jobTitle} variant={"navy"} />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -207,23 +203,19 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
           {blok.eyebrow?.[0] && (
             <Eyebrow
               {...blok.eyebrow[0]}
-              className={
-                twMerge(
-                  "text-center", 
-                  mode=== 'dark' && 'text-white'
-                )
-              }
+              className={twMerge(
+                "text-center",
+                mode === "dark" && "text-white"
+              )}
             />
           )}
           {blok.heading?.[0] && (
             <Heading
               blok={blok.heading[0]}
-              className={
-                twMerge(
-                  " mt-4 mb-12 lg:mb-18 max-w-200 mx-auto",
-                  mode=== 'dark' && 'text-white'
-                )
-              }
+              className={twMerge(
+                "mt-4 mb-12 lg:mb-18 max-w-200 mx-auto",
+                mode === "dark" && "text-white"
+              )}
             />
           )}
         </div>
@@ -247,7 +239,6 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
           onGoTo={(index) => setCurrentIndex(index)}
           showArrows={isMobile}
           alignment="center"
-          
         />
       </div>
     </div>

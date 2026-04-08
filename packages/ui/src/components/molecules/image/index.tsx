@@ -62,6 +62,8 @@ export interface ImageProps
   isSquarePattern?: boolean;
 
   patternColor?: "primary" | "secondary" | "tertiary";
+
+  showPatternOnHover?: boolean;
 }
 
 const Image: FC<ImageProps> = ({
@@ -81,21 +83,26 @@ const Image: FC<ImageProps> = ({
   patternVariant,
   isSquarePattern = true,
   patternColor = "secondary",
+  showPatternOnHover = false,
   ...props
 }) => {
   const imgWidth = width || asset?.metadata?.dimensions?.width,
     imgHeight = height || asset?.metadata?.dimensions?.height;
 
-    const patternColorClass = {
-      primary: "pattern-primary",
-      secondary: "pattern-secondary",
-      tertiary: "pattern-tertiary",
-    }[patternColor || "secondary"];
+  const patternColorClass = {
+    primary: "pattern-primary",
+    secondary: "pattern-secondary",
+    tertiary: "pattern-tertiary",
+  }[patternColor || "secondary"];
 
   return (
     asset?.url && (
       <picture
-        className={twMerge("relative block", className, 'rounded-sm overflow-hidden',)}
+        className={twMerge(
+          "relative block group",
+          className,
+          "rounded-sm overflow-hidden"
+        )}
         style={{
           aspectRatio: unsetRatio
             ? undefined
@@ -112,9 +119,13 @@ const Image: FC<ImageProps> = ({
                 ? "pattern-triangle-sm"
                 : patternVariant === "md"
                   ? "pattern-triangle-md"
-                  : "pattern-triangle"
+                  : "pattern-triangle",
+
+              showPatternOnHover
+                ? "opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                : "opacity-100"
             )}
-          ></div>
+          />
         )}
         <NextImage
           loader={storyblokLoader}
