@@ -6,8 +6,10 @@ import {
   ComponentGenerator,
   getAllTeamMembers,
   getAllWebsitePageSlugs,
+  getStoryBySlug,
   getWebsitePageBySlug,
   isStoryblokConfigured,
+  renderMetadataFromStoryblok,
   StoryblokBridge,
   StoryblokSiteSettings,
 } from "@repo/storyblok";
@@ -48,12 +50,9 @@ export default async function SlugPage(props: {
   const slugParam =
     params.slug && params.slug.length > 0 ? params.slug.join("/") : "home";
   const inEditor = isStoryblokEditor(searchParams);
-  const preview = inEditor; 
+  const preview = inEditor;
 
-  const page = await getWebsitePageBySlug(
-    `edge/${slugParam}`,
-    preview
-  );
+  const page = await getWebsitePageBySlug(`edge/${slugParam}`, preview);
   console.log(page, slugParam, "page data");
 
   if (!page) {
@@ -87,24 +86,24 @@ export default async function SlugPage(props: {
         ?.attrs?.body?.find((blok: any) => blok.component === "authorCard");
     };
 
-    const teamMembers = (
-      await getAllTeamMembers(preview, "edge")
-    ).map((member: any) => {
-      const authorCard = getAuthorCard(member.content);
+    const teamMembers = (await getAllTeamMembers(preview, "edge")).map(
+      (member: any) => {
+        const authorCard = getAuthorCard(member.content);
 
-      return {
-        _uid: member.uuid,
-        component: "leadershipCard",
+        return {
+          _uid: member.uuid,
+          component: "leadershipCard",
 
-        name: authorCard?.name || "",
-        role: authorCard?.designation || "",
-        location: authorCard?.location || "",
-        image: authorCard?.headshotImage || {},
+          name: authorCard?.name || "",
+          role: authorCard?.designation || "",
+          location: authorCard?.location || "",
+          image: authorCard?.headshotImage || {},
 
-        team: authorCard?.team || [],
-        ...member,
-      };
-    });
+          team: authorCard?.team || [],
+          ...member,
+        };
+      }
+    );
     console.log(teamMembers, "team members data");
 
     updatedSections = sections.map((layout: any) => ({
@@ -130,14 +129,13 @@ export default async function SlugPage(props: {
 
     console.log(updatedSections, "updated sections with team members");
   }
-const updatedStory = {
-  ...page,
-  content: {
-    ...page.content,
-    sections: updatedSections,
-  },
-};
-  console.log(preview, "preview mode ______--------------------");
+  const updatedStory = {
+    ...page,
+    content: {
+      ...page.content,
+      sections: updatedSections,
+    },
+  };
   return (
     <>
       {preview ? (
@@ -153,3 +151,26 @@ const updatedStory = {
     </>
   );
 }
+
+export const generateMetadata = async (props: {
+  params: Promise<PageParams>;
+}): Promise<Metadata> => {
+  const slugArray = (await props.params).slug || [];
+const slugPath = slugArray.length ? slugArray.join("/") : "home";
+
+const result = await getStoryBySlug(`edge/${slugPath}`, false);
+  try {
+    const result = await getStoryBySlug(`edge/${slugPath}`, false);
+    if (!result) {
+      return { title: "Page Not Found" };
+    }
+   const seo = result.story.content.seo?.[0];
+
+    return renderMetadataFromStoryblok(`${slugPath}`, process.env.NEXT_PUBLIC_SITE_URL || 'https://o3-edge-webstacks.vercel.app/', seo, {}as any);
+  } catch (error) {
+    console.error("Metadata generation failed:", error);
+    return {
+      title: "O3 Edge",
+    };
+  }
+};
