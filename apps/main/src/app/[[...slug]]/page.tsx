@@ -8,6 +8,7 @@ import {
   getAllWebsitePageSlugs,
   getWebsitePageBySlug,
   isStoryblokConfigured,
+  renderMetadataFromStoryblok,
   StoryblokBridge,
   StoryblokSiteSettings,
 } from "@repo/storyblok";
@@ -154,3 +155,38 @@ const updatedStory = {
     </>
   );
 }
+
+export const generateMetadata = async (props: {
+  params: Promise<PageParams>;
+}): Promise<Metadata> => {
+  const { slug } = await props.params;
+
+  const slugParam =
+    slug && slug.length > 0 ? slug.join("/") : "home";
+
+  try {
+    const story = await getWebsitePageBySlug(
+      `octoberthree-main/${slugParam}${slugParam === "articles" ? "/" : ""}`,
+      false
+    );
+
+    if (!story) {
+      return { title: "Page Not Found" };
+    }
+
+    const seo = story.content?.seo?.[0];
+
+    return renderMetadataFromStoryblok(
+      slugParam === "home" ? "" : slugParam,
+      process.env.NEXT_PUBLIC_SITE_URL ||
+        "https://october3-main-webstacks.vercel.app/",
+      seo,
+      null
+    );
+  } catch {
+    return {
+      title: "Website",
+      description: "Default description",
+    };
+  }
+};

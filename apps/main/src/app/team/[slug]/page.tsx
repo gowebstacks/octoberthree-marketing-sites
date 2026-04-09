@@ -7,6 +7,7 @@ import {
   getAllTeamMembers,
   getTeamMemberBySlug,
   isStoryblokConfigured,
+  renderMetadataFromStoryblok,
   StoryblokBridge,
 } from '@repo/storyblok';
 
@@ -107,38 +108,6 @@ export async function generateStaticParams() {
   }
 }
 
-export const generateMetadata = async (props: { 
-  params: Promise<PageProps['params']>;
-}): Promise<Metadata> => {
-  const params = await props.params;
-  const { slug } = params;
-  
-  try {
-    const teamMember = await getTeamMemberBySlug(slug, false, "octoberthree-main");
-    
-    if (!teamMember) {
-      return {
-        title: 'Team Member Not Found',
-        description: 'The requested team member could not be found',
-      };
-    }
-
-    const { content } = teamMember;
-    const name = content.name || 'Team Member';
-    const title = content.title || '';
-    
-    return renderMetadata(`team/${slug}`, {
-      title: `${name}${title ? ` | ${title}` : ''} | October Three`,
-      description: `Meet ${name}, ${title} at October Three`,
-    });
-  } catch {
-    return {
-      title: 'Team Member',
-      description: 'Meet our team member',
-    };
-  }
-};
-
 const TeamMemberPageContainer = async (props: { 
   params: Promise<PageProps['params']>;
   searchParams?: Promise<PageProps['searchParams']>;
@@ -160,3 +129,39 @@ const TeamMemberPageContainer = async (props: {
 };
 
 export default TeamMemberPageContainer;
+
+export const generateMetadata = async (props: { 
+  params: Promise<PageProps['params']>;
+}): Promise<Metadata> => {
+  const params = await props.params;
+  const { slug } = params;
+  
+  try {
+    const teamMember = await getTeamMemberBySlug(
+      slug,
+      false,
+      "octoberthree-main"
+    );
+    
+    if (!teamMember) {
+      return {
+        title: 'Team Member Not Found',
+      };
+    }
+
+    const seo = teamMember.content?.seo?.[0];
+
+    return renderMetadataFromStoryblok(
+      `team/${slug}`,
+      process.env.NEXT_PUBLIC_SITE_URL ||
+        'https://october3-main-webstacks.vercel.app/',
+      seo,
+      null
+    );
+  } catch {
+    return {
+      title: 'Team Member',
+      description: 'Meet our team member',
+    };
+  }
+};

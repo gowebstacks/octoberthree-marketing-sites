@@ -58,17 +58,17 @@ const InsightContent = async ({
   );
 };
 
-// export async function generateStaticParams() {
-//   if (!isStoryblokConfigured()) return [];
-//   try {
-//     const stories = await getAllStoriesByFolder(INSIGHTS_FOLDER, false);
-//     return stories.map((story: any) => ({
-//       slug: story.slug.split("/").pop(), // extract last part as slug
-//     }));
-//   } catch {
-//     return [];
-//   }
-// }
+export async function generateStaticParams() {
+  if (!isStoryblokConfigured()) return [];
+  try {
+    const stories = await getAllStoriesByFolder(INSIGHTS_FOLDER, false);
+    return stories.map((story: any) => ({
+      slug: story.slug.split("/").pop(), 
+    }));
+  } catch {
+    return [];
+  }
+}
 
 export const generateMetadata = async (props: {
   params: Promise<PageParams>;
@@ -83,7 +83,7 @@ export const generateMetadata = async (props: {
    const seo = story.content.seo?.[0];
    console.log(seo, "seo content", story)
 
-    return renderMetadataFromStoryblok(`insights`, process.env.NEXT_PUBLIC_SITE_URL || 'https://o3-edge-webstacks.vercel.app/', seo, {}as any);
+    return renderMetadataFromStoryblok(`insights/${slug}`, process.env.NEXT_PUBLIC_SITE_URL || 'https://o3-edge-webstacks.vercel.app/', seo, {}as any);
   } catch (error) {
     console.error("Metadata generation failed:", error);
     return {
