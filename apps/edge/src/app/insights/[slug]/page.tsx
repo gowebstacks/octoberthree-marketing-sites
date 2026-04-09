@@ -58,17 +58,17 @@ const InsightContent = async ({
   );
 };
 
-export async function generateStaticParams() {
-  if (!isStoryblokConfigured()) return [];
-  try {
-    const stories = await getAllStoriesByFolder(INSIGHTS_FOLDER, false);
-    return stories.map((story: any) => ({
-      slug: story.slug.split("/").pop(), 
-    }));
-  } catch {
-    return [];
-  }
-}
+// export async function generateStaticParams() {
+//   if (!isStoryblokConfigured()) return [];
+//   try {
+//     const stories = await getAllStoriesByFolder(INSIGHTS_FOLDER, false);
+//     return stories.map((story: any) => ({
+//       slug: story.slug.split("/").pop(), 
+//     }));
+//   } catch {
+//     return [];
+//   }
+// }
 
 export const generateMetadata = async (props: {
   params: Promise<PageParams>;
