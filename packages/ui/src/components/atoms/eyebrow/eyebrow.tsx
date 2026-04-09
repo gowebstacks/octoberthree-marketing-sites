@@ -15,7 +15,8 @@ export const Eyebrow: FC<EyebrowBlockProps> = ({
   className='',
   ...blok
 }) => {
-  const Component = elementType || "h6";
+  const Component = elementType || "span";
+
   return (
     <span
       {...storyblokEditable(blok)}
