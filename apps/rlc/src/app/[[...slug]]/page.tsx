@@ -8,6 +8,7 @@ import {
   getAllWebsitePageSlugs,
   getWebsitePageBySlug,
   isStoryblokConfigured,
+  renderMetadataFromStoryblok,
   StoryblokBridge,
   StoryblokSiteSettings,
 } from "@repo/storyblok";
@@ -153,3 +154,43 @@ const updatedStory = {
     </>
   );
 }
+
+
+export const generateMetadata = async (props: {
+  params: Promise<PageParams>;
+}): Promise<Metadata> => {
+  const params = await props.params;
+
+  const slugParam =
+    params.slug && params.slug.length > 0
+      ? params.slug.join("/")
+      : "home";
+
+  try {
+    const page = await getWebsitePageBySlug(
+      `rlc/${slugParam}${
+        slugParam === "resources" || slugParam === "services" ? "/" : ""
+      }`,
+      false
+    );
+
+    if (!page) {
+      return { title: "Page Not Found" };
+    }
+
+    const seo = page.content?.seo?.[0];
+
+    return renderMetadataFromStoryblok(
+      slugParam === "home" ? "" : slugParam,
+      process.env.NEXT_PUBLIC_SITE_URL ||
+        "https://rlc-webstacks.vercel.app/",
+      seo,
+      null
+    );
+  } catch {
+    return {
+      title: "Website",
+      description: "Default description",
+    };
+  }
+};
