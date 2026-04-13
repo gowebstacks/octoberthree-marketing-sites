@@ -13,27 +13,22 @@ export type BadgeProps = {
 const variantStyles: Record<NonNullable<BadgeProps["variant"]>, string> = {
   orange: `
     bg-[var(--color-orange-50)]
-    hover:bg-(--color-orange-100)
     text-[var(--color-orange-700---p-dark)]
   `,
   cyan: `
     bg-[var(--color-cyan-50)]
-    hover:bg-(--color-cyan-100)
     text-[var(--color-cyan-800)]
   `,
   navy: `
     bg-[var(--color-navy-primary-50)]
-    hover:bg-(--color-navy-primary-100)
     text-[var(--color-navy-primary-900---p)]
   `,
   yellow: `
     bg-[var(--color-yellow-50)]
-    hover:bg-(--color-yellow-100)
     text-[var(--color-yellow-900)]
   `,
   teal: `
     bg-[var(--color-teal-50)]
-    hover:bg-(--color-teal-100)
     text-[var(--color-teal-800---p)]
   `,
 };
@@ -53,7 +48,16 @@ export const Badge: FC<BadgeProps> = ({
           text-sm font-medium leading-6
           w-fit
         `,
-        variantStyles[variant]
+        variantStyles[variant],
+         onRemove &&
+      {
+        orange: "hover:bg-(--color-orange-100)",
+        cyan: "hover:bg-(--color-cyan-100)",
+        navy: "hover:bg-(--color-navy-primary-100)",
+        yellow: "hover:bg-(--color-yellow-100)",
+        teal: "hover:bg-(--color-teal-100)",
+      }[variant]
+  
       )}
     >
       {label}

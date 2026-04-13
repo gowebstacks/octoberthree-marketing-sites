@@ -1387,6 +1387,12 @@
     display: flex !important;
     flex-direction: column;
     gap: 16px;
+    width: 100% !important;
+    max-width: none !important;
+  }
+  .hubspot-form .form-columns-1{
+    width: 100% !important;
+    max-width: none !important;
   }
   .hubspot-form .form-columns-2 > div {
     width: 100% !important;
@@ -1396,6 +1402,7 @@
   .hubspot-form textarea,
   .hubspot-form select.hs-input {
     width: 100% !important;
+    max-width: none !important;
 
     padding: var(--padding-8-6-6) var(--padding-12-8-8) !important;
 

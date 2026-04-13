@@ -37,9 +37,9 @@ export const IconTextCard: FC<IconTextCardProps> = ({
     <div
       {...storyblokEditable(blok)}
       className={twMerge(
-        "flex h-full flex-col  border border-(--stroke-card)  transition-all duration-200 rounded-sm",
+        "flex h-full flex-col group hover:shadow-lg border border-(--stroke-card)  transition-all duration-200 rounded-sm",
         "bg-(--surface-card)",
-        hasButtons && "group cursor-pointer  hover:shadow-lg overflow-hidden "
+        hasButtons && " cursor-pointer  overflow-hidden "
       )}
     >
       {icon?.filename && (
@@ -74,7 +74,7 @@ export const IconTextCard: FC<IconTextCardProps> = ({
         )}
 
         {!isBodyEmpty && (
-          <div className="mt-4 text-(--text-body-dark)">
+          <div className="text-(--text-body-dark)">
             <RichText
               doc={body}
               className="

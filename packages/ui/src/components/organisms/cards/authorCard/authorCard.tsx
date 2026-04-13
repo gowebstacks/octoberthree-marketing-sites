@@ -17,6 +17,7 @@ export interface AuthorCardProps extends SbBlokData {
   component?: "authorCard";
   name: string;
   company?: string;
+  designation?:string; 
   bio: string;
   location: string;
   headshotImage: StoryblokAsset;
@@ -26,7 +27,7 @@ export interface AuthorCardProps extends SbBlokData {
 }
 
 export const AuthorCard: FC<{ blok: AuthorCardProps }> = ({ blok }) => {
-  const { name, company, bio, location, socials = [],headshotImage,variant = 'bioInside'} = blok;
+  const { name, company, designation,bio, location, socials = [],headshotImage,variant = 'bioInside'} = blok;
   return (
     <div className="max-w-187.5 ">
       <div
@@ -54,8 +55,8 @@ export const AuthorCard: FC<{ blok: AuthorCardProps }> = ({ blok }) => {
 
             <div className="flex gap-4 items-center">
               {company && (
-                <span className="text-lg tracking-wide text-(--text-body-dark) flex-1">
-                  {company}
+                <span className="text-lg tracking-wide text-(--text-body-dark) ">
+                  {designation || company}
                 </span>
               )}
               {location && <Badge variant="cyan" label={location} />}

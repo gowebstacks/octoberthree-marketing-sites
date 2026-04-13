@@ -42,20 +42,7 @@ export const FormBlock: FC<FormBlockProps> = ({
       ) : null}
      </div>
 
-      {/* {content?.length ? (
-        <div
-          className={twMerge(
-            pattern === "square" ? "order-2 lg:order-1" : "",
-            "flex-1"
-          )}
-        >
-          {content[0] && (
-            <ContentBlock blok={{ ...content[0], mode: "dark" }} />
-          )}{" "}
-        </div>
-      ) : null}
-
-       */}
+     
 
       <div className="flex-1">
         {/* <Form  /> */}
