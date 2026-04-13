@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 
 import {
   ComponentGenerator,
+  generateMetaDataByslug,
   getAllTeamMembers,
   getTeamMemberBySlug,
   isStoryblokConfigured,
@@ -11,7 +12,6 @@ import {
   StoryblokBridge,
 } from '@repo/storyblok';
 
-import { renderMetadata, SITE_CONFIG } from '@repo/ui';
 import { isStoryblokEditor } from '../../../lib/helper';
 
 type PageProps = {
@@ -36,17 +36,17 @@ const TeamMemberContent = async ({
   const { content } = teamMember;
   const rels = (teamMember as any).rels || [];
   const sections = content.sections || [];
-
   let authorData = null;
-  if (sections[1]?.section?.[0]?.body?.content?.[0]?.attrs?.body?.[0]) {
-    authorData = sections[1].section[0].body.content[0].attrs.body[0];
+  if (sections[0]?.section[0]?.body?.content?.[0].attrs.body[0]) {
+    authorData = sections[0]?.section[0]?.body?.content?.[0].attrs.body[0];
   }
 
+  console.log(authorData, "test author data")
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: authorData?.name || content.name || 'Team Member',
-    jobTitle: authorData?.company || content.title || '',
+    jobTitle: authorData?.company || content.designation || '',
     worksFor: {
       '@type': 'Organization',
       name: 'October Three',
@@ -58,7 +58,7 @@ const TeamMemberContent = async ({
       },
     }),
     ...(content.slug && {
-      url: `https://www.octoberthree.com/team/${content.slug}`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.octoberthree.com'}/team/${content.slug}`,
     }),
     ...(authorData?.headshotImage?.filename && {
       image: authorData.headshotImage.filename,
@@ -117,6 +117,8 @@ const TeamMemberPageContainer = async (props: {
   const { slug } = params;
   const preview = isStoryblokEditor(searchParams);
 
+  const teamMembers = await getAllTeamMembers(false, "octoberthree-main")
+
   try {
     return (
       <Suspense fallback={<div>Loading team member...</div>}>
@@ -130,38 +132,19 @@ const TeamMemberPageContainer = async (props: {
 
 export default TeamMemberPageContainer;
 
-export const generateMetadata = async (props: { 
-  params: Promise<PageProps['params']>;
+export type PageParams = {
+  slug: string;
+};
+export const generateMetadata = async (props: {
+  params: Promise<PageParams>;
 }): Promise<Metadata> => {
   const params = await props.params;
-  const { slug } = params;
-  
-  try {
-    const teamMember = await getTeamMemberBySlug(
-      slug,
-      false,
-      "octoberthree-main"
-    );
-    
-    if (!teamMember) {
-      return {
-        title: 'Team Member Not Found',
-      };
-    }
 
-    const seo = teamMember.content?.seo?.[0];
+  const slugParam =
+    params.slug && params.slug.length > 0
+      ? params.slug
+      : "home";
 
-    return renderMetadataFromStoryblok(
-      `team/${slug}`,
-      process.env.NEXT_PUBLIC_SITE_URL ||
-        'https://october3-main-webstacks.vercel.app/',
-      seo,
-      null
-    );
-  } catch {
-    return {
-      title: 'Team Member',
-      description: 'Meet our team member',
-    };
-  }
+   const metaData = await generateMetaDataByslug('octoberthree-main', `team/${slugParam}`);
+  return metaData;
 };

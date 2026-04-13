@@ -3,14 +3,11 @@ import { Metadata } from "next";
 import { Suspense } from "react";
 import {
   ComponentGenerator,
-  getAllStoriesByFolder,
+  generateMetaDataByslug,
   getInsightBySlug,
-  getStoryBySlug,
-  isStoryblokConfigured,
-  renderMetadataFromStoryblok,
+  getWebsitePageBySlug,
   StoryblokBridge,
 } from "@repo/storyblok";
-import { renderMetadata } from "@repo/ui";
 import { isStoryblokEditor } from "../../../lib/helper";
 import { PageParams } from "../page";
 
@@ -32,8 +29,7 @@ const InsightContent = async ({
   slug: string;
   preview: boolean;
 }) => {
-  const fullSlug = `${INSIGHTS_FOLDER}/${slug}`;
-  const story = await getInsightBySlug(slug, preview, INSIGHTS_FOLDER);
+  const story = await getWebsitePageBySlug(`edge/insights/${slug}`, preview);
   if (!story) return notFound();
 
   const { content } = story;
@@ -58,41 +54,6 @@ const InsightContent = async ({
   );
 };
 
-// export async function generateStaticParams() {
-//   if (!isStoryblokConfigured()) return [];
-//   try {
-//     const stories = await getAllStoriesByFolder(INSIGHTS_FOLDER, false);
-//     return stories.map((story: any) => ({
-//       slug: story.slug.split("/").pop(), 
-//     }));
-//   } catch {
-//     return [];
-//   }
-// }
-
-export const generateMetadata = async (props: {
-  params: Promise<PageParams>;
-}): Promise<Metadata> => {
-  const { slug } = await props.params;
-
-  try {
-    const story = await getInsightBySlug(slug, false);
-    if (!story) {
-      return { title: "Insight Not Found" };
-    }
-   const seo = story.content.seo?.[0];
-   console.log(seo, "seo content", story)
-
-    return renderMetadataFromStoryblok(`insights/${slug}`, process.env.NEXT_PUBLIC_SITE_URL || 'https://o3-edge-webstacks.vercel.app/', seo, {}as any);
-  } catch (error) {
-    console.error("Metadata generation failed:", error);
-    return {
-      title: "Insight",
-      description: "Explore our insights",
-    };
-  }
-};
-
 
 const InsightPageContainer = async (props: {
   params: Promise<PageProps["params"]>;
@@ -114,3 +75,18 @@ const InsightPageContainer = async (props: {
 };
 
 export default InsightPageContainer;
+
+
+export const generateMetadata = async (props: {
+  params: Promise<PageParams>;
+}): Promise<Metadata> => {
+  const params = await props.params;
+
+  const slugParam =
+    params.slug && params.slug.length > 0
+      ? params.slug
+      : "home";
+
+   const metaData = await generateMetaDataByslug('edge', `insights/${slugParam}`);
+  return metaData;
+};

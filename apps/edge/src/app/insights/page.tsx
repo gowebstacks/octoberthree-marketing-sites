@@ -2,11 +2,11 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import {
   ComponentGenerator,
+  generateMetaDataByslug,
   getAllStoriesByFolder,
   getSiteSettings,
-  getStoryBySlug,
+  getWebsitePageBySlug,
   isStoryblokConfigured,
-  renderMetadataFromStoryblok,
   StoryblokBridge,
   StoryblokSiteSettings,
 } from "@repo/storyblok";
@@ -18,7 +18,6 @@ export type PageParams = {
 
 type SearchParams = { [key: string]: string | string[] | undefined };
 
-const INSIGHTS_FOLDER = "edge/insights";
 
 export default async function InsightPage(props: {
   params: Promise<PageParams>;
@@ -27,13 +26,12 @@ export default async function InsightPage(props: {
   const { slug } = await props.params;
   const searchParams = await props.searchParams;
   const preview = isStoryblokEditor(searchParams);
-  const fullSlug = `${INSIGHTS_FOLDER}`;
 
-  const result = await getStoryBySlug(fullSlug, preview);
+  const story = await getWebsitePageBySlug('edge/insights', preview);
 
-  if (!result) notFound();
+  if (!story) notFound();
 
-  const { story, rels } = result;
+  const rels = story.rels as any
   const sections = story.content.sections || [];
 
   const updatedStory = {
@@ -62,31 +60,13 @@ export default async function InsightPage(props: {
 
 export async function generateStaticParams() {
   if (!isStoryblokConfigured()) return [];
-  const stories = await getAllStoriesByFolder(INSIGHTS_FOLDER, false);
+  const stories = await getAllStoriesByFolder('edge/insights', false);
   return stories.map((story: any) => ({
     slug: story.slug.split("/").pop(),
   }));
 }
 
-export const generateMetadata = async (props: {
-  params: Promise<PageParams>;
-}): Promise<Metadata> => {
-  const { slug } = await props.params;
-  const fullSlug = `${INSIGHTS_FOLDER}`;
-
-  try {
-    const result = await getStoryBySlug(fullSlug, false);
-    if (!result) {
-      return { title: "Insight Not Found" };
-    }
-   const seo = result.story.content.seo?.[0];
-
-    return renderMetadataFromStoryblok(`insights`, process.env.NEXT_PUBLIC_SITE_URL || 'https://o3-edge-webstacks.vercel.app/', seo, {}as any);
-  } catch (error) {
-    console.error("Metadata generation failed:", error);
-    return {
-      title: "Insight",
-      description: "Explore our insights",
-    };
-  }
+export const generateMetadata = async (): Promise<Metadata> => {
+   const metaData = await generateMetaDataByslug('edge','insights/');
+  return metaData;
 };

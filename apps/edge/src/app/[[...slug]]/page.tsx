@@ -1,43 +1,21 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-
-import { StoryblokComponent, storyblokEditable } from "@storyblok/react";
 import {
   ComponentGenerator,
+  generateMetaDataByslug,
   getAllTeamMembers,
-  getAllWebsitePageSlugs,
-  getStoryBySlug,
   getWebsitePageBySlug,
-  isStoryblokConfigured,
-  renderMetadataFromStoryblok,
   StoryblokBridge,
   StoryblokSiteSettings,
 } from "@repo/storyblok";
-import { renderMetadata, SITE_CONFIG } from "@repo/ui";
+import { SITE_CONFIG } from "@repo/ui";
+import { isStoryblokEditor } from "../../lib/helper";
 
 interface PageParams {
   slug?: string[];
 }
 
 type SearchParams = { [key: string]: string | string[] | undefined };
-
-function isStoryblokEditor(searchParams?: SearchParams) {
-  const qp = searchParams || {};
-  const getParam = (k: string): string | undefined => {
-    const v = qp[k];
-    return Array.isArray(v) ? v[0] : v;
-  };
-
-  const version = (getParam("version") || "").toLowerCase();
-  const hasSbKey = Object.keys(qp).some((k) =>
-    k.toLowerCase().includes("storyblok")
-  );
-  const hasPreviewKey = ["_storyblok", "storyblok", "sb", "preview"].some(
-    (k) => !!getParam(k)
-  );
-
-  return hasSbKey || hasPreviewKey || version === "draft";
-}
 
 export default async function SlugPage(props: {
   params: Promise<PageParams>;
@@ -76,7 +54,6 @@ export default async function SlugPage(props: {
   const absoluteUrl = `${siteBase}${pathPart}`;
 
   let updatedSections = sections;
-  console.log(slugParam, "slug param");
   if (slugParam === "meet-the-team") {
     const getAuthorCard = (content: any) => {
       return content?.sections
@@ -104,7 +81,6 @@ export default async function SlugPage(props: {
         };
       }
     );
-    console.log(teamMembers, "team members data");
 
     updatedSections = sections.map((layout: any) => ({
       ...layout,
@@ -126,8 +102,6 @@ export default async function SlugPage(props: {
         return section;
       }),
     }));
-
-    console.log(updatedSections, "updated sections with team members");
   }
   const updatedStory = {
     ...page,
@@ -155,22 +129,11 @@ export default async function SlugPage(props: {
 export const generateMetadata = async (props: {
   params: Promise<PageParams>;
 }): Promise<Metadata> => {
-  const slugArray = (await props.params).slug || [];
-const slugPath = slugArray.length ? slugArray.join("/") : "home";
+  const params = await props.params;
 
-const result = await getStoryBySlug(`edge/${slugPath}`, false);
-  try {
-    const result = await getStoryBySlug(`edge/${slugPath}`, false);
-    if (!result) {
-      return { title: "Page Not Found" };
-    }
-   const seo = result.story.content.seo?.[0];
+  const slugParam =
+    params.slug && params.slug.length > 0 ? params.slug.join("/") : "home";
 
-    return renderMetadataFromStoryblok(`${slugPath}`, process.env.NEXT_PUBLIC_SITE_URL || 'https://o3-edge-webstacks.vercel.app/', seo, {}as any);
-  } catch (error) {
-    console.error("Metadata generation failed:", error);
-    return {
-      title: "O3 Edge",
-    };
-  }
+  const metaData = await generateMetaDataByslug("edge", slugParam);
+  return metaData;
 };

@@ -141,17 +141,17 @@ export async function getWebsitePageBySlug(
   }
   try {
     // First, get all website pages and find the one with matching SEO slug
-    const stories = await getAllWebsitePages(isDraft);
-    const matchingStory = stories.find(
-      (story: ISbStoryData<any>) =>
-        story.content.seo && story.content.seo[0] && story.full_slug === slug
-    );
-    if (!matchingStory) {
-      return null;
-    }
+    // const stories = await getAllWebsitePages(isDraft);
+    // const matchingStory = stories.find(
+    //   (story: ISbStoryData<any>) =>
+    //     story.content.seo && story.content.seo[0] && story.full_slug === slug
+    // );
+    // if (!matchingStory) {
+    //   return null;
+    // }
 
     // Now fetch the full story data with resolved relations
-    const data = await storyblokFetch(matchingStory.full_slug, {
+    const data = await storyblokFetch(slug, {
       version: isDraft ? "draft" : "published",
       resolve_relations:
         "testimonial.person,resourceCard.tags,testimonialSlide.testimonial", // Resolve testimonial, person, and company relations

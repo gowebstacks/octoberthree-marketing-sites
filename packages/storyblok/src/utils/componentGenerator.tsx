@@ -18,6 +18,7 @@ import {
   ConversionPanelProps,
   ResourceCardDeck,
   FormBlock,
+  FormBlockProps,
   LeadershipCardDeck,
   MetricsBlock,
   ResourceCarousel,
@@ -73,7 +74,7 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
         />
       );
     case "formBlock":
-      return <FormBlock key={component._uid} {...component} />;
+      return <FormBlock key={component._uid} {...component as FormBlockProps} />;
     case "hero":
       return <Hero key={component._uid} blok={component} />;
     case "testimonialSlider":

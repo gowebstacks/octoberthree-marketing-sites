@@ -1,18 +1,16 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 
-import { StoryblokComponent, storyblokEditable } from "@storyblok/react";
 import {
   ComponentGenerator,
+  generateMetaDataByslug,
   getAllTeamMembers,
-  getAllWebsitePageSlugs,
   getWebsitePageBySlug,
-  isStoryblokConfigured,
-  renderMetadataFromStoryblok,
   StoryblokBridge,
   StoryblokSiteSettings,
 } from "@repo/storyblok";
-import { renderMetadata, SITE_CONFIG } from "@repo/ui";
+import { SITE_CONFIG } from "@repo/ui";
+import { isStoryblokEditor } from "../lib/helper";
 
 interface PageParams {
   slug?: string[];
@@ -20,23 +18,6 @@ interface PageParams {
 
 type SearchParams = { [key: string]: string | string[] | undefined };
 
-function isStoryblokEditor(searchParams?: SearchParams) {
-  const qp = searchParams || {};
-  const getParam = (k: string): string | undefined => {
-    const v = qp[k];
-    return Array.isArray(v) ? v[0] : v;
-  };
-
-  const version = (getParam("version") || "").toLowerCase();
-  const hasSbKey = Object.keys(qp).some((k) =>
-    k.toLowerCase().includes("storyblok")
-  );
-  const hasPreviewKey = ["_storyblok", "storyblok", "sb", "preview"].some(
-    (k) => !!getParam(k)
-  );
-
-  return hasSbKey || hasPreviewKey || version === "draft";
-}
 
 export default async function SlugPage(props: {
   params: Promise<PageParams>;
@@ -106,7 +87,6 @@ export default async function SlugPage(props: {
         ...member,
       };
     });
-    console.log(teamMembers, "team members data");
 
     updatedSections = sections.map((layout: any) => ({
       ...layout,
@@ -129,7 +109,6 @@ export default async function SlugPage(props: {
       }),
     }));
 
-    console.log(updatedSections, "updated sections with team members");
   }
 const updatedStory = {
   ...page,
@@ -166,31 +145,6 @@ export const generateMetadata = async (props: {
       ? params.slug.join("/")
       : "home";
 
-  try {
-    const page = await getWebsitePageBySlug(
-      `rlc/${slugParam}${
-        slugParam === "resources" || slugParam === "services" ? "/" : ""
-      }`,
-      false
-    );
-
-    if (!page) {
-      return { title: "Page Not Found" };
-    }
-
-    const seo = page.content?.seo?.[0];
-
-    return renderMetadataFromStoryblok(
-      slugParam === "home" ? "" : slugParam,
-      process.env.NEXT_PUBLIC_SITE_URL ||
-        "https://rlc-webstacks.vercel.app/",
-      seo,
-      null
-    );
-  } catch {
-    return {
-      title: "Website",
-      description: "Default description",
-    };
-  }
+   const metaData = await generateMetaDataByslug('rlc',slugParam);
+  return metaData;
 };

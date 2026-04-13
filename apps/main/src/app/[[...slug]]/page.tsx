@@ -4,39 +4,20 @@ import { Metadata } from "next";
 import { StoryblokComponent, storyblokEditable } from "@storyblok/react";
 import {
   ComponentGenerator,
+  generateMetaDataByslug,
   getAllTeamMembers,
-  getAllWebsitePageSlugs,
   getWebsitePageBySlug,
-  isStoryblokConfigured,
-  renderMetadataFromStoryblok,
   StoryblokBridge,
   StoryblokSiteSettings,
 } from "@repo/storyblok";
 import { renderMetadata, SITE_CONFIG } from "@repo/ui";
+import { isStoryblokEditor } from "../../lib/helper";
 
 interface PageParams {
   slug?: string[];
 }
 
 type SearchParams = { [key: string]: string | string[] | undefined };
-
-function isStoryblokEditor(searchParams?: SearchParams) {
-  const qp = searchParams || {};
-  const getParam = (k: string): string | undefined => {
-    const v = qp[k];
-    return Array.isArray(v) ? v[0] : v;
-  };
-
-  const version = (getParam("version") || "").toLowerCase();
-  const hasSbKey = Object.keys(qp).some((k) =>
-    k.toLowerCase().includes("storyblok")
-  );
-  const hasPreviewKey = ["_storyblok", "storyblok", "sb", "preview"].some(
-    (k) => !!getParam(k)
-  );
-
-  return hasSbKey || hasPreviewKey || version === "draft";
-}
 
 export default async function SlugPage(props: {
   params: Promise<PageParams>;
@@ -50,7 +31,6 @@ export default async function SlugPage(props: {
     params.slug && params.slug.length > 0 ? params.slug.join("/") : "home";
   const inEditor = isStoryblokEditor(searchParams);
   const preview = inEditor; 
-console.log(slugParam)
 
   const page = await getWebsitePageBySlug(
     `octoberthree-main/${slugParam}${slugParam === 'articles' ? '/' :''}`,
@@ -79,7 +59,6 @@ console.log(slugParam)
   const absoluteUrl = `${siteBase}${pathPart}`;
 
   let updatedSections = sections;
-  console.log(slugParam, "slug param");
   if (slugParam === "meet-our-team") {
     const getAuthorCard = (content: any) => {
       return content?.sections
@@ -107,7 +86,6 @@ console.log(slugParam)
         ...member,
       };
     });
-    console.log(teamMembers, "team members data");
 
     updatedSections = sections.map((layout: any) => ({
       ...layout,
@@ -130,7 +108,6 @@ console.log(slugParam)
       }),
     }));
 
-    console.log(updatedSections, "updated sections with team members");
   }
 const updatedStory = {
   ...page,
@@ -159,34 +136,13 @@ const updatedStory = {
 export const generateMetadata = async (props: {
   params: Promise<PageParams>;
 }): Promise<Metadata> => {
-  const { slug } = await props.params;
+  const params = await props.params;
 
   const slugParam =
-    slug && slug.length > 0 ? slug.join("/") : "home";
+    params.slug && params.slug.length > 0
+      ? params.slug.join("/")
+      : "home";
 
-  try {
-    const story = await getWebsitePageBySlug(
-      `octoberthree-main/${slugParam}${slugParam === "articles" ? "/" : ""}`,
-      false
-    );
-
-    if (!story) {
-      return { title: "Page Not Found" };
-    }
-
-    const seo = story.content?.seo?.[0];
-
-    return renderMetadataFromStoryblok(
-      slugParam === "home" ? "" : slugParam,
-      process.env.NEXT_PUBLIC_SITE_URL ||
-        "https://october3-main-webstacks.vercel.app/",
-      seo,
-      null
-    );
-  } catch {
-    return {
-      title: "Website",
-      description: "Default description",
-    };
-  }
+   const metaData = await generateMetaDataByslug('octoberthree-main',slugParam);
+  return metaData;
 };

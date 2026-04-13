@@ -108,28 +108,7 @@ textarea.hs-input {
    CHECKBOX GROUP
 ========================= */
 
-.hs-form-checkbox {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
 
-.hs-form-checkbox label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  font-size: 14px;
-  font-weight: 400;
-  text-transform: none;
-}
-
-/* Checkbox */
-.hs-form-checkbox input {
-  width: 14px;
-  height: 14px;
-  accent-color: #1d4ed8; /* blue */
-}
 
 /* =========================
    SUBMIT BUTTON
