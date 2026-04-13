@@ -42,27 +42,29 @@ export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
       <div
         className={twMerge(
           "relative  mx-auto grid items-center",
-          hasImage || hasVideo ? "grid-cols-1 lg:grid-cols-[57%_43%]" : ""
+          hasImage || hasVideo ? "grid-cols-1 lg:grid-cols-[57%_43%] " : ""
         )}
       >
         <div
           className={twMerge(
             "z-12 relative",
             hasImage || hasVideo
-              ? "px-4 py-12 sm:px-(--scale-80) sm:py-(--scale-72) lg:py-(--scale-96)"
+              ? "px-4 py-12 sm:px-11.5 lg:px-14 sm:py-(--scale-72) lg:py-(--scale-96)"
               : "section-padding-xl sm:px-(--scale-80) sm:py-(--scale-120)",
             blok.reverse && "lg:order-2"
           )}
         >
-          {blok.body?.map((nestedBlok) => (
-            <ContentBlock
-              key={nestedBlok._uid}
-              blok={{
-                ...nestedBlok,
-                mode: blok.theme === "primary" ? "dark" : "light",
-              }}
-            />
-          ))}
+          <div className={blok?.logoPopout?.filename && "pb-20 sm:pb-0"}>
+            {blok.body?.map((nestedBlok) => (
+              <ContentBlock
+                key={nestedBlok._uid}
+                blok={{
+                  ...nestedBlok,
+                  mode: blok.theme === "primary" ? "dark" : "light",
+                }}
+              />
+            ))}
+          </div>
         </div>
         {(hasVideo || hasImage) && (
           <div
@@ -75,7 +77,11 @@ export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
               <Video
                 blok={{
                   ...blok.video![0],
-                  classname: "h-full min-h-full aspect-auto",
+                  classname: twMerge(
+                    "h-full min-h-full aspect-auto rounded-none",
+                    (hasImage || hasVideo) &&
+                      "rounded-b-[4px] lg:rounded-b-none lg:rounded-r-[4px]"
+                  ),
                 }}
               />
             ) : (
@@ -93,7 +99,7 @@ export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
         {blok.logoPopout?.filename && (
           <div
             className={twMerge(
-              "absolute bottom-[15%] z-20 flex h-22.5 items-center overflow-hidden bg-(--surface-button) p-3 md:h-37.5",
+              "absolute bottom-[5%] w-fit sm:bottom-[15%] z-20 flex h-22.5 items-center overflow-hidden bg-(--surface-button) p-3 md:h-37.5",
               blok.reverse
                 ? "left-px rounded-[0_999px_999px_0]"
                 : " rounded-[999px_0_0_999px]",

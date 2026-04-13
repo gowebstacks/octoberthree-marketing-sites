@@ -169,6 +169,11 @@ export const FooterNavigation: React.FC<FooterNavigationProps> = ({
                           color="var(--color-navy-primary-900---p)"
                           icon={s.platform}
                         />
+                        <span className="sr-only">
+                          {s.platform.charAt(0).toUpperCase() +
+                            s.platform.slice(1) +
+                            " Link"}
+                        </span>
                       </Link>
                     ))}
                   </div>
@@ -191,7 +196,7 @@ export const FooterNavigation: React.FC<FooterNavigationProps> = ({
             </div>
             <div className="text-mono-sm uppercase">
               {bottom?.copyrightText?.content?.[0]?.content
-                ?.map((t: any) => t.text) 
+                ?.map((t: any) => t.text)
                 .join("")
                 .replace("{year}", String(new Date().getFullYear()))}
             </div>
@@ -221,6 +226,7 @@ export const FooterNavigation: React.FC<FooterNavigationProps> = ({
                   src={brand.logo.filename}
                   className="lg:h-full w-full h-13.5 max-w-48"
                 />
+                <span className="sr-only"> {brand.name + " Link"}</span>
               </Link>
             ))}
           </div>
