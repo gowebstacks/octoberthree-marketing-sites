@@ -21,7 +21,6 @@ The structure was later extended and customized:
 
 .
 ├── apps
-│   ├── web         # Default
 │   ├── main        
 │   ├── rlc         
 │   ├── edge       
@@ -44,8 +43,6 @@ The structure was later extended and customized:
 
 All applications live inside the apps directory and are built with Next.js.
 
-- web  
-  Default created with turborepo starter
 
 - main  
 

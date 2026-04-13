@@ -44,6 +44,7 @@ export type ButtonProps = NativeButtonProps & {
     fieldtype: string;
     cached_url: string;
   };
+  url?: string | LinkFragment;
   externalUrl?: string;
   anchorLinkId?: string;
   popupform?: string;
@@ -75,8 +76,7 @@ const Button: FC<ButtonProps> = ({
   iconColor,
   ...props
 }) => {
-  // console.log('Button received props:', { label, mode, tone, linkType, internalLink, externalUrl, ...props });
-
+console.log(props.url, internalLink, "test inside button ")
   // Extract data from nested structure that StoryblokComponent provides
   const actualBlok = (props as any)?.blok || props;
 
@@ -95,12 +95,20 @@ const Button: FC<ButtonProps> = ({
   const actualLeadingIcon = leadingIcon || actualBlok?.leadingIcon;
 
   // Build link from Storyblok data if available
-  let finalLink = link;
+  let finalLink = link ;
+ if (
+  props.url &&
+  typeof props.url !== "string" &&
+  "cached_url" in props.url
+) {
+  finalLink = props.url;
+}
   if (
     !finalLink &&
     actualLinkType === "internal" &&
     actualInternalLink?.cached_url
   ) {
+    console.log("no final link", internalLink)
     finalLink = `/${actualInternalLink.cached_url}`;
   } else if (!finalLink && actualLinkType === "external" && actualExternalUrl) {
     finalLink = actualExternalUrl;

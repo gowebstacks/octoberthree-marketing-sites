@@ -29,7 +29,7 @@ html{
 --icon-primary-dark: var(--color-neutral-900---p-dark);
 --icon-button: var(--color-base-black);
 --text-secondary-button: var(--color-neutral-900---p-dark);
---icon-success: var(--color-success-200);
+--icon-success: var(--color-success-700);
 --icon-disabled-dark: var(--color-neutral-500);
 --icon-warning: var(--color-warning-300);
 --icon-error: var(--color-error-300);

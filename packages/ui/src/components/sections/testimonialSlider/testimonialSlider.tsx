@@ -196,7 +196,12 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
           : "bg-(--color-cream-200)"
       )}
     >
-      <div className="pattern-grid pattern-white opacity-5" />
+      <div className={
+        twMerge(
+          "pattern-grid pattern-white",
+          mode === 'dark' ? 'opacity-5' : 'opacity-15'
+        )
+      } />
 
       <div className="relative mx-auto max-w-7xl md:w-[90%]! lg:w-full flex flex-col items-center">
         <div className="text-center">

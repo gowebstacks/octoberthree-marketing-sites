@@ -1,4 +1,5 @@
 import { StoryblokSiteSettings } from "@repo/ui";
+import { getWebsitePageBySlug } from "../api";
 
 export interface StoryblokSeo {
   _uid: string;
@@ -46,4 +47,33 @@ export function renderMetadataFromStoryblok(
     },
     metadataBase: new URL(site),
   };
+}
+
+
+export async function generateMetaDataByslug(siteSlug:string,slugParam:string){
+  try {
+    const story = await getWebsitePageBySlug(
+      `${siteSlug}/${slugParam}${slugParam === "articles" ? "/" : ""}`,
+      false
+    );
+
+    if (!story) {
+      return { title: "Page Not Found" };
+    }
+
+    const seo = story.content?.seo?.[0];
+
+    return renderMetadataFromStoryblok(
+      slugParam === "home" ? "" : slugParam,
+      process.env.NEXT_PUBLIC_SITE_URL ||
+        "https://october3-main-webstacks.vercel.app/",
+      seo,
+      null
+    );
+  } catch {
+    return {
+      title: "Website",
+      description: "Website description",
+    };
+  }
 }
