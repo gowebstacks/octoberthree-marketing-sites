@@ -76,7 +76,6 @@ const Button: FC<ButtonProps> = ({
   iconColor,
   ...props
 }) => {
-console.log(props.url, internalLink, "test inside button ")
   // Extract data from nested structure that StoryblokComponent provides
   const actualBlok = (props as any)?.blok || props;
 

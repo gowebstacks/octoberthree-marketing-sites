@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import {
   ComponentGenerator,
   generateMetaDataByslug,
-  getInsightBySlug,
   getWebsitePageBySlug,
   StoryblokBridge,
 } from "@repo/storyblok";

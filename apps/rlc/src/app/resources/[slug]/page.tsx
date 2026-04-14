@@ -1,16 +1,14 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { Suspense } from "react";
-
 import {
   ComponentGenerator,
   generateMetaDataByslug,
-  getArticleBySlug,
   getWebsitePageBySlug,
   StoryblokBridge,
 } from "@repo/storyblok";
-
 import { isStoryblokEditor } from "../../../lib/helper";
+import { PageParams } from "../page";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -20,65 +18,52 @@ type PageProps = {
 export const dynamicParams = true;
 export const revalidate = 3600;
 
-const ArticleContent = async ({
+
+const ResourceContent = async ({
   slug,
   preview,
 }: {
   slug: string;
   preview: boolean;
 }) => {
-  const article = await getWebsitePageBySlug(
-    `octoberthree-main/articles/${slug}`,
-    preview
-  );
+  const story = await getWebsitePageBySlug(`rlc/resources/${slug}`, preview);
+  if (!story) return notFound();
 
-  if (!article) return notFound();
-
-  const { content } = article;
-  const rels = (article as any).rels || [];
+  const { content } = story;
   const sections = content.sections || [];
-
+  const rels = (story as any).rels || [];
 
   return (
     <>
-
       {preview ? (
         <StoryblokBridge
-          story={{
-            ...article,
-            content: {
-              ...article.content,
-              sections,
-            },
-          }}
+          story={{ ...story, content: { ...story.content, sections } }}
         />
       ) : (
         <ComponentGenerator
           sections={sections}
-          documentId={article.id.toString()}
-          documentType={article.content.component}
-          rels={rels}
+          documentId={story.id.toString()}
+          documentType={story.content.component}
+          rels={rels || []}
         />
       )}
     </>
   );
 };
 
-const ArticlePageContainer = async (props: {
+
+const ResourcePageContainer = async (props: {
   params: Promise<PageProps["params"]>;
   searchParams?: Promise<PageProps["searchParams"]>;
 }) => {
-  const params = await props.params;
-  const searchParams = props.searchParams
-    ? await props.searchParams
-    : undefined;
-  const { slug } = params;
-  const preview = isStoryblokEditor(searchParams);
-
+  const { slug } = await props.params;
+  const preview = isStoryblokEditor(
+    props.searchParams ? await props.searchParams : undefined
+  );
   try {
     return (
-      <Suspense fallback={<div>Loading article...</div>}>
-        <ArticleContent slug={slug} preview={preview} />
+      <Suspense fallback={<div>Loading resource...</div>}>
+        <ResourceContent slug={slug} preview={preview} />
       </Suspense>
     );
   } catch {
@@ -86,11 +71,9 @@ const ArticlePageContainer = async (props: {
   }
 };
 
-export default ArticlePageContainer;
+export default ResourcePageContainer;
 
-export type PageParams = {
-  slug: string;
-};
+
 export const generateMetadata = async (props: {
   params: Promise<PageParams>;
 }): Promise<Metadata> => {
@@ -101,6 +84,6 @@ export const generateMetadata = async (props: {
       ? params.slug
       : "home";
 
-   const metaData = await generateMetaDataByslug('octoberthree-main', `articles/${slugParam}`);
+   const metaData = await generateMetaDataByslug('rlc', `resources/${slugParam}`);
   return metaData;
 };

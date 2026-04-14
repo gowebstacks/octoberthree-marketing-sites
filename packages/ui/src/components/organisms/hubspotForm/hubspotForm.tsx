@@ -98,7 +98,7 @@ export function HubspotFormComponent({
           {status === "submitting" && (
             <div className="absolute rounded-sm z-100 inset-0 bg-(--surface-secondary-background)  flex flex-col items-center justify-center gap-3">
               <img
-                src="loading.svg"
+                src="/loading.svg"
                 alt="Loading"
                 className="h-10 w-10 animate-spin [animation-duration:2s]"
               />

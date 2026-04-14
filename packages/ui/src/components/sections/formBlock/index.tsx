@@ -24,32 +24,30 @@ export const FormBlock: FC<FormBlockProps> = ({
   hubspotFormId,
   ...blok
 }) => {
-
+  const hubspotformID = ((blok as any).blok?.hubspotFormId.replace(
+    /^hsForm_/,
+    ""
+  ) || hubspotFormId) as string;
   return (
     <div
       {...storyblokEditable(blok)}
       className={twMerge(
-        "max-w-360 relative mx-auto  flex flex-col lg:flex-row gap-(--gaps-48-40-40)  rounded-md ",
+        "max-w-360 w-full relative mx-auto  flex flex-col lg:flex-row gap-(--gaps-48-40-40)  rounded-md ",
         content?.length && "bg-(--surface-accent-background) section-padding-md"
       )}
     >
       {pattern === "square" && (
         <div className="pattern-grid pattern-white opacity-10"></div>
       )}
-     <div className="flex-1">
-       {content?.length ? (
-        <ContentBlock blok={{ ...content[0], mode: "dark" }} />
+      {content?.length ? (
+        <div className="flex-1">
+          <ContentBlock blok={{ ...content[0], mode: "dark" }} />
+        </div>
       ) : null}
-     </div>
-
-     
 
       <div className="flex-1">
         {/* <Form  /> */}
-        <HubspotFormComponent
-      
-          formId={hubspotFormId}
-        />
+        <HubspotFormComponent formId={hubspotformID} />
       </div>
     </div>
   );
