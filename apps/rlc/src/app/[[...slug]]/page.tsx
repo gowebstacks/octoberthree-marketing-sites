@@ -10,7 +10,7 @@ import {
   StoryblokSiteSettings,
 } from "@repo/storyblok";
 import { SITE_CONFIG } from "@repo/ui";
-import { isStoryblokEditor } from "../lib/helper";
+import { isStoryblokEditor } from "../../lib/helper";
 
 interface PageParams {
   slug?: string[];

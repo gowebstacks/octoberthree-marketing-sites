@@ -25,6 +25,7 @@ export const RichText: FC<RichTextProps> = ({
 
     if (node.marks) {
       node.marks.forEach((mark: any) => {
+        
         if (mark.type === "link") {
           let href = mark.attrs?.href || "#";
           if (!href.startsWith("http")) {

@@ -8,7 +8,7 @@ import {
 } from "@repo/storyblok";
 import { FooterNavigation, HeaderNavigation, Layout } from "@repo/ui";
 import Script from "next/script";
-import StoryblokInit from "./lib/storyblok";
+import StoryblokInit from "../lib/storyblok";
 
 import { Lato } from 'next/font/google'
 

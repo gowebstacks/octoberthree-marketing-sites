@@ -16,3 +16,6 @@ export function isStoryblokEditor(searchParams?: SearchParams) {
   );
 
   return hasSbKey || hasPreviewKey || version === "draft";}
+
+
+  
