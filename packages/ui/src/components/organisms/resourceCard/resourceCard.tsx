@@ -40,6 +40,30 @@ export interface ResourceCardProps extends SbBlokData {
   carousel?: boolean;
   mode: "dark" | "light";
 }
+const getFirstValidParagraph = (body?: RichTextContent) => {
+  const content = body?.content;
+  if (!Array.isArray(content)) return null;
+
+  for (const block of content) {
+    if (block.type !== "paragraph") continue;
+
+    const children = block.content || [];
+
+    const hasText = children.some(
+      (child: any) =>
+        child.type === "text" && child.text?.trim().length > 0
+    );
+
+    if (hasText) {
+      return {
+        ...body,
+        content: [block], // keep full doc shape, just replace content
+      };
+    }
+  }
+
+  return null;
+};
 
 // Helper function to extract plain text from portable text body
 export const extractPlainText = (body: any[]): string => {
@@ -116,6 +140,8 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
   const badgeLabel = RESOURCE_TYPE_LABELS[_type] || "Article";
 
   const resourceUrl = link  || `${getResourceRoute(_type)}/${resourceSlug}`;
+    const firstParagraph = getFirstValidParagraph(body);
+
   return (
     <Link
       href={resourceUrl}
@@ -171,7 +197,7 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
           {/* Description */}
           {body && (
             <div className="text-sm text-(--text-body-dark) line-clamp-4 mb-4">
-              <RichText doc={body} />
+              <RichText doc={firstParagraph} />
             </div>
           )}
 

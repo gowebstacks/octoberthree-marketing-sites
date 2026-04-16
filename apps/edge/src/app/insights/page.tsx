@@ -18,7 +18,6 @@ export type PageParams = {
 
 type SearchParams = { [key: string]: string | string[] | undefined };
 
-
 export default async function InsightPage(props: {
   params: Promise<PageParams>;
   searchParams?: Promise<SearchParams>;
@@ -27,18 +26,69 @@ export default async function InsightPage(props: {
   const searchParams = await props.searchParams;
   const preview = isStoryblokEditor(searchParams);
 
-  const story = await getWebsitePageBySlug('edge/insights', preview);
+  const story = await getWebsitePageBySlug("edge/insights", preview);
 
   if (!story) notFound();
 
-  const rels = story.rels as any
+  const rels = story.rels as any;
   const sections = story.content.sections || [];
+
+  const insights = await getAllStoriesByFolder("edge/insights", preview);
+  console.log(insights, "tetetet")
+
+  const insightRels = (insights as any).rels;
+  const mergedRels = [...(rels || []), ...(insightRels || [])];
+
+  const getDate = (content: any) => {
+    return (
+      content?.sections?.[0]?.section?.[0]?.body?.[0]?.eyebrow?.[0]?.eyebrow ||
+      ""
+    );
+  };
+
+  const insightCards = insights
+    .filter((a: any) => a.full_slug !== "edge/insights/")
+    .map((insight: any) => ({
+      _uid: insight.uuid,
+      component: "resourceCard",
+
+      title: insight.content?.title  || insight.content.sections[0]?.section[0]?.body[0]?.heading[0]?.heading || "",
+
+    
+      mode: "dark",
+      body: insight.content.sections[1].section[0].body,
+
+      link: {
+        cached_url: `${insight.full_slug}`,
+        linktype: "story",
+        fieldtype: "multilink",
+      },
+
+      featuredImage: {},
+
+      tags: insight.content.tags,
+
+      date: getDate(insight.content),
+    }));
+
+  const updatedSections = sections.map((layout: any) => ({
+    ...layout,
+    section: layout.section?.map((section: any) => {
+      if (section.component === "resourceCardDeck") {
+        return {
+          ...section,
+          resources: insightCards,
+        };
+      }
+      return section;
+    }),
+  }));
 
   const updatedStory = {
     ...story,
     content: {
       ...story.content,
-      sections,
+      sections: updatedSections,
     },
   };
 
@@ -48,10 +98,10 @@ export default async function InsightPage(props: {
         <StoryblokBridge story={updatedStory} />
       ) : (
         <ComponentGenerator
-          sections={sections}
+          sections={updatedSections}
           documentId={story.id.toString()}
           documentType={story.content.component}
-          rels={rels || []}
+          rels={mergedRels || []}
         />
       )}
     </>
@@ -60,13 +110,13 @@ export default async function InsightPage(props: {
 
 export async function generateStaticParams() {
   if (!isStoryblokConfigured()) return [];
-  const stories = await getAllStoriesByFolder('edge/insights', false);
+  const stories = await getAllStoriesByFolder("edge/insights", false);
   return stories.map((story: any) => ({
     slug: story.slug.split("/").pop(),
   }));
 }
 
 export const generateMetadata = async (): Promise<Metadata> => {
-   const metaData = await generateMetaDataByslug('edge','insights/');
+  const metaData = await generateMetaDataByslug("edge", "insights/");
   return metaData;
 };

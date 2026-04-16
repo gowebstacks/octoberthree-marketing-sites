@@ -151,7 +151,10 @@ const Button: FC<ButtonProps> = ({
     !isExternalUrl &&
     !url.startsWith("http://") &&
     !url.startsWith("https://") &&
-    !url.startsWith("#")
+    !url.startsWith("#") &&
+      !url.startsWith("tel:") &&
+  !url.startsWith("mailto:")
+    
   ) {
     url = ensureLeadingSlash(url);
   }
