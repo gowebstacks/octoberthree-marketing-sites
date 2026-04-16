@@ -35,7 +35,14 @@ export const ResourceCardDeck: FC<Props> = ({
   rels = [],
   ...blok
 }) => {
-  console.log(resources, rels,"test blokkkkk")
+  console.log(
+  {
+    resources: resources?.slice(0, 5),
+    rels: rels?.slice(0, 5),
+  },
+  "debug rels"
+);
+  
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;

@@ -535,7 +535,7 @@ export async function getTeamMemberBySlug(
     }
 
     const data = await response.json();
-     return {
+    return {
       ...data.story,
       rels: data.rels || [],
     };
@@ -570,7 +570,7 @@ export async function getArticleBySlug(
   isDraft: boolean = false,
   sitename: string
 ) {
-  console.log('article slug ******************', slug)
+  console.log("article slug ******************", slug);
   try {
     const accessToken = getAccessToken(isDraft ? "draft" : "published");
 
@@ -580,7 +580,7 @@ export async function getArticleBySlug(
     }
 
     const fullSlug = `${sitename}/articles/${slug}`;
-console.log(fullSlug, "test full slug")
+    console.log(fullSlug, "test full slug");
     const params = new URLSearchParams({
       token: accessToken,
       version: isDraft ? "draft" : "published",
@@ -603,7 +603,7 @@ console.log(fullSlug, "test full slug")
     }
 
     const data = await response.json();
-     return {
+    return {
       ...data.story,
       rels: data.rels || [],
     };
@@ -617,53 +617,51 @@ console.log(fullSlug, "test full slug")
 }
 
 // Get layout data
-export const getGlobalLayoutData = async (headerSlug:string, footerSlug:string) => {
-    try {
-      const [headerRes, footerRes] = await Promise.allSettled([
-        storyblokApi.getStory(headerSlug, { version: "published" }),
-        storyblokApi.getStory(footerSlug, { version: "published" }),
-      ]);
+export const getGlobalLayoutData = async (
+  headerSlug: string,
+  footerSlug: string
+) => {
+  try {
+    const [headerRes, footerRes] = await Promise.allSettled([
+      storyblokApi.getStory(headerSlug, { version: "published" }),
+      storyblokApi.getStory(footerSlug, { version: "published" }),
+    ]);
 
-      const header =
-        headerRes.status === "fulfilled"
-          ? (headerRes.value?.data.story?.content ?? null)
-          : null;
+    const header =
+      headerRes.status === "fulfilled"
+        ? (headerRes.value?.data.story?.content ?? null)
+        : null;
 
-      const footer =
-        footerRes.status === "fulfilled"
-          ? (footerRes.value?.data?.story?.content ?? null)
-          : null;
+    const footer =
+      footerRes.status === "fulfilled"
+        ? (footerRes.value?.data?.story?.content ?? null)
+        : null;
 
-      if (headerRes.status === "rejected") {
-        console.error("Header fetch failed:", headerRes.reason);
-      }
-
-      if (footerRes.status === "rejected") {
-        console.error("Footer fetch failed:", footerRes.reason);
-      }
-
-      return { header, footer };
-    } catch (error) {
-      console.error("Unexpected error in getGlobalLayoutData:", error);
-
-      return {
-        header: null,
-        footer: null,
-      };
+    if (headerRes.status === "rejected") {
+      console.error("Header fetch failed:", headerRes.reason);
     }
-  };
 
+    if (footerRes.status === "rejected") {
+      console.error("Footer fetch failed:", footerRes.reason);
+    }
 
+    return { header, footer };
+  } catch (error) {
+    console.error("Unexpected error in getGlobalLayoutData:", error);
+
+    return {
+      header: null,
+      footer: null,
+    };
+  }
+};
 
 // Get All blogs
-export async function getAllBlogs(
-  sitename: string,
-  isDraft: boolean = false
-) {
+export async function getAllBlogs(sitename: string, isDraft: boolean = false) {
   try {
     const res = await storyblokApi.getStories({
       version: isDraft ? "draft" : "published",
-      starts_with: `${sitename}`, 
+      starts_with: `${sitename}`,
       per_page: 100,
     });
 
@@ -681,6 +679,8 @@ export async function getAllStoriesByFolder(
   const version = isDraft ? "draft" : "published";
   let allStories: ISbStoryData<any>[] = [];
   let page = 1;
+  let allRels: any[] = []; 
+
 
   while (true) {
     const data = await storyblokApi.getStories({
@@ -688,19 +688,22 @@ export async function getAllStoriesByFolder(
       starts_with: folderPath,
       per_page: 100,
       page,
-      resolve_relations: ["tags, topics"], 
-
+      resolve_relations: ["tags, topics"],
     });
-
     const stories = data.stories || [];
-    allStories.push(...stories);
 
-    if (stories.length < 100) break; 
+    const rels = data.rels || [];
+
+    allStories.push(...stories);
+     allRels.push(...rels);
+
+    if (stories.length < 100) break;
 
     page++;
   }
+(allStories as any).rels = allRels;
 
-  return allStories;
+return allStories as ISbStoryData<any>[] & { rels: any[] };
 }
 export async function getStoryBySlug(
   slug: string,
@@ -710,9 +713,9 @@ export async function getStoryBySlug(
   try {
     const result = await storyblokApi.getStory(slug, {
       version,
-      resolve_relations: ["resourceCard.tags"], 
+      resolve_relations: ["resourceCard.tags"],
     });
-    console.log(result, "test the api data")
+    console.log(result, "test the api data");
     if (!result?.data?.story) return null;
     return {
       story: result.data.story,
@@ -722,5 +725,3 @@ export async function getStoryBySlug(
     return null;
   }
 }
-
-
