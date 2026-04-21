@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FC, FormEvent } from "react";
+import { useState, type FC, FormEvent, act } from "react";
 import { storyblokEditable } from "@storyblok/react";
 import type { SbBlokData } from "@storyblok/react";
 import { Button } from "../../atoms";

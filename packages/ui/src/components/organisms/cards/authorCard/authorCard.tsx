@@ -49,13 +49,13 @@ export const AuthorCard: FC<{ blok: AuthorCardProps }> = ({ blok }) => {
           <div className="flex flex-col">
             <Heading
               heading={name}
-              headingSize="2xl"
+              headingSize="3xl"
               className="text-display-2xl text-(--text-headings)"
             />
 
-            <div className="flex gap-4 items-center">
+            <div className="flex flex-col gap-2 ">
               {company && (
-                <span className="text-lg tracking-wide text-(--text-body-dark) ">
+                <span className="text-md tracking-wide text-(--text-body-dark) ">
                   {designation || company}
                 </span>
               )}

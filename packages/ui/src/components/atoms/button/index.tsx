@@ -92,16 +92,16 @@ const Button: FC<ButtonProps> = ({
   const actualTone = tone || actualBlok?.tone || "primary";
   const actualTrailingIcon = trailingIcon || actualBlok?.trailingIcon ||  (actualTone === "secondary" ? "arrow-up-right" : undefined);
   const actualLeadingIcon = leadingIcon || actualBlok?.leadingIcon;
-
   // Build link from Storyblok data if available
   let finalLink = link ;
- if (
+if (
   props.url &&
   typeof props.url !== "string" &&
-  "cached_url" in props.url
+  "cached_url" in props.url &&
+  props.url.cached_url !== ""
 ) {
   finalLink = props.url;
-}
+}  
   if (
     !finalLink &&
     actualLinkType === "internal" &&
@@ -121,10 +121,7 @@ const Button: FC<ButtonProps> = ({
     };
   }
 
-  // console.log('Button final link:', finalLink);
-  // console.log('Button actualLabel:', actualLabel);
-  // console.log('Button actualMode:', actualMode);
-  // console.log('Button actualTone:', actualTone);
+ 
 
   // Get the raw link data without modification
   const rawLinkData = getLinkData(finalLink);

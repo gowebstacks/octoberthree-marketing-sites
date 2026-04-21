@@ -14,7 +14,6 @@ export default function StoryblokInit() {
     const init = () => {
       if (window.StoryblokBridge) {
         window.storyblok = new window.StoryblokBridge();
-        console.log("Storyblok bridge initialized");
       } else {
         console.log("StoryblokBridge not found");
       }

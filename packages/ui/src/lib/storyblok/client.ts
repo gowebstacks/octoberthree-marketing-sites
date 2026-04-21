@@ -126,7 +126,6 @@ export async function getWebsitePageBySlug(slug: string, isDraft: boolean = fals
     // }
     
     // Now fetch the full story data with resolved relations
-    console.log(slug, "sluggg treststststst")
     const story = await storyblokFetch(slug, {
       version: isDraft ? 'draft' : 'published',
       resolve_relations: 'testimonial,person,company', // Resolve testimonial, person, and company relations

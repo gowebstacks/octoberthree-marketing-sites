@@ -24,6 +24,9 @@ export default async function ArticlesPage(props: {
 }) {
   const { slug } = await props.params;
   const searchParams = await props.searchParams;
+  const page = Number(searchParams?.page || 1);
+  const search = searchParams?.search as string | undefined;
+  const category = searchParams?.category as string | undefined;
   const preview = isStoryblokEditor(searchParams);
 
   const story = await getWebsitePageBySlug(
@@ -35,49 +38,56 @@ export default async function ArticlesPage(props: {
 
   const rels = story.rels as any;
   const sections = story.content.sections || [];
+  const ITEMS_PER_PAGE = 4 * 5;
 
   const articles = await getAllStoriesByFolder(
     "octoberthree-main/articles",
-    preview
+    preview,
+    {
+      perPage: ITEMS_PER_PAGE,
+      page,
+  filterQuery: search ? { search } : undefined,
+    }
   );
-  
+  const total = (articles as any).total || 0;
+
+  const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
   const articleRels = (articles as any).rels;
   const mergedRels = [...(rels || []), ...(articleRels || [])];
 
+  const getDate = (content: any) => {
+    return (
+      content?.sections?.[0]?.section?.[0]?.body?.[0]?.eyebrow?.[0]?.eyebrow ||
+      ""
+    );
+  };
 
+  const articleCards = articles
+    .filter((a: any) => a.full_slug !== "octoberthree-main/articles/")
+    .map((article: any) => ({
+      _uid: article.uuid,
+      component: "resourceCard",
 
+      title:
+        article.content?.title ||
+        article.content.sections[0]?.section[0]?.body[0]?.heading[0]?.heading ||
+        "",
 
-const getDate = (content: any) => {
-  return content?.sections?.[0]?.section?.[0]?.body?.[0]?.eyebrow?.[0]?.eyebrow || "";
-};
+      mode: "dark",
+      body: article.content.sections[1].section[0].body,
 
-const articleCards = articles
-  .filter((a: any) => a.full_slug !== "octoberthree-main/articles/") 
-  .map((article: any) => ({
-    _uid: article.uuid,
-    component: "resourceCard",
+      link: {
+        cached_url: `${article.full_slug}`,
+        linktype: "story",
+        fieldtype: "multilink",
+      },
 
-          title: article.content?.title  || article.content.sections[0]?.section[0]?.body[0]?.heading[0]?.heading || "",
+      featuredImage: {},
 
+      tags: article.content.tags,
 
-    mode:'dark',
-    body : article.content.sections[1].section[0].body,
-
-    link: {
-      cached_url: `${article.full_slug}`,
-      linktype: "story",
-      "fieldtype": "multilink",
-
-    },
-
-    featuredImage:{},
-
-    tags: article.content.tags,
-
-    date: getDate(article.content), 
-  }));
-
-
+      date: getDate(article.content),
+    }));
 
   const updatedSections = sections.map((layout: any) => ({
     ...layout,
@@ -86,6 +96,10 @@ const articleCards = articles
         return {
           ...section,
           resources: articleCards,
+          pagination: {
+            currentPage: page,
+            totalPages,
+          },
         };
       }
       return section;
@@ -98,6 +112,7 @@ const articleCards = articles
       ...story.content,
       sections: updatedSections,
     },
+     rels: mergedRels, 
   };
 
   return (

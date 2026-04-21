@@ -438,7 +438,15 @@ export const storyblokApi = {
       );
     }
 
-    return response.json();
+    // return response.json();
+    const data = await response.json();
+
+    return Object.assign(data, {
+      _headers: {
+        total: response.headers.get("total"),
+        perPage: response.headers.get("per-page"),
+      },
+    });
   },
 };
 
@@ -570,7 +578,6 @@ export async function getArticleBySlug(
   isDraft: boolean = false,
   sitename: string
 ) {
-  console.log("article slug ******************", slug);
   try {
     const accessToken = getAccessToken(isDraft ? "draft" : "published");
 
@@ -580,7 +587,6 @@ export async function getArticleBySlug(
     }
 
     const fullSlug = `${sitename}/articles/${slug}`;
-    console.log(fullSlug, "test full slug");
     const params = new URLSearchParams({
       token: accessToken,
       version: isDraft ? "draft" : "published",
@@ -674,14 +680,45 @@ export async function getAllBlogs(sitename: string, isDraft: boolean = false) {
 
 export async function getAllStoriesByFolder(
   folderPath: string,
-  isDraft: boolean = false
+  isDraft: boolean = false,
+  options?: {
+    perPage?: number;
+    page?: number;
+    filterQuery?: any;
+  }
 ): Promise<ISbStoryData<any>[]> {
   const version = isDraft ? "draft" : "published";
+
+  const usePagination = options?.perPage || options?.page || options?.filterQuery;
+  if (usePagination) {
+    const data = await storyblokApi.getStories({
+      version,
+      starts_with: `${folderPath}/`,
+      per_page: options?.perPage || 10,
+      page: options?.page || 1,
+      resolve_relations: ["tags, topics"],
+      is_startpage: false,
+    ...(options?.filterQuery?.search && {
+    search_term: options.filterQuery.search,
+  }),
+    });
+
+    const stories = data.stories || [];
+    const rels = data.rels || [];
+
+    const total = Number(data._headers?.total || 0);
+
+    (stories as any).rels = rels;
+    (stories as any).total = total;
+
+    return stories as ISbStoryData<any>[] & {
+      rels: any[];
+      total: number;
+    };
+  }
   let allStories: ISbStoryData<any>[] = [];
   let page = 1;
-  let allRels: any[] = []; 
-
-
+  let allRels: any[] = [];
   while (true) {
     const data = await storyblokApi.getStories({
       version,
@@ -689,21 +726,22 @@ export async function getAllStoriesByFolder(
       per_page: 100,
       page,
       resolve_relations: ["tags, topics"],
+      filter_query: options?.filterQuery,
     });
     const stories = data.stories || [];
 
     const rels = data.rels || [];
 
     allStories.push(...stories);
-     allRels.push(...rels);
+    allRels.push(...rels);
 
     if (stories.length < 100) break;
 
     page++;
   }
-(allStories as any).rels = allRels;
+  (allStories as any).rels = allRels;
 
-return allStories as ISbStoryData<any>[] & { rels: any[] };
+  return allStories as ISbStoryData<any>[] & { rels: any[] };
 }
 export async function getStoryBySlug(
   slug: string,

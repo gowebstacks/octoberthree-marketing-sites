@@ -151,7 +151,7 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
        
       )}
     >
-      <div className={twMerge('h-full flex flex-col',carousel ? "max-w-100" : "",  !displayImage.filename &&
+      <div className={twMerge('flex flex-col',carousel ? "max-w-100" : "",  !displayImage.filename &&
           (mode === "light"
             ? "border-t-8 border-t-orange-300"
             : "border-t-8 border-t-(--surface-accent-background)"))}>
@@ -159,7 +159,7 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
         {displayImage.filename && (
           <div
             className={twMerge(
-              "relative h-24.25 flex justify-center items-center overflow-hidden p-8",
+              "relative  flex justify-center items-center overflow-hidden h-35",
               mode === "light"
                 ? "bg-orange-300 group-hover:bg-(--illustration-primary)"
                 : "bg-(--surface-accent-background) group-hover:bg-(--text-blog-cta-card)"
@@ -169,9 +169,8 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
             loader={storyblokLoader}
               src={displayImage.filename}
               alt={displayImage?.alt || title || "Resource"}
-              className="object-contain h-full"
-              width={250}
-              height={10}
+              className="object-cover h-24.25 w-full"
+              fill
             />
           </div>
         )}

@@ -1,10 +1,10 @@
 "use client";
 
 import type { FC } from "react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { storyblokEditable, type SbBlokData } from "@storyblok/react";
 import { ContentBlock, LeadershipCard } from "../../../organisms";
-import { Dropdown } from "../../../molecules";
+import { BlogPagination, Dropdown } from "../../../molecules";
 import { Badge, Heading } from "../../../atoms";
 import { buildRelMap } from "../../../../utils";
 
@@ -72,15 +72,11 @@ const getAuthorCard = (content: any) => {
 const resolveRelatedBios = (card: any, relMap: Record<string, any>) => {
   if (card.component !== "relatedBios" || !card.relatedBio) return [card];
 
-  console.log(card.relatedBio, "resolving related bios");
   return card.relatedBio
     .map((uuid: string) => {
-      console.log(relMap[uuid], "resolving uuid");
-      console.log(relMap, "relMap");
       const content = relMap[uuid];
 
       if (!content) return null;
-      console.log(content, "related bio content");
       const authorCard = getAuthorCard(content);
 
       if (!authorCard) return null;
@@ -107,18 +103,17 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
   filterable,
   ...blok
 }) => {
-
-  console.log(
-    {rows,
-  ...blok
-}, "leadership card deck data"
-  )
+  const ITEMS_PER_PAGE = 12;
+  const [currentPage, setCurrentPage] = useState(1);
   const [teams, setTeams] = useState<string[]>([]);
   const [locations, setLocations] = useState<string[]>([]);
   const [names, setNames] = useState<string[]>([]);
 
   const relMap = useMemo(() => buildRelMap(rels), [rels]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [teams, locations, names]);
   const allCards = useMemo(() => {
     if (!rows) return [];
     return rows.flatMap((row) =>
@@ -176,23 +171,33 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
       ),
     [filteredByTeamLocation, names]
   );
+const totalItems = filteredCards.length;
+  const paginatedCards = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredCards.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredCards, currentPage]);
 
-  const groupedFilteredRows = useMemo(() => {
-    if (!rows) return [];
-    const filteredUids = new Set(filteredCards.map((c) => c._uid));
+ const groupedPaginatedRows = useMemo(() => {
+  if (!rows) return [];
 
-    return rows
-      .map((row) => {
-        const expandedCards = (row.cards ?? []).flatMap((card) =>
-          resolveRelatedBios(card, relMap)
-        );
-        const filteredRowCards = expandedCards.filter((card) =>
-          filteredUids.has(card._uid)
-        );
-        return { ...row, cards: filteredRowCards };
-      })
-      .filter((row) => row.cards.length > 0);
-  }, [rows, filteredCards, relMap]);
+  const paginatedUids = new Set(paginatedCards.map((c) => c._uid));
+
+  return rows
+    .map((row) => {
+      const expandedCards = (row.cards ?? []).flatMap((card) =>
+        resolveRelatedBios(card, relMap)
+      );
+
+      const filteredRowCards = expandedCards.filter((card) =>
+        paginatedUids.has(card._uid)
+      );
+
+      return { ...row, cards: filteredRowCards };
+    })
+    .filter((row) => row.cards.length > 0);
+}, [rows, paginatedCards, relMap]);
+  
+  
   const hasRelatedBios = useMemo(() => {
     if (!rows) return false;
 
@@ -275,7 +280,7 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
       ) : null}
 
       <div className="flex flex-col gap-y-(--gaps-56-48-48)">
-        {groupedFilteredRows.map((row, rowIndex) => (
+        {groupedPaginatedRows.map((row, rowIndex) => (
           <div
             key={rowIndex}
             className={`grid  w-full gap-y-(--gaps-56-48-48) gap-x-(--gaps-16-12-12) ${getGridClass(row.cardsPerRow, row.cardsPerRowTablet, row.cardsPerRowMobile)}`}
@@ -293,6 +298,17 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
           </div>
         ))}
       </div>
+
+      {totalItems > ITEMS_PER_PAGE && (
+        <div className="mt-8">
+          <BlogPagination
+            currentPage={currentPage}
+            totalItems={totalItems}
+            itemsPerPage={ITEMS_PER_PAGE}
+            onPageChange={setCurrentPage}
+          />
+        </div>
+      )}
     </div>
   );
 };
