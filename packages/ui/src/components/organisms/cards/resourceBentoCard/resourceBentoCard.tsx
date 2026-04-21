@@ -138,14 +138,14 @@ export const ResourceBentoCard: FC<ResourceBentoCardProps> = ({
         )}
 
         {body && (
-          <p
+          <div
             className={twMerge(
               "text-(--text-body-dark)",
               styles.excerptVisibility
             )}
           >
             <RichText doc={body} />
-          </p>
+          </div>
         )}
 
         <Button mode="link" label="Learn more" className="w-fit" />
