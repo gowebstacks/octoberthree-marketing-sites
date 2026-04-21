@@ -128,6 +128,9 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
     const finalIconColor = blok?.iconColor || iconColor;
 
     const finalIcon = blok?.icon?.icon || icon?.icon;
+
+
+    console.log(finalIcon,"fianl icon")
   return (
       <HeadingComponent
         ref={ref}
@@ -143,6 +146,7 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
         <span className="flex gap-2 items-start">
           {finalIcon && (
             <Icon
+            filled={true}
               size={32}
               color={
                 finalIconColor === "primary"
