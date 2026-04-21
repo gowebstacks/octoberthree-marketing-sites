@@ -47,6 +47,7 @@ export function ContentBlock({ blok }: ContentBlockProps) {
     split: "grid grid-cols-1 gap-10 md:grid-cols-2 md:items-center",
   };
 
+  console.log(heading, "in contentblock")
   return (
     <div {...storyblokEditable(blok)}>
       <div className={twMerge(layoutClasses[layout], "max-w-360")}>

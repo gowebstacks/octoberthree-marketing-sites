@@ -54,9 +54,9 @@ export const AuthorCard: FC<{ blok: AuthorCardProps }> = ({ blok }) => {
             />
 
             <div className="flex flex-col gap-2 ">
-              {company && (
+              {company || designation && (
                 <span className="text-md tracking-wide text-(--text-body-dark) ">
-                  {designation || company}
+                  {designation || company} 
                 </span>
               )}
               {location && <Badge variant="cyan" label={location} />}

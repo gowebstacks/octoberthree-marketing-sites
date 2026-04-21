@@ -69,6 +69,9 @@ export interface HeadingBlok extends SbBlokData {
     | "6xl"
     | "7xl";
   weight?: "normal" | "medium" | "semibold" | "bold";
+  icon?: {
+    icon? : string
+  };
   fontFamily?: "display" | "accent" | "body" | "eyebrow";
   textTransform?: "none" | "uppercase" | "lowercase" | "capitalize";
 }
@@ -83,7 +86,9 @@ export interface HeadingProps
   heading?: string;
   headingSize?: HeadingBlok["headingSize"];
   children?: React.ReactNode;
-  icon?: string;
+  icon?: {
+    icon? : string
+  };
   iconColor?: "primary" | "secondary" | "tertiary";
 }
 
@@ -122,7 +127,7 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
     const finalText = blok?.heading || heading || children;
     const finalIconColor = blok?.iconColor || iconColor;
 
-    const finalIcon = blok?.icon || icon;
+    const finalIcon = blok?.icon?.icon || icon?.icon;
   return (
       <HeadingComponent
         ref={ref}

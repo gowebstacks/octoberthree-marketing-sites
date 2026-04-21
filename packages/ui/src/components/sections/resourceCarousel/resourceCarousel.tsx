@@ -116,6 +116,9 @@ export const ResourceCarousel: FC<ResourceCarouselBlok> = ({
               overflow-x-auto scroll-smooth
               snap-x snap-mandatory
               pb-4
+                [-ms-overflow-style:none]
+    [scrollbar-width:none]
+    [&::-webkit-scrollbar]:hidden
             "
         >
           {cards.map((resource) => (

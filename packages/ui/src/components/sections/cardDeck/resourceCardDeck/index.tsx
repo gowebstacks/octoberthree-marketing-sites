@@ -47,6 +47,10 @@ export const ResourceCardDeck: FC<Props> = ({
   const [showAllFilters, setShowAllFilters] = useState(false);
 
   const relMap = useMemo(() => buildRelMap(rels), [rels]);
+  const showFilters =
+  pathname.includes("/articles") ||
+  pathname.includes("/resources") ||
+  pathname.includes("/insights");
 
   const tagNameMap = useMemo(() => {
     const map: Record<string, string> = {};
@@ -147,7 +151,9 @@ export const ResourceCardDeck: FC<Props> = ({
         </div>
       ) : null}
 
-      <div className="border items-start border-(--stroke-secondary) p-4 sm:px-8 sm:py-4.5 lg:py-8 flex flex-col-reverse lg:flex-row gap-4 justify-between">
+      {
+        showFilters &&
+        <div className="border items-start border-(--stroke-secondary) p-4 sm:px-8 sm:py-4.5 lg:py-8 flex flex-col-reverse lg:flex-row gap-4 justify-between">
         <div className="flex flex-wrap gap-3">
           {visibleFilters.map((option) => {
             const isActive = activeFilter === option;
@@ -221,6 +227,7 @@ export const ResourceCardDeck: FC<Props> = ({
           </button>
         </div>
       </div>
+      }
 
       {filteredResources?.length ? (
         <div

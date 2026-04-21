@@ -147,7 +147,7 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
       href={resourceUrl}
       {...storyblokEditable(props)}
       className={twMerge(
-        "group cursor-pointer relative flex h-full flex-col overflow-hidden transition-all duration-200 bg-(--surface-card) hover:bg-(--surface-card-hover) border border-(--stroke-card) rounded-sm",
+        "group hover:shadow-lg cursor-pointer relative flex h-full flex-col overflow-hidden transition-all duration-200 bg-(--surface-card) hover:bg-(--surface-card-hover) border border-(--stroke-card) rounded-sm",
        
       )}
     >

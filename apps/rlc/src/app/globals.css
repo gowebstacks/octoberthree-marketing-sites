@@ -40,7 +40,7 @@ html{
 --stroke-secondary-button: var(--color-neutral-900---p-dark);
 --logo-icon: var(--color-navy-primary-600);
 --stroke-card: var(--color-cream-200);
---surface-button-hover: var(--color-yellow-500);
+--surface-button-hover: var(--color-yellow-600);
 --stroke-error: var(--color-error-800);
 --surface-secondary-background: var(--color-base-white);
 --text-placeholder: var(--color-neutral-800);
