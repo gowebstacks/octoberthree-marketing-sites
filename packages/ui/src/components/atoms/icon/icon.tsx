@@ -13,16 +13,20 @@ interface IconProps extends HTMLAttributes<SVGElement> {
   className?: string;
   strokeWidth?: number;
   spriteType?: 'brand' | 'ui';
+  filled?: boolean
 }
 
-const Icon = ({ icon, size = 24, className, strokeWidth = 1, spriteType, ...props }: IconProps) => {
+const Icon = ({ icon, size = 24, className, strokeWidth = 1, spriteType,filled = false, ...props }: IconProps) => {
   if (!icon) return null;
 
   // Handle both spriteType and automatic detection
   const allSpriteFiles: string[] = [];
 
   // If spriteType is provided, use it to determine the sprite file
-  if (spriteType === 'brand') {
+  if(filled){
+     allSpriteFiles.push('/heading-ui-icon-sprite.svg');
+  }
+  else if (spriteType === 'brand') {
     allSpriteFiles.push('/brand-icon-sprite.svg');
   } else if (spriteType === 'ui') {
     allSpriteFiles.push('/ui-icon-sprite.svg');
@@ -30,7 +34,11 @@ const Icon = ({ icon, size = 24, className, strokeWidth = 1, spriteType, ...prop
 
   // Auto-detect brand icons by their prefix if no spriteType is provided
   if (allSpriteFiles.length === 0) {
-    if (icon.startsWith('brand-') ||
+    if(filled){
+      
+      allSpriteFiles.push('/heading-ui-icon-sprite.svg');
+    }
+    else if (icon.startsWith('brand-') ||
         icon.startsWith('dark-theme-') ||
         icon.startsWith('light-theme-') ||
         icon.startsWith('special-theme-')) {
@@ -46,8 +54,8 @@ const Icon = ({ icon, size = 24, className, strokeWidth = 1, spriteType, ...prop
   const isBrandIcon = spriteType === 'brand' ||
                      icon.startsWith('brand-') ||
                      allSpriteFiles.some(file => file.includes('brand-icon'));
-  const shouldDisableStroke = isBrandIcon;
-
+  const shouldDisableStroke = isBrandIcon || filled;
+const shouldUseFill =  isBrandIcon || filled;
   return (
     <svg
     shapeRendering="auto"
@@ -55,7 +63,7 @@ const Icon = ({ icon, size = 24, className, strokeWidth = 1, spriteType, ...prop
       height={size}
       // viewBox="0 0 24 24"
       className={className}
-      fill={shouldDisableStroke ? 'currentColor' : 'none'}
+      fill={shouldUseFill ? 'currentColor' : 'none'}
       stroke={shouldDisableStroke ? 'none' : 'currentColor'}
       strokeWidth={shouldDisableStroke ? 0 : strokeWidth}
       {...props}
