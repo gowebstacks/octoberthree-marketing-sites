@@ -24,10 +24,13 @@ export const FormBlock: FC<FormBlockProps> = ({
   hubspotFormId,
   ...blok
 }) => {
+
   const hubspotformID = ((blok as any).blok?.hubspotFormId.replace(
     /^hsForm_/,
     ""
   ) || hubspotFormId) as string;
+
+
   return (
     <div
       {...storyblokEditable(blok)}
@@ -47,7 +50,7 @@ export const FormBlock: FC<FormBlockProps> = ({
 
       <div className="flex-1">
         {/* <Form  /> */}
-        <HubspotFormComponent formId={hubspotformID} />
+        <HubspotFormComponent formId={hubspotformID || 'cbd47751-5c13-44c2-8dd1-3290840fe8b8'} />
       </div>
     </div>
   );

@@ -41,7 +41,13 @@ export const ResourceCarousel: FC<ResourceCarouselBlok> = ({
       trackRef.current.querySelector<HTMLElement>("[data-card]")?.offsetWidth ||
       1;
 
-    const index = Math.round(scrollLeft / cardWidth);
+    const maxScrollLeft = scrollWidth - clientWidth;
+
+    const index =
+      maxScrollLeft > 0
+        ? Math.round((scrollLeft / maxScrollLeft) * (cards.length - 1))
+        : 0;
+
     setCurrentSlide(index);
   };
 
@@ -131,7 +137,7 @@ export const ResourceCarousel: FC<ResourceCarouselBlok> = ({
         {!!cards.length && (
           <>
             <div className="mt-6 flex justify-between gap-3">
-               <div className="mt-4">
+              <div className="mt-4">
                 <SliderControls
                   currentIndex={currentSlide}
                   totalSlides={cards.length}
@@ -154,7 +160,6 @@ export const ResourceCarousel: FC<ResourceCarouselBlok> = ({
                   onClick={() => scrollByCard("right")}
                 />
               </div>
-             
             </div>
           </>
         )}
