@@ -54,7 +54,7 @@ export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
             blok.reverse && "lg:order-2"
           )}
         >
-          <div className={blok?.logoPopout?.filename && "pb-20 sm:pb-0"}>
+          <div className={blok?.logoPopout?.filename && "pb-20 sm:pb-0 sm:pr-20 lg:pr-0"}>
             {blok.body?.map((nestedBlok) => (
               <ContentBlock
                 key={nestedBlok._uid}

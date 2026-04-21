@@ -24,6 +24,10 @@ export default async function ResourcesPage(props: {
 }) {
   const { slug } = await props.params;
   const searchParams = await props.searchParams;
+  const page = Number(searchParams?.page || 1);
+  const search = searchParams?.search as string | undefined;
+  const category = searchParams?.category as string | undefined;
+  const ITEMS_PER_PAGE = 4 * 5;
   const preview = isStoryblokEditor(searchParams);
 
   const story = await getWebsitePageBySlug("rlc/resources", preview);
@@ -33,8 +37,13 @@ export default async function ResourcesPage(props: {
   const rels = story.rels as any;
   const sections = story.content.sections || [];
 
-  const resources = await getAllStoriesByFolder("rlc/resources", preview);
-
+  const resources = await getAllStoriesByFolder("rlc/resources", preview, {
+    perPage: ITEMS_PER_PAGE,
+    page,
+  filterQuery: search ? { search } : undefined,
+  });
+  const total = (resources as any).total || 0;
+  const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
   const rlcRels = (resources as any).rels;
   const mergedRels = [...(rels || []), ...(rlcRels || [])];
 
@@ -80,6 +89,10 @@ export default async function ResourcesPage(props: {
         return {
           ...section,
           resources: rlcCards,
+          pagination: {
+            currentPage: page,
+            totalPages,
+          },
         };
       }
       return section;
@@ -92,6 +105,7 @@ export default async function ResourcesPage(props: {
       ...story.content,
       sections: updatedSections,
     },
+     rels: mergedRels, 
   };
 
   return (
@@ -113,7 +127,6 @@ export default async function ResourcesPage(props: {
 export async function generateStaticParams() {
   if (!isStoryblokConfigured()) return [];
   const stories = await getAllStoriesByFolder("rlc/resources", false);
-  console.log(stories, "stories!!!@@###$#$%%^&^$$#FHg");
   return stories.map((story: any) => ({
     slug: story.slug.split("/").pop(),
   }));

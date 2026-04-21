@@ -27,8 +27,7 @@ function VisualEditorContent({ story }: { story: any }) {
   const s = (liveStory as any) || story;
   const content = s?.content || {};
   const sections = content.sections || [];
-  const rels = s?.rels;
-
+const rels = s?.rels || story?.rels;
   return (
     <div {...storyblokEditable(content)}>
       {Array.isArray(sections) && sections.length > 0 ? (

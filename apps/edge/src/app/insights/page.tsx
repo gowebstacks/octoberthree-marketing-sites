@@ -24,8 +24,11 @@ export default async function InsightPage(props: {
 }) {
   const { slug } = await props.params;
   const searchParams = await props.searchParams;
-  const preview = isStoryblokEditor(searchParams);
+  const page = Number(searchParams?.page || 1);
+  const search = searchParams?.search as string | undefined;
 
+  const preview = isStoryblokEditor(searchParams);
+  const ITEMS_PER_PAGE = 4 * 5;
   const story = await getWebsitePageBySlug("edge/insights", preview);
 
   if (!story) notFound();
@@ -33,9 +36,13 @@ export default async function InsightPage(props: {
   const rels = story.rels as any;
   const sections = story.content.sections || [];
 
-  const insights = await getAllStoriesByFolder("edge/insights", preview);
-  console.log(insights, "tetetet")
-
+  const insights = await getAllStoriesByFolder("edge/insights", preview, {
+    perPage: ITEMS_PER_PAGE,
+    page,
+    filterQuery: search ? { search } : undefined,
+  });
+  const total = (insights as any).total || 0;
+  const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
   const insightRels = (insights as any).rels;
   const mergedRels = [...(rels || []), ...(insightRels || [])];
 
@@ -52,9 +59,11 @@ export default async function InsightPage(props: {
       _uid: insight.uuid,
       component: "resourceCard",
 
-      title: insight.content?.title  || insight.content.sections[0]?.section[0]?.body[0]?.heading[0]?.heading || "",
+      title:
+        insight.content?.title ||
+        insight.content.sections[0]?.section[0]?.body[0]?.heading[0]?.heading ||
+        "",
 
-    
       mode: "dark",
       body: insight.content.sections[1].section[0].body,
 
@@ -78,6 +87,10 @@ export default async function InsightPage(props: {
         return {
           ...section,
           resources: insightCards,
+          pagination: {
+            currentPage: page,
+            totalPages,
+          },
         };
       }
       return section;
@@ -90,6 +103,7 @@ export default async function InsightPage(props: {
       ...story.content,
       sections: updatedSections,
     },
+     rels: mergedRels, 
   };
 
   return (

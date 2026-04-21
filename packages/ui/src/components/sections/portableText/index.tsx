@@ -175,7 +175,6 @@ const renderDefault = (blok: any, body: any, hasToc: boolean) => {
 
 export const PortableText: FC<{ blok: PortableTextProps }> = ({ blok }) => {
   if (!blok?.body) return null;
-  console.log(blok, "blockkkkk");
 
   const { hasPair, authorCard, formBlock, filteredContent } =
     extractAuthorAndForm(blok.body);

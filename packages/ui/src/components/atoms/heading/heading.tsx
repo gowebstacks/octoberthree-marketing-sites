@@ -123,11 +123,7 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
     const finalIconColor = blok?.iconColor || iconColor;
 
     const finalIcon = blok?.icon || icon;
-
-if(finalText == 'Unique Features'){
-      console.log(blok, "heading ", )
-
-}    return (
+  return (
       <HeadingComponent
         ref={ref}
         className={`${headingVariants({

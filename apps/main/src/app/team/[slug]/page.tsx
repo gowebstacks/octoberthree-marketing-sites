@@ -41,7 +41,6 @@ const TeamMemberContent = async ({
     authorData = sections[0]?.section[0]?.body?.content?.[0].attrs.body[0];
   }
 
-  console.log(authorData, "test author data")
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Person',
@@ -64,7 +63,6 @@ const TeamMemberContent = async ({
       image: authorData.headshotImage.filename,
     }),
   };
-console.log(teamMember, "team member data");
   return (
     <>
       <script
