@@ -4,8 +4,8 @@ import {
   ComponentGenerator,
   generateMetaDataByslug,
   getAllStoriesByFolder,
+  getPageData,
   getSiteSettings,
-  getWebsitePageBySlug,
   isStoryblokConfigured,
   StoryblokBridge,
   StoryblokSiteSettings,
@@ -33,8 +33,7 @@ export default async function InsightPage(props: {
     : undefined;
   const preview = isStoryblokEditor(searchParams);
   const ITEMS_PER_PAGE = 4 * 5;
-  const story = await getWebsitePageBySlug("edge/insights", preview);
-
+const story = await getPageData("edge/insights", preview);
   if (!story) notFound();
 
   const rels = story.rels as any;
@@ -132,13 +131,7 @@ export default async function InsightPage(props: {
   );
 }
 
-export async function generateStaticParams() {
-  if (!isStoryblokConfigured()) return [];
-  const stories = await getAllStoriesByFolder("edge/insights", false);
-  return stories.map((story: any) => ({
-    slug: story.slug.split("/").pop(),
-  }));
-}
+
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const metaData = await generateMetaDataByslug("edge", "insights/");

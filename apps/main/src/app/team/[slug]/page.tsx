@@ -5,7 +5,9 @@ import { Suspense } from 'react';
 import {
   ComponentGenerator,
   generateMetaDataByslug,
+  getAllStoriesByFolder,
   getAllTeamMembers,
+  getPageData,
   getTeamMemberBySlug,
   isStoryblokConfigured,
   renderMetadataFromStoryblok,
@@ -29,7 +31,8 @@ const TeamMemberContent = async ({
   slug: string; 
   preview: boolean;
 }) => {
-  const teamMember = await getTeamMemberBySlug(slug, preview, "octoberthree-main");
+  // const teamMember = await getTeamMemberBySlug(slug, preview, "octoberthree-main");
+  const teamMember =await getPageData(`octoberthree-main/team/${slug}`, preview)
   
   if (!teamMember) return notFound();
 
@@ -92,19 +95,16 @@ const TeamMemberContent = async ({
   );
 };
 
-export async function generateStaticParams() {
-  if (!isStoryblokConfigured()) return [];
-
-  try {
-    const teamMembers = await getAllTeamMembers(false, "octoberthree-main");
-    
-    return teamMembers.map((member: any) => ({
-      slug: member.slug.split('/').pop()
-    }));
-  } catch {
-    return [];
-  }
-}
+// export async function generateStaticParams() {
+//   if (!isStoryblokConfigured()) return [];
+//   const stories = await getAllStoriesByFolder(
+//     "octoberthree-main/team",
+//     false
+//   );
+//   return stories.map((story: any) => ({
+//     slug: story.slug.split("/").pop(),
+//   }));
+// }
 
 const TeamMemberPageContainer = async (props: { 
   params: Promise<PageProps['params']>;
@@ -115,7 +115,6 @@ const TeamMemberPageContainer = async (props: {
   const { slug } = params;
   const preview = isStoryblokEditor(searchParams);
 
-  const teamMembers = await getAllTeamMembers(false, "octoberthree-main")
 
   try {
     return (

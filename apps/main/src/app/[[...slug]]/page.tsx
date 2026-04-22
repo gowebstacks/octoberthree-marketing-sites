@@ -112,7 +112,6 @@ const updatedStory = {
     sections: updatedSections,
   },
 };
-  console.log(preview, "preview mode ______--------------------");
   return (
     <>
       {preview ? (

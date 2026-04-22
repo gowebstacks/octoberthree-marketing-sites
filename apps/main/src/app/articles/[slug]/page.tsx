@@ -5,8 +5,10 @@ import { Suspense } from "react";
 import {
   ComponentGenerator,
   generateMetaDataByslug,
-  getArticleBySlug,
+  getAllStoriesByFolder,
+  getPageData,
   getWebsitePageBySlug,
+  isStoryblokConfigured,
   StoryblokBridge,
 } from "@repo/storyblok";
 
@@ -18,7 +20,7 @@ type PageProps = {
 };
 
 export const dynamicParams = true;
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 const ArticleContent = async ({
   slug,
@@ -27,10 +29,10 @@ const ArticleContent = async ({
   slug: string;
   preview: boolean;
 }) => {
-  const article = await getWebsitePageBySlug(
-    `octoberthree-main/articles/${slug}`,
-    preview
-  );
+  const article = await getPageData(
+  `octoberthree-main/articles/${slug}`,
+  preview
+);
 
   if (!article) return notFound();
 
@@ -104,3 +106,14 @@ export const generateMetadata = async (props: {
    const metaData = await generateMetaDataByslug('octoberthree-main', `articles/${slugParam}`);
   return metaData;
 };
+
+// export async function generateStaticParams() {
+//   if (!isStoryblokConfigured()) return [];
+//   const stories = await getAllStoriesByFolder(
+//     "octoberthree-main/articles",
+//     false
+//   );
+//   return stories.map((story: any) => ({
+//     slug: story.slug.split("/").pop(),
+//   }));
+// }

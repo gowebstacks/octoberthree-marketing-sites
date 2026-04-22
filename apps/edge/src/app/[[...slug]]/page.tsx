@@ -4,7 +4,7 @@ import {
   ComponentGenerator,
   generateMetaDataByslug,
   getAllTeamMembers,
-  getWebsitePageBySlug,
+  getPageData,
   StoryblokBridge,
   StoryblokSiteSettings,
 } from "@repo/storyblok";
@@ -30,7 +30,7 @@ export default async function SlugPage(props: {
   const inEditor = isStoryblokEditor(searchParams);
   const preview = inEditor;
 
-  const page = await getWebsitePageBySlug(`edge/${slugParam}`, preview);
+const page = await getPageData(`edge/${slugParam}`, preview);
 
   if (!page) {
     notFound();

@@ -4,11 +4,13 @@ import { Suspense } from "react";
 import {
   ComponentGenerator,
   generateMetaDataByslug,
-  getWebsitePageBySlug,
+  getAllStoriesByFolder,
+  getPageData,
   StoryblokBridge,
 } from "@repo/storyblok";
 import { isStoryblokEditor } from "../../../lib/helper";
 import { PageParams } from "../page";
+import { isStoryblokConfigured } from "@repo/ui";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
@@ -16,7 +18,7 @@ type PageProps = {
 };
 
 export const dynamicParams = true;
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 // Folder where insight stories live (e.g., 'edge/insights')
 const INSIGHTS_FOLDER = "edge/insights";
@@ -28,8 +30,10 @@ const InsightContent = async ({
   slug: string;
   preview: boolean;
 }) => {
-  const story = await getWebsitePageBySlug(`edge/insights/${slug}`, preview);
-  if (!story) return notFound();
+const story = await getPageData(
+  `edge/insights/${slug}`,
+  preview
+);  if (!story) return notFound();
 
   const { content } = story;
   const sections = content.sections || [];
@@ -89,3 +93,11 @@ export const generateMetadata = async (props: {
    const metaData = await generateMetaDataByslug('edge', `insights/${slugParam}`);
   return metaData;
 };
+
+// export async function generateStaticParams() {
+//   if (!isStoryblokConfigured()) return [];
+//   const stories = await getAllStoriesByFolder("edge/insights", false);
+//   return stories.map((story: any) => ({
+//     slug: story.slug.split("/").pop(),
+//   }));
+// }
