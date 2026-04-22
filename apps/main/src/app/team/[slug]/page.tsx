@@ -6,9 +6,7 @@ import {
   ComponentGenerator,
   generateMetaDataByslug,
   getAllStoriesByFolder,
-  getAllTeamMembers,
   getPageData,
-  getTeamMemberBySlug,
   isStoryblokConfigured,
   renderMetadataFromStoryblok,
   StoryblokBridge,
@@ -145,3 +143,4 @@ export const generateMetadata = async (props: {
    const metaData = await generateMetaDataByslug('octoberthree-main', `team/${slugParam}`);
   return metaData;
 };
+
