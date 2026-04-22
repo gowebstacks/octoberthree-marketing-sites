@@ -129,8 +129,6 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
 
     const finalIcon = blok?.icon?.icon || icon?.icon;
 
-
-    console.log(finalIcon,"fianl icon")
   return (
       <HeadingComponent
         ref={ref}

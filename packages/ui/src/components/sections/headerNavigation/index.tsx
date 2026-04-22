@@ -1,11 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
 import { StoryblokGlobalNavigation } from "../../../types/storyblok";
-import { useStoryblokSiteSettings } from "../../../hooks/useStoryblokSiteSettings";
-import useWindowScrolledPast from "../../../lib/utils/hooks/useWindowScrolledPast";
-import { closeDesktopMenu, closeMobileMenu } from "./store";
 import { AnnouncementBar } from "./components/announcementBar";
 import { Icon, Link } from "../../atoms";
 import CTABar from "../../modules/ctaBar";
@@ -30,7 +25,6 @@ export const HeaderNavigation: React.FC<HeaderNavigationProps> = ({
           announcementLink={headerNavigation.announcementLink?.[0]}
         />
       )}
-
       <nav
         className="
           relative

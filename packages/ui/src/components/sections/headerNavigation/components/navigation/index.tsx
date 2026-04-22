@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import {
   Content,
@@ -6,40 +6,36 @@ import {
   List,
   Root,
   Trigger,
-} from '@radix-ui/react-navigation-menu'
-import { Fragment, useEffect, useRef, useState, type FC } from 'react'
-import { usePathname } from 'next/navigation'
+} from "@radix-ui/react-navigation-menu";
+import { Fragment, useEffect, useRef, useState, type FC } from "react";
+import { usePathname } from "next/navigation";
 
-import { StoryblokNavigationMenuItem } from '../../../../../types/storyblok'
-import DropDownMenu from '../dropDownMenu'
-import { Icon } from '../../../../atoms'
-import { getLinkHref } from '../../../../../utils/getLinkHref'
+import { StoryblokNavigationMenuItem } from "../../../../../types/storyblok";
+import DropDownMenu from "../dropDownMenu";
+import { Icon } from "../../../../atoms";
+import { getLinkHref } from "../../../../../utils/getLinkHref";
 
 interface NavigationProps {
-  menuItems?: StoryblokNavigationMenuItem[]
+  menuItems?: StoryblokNavigationMenuItem[];
 }
 
 const MenuItemWithDropdown: FC<
   StoryblokNavigationMenuItem & {
-    onClose: () => void
+    onClose: () => void;
   }
 > = (item) => {
-  const { link, label, menuSection, _uid, onClose } = item
-  const hasDropdown = menuSection && menuSection.length > 0
-
+  const { link, label, menuSection, _uid, onClose } = item;
+  const hasDropdown = menuSection && menuSection.length > 0;
 
   return (
-    <Item
-      value={_uid}
-      className="relative"
-    
-    >
+    <Item value={_uid} className="relative">
       <Trigger asChild>
         <button
           className="
             group flex cursor-pointer items-center gap-1.5 
             text-(--text-headings) text-sm
-            data-[state=open]:font-medium
+            data-[state=open]:font-medium data-[state=open]:bg-(--color-cream-50---p-background)
+            rounded-sm px-3 py-2 hover:bg-(--color-cream-50---p-background)
           "
         >
           {label || link?.label}
@@ -59,36 +55,33 @@ const MenuItemWithDropdown: FC<
       {hasDropdown && (
         <Content
           className="
-            absolute left-1/2 top-full z-50 mt-11.5
-            -translate-x-1/2
-            pointer-events-auto
-            origin-top
-            data-[state=open]:opacity-100
-            data-[state=open]:scale-100
-            data-[state=closed]:opacity-0
-            data-[state=closed]:scale-95
-            transition-[opacity,transform]
-            duration-200
-            ease-out
+           absolute left-0 top-full z-50 mt-4
+    pointer-events-auto
+    origin-top
+    data-[state=open]:opacity-100
+    data-[state=open]:scale-100
+    data-[state=closed]:opacity-0
+    data-[state=closed]:scale-95
+    transition-[opacity,transform]
+    duration-200
+    ease-out
           "
-     
         >
           <div className="absolute inset-x-0 -top-4 h-4" />
           <DropDownMenu {...item} />
         </Content>
       )}
     </Item>
-  )
-}
+  );
+};
 
 const Navigation: FC<NavigationProps> = ({ menuItems }) => {
-  const [value, setValue] = useState('')
-  const pathname = usePathname()
+  const [value, setValue] = useState("");
+  const pathname = usePathname();
 
   useEffect(() => {
-    setValue('')
-  }, [pathname])
-
+    setValue("");
+  }, [pathname]);
   return (
     <Root
       className="relative w-fit"
@@ -101,10 +94,7 @@ const Navigation: FC<NavigationProps> = ({ menuItems }) => {
         {menuItems?.map((item) => (
           <Fragment key={item._uid}>
             {item.menuSection?.length ? (
-              <MenuItemWithDropdown
-                {...item}
-                onClose={() => setValue('')}
-              />
+              <MenuItemWithDropdown {...item} onClose={() => setValue("")} />
             ) : (
               <Item value={item._uid} asChild>
                 <a
@@ -112,7 +102,6 @@ const Navigation: FC<NavigationProps> = ({ menuItems }) => {
                   className="text-sm rounded-sm px-3 py-2 hover:bg-(--color-cream-50---p-background) font-medium text-(--text-headings) transition-colors hover:text-primary"
                 >
                   {item.label || item.link?.label}
-
                 </a>
               </Item>
             )}
@@ -120,7 +109,7 @@ const Navigation: FC<NavigationProps> = ({ menuItems }) => {
         ))}
       </List>
     </Root>
-  )
-}
+  );
+};
 
-export default Navigation
+export default Navigation;

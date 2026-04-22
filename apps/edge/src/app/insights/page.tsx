@@ -26,7 +26,11 @@ export default async function InsightPage(props: {
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page || 1);
   const search = searchParams?.search as string | undefined;
+  const rawCategory = searchParams?.category as string | undefined;
 
+  const category = rawCategory
+    ? rawCategory.replace(/_/g, "-").toLowerCase()
+    : undefined;
   const preview = isStoryblokEditor(searchParams);
   const ITEMS_PER_PAGE = 4 * 5;
   const story = await getWebsitePageBySlug("edge/insights", preview);
@@ -36,11 +40,17 @@ export default async function InsightPage(props: {
   const rels = story.rels as any;
   const sections = story.content.sections || [];
 
+    const filterQuery = {
+  ...(search && { search }),
+  ...(category && {category})}
+
   const insights = await getAllStoriesByFolder("edge/insights", preview, {
     perPage: ITEMS_PER_PAGE,
     page,
-    filterQuery: search ? { search } : undefined,
-  });
+      filterQuery: Object.keys(filterQuery).length ? filterQuery : undefined,
+  },
+  'edge'
+);
   const total = (insights as any).total || 0;
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
   const insightRels = (insights as any).rels;

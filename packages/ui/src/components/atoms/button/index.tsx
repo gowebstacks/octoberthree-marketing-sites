@@ -63,7 +63,7 @@ const Button: FC<ButtonProps> = ({
   variant, // Keep for backward compatibility
   size,
   leadingIcon,
-  trailingIcon='arrow-up-right',
+  trailingIcon,
   fullWidth = false,
   asLink = false,
   // Storyblok specific props
@@ -91,9 +91,11 @@ const Button: FC<ButtonProps> = ({
   const actualMode = mode || actualBlok?.mode || "filled";
   const actualTone = tone || actualBlok?.tone || "primary";
   const actualTrailingIcon = trailingIcon || actualBlok?.trailingIcon ||  (actualTone === "secondary" ? "arrow-up-right" : undefined);
+  
   const actualLeadingIcon = leadingIcon || actualBlok?.leadingIcon;
   // Build link from Storyblok data if available
   let finalLink = link ;
+
 if (
   props.url &&
   typeof props.url !== "string" &&
@@ -209,7 +211,7 @@ if (
         <span className="mt-0.5 lg:mt-0" >
           {actualLabel || children}
         </span>
-        {actualTrailingIcon && actualTrailingIcon !== "None" &&  mode!=='nav' && !leadingIcon &&(
+        {actualTrailingIcon && actualTrailingIcon !== "None" &&  mode!=='nav'  &&(
           <span>
             <Icon color={iconColor} size={20} icon={actualTrailingIcon} aria-hidden={true} />
           </span>
