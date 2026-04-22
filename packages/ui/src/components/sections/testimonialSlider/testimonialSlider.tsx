@@ -26,13 +26,6 @@ export interface TestimonialSliderBlok extends SbBlokData {
   eyebrow?: any[];
   heading?: HeadingBlok[];
   testimonials: (TestimonialBlok | TestimonialSlideBlok)[];
-  autoplay?: boolean;
-  autoplaySpeed?: string;
-  showDots?: boolean;
-  showArrows?: boolean;
-  showAvatar?: boolean;
-  showCompany?: boolean;
-  displayStyle?: string[];
   mode: "light" | "dark";
 }
 
@@ -43,18 +36,23 @@ interface TestimonialSliderProps {
 
 export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
   const activeCardRef = useRef<HTMLDivElement | null>(null);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeHeight, setActiveHeight] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+
+  const dragStartX = useRef(0);
+  const [dragOffset, setDragOffset] = useState(0);
+  const isDragging = useRef(false);
+
   const mode = blok.mode || "dark";
 
   const relMap = useMemo(() => buildRelMap(rels), [rels]);
+
   const resolvedTestimonials = useMemo(() => {
     return blok.testimonials
       .map((item) => {
-        if (item.component === "testimonial") {
-          return item;
-        }
+        if (item.component === "testimonial") return item;
         if (item.component === "testimonialSlide" && item.testimonial) {
           const resolved = resolveRel<any>(item.testimonial, relMap);
           if (resolved?.component === "testimonial") {
@@ -93,6 +91,51 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
     return () => media.removeEventListener("change", handleChange);
   }, []);
 
+  const handleStart = (x: number) => {
+    isDragging.current = true;
+    dragStartX.current = x;
+  };
+
+  // 🔥 UPDATED: infinite continuous drag
+  const handleMove = (x: number) => {
+    if (!isDragging.current) return;
+
+    const cardWidth = activeCardRef.current?.offsetWidth || 600;
+    const maxDrag = cardWidth * 0.2;
+
+    let diff = x - dragStartX.current;
+
+    diff = diff * 0.6;
+    diff = Math.max(-maxDrag, Math.min(maxDrag, diff));
+
+    const trigger = cardWidth * 0.15;
+
+    // 👉 swipe left → next
+    if (diff <= -trigger) {
+      setCurrentIndex((prev) => getIndex(prev + 1));
+      dragStartX.current = x;
+      setDragOffset(0);
+      return;
+    }
+
+    // 👉 swipe right → prev
+    if (diff >= trigger) {
+      setCurrentIndex((prev) => getIndex(prev - 1));
+      dragStartX.current = x;
+      setDragOffset(0);
+      return;
+    }
+
+    setDragOffset(diff);
+  };
+
+  const handleEnd = () => {
+    if (!isDragging.current) return;
+
+    setDragOffset(0);
+    isDragging.current = false;
+  };
+
   const desktopSlides = useMemo(() => {
     return resolvedTestimonials.map((testimonial, index) => {
       const isActive = index === currentIndex;
@@ -104,7 +147,7 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
         stateClasses = "z-30 scale-100 opacity-100 translate-x-0";
       } else if (isPrev) {
         stateClasses =
-          "z-20 scale-90 opacity-0 md:opacity-100 lg:-translate-x-28 md:-translate-x-20 -translate-x-24";
+          "z-20 scale-90 opacity-0 md:opacity-100 lg:-translate-x-28  md:-translate-x-20 -translate-x-24";
       } else if (isNext) {
         stateClasses =
           "z-20 scale-90 opacity-0 md:opacity-100 lg:translate-x-28 md:translate-x-20 translate-x-24";
@@ -122,9 +165,20 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
           key={`${testimonial._uid} ${index}`}
           {...storyblokEditable(testimonial)}
           className={twMerge(
-            "absolute transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] cursor-pointer",
+            "absolute transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer",
             stateClasses
           )}
+          style={
+            isActive
+              ? {
+                  transform: `translateX(${dragOffset}px)`,
+                  transition: isDragging.current
+                    ? "none"
+                    : "transform 1s cubic-bezier(0.16,1,0.3,1)",
+                }
+              : undefined
+          }
+          onDragStart={(e) => e.preventDefault()}
           onClick={() => {
             if (isNext) setCurrentIndex(nextIndex);
             if (isPrev) setCurrentIndex(prevIndex);
@@ -147,29 +201,29 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
           >
             <div
               className={twMerge(
-                "py-(--scale-24) px-(--scale-16) sm:px-14 sm:py-18 md:py-18 md:px-14 transition-opacity duration-300",
+                "py-(--scale-24) px-(--scale-16) sm:px-14 sm:py-18 md:py-18 md:px-14 transition-opacity duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] select-none",
                 isActive ? "opacity-100" : "opacity-0"
               )}
             >
               <Heading size="4xl">
                 <blockquote>“{testimonial.quote}”</blockquote>
               </Heading>
-
-              <div className="mt-10 border-t border-(--color-neutral-700---body) pt-6">
-                <div className="flex flex-col items-start gap-1">
-                  {testimonial.companyName && (
-                    <div className="font-normal text-[16px] leading-6 lg:text-[18px] lg:leading-7 text-(--text-headings)">
-                      {testimonial.companyName}
-                    </div>
-                  )}
-
-                  {testimonial.jobTitle && (
-                    <div className="[&_span]:text-[12px] [&_span]:leading-4.5 lg:[&_span]:text-[14px] lg:[&_span]:leading-6">
-                      <Badge label={testimonial.jobTitle} variant={"navy"} />
-                    </div>
-                  )}
+              {(testimonial.companyName || testimonial.jobTitle) && (
+                <div className="mt-10 border-t border-(--color-neutral-700---body) pt-6">
+                  <div className="flex flex-col items-start gap-1">
+                    {testimonial.companyName && (
+                      <div className="font-normal text-[16px] leading-6 lg:text-[18px] lg:leading-7 text-(--text-headings)">
+                        {testimonial.companyName}
+                      </div>
+                    )}
+                    {testimonial.jobTitle && (
+                      <div className="[&_span]:text-[12px] [&_span]:leading-4.5 lg:[&_span]:text-[14px] lg:[&_span]:leading-6">
+                        <Badge label={testimonial.jobTitle} variant={"navy"} />
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -181,7 +235,7 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
     prevIndex,
     nextIndex,
     activeHeight,
-    relMap,
+    dragOffset,
   ]);
 
   if (resolvedTestimonials.length === 0) return null;
@@ -190,18 +244,18 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
     <div
       {...storyblokEditable(blok)}
       className={twMerge(
-        "relative max-w-360 mx-auto  rounded-lg overflow-hidden px-(--scale-16) py-(--scale-48) sm:px-(--scale-48) sm:py-(--scale-72) lg:p-24",
+        "relative max-w-360 mx-auto rounded-lg overflow-hidden px-(--scale-16) py-(--scale-48) sm:px-(--scale-48) sm:py-(--scale-72) lg:p-24",
         mode === "dark"
           ? "bg-(--surface-accent-background)"
           : "bg-(--color-cream-200)"
       )}
     >
-      <div className={
-        twMerge(
+      <div
+        className={twMerge(
           "pattern-grid pattern-white",
-          mode === 'dark' ? 'opacity-5' : 'opacity-15'
-        )
-      } />
+          mode === "dark" ? "opacity-5" : "opacity-15"
+        )}
+      />
 
       <div className="relative mx-auto max-w-7xl md:w-[90%]! lg:w-full flex flex-col items-center">
         <div className="text-center">
@@ -226,8 +280,18 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
         </div>
 
         <div
-          className="relative w-full flex items-center justify-center"
-          style={{ height: activeHeight || "auto" }}
+          className="relative w-full flex items-center justify-center cursor-grab active:cursor-grabbing select-none"
+          style={{
+            height: activeHeight || "auto",
+            transition: "height 0.7s cubic-bezier(0.16,1,0.3,1)",
+          }}
+          onMouseDown={(e) => handleStart(e.clientX)}
+          onMouseMove={(e) => handleMove(e.clientX)}
+          onMouseUp={handleEnd}
+          onMouseLeave={handleEnd}
+          onTouchStart={(e) => handleStart(e.touches[0].clientX)}
+          onTouchMove={(e) => handleMove(e.touches[0].clientX)}
+          onTouchEnd={handleEnd}
         >
           {desktopSlides}
         </div>
