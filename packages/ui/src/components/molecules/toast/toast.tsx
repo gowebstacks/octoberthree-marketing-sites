@@ -35,7 +35,7 @@ export function Toast({
   description,
   actionLabel = 'Undo',
   onAction,
-  duration = 3000,
+  duration = 30000,
   position = 'bottom-right',
   variant = 'default',
 }: ToastProps) {
@@ -57,13 +57,13 @@ export function Toast({
         className={`flex items-start justify-between gap-2 rounded-xs border bg-(--surface-card) p-(--padding-18-16-16) shadow-md ${variantClasses[variant]}`}
       >
         <div className="flex flex-col gap-1">
-          <p className="text-sm font-medium text-(--text-headings-dark)">
+          <p className="text-sm font-medium text-(--text-headings-dark)!">
             {title}
           </p>
 
           {description && (
-            <p className="text-xs text-(--text-headings-dark)">
-              {description}
+            <p className="text-xs text-(--text-headings-dark)!">
+             {description}
             </p>
           )}
         </div>
