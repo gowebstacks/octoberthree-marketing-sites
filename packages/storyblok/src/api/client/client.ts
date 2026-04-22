@@ -5,6 +5,8 @@ type StoryblokResponse<T> = {
 };
 // Storyblok API base URL
 const STORYBLOK_API_URL = "https://api.storyblok.com/v2/cdn";
+import { cache } from "react";
+
 
 // Helper function to get the appropriate token based on version
 const getAccessToken = (version: string = "published") => {
@@ -65,7 +67,8 @@ export async function storyblokFetch<T = any>(
     const response = await fetch(
       `${STORYBLOK_API_URL}/stories/${slug}?${queryParams}` as any,
       {
-        cache: isDraft ? "no-store" : undefined,
+        cache: isDraft ? "no-store" : 'force-cache',
+        next: isDraft ? undefined : { revalidate: 3600 },
       } as any
     );
 
@@ -108,7 +111,8 @@ export async function getAllWebsitePages(isDraft: boolean = true) {
     const response = await fetch(
       `${STORYBLOK_API_URL}/stories?${queryParams}` as any,
       {
-        cache: isDraft ? "no-store" : undefined,
+        cache: isDraft ? "no-store" : 'force-cache',
+        next: isDraft ? undefined : { revalidate: 3600 },
       } as any
     );
 
@@ -214,7 +218,8 @@ export async function getAllTestimonials(isDraft: boolean = false) {
     const response = await fetch(
       `${STORYBLOK_API_URL}/stories?${queryParams}` as any,
       {
-        cache: isDraft ? "no-store" : undefined,
+        cache: isDraft ? "no-store" : 'force-cache',
+        next: isDraft ? undefined : { revalidate: 3600 },
       } as any
     );
 
@@ -269,7 +274,8 @@ export async function getAllPersons(isDraft: boolean = false) {
     const response = await fetch(
       `${STORYBLOK_API_URL}/stories?${queryParams}` as any,
       {
-        cache: isDraft ? "no-store" : undefined,
+        cache: isDraft ? "no-store" : 'force-cache',
+        next: isDraft ? undefined : { revalidate: 3600 },
       } as any
     );
 
@@ -328,7 +334,8 @@ export async function getAllGlobalNavigations(
     const response = await fetch(
       `${STORYBLOK_API_URL}/stories?${queryParams}` as any,
       {
-        cache: isDraft ? "no-store" : undefined,
+         cache: isDraft ? "no-store" : 'force-cache',
+        next: isDraft ? undefined : { revalidate: 3600 },
       } as any
     );
 
@@ -428,7 +435,8 @@ export const storyblokApi = {
     const response = await fetch(
       `${STORYBLOK_API_URL}/stories?${queryParams}` as any,
       {
-        cache: isDraft ? "no-store" : undefined,
+         cache: isDraft ? "no-store" : 'force-cache',
+        next: isDraft ? undefined : { revalidate: 3600 },
       } as any
     );
 
@@ -479,7 +487,8 @@ export async function getAllTeamMembers(
       const response = await fetch(
         `${STORYBLOK_API_URL}/stories?${queryParams}` as any,
         {
-          cache: isDraft ? "no-store" : undefined,
+           cache: isDraft ? "no-store" : 'force-cache',
+        next: isDraft ? undefined : { revalidate: 3600 },
         } as any
       );
 
@@ -530,7 +539,8 @@ export async function getTeamMemberBySlug(
     const url = `${STORYBLOK_API_URL}/stories/${fullSlug}?${params.toString()}`;
 
     const response = await fetch(url, {
-      cache: isDraft ? "no-store" : undefined,
+      cache: isDraft ? "no-store" : 'force-cache',
+        next: isDraft ? undefined : { revalidate: 3600 },
     });
 
     if (!response.ok) {
@@ -596,7 +606,8 @@ export async function getArticleBySlug(
     const url = `${STORYBLOK_API_URL}/stories/${fullSlug}?${params.toString()}`;
 
     const response = await fetch(url, {
-      cache: isDraft ? "no-store" : undefined,
+       cache: isDraft ? "no-store" : 'force-cache',
+        next: isDraft ? undefined : { revalidate: 3600 },
     });
 
     if (!response.ok) {
@@ -778,3 +789,8 @@ export async function getStoryBySlug(
     return null;
   }
 }
+
+
+export const getPageData = cache(async (slug: string, preview: boolean) => {
+  return await getWebsitePageBySlug(slug, preview);
+});

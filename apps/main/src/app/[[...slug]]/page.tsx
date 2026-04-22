@@ -6,6 +6,7 @@ import {
   ComponentGenerator,
   generateMetaDataByslug,
   getAllTeamMembers,
+  getPageData,
   getWebsitePageBySlug,
   StoryblokBridge,
   StoryblokSiteSettings,
@@ -32,10 +33,10 @@ export default async function SlugPage(props: {
   const inEditor = isStoryblokEditor(searchParams);
   const preview = inEditor; 
 
-  const page = await getWebsitePageBySlug(
-    `octoberthree-main/${slugParam}${slugParam === 'articles' ? '/' :''}`,
-    preview
-  );
+ const page = await getPageData(
+  `octoberthree-main/${slugParam}${slugParam === "articles" ? "/" : ""}`,
+  preview
+);
 
   if (!page) {
     notFound();
