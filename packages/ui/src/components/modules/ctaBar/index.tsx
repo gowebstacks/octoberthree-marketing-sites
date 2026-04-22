@@ -7,22 +7,28 @@ import { Button } from "../../atoms";
 import { twMerge } from "tailwind-merge";
 import type { ButtonProps } from "../../atoms/button";
 import { InputField, Toast } from "../../molecules";
+import { Form, HubspotFormComponent } from "../../organisms";
 
 export interface CTABarProps extends SbBlokData {
   buttons?: ButtonProps[];
   className?: string;
   type?: "button" | "subscribe";
   placeholder?: string;
-  layout? : string
+  layout?: string;
 }
 
-const CTABar: FC<CTABarProps> = ({ buttons, className = "", layout,...blok }) => {
+const CTABar: FC<CTABarProps> = ({
+  buttons,
+  className = "",
+  layout,
+  ...blok
+}) => {
   const actualBlok = (blok as any)?.blok || blok;
   const items = buttons || actualBlok?.buttons;
   const type = actualBlok?.type ?? "button";
   const placeholder = actualBlok?.placeholder ?? "companyemail@company.com";
   const portalId = actualBlok?.portalId;
-  const formId = actualBlok?.formId;
+  const formId = actualBlok?.formId || 'fce28be1-0ef7-4d68-93bd-b3427e85479a';
 
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,10 +42,7 @@ const CTABar: FC<CTABarProps> = ({ buttons, className = "", layout,...blok }) =>
       setError("Please enter a valid email address");
       return;
     }
-    if (!portalId || !formId) {
-  setError("Form configuration missing");
-  return;
-}
+
     try {
       setLoading(true);
       setError(null);
@@ -68,18 +71,21 @@ const CTABar: FC<CTABarProps> = ({ buttons, className = "", layout,...blok }) =>
     <div
       data-component="cta-bar"
       {...storyblokEditable(actualBlok)}
-      className={twMerge("flex sm:flex-row! flex-col gap-3 lg:mt-2 ", className, layout==='split' ? 'w-full!' :'sm:w-fit')}
+      className={twMerge(
+        "flex sm:flex-row! flex-col gap-3 lg:mt-2 ",
+        className,
+        layout === "split" ? "w-full!" : "sm:w-fit"
+      )}
     >
       {type === "subscribe" ? (
         <form
           onSubmit={handleSubmit}
-          className={
-           
-            twMerge(
-               'flex  gap-3',
-              layout === 'split' ? "flex-col w-full" :"flex-col sm:flex-row w-full"
-            )
-          }
+          className={twMerge(
+            "flex  gap-3",
+            layout === "split"
+              ? "flex-col w-full"
+              : "flex-col sm:flex-row w-full"
+          )}
         >
           <div className="flex flex-col gap-2 w-full">
             <InputField
@@ -90,18 +96,28 @@ const CTABar: FC<CTABarProps> = ({ buttons, className = "", layout,...blok }) =>
                 setSuccess(false);
                 setError(null);
               }}
+              aria-label="email"
               placeholder={placeholder}
               className="rounded h-10 lg:h-12.5 sm:min-w-75"
               required
             />
+            {/* <HubspotFormComponent basic={true} formId="fce28be1-0ef7-4d68-93bd-b3427e85479a"/> */}
 
             {success && (
-              <Toast title="Subscribed successfully" actionLabel="Done" position="top-right"/>
+              <Toast
+                title="Subscribed successfully"
+                actionLabel="Done"
+                position="top-right"
+              />
             )}
-            {error && <Toast title={error} actionLabel="" />}
+            {error && <Toast title={error} actionLabel="" position="top-right"/>}
           </div>
 
-          <Button fullWidth={layout==='split'} type="submit" disabled={loading}>
+          <Button
+            fullWidth={layout === "split"}
+            type="submit"
+            disabled={loading}
+          >
             {loading ? "Submitting..." : "Subscribe"}
           </Button>
         </form>

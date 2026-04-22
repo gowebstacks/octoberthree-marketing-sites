@@ -18,6 +18,7 @@ export type HubspotFormProps = {
   formId: string;
   className?: string;
   onReady?: () => void;
+  basic?:boolean
 };
 
 export function HubspotFormComponent({
@@ -25,6 +26,7 @@ export function HubspotFormComponent({
   formId,
   className,
   onReady,
+  basic=false
 }: HubspotFormProps) {
   const id = useId();
   const targetId = `hubspot-form-${id}`;
@@ -72,7 +74,7 @@ export function HubspotFormComponent({
   };
 
   return (
-    <div className={twMerge(className, "hubspot-form relative z-1")}>
+    <div className={twMerge(className, "hubspot-form relative z-1", basic && 'basic')}>
       <Script
         src="https://js.hsforms.net/forms/v2.js"
         strategy="afterInteractive"
@@ -96,7 +98,7 @@ export function HubspotFormComponent({
           />
 
           {status === "submitting" && (
-            <div className="absolute rounded-sm z-100 inset-0 bg-(--surface-secondary-background)  flex flex-col items-center justify-center gap-3">
+            <div className="absolute rounded-sm z-100 inset-0 bg-(--surface-secondary-background)!  flex flex-col items-center justify-center gap-3">
               <img
                 src="/loading.svg"
                 alt="Loading"

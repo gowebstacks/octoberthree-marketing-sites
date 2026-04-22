@@ -1,6 +1,6 @@
 "use client";
 
-import type { FC } from "react";
+import { useEffect, useState, type FC } from "react";
 import { storyblokEditable, type SbBlokData } from "@storyblok/react";
 import { twMerge } from "tailwind-merge";
 
@@ -25,6 +25,89 @@ export interface SubscribeProps extends SbBlokData {
   rtc: boolean;
 }
 
+const mockBlok : SubscribeProps= {
+  ctaBar: [
+    {
+      type: "subscribe",
+      formId: "",
+      buttons: [],
+      portalId: "",
+      component: "ctaBar",
+    },
+  ],
+  layout: "leading",
+  heading: [
+    {
+      heading: "Want to receive the latest articles?",
+      fontFamily: "display",
+      elementType: "h2",
+      headingSize: "xl",
+    },
+  ],
+  pattern: "square",
+  component: "subscribe",
+  consentText: {
+    type: "doc",
+    content: [
+      {
+        type: "paragraph",
+        attrs: {
+          textAlign: null,
+        },
+        content: [
+          {
+            text: "By submitting the form, you agree our ",
+            type: "text",
+            marks: [
+              {
+                type: "textStyle",
+                attrs: {
+                  color: "#000000",
+                },
+              },
+            ],
+          },
+          {
+            text: "Privacy polic",
+            type: "text",
+            marks: [
+              {
+                type: "link",
+                attrs: {
+                  href: "/privacy",
+                  uuid: null,
+                  anchor: null,
+                  target: "_self",
+                  linktype: "url",
+                },
+              },
+              {
+                type: "textStyle",
+                attrs: {
+                  color: "#000000",
+                },
+              },
+            ],
+          },
+          {
+            text: "y.",
+            type: "text",
+            marks: [
+              {
+                type: "textStyle",
+                attrs: {
+                  color: "#000000",
+                },
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  } as any,
+  size: "sm",
+  rtc: false,
+} ;
 export const Subscribe: FC<{ blok: SubscribeProps }> = ({ blok }) => {
   const {
     eyebrow,
@@ -36,7 +119,9 @@ export const Subscribe: FC<{ blok: SubscribeProps }> = ({ blok }) => {
     layout = "stacked",
     size = "default",
     rtc = true,
-  } = blok;
+  } = mockBlok
+
+  console.log(blok, "insidhythtloggsg");
 
   const layoutClasses = {
     stacked: "mx-auto text-center",
@@ -44,11 +129,23 @@ export const Subscribe: FC<{ blok: SubscribeProps }> = ({ blok }) => {
     split: "flex flex-col sm:gap-10 md:flex-row  md:justify-between",
   };
 
+
+  const [isLg, setIsLg] = useState(false);
+
+useEffect(() => {
+  const m = window.matchMedia("(min-width: 1024px)");
+  const update = () => setIsLg(m.matches);
+  update();
+  m.addEventListener("change", update);
+  return () => m.removeEventListener("change", update);
+}, []);
+
+const layoutMode = isLg ? "leading" : "split";
   return (
     <div
       className={twMerge(
-        rtc && 'lg:hidden',
-        "bg-(--surface-accent-background) relative",
+        rtc && "lg:hidden",
+        "bg-(--surface-accent-background) relative mt-8",
         size === "sm" ? "p-6" : "p-6 md:p-8 "
       )}
     >
@@ -56,8 +153,8 @@ export const Subscribe: FC<{ blok: SubscribeProps }> = ({ blok }) => {
         {...storyblokEditable(blok)}
         className={twMerge(
           "overflow-hidden w-full mx-auto max-w-360",
-          layoutClasses[layout],
-          "bg-(--surface-accent-background) [&_*:not(button):not(button_*):not(a):not(a_*)]:text-white!"
+          layoutClasses[layoutMode],
+          "bg-(--surface-accent-background) [&_*:not(button):not(button_*):not(a):not(a_*):not(input):not(input_*)]:text-white"
         )}
       >
         {pattern === "square" && (
@@ -119,7 +216,7 @@ export const Subscribe: FC<{ blok: SubscribeProps }> = ({ blok }) => {
               className={twMerge(
                 layout === "stacked" && "sm:w-fit m-auto",
                 layout === "split" && "w-full",
-                "mt-(--gaps-32-24-24)"
+                "mt-0"
               )}
             />
           ))}

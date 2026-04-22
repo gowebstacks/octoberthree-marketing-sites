@@ -148,15 +148,13 @@ const renderDefault = (blok: any, body: any, hasToc: boolean) => {
           <aside className="lg:w-[320px] shrink-0">
             <div className="sticky top-4 flex flex-col gap-10">
               <TableOfContents article={{ body }} label="Table of contents" />
-              {
-                subscribeBlock &&
-                <div className="hidden lg:block">
+
+              <div className="hidden lg:block">
                 <Subscribe
                   {...storyblokEditable(subscribeBlock)}
-                  blok={{ ...subscribeBlock, size: "sm" ,rtc:false}}
+                  blok={{ ...subscribeBlock, size: "sm", rtc: false }}
                 />
               </div>
-              }
             </div>
           </aside>
         )}
@@ -166,7 +164,13 @@ const renderDefault = (blok: any, body: any, hasToc: boolean) => {
             enableToc
             className="prose prose-lg dark:prose-invert"
           />
-        
+
+          <div className="lg:hidden">
+            <Subscribe
+              {...storyblokEditable(subscribeBlock)}
+              blok={{ ...subscribeBlock, size: "md", rtc: false }}
+            />
+          </div>
         </div>
       </div>
     </div>
