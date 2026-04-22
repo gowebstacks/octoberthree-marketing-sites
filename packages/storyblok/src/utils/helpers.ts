@@ -1,5 +1,5 @@
 import { StoryblokSiteSettings } from "@repo/ui";
-import { getWebsitePageBySlug } from "../api";
+import { getPageData, getWebsitePageBySlug } from "../api";
 
 export interface StoryblokSeo {
   _uid: string;
@@ -52,9 +52,9 @@ export function renderMetadataFromStoryblok(
 
 export async function generateMetaDataByslug(siteSlug:string,slugParam:string){
   try {
-    const story = await getWebsitePageBySlug(
+    const story = await getPageData(
       `${siteSlug}/${slugParam}${slugParam === "articles" ? "/" : ""}`,
-      false
+      false 
     );
 
     if (!story) {
