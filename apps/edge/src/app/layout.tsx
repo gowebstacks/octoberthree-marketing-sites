@@ -3,11 +3,9 @@ import "@repo/ui/styles.css";
 import "./globals.css";
 import {
   getGlobalLayoutData,
-  getLatestGlobalNavigation,
-  storyblokApi,
   StoryblokBridge,
 } from "@repo/storyblok";
-import { FooterNavigation, HeaderNavigation, Layout } from "@repo/ui";
+import { FooterNavigation, HeaderNavigation } from "@repo/ui";
 import Script from "next/script";
 import StoryblokInit from "../lib/storyblok";
 

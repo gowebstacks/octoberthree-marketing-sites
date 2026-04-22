@@ -4,7 +4,9 @@ import { Suspense } from "react";
 import {
   ComponentGenerator,
   generateMetaDataByslug,
-  getWebsitePageBySlug,
+  getAllStoriesByFolder,
+  getPageData,
+  isStoryblokConfigured,
   StoryblokBridge,
 } from "@repo/storyblok";
 import { isStoryblokEditor } from "../../../lib/helper";
@@ -16,8 +18,7 @@ type PageProps = {
 };
 
 export const dynamicParams = true;
-export const revalidate = 3600;
-
+export const revalidate = 86400;
 
 const ResourceContent = async ({
   slug,
@@ -26,7 +27,7 @@ const ResourceContent = async ({
   slug: string;
   preview: boolean;
 }) => {
-  const story = await getWebsitePageBySlug(`rlc/resources/${slug}`, preview);
+  const story = await getPageData(`rlc/resources/${slug}`, preview);
   if (!story) return notFound();
 
   const { content } = story;
@@ -51,7 +52,6 @@ const ResourceContent = async ({
   );
 };
 
-
 const ResourcePageContainer = async (props: {
   params: Promise<PageProps["params"]>;
   searchParams?: Promise<PageProps["searchParams"]>;
@@ -73,17 +73,25 @@ const ResourcePageContainer = async (props: {
 
 export default ResourcePageContainer;
 
-
 export const generateMetadata = async (props: {
   params: Promise<PageParams>;
 }): Promise<Metadata> => {
   const params = await props.params;
 
   const slugParam =
-    params.slug && params.slug.length > 0
-      ? params.slug
-      : "home";
+    params.slug && params.slug.length > 0 ? params.slug : "home";
 
-   const metaData = await generateMetaDataByslug('rlc', `resources/${slugParam}`);
+  const metaData = await generateMetaDataByslug(
+    "rlc",
+    `resources/${slugParam}`
+  );
   return metaData;
 };
+
+// export async function generateStaticParams() {
+//   if (!isStoryblokConfigured()) return [];
+//   const stories = await getAllStoriesByFolder("rlc/resources", false);
+//   return stories.map((story: any) => ({
+//     slug: story.slug.split("/").pop(),
+//   }));
+// }

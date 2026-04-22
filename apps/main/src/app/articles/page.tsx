@@ -22,7 +22,6 @@ export default async function ArticlesPage(props: {
   params: Promise<PageParams>;
   searchParams?: Promise<SearchParams>;
 }) {
-  const { slug } = await props.params;
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page || 1);
   const search = searchParams?.search as string | undefined;
@@ -140,16 +139,6 @@ export default async function ArticlesPage(props: {
   );
 }
 
-export async function generateStaticParams() {
-  if (!isStoryblokConfigured()) return [];
-  const stories = await getAllStoriesByFolder(
-    "octoberthree-main/articles",
-    false
-  );
-  return stories.map((story: any) => ({
-    slug: story.slug.split("/").pop(),
-  }));
-}
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const metaData = await generateMetaDataByslug(

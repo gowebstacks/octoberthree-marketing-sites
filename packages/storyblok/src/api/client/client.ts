@@ -67,7 +67,7 @@ export async function storyblokFetch<T = any>(
       `${STORYBLOK_API_URL}/stories/${slug}?${queryParams}` as any,
      {
       cache: isDraft ? "no-store" : "force-cache",
-      next: isDraft ? undefined : { revalidate: 3600 },
+      next: isDraft ? undefined : { revalidate: 86400 },
     }as RequestInit & { next?: any });
 
     if (!response.ok) {
@@ -85,48 +85,6 @@ export async function storyblokFetch<T = any>(
   }
 }
 
-// Get all website pages
-export async function getAllWebsitePages(isDraft: boolean = true) {
-  try {
-    const accessToken = getAccessToken(isDraft ? "draft" : "published");
-
-    if (!accessToken) {
-      console.warn(
-        `Storyblok token not configured ${isDraft ? "draft" : "published"}`
-      );
-      return [];
-    }
-
-    // Build query string
-    const queryParams = new URLSearchParams({
-      token: accessToken,
-      content_type: "websitePage",
-      per_page: "100",
-      version: isDraft ? "draft" : "published",
-      excluding_slugs: "*/team/*",
-    });
-
-    const response = await fetch(
-      `${STORYBLOK_API_URL}/stories?${queryParams}` as any,
-     {
-      cache: isDraft ? "no-store" : "force-cache",
-      next: isDraft ? undefined : { revalidate: 3600 },
-    }as RequestInit & { next?: any });
-
-    if (!response.ok) {
-      throw new Error(
-        `Storyblok API error: ${response.status} ${response.statusText}`
-      );
-    }
-
-    const data = await response.json();
-    return data.stories || [];
-  } catch (error) {
-    console.error("Failed to fetch all website pages", error);
-    return [];
-  }
-}
-
 // Get website page by slug
 export async function getWebsitePageBySlug(
   slug: string,
@@ -141,21 +99,13 @@ export async function getWebsitePageBySlug(
     return null;
   }
   try {
-    // First, get all website pages and find the one with matching SEO slug
-    // const stories = await getAllWebsitePages(isDraft);
-    // const matchingStory = stories.find(
-    //   (story: ISbStoryData<any>) =>
-    //     story.content.seo && story.content.seo[0] && story.full_slug === slug
-    // );
-    // if (!matchingStory) {
-    //   return null;
-    // }
+  
 
-    // Now fetch the full story data with resolved relations
+    // fetch the full story data with resolved relations
     const data = await storyblokFetch(slug, {
       version: isDraft ? "draft" : "published",
       resolve_relations:
-        "testimonial.person,resourceCard.tags,testimonialSlide.testimonial", // Resolve testimonial, person, and company relations
+        "testimonial.person,resourceCard.tags,testimonialSlide.testimonial,relatedBios.relatedBio", // Resolve testimonial, person, and company relations
       resolve_level: 2,
     });
     if (!data) {
@@ -171,220 +121,6 @@ export async function getWebsitePageBySlug(
       `[getWebsitePageBySlug] Error fetching story for SEO slug: ${slug}`,
       error
     );
-    return null;
-  }
-}
-
-// Get all website page slugs for static generation
-export async function getAllWebsitePageSlugs() {
-  try {
-    const stories = await getAllWebsitePages(false);
-    return stories
-      .filter(
-        (story: ISbStoryData<any>) =>
-          story.content.seo && story.content.seo[0] && story.content.seo[0].slug
-      )
-      .map((story: ISbStoryData<any>) => ({
-        slug: story.content.seo[0].slug.split("/"),
-      }));
-  } catch (error) {
-    console.error("Failed to fetch website page slugs", error);
-    return [];
-  }
-}
-
-// Get all testimonials
-export async function getAllTestimonials(isDraft: boolean = false) {
-  try {
-    const accessToken = getAccessToken(isDraft ? "draft" : "published");
-
-    if (!accessToken) {
-      console.warn("Storyblok token not configured");
-      return [];
-    }
-
-    // Build query string with person relations resolved
-    const queryParams = new URLSearchParams({
-      token: accessToken,
-      content_type: "testimonial",
-      per_page: "100",
-      version: isDraft ? "draft" : "published",
-      resolve_relations: "person,company", // Resolve person and company references
-    });
-
-    const response = await fetch(
-      `${STORYBLOK_API_URL}/stories?${queryParams}` as any,
-     {
-      cache: isDraft ? "no-store" : "force-cache",
-      next: isDraft ? undefined : { revalidate: 3600 },
-    }as RequestInit & { next?: any });
-
-    if (!response.ok) {
-      throw new Error(
-        `Storyblok API error: ${response.status} ${response.statusText}`
-      );
-    }
-
-    const data = await response.json();
-    return data.stories || [];
-  } catch (error) {
-    console.error("Failed to fetch all testimonials", error);
-    return [];
-  }
-}
-
-// Get testimonial by ID
-export async function getTestimonialById(id: string, isDraft: boolean = false) {
-  try {
-    const story = await storyblokFetch(id, {
-      version: isDraft ? "draft" : "published",
-      resolve_relations: "person,company",
-    });
-
-    return story;
-  } catch (error) {
-    console.error(`Failed to fetch testimonial: ${id}`, error);
-    return null;
-  }
-}
-
-// Get all persons
-export async function getAllPersons(isDraft: boolean = false) {
-  try {
-    const accessToken = getAccessToken(isDraft ? "draft" : "published");
-
-    if (!accessToken) {
-      console.warn("Storyblok token not configured");
-      return [];
-    }
-
-    // Build query string with company relations resolved
-    const queryParams = new URLSearchParams({
-      token: accessToken,
-      content_type: "person",
-      per_page: "100",
-      version: isDraft ? "draft" : "published",
-      resolve_relations: "company", // Resolve company references
-    });
-
-    const response = await fetch(
-      `${STORYBLOK_API_URL}/stories?${queryParams}` as any,
-      {
-      cache: isDraft ? "no-store" : "force-cache",
-      next: isDraft ? undefined : { revalidate: 3600 },
-    }as RequestInit & { next?: any });
-
-    if (!response.ok) {
-      throw new Error(
-        `Storyblok API error: ${response.status} ${response.statusText}`
-      );
-    }
-
-    const data = await response.json();
-    return data.stories || [];
-  } catch (error) {
-    console.error("Failed to fetch all persons", error);
-    return [];
-  }
-}
-
-// Get person by ID
-export async function getPersonById(id: string, isDraft: boolean = false) {
-  try {
-    const story = await storyblokFetch(id, {
-      version: isDraft ? "draft" : "published",
-      resolve_relations: "company",
-    });
-
-    return story;
-  } catch (error) {
-    console.error(`Failed to fetch person: ${id}`, error);
-    return null;
-  }
-}
-
-// Get all global navigation items
-export async function getAllGlobalNavigations(
-  isDraft: boolean = false,
-  filterBy: string
-) {
-  try {
-    const accessToken = getAccessToken(isDraft ? "draft" : "published");
-
-    if (!accessToken) {
-      console.warn("Storyblok token not configured");
-      return [];
-    }
-
-    // Build query string with all necessary relations resolved
-    const queryParams = new URLSearchParams({
-      token: accessToken,
-      content_type: "globalNavigation",
-      starts_with: filterBy,
-      per_page: "100",
-      version: isDraft ? "draft" : "published",
-      resolve_relations: "button,ctaBar,headingBlock", // Resolve button, ctaBar, and headingBlock references
-    });
-
-    const response = await fetch(
-      `${STORYBLOK_API_URL}/stories?${queryParams}` as any,
-      {
-      cache: isDraft ? "no-store" : "force-cache",
-      next: isDraft ? undefined : { revalidate: 3600 },
-    }as RequestInit & { next?: any });
-
-    if (!response.ok) {
-      throw new Error(
-        `Storyblok API error: ${response.status} ${response.statusText}`
-      );
-    }
-
-    const data = await response.json();
-    return data.stories || [];
-  } catch (error) {
-    console.error("Failed to fetch all global navigations", error);
-    return [];
-  }
-}
-
-// Get global navigation by ID
-export async function getGlobalNavigationById(
-  id: string,
-  isDraft: boolean = false
-) {
-  try {
-    const story = await storyblokFetch(id, {
-      version: isDraft ? "draft" : "published",
-      resolve_relations: "button,ctaBar,headingBlock", // Resolve button, ctaBar, and headingBlock references
-    });
-
-    return story;
-  } catch (error) {
-    console.error(`Failed to fetch global navigation: ${id}`, error);
-    return null;
-  }
-}
-
-// Get the latest global navigation (most recent one)
-export async function getLatestGlobalNavigation(
-  isDraft: boolean = false,
-  filterBy: string
-) {
-  try {
-    const stories = await getAllGlobalNavigations(isDraft, filterBy);
-    if (stories.length === 0) {
-      return null;
-    }
-
-    // Get the most recent one (first in the list, as Storyblok returns them sorted by creation date)
-    const latestStory = stories[0];
-
-    // Fetch the full story data with resolved relations
-    const fullStory = await getGlobalNavigationById(latestStory.id, isDraft);
-
-    return fullStory;
-  } catch (error) {
-    console.error("Failed to fetch latest global navigation", error);
     return null;
   }
 }
@@ -430,7 +166,7 @@ export const storyblokApi = {
       `${STORYBLOK_API_URL}/stories?${queryParams}` as any,
 {
       cache: isDraft ? "no-store" : "force-cache",
-      next: isDraft ? undefined : { revalidate: 3600 },
+      next: isDraft ? undefined : { revalidate: 86400 },
     }as RequestInit & { next?: any });
 
     if (!response.ok) {
@@ -481,7 +217,7 @@ export async function getAllTeamMembers(
         `${STORYBLOK_API_URL}/stories?${queryParams}` as any,
        {
       cache: isDraft ? "no-store" : "force-cache",
-      next: isDraft ? undefined : { revalidate: 3600 },
+      next: isDraft ? undefined : { revalidate: 86400 },
     }as RequestInit & { next?: any });
 
       if (!response.ok) {
@@ -506,123 +242,6 @@ export async function getAllTeamMembers(
   }
 }
 
-// Get a single team member by slug
-export async function getTeamMemberBySlug(
-  slug: string,
-  isDraft: boolean = false,
-  sitename: string
-) {
-  try {
-    const accessToken = getAccessToken(isDraft ? "draft" : "published");
-
-    if (!accessToken) {
-      console.warn("Storyblok token not configured");
-      return null;
-    }
-
-    const fullSlug = `${sitename}/team/${slug}`;
-
-    const params = new URLSearchParams({
-      token: accessToken,
-      version: isDraft ? "draft" : "published",
-      resolve_relations: "relatedBios.relatedBio",
-    });
-
-    const url = `${STORYBLOK_API_URL}/stories/${fullSlug}?${params.toString()}`;
-
-    const response = await fetch(url, {
-      cache: isDraft ? "no-store" : "force-cache",
-      next: isDraft ? undefined : { revalidate: 3600 },
-    }as RequestInit & { next?: any });
-    if (!response.ok) {
-      if (response.status === 404) {
-        return null;
-      }
-      throw new Error(
-        `Storyblok API error: ${response.status} ${response.statusText}`
-      );
-    }
-
-    const data = await response.json();
-    return {
-      ...data.story,
-      rels: data.rels || [],
-    };
-  } catch (error) {
-    console.error(
-      `[getTeamMemberBySlug] Failed to fetch team member with slug ${slug}:`,
-      error
-    );
-    return null;
-  }
-}
-
-// Optional: Get all team member slugs for static generation
-export async function getAllTeamMemberSlugs(
-  sitename: string,
-  isDraft: boolean = false
-) {
-  try {
-    const teamMembers = await getAllTeamMembers(isDraft, sitename);
-    return teamMembers.map((member: any) => ({
-      slug: member.slug.split("/").pop(), // Extract the last part of the slug
-    }));
-  } catch (error) {
-    console.error("Failed to fetch team member slugs", error);
-    return [];
-  }
-}
-
-// Get a single team member by slug
-export async function getArticleBySlug(
-  slug: string,
-  isDraft: boolean = false,
-  sitename: string
-) {
-  try {
-    const accessToken = getAccessToken(isDraft ? "draft" : "published");
-
-    if (!accessToken) {
-      console.warn("Storyblok token not configured");
-      return null;
-    }
-
-    const fullSlug = `${sitename}/articles/${slug}`;
-    const params = new URLSearchParams({
-      token: accessToken,
-      version: isDraft ? "draft" : "published",
-      resolve_relations: "relatedBios.relatedBio",
-    });
-
-    const url = `${STORYBLOK_API_URL}/stories/${fullSlug}?${params.toString()}`;
-
-    const response = await fetch(url, {
-      cache: isDraft ? "no-store" : "force-cache",
-      next: isDraft ? undefined : { revalidate: 3600 },
-    }as RequestInit & { next?: any });
-
-    if (!response.ok) {
-      if (response.status === 404) {
-        return null;
-      }
-      throw new Error(
-        `Storyblok API error: ${response.status} ${response.statusText}`
-      );
-    }
-
-    const data = await response.json();
-    return {
-      ...data.story,
-      rels: data.rels || [],
-    };
-  } catch (error) {
-    console.error(
-      `[getArticleBySlug] Failed to fetch article with slug ${slug}:`,
-      error
-    );
-    return null;
-  }
-}
 
 // Get layout data
 export const getGlobalLayoutData = async (
@@ -664,21 +283,6 @@ export const getGlobalLayoutData = async (
   }
 };
 
-// Get All blogs
-export async function getAllBlogs(sitename: string, isDraft: boolean = false) {
-  try {
-    const res = await storyblokApi.getStories({
-      version: isDraft ? "draft" : "published",
-      starts_with: `${sitename}`,
-      per_page: 100,
-    });
-
-    return res.stories || [];
-  } catch (error) {
-    console.error("Failed to fetch blogs", error);
-    return [];
-  }
-}
 
 export async function getAllStoriesByFolder(
   folderPath: string,
@@ -734,30 +338,17 @@ export async function getAllStoriesByFolder(
     };
   }
   let allStories: ISbStoryData<any>[] = [];
-  let page = 1;
-  let allRels: any[] = [];
-  while (true) {
+
     const data = await storyblokApi.getStories({
       version,
       starts_with: folderPath,
       per_page: 100,
-      page,
-      resolve_relations: ["tags, topics"],
-      filter_query: options?.filterQuery,
+
     });
     const stories = data.stories || [];
-
-    const rels = data.rels || [];
-
     allStories.push(...stories);
-    allRels.push(...rels);
 
-    if (stories.length < 100) break;
-
-    page++;
-  }
-  (allStories as any).rels = allRels;
-
+  
   return allStories as ISbStoryData<any>[] & { rels: any[] };
 }
 export async function getStoryBySlug(
@@ -779,6 +370,7 @@ export async function getStoryBySlug(
     return null;
   }
 }
+
 
 export const getPageData = cache(async (slug: string, preview: boolean) => {
   return await getWebsitePageBySlug(slug, preview);

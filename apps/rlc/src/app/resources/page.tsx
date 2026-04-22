@@ -45,14 +45,16 @@ export default async function ResourcesPage(props: {
     ...(search && { search }),
     ...(category && { category }),
   };
-  const resources = await getAllStoriesByFolder("rlc/resources", preview, {
-    perPage: ITEMS_PER_PAGE,
-    page,
-    filterQuery: Object.keys(filterQuery).length ? filterQuery : undefined,
-   
-  },
-'rlc'
-);
+  const resources = await getAllStoriesByFolder(
+    "rlc/resources",
+    preview,
+    {
+      perPage: ITEMS_PER_PAGE,
+      page,
+      filterQuery: Object.keys(filterQuery).length ? filterQuery : undefined,
+    },
+    "rlc"
+  );
   const total = (resources as any).total || 0;
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
   const rlcRels = (resources as any).rels;
@@ -135,13 +137,6 @@ export default async function ResourcesPage(props: {
   );
 }
 
-export async function generateStaticParams() {
-  if (!isStoryblokConfigured()) return [];
-  const stories = await getAllStoriesByFolder("rlc/resources", false);
-  return stories.map((story: any) => ({
-    slug: story.slug.split("/").pop(),
-  }));
-}
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const metaData = await generateMetaDataByslug("rlc", "resources/");

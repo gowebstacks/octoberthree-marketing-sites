@@ -5,7 +5,7 @@ import {
   ComponentGenerator,
   generateMetaDataByslug,
   getAllTeamMembers,
-  getWebsitePageBySlug,
+  getPageData,
   StoryblokBridge,
   StoryblokSiteSettings,
 } from "@repo/storyblok";
@@ -17,7 +17,6 @@ interface PageParams {
 }
 
 type SearchParams = { [key: string]: string | string[] | undefined };
-
 
 export default async function SlugPage(props: {
   params: Promise<PageParams>;
@@ -32,15 +31,14 @@ export default async function SlugPage(props: {
   const inEditor = isStoryblokEditor(searchParams);
   const preview = inEditor;
 
-  const page = await getWebsitePageBySlug(
-`rlc/${slugParam}${slugParam === 'resources' || slugParam === 'services' ? '/' : ''}`  ,
+const page = await getPageData(
+  `rlc/${slugParam}${slugParam === 'resources' || slugParam === 'services' ? '/' : ''}`,
   preview
-  );
+);
 
   if (!page) {
     notFound();
   }
-
 
   // Extract content and settings from Storyblok page
   const { content } = page;
@@ -63,24 +61,24 @@ export default async function SlugPage(props: {
         ?.attrs?.body?.find((blok: any) => blok.component === "authorCard");
     };
 
-    const teamMembers = (
-      await getAllTeamMembers(preview, "rlc")
-    ).map((member: any) => {
-      const authorCard = getAuthorCard(member.content);
+    const teamMembers = (await getAllTeamMembers(preview, "rlc")).map(
+      (member: any) => {
+        const authorCard = getAuthorCard(member.content);
 
-      return {
-        _uid: member.uuid,
-        component: "leadershipCard",
+        return {
+          _uid: member.uuid,
+          component: "leadershipCard",
 
-        name: authorCard?.name || "",
-        role: authorCard?.designation || "",
-        location: authorCard?.location || "",
-        image: authorCard?.headshotImage || {},
+          name: authorCard?.name || "",
+          role: authorCard?.designation || "",
+          location: authorCard?.location || "",
+          image: authorCard?.headshotImage || {},
 
-        team: authorCard?.team || [],
-        ...member,
-      };
-    });
+          team: authorCard?.team || [],
+          ...member,
+        };
+      }
+    );
 
     updatedSections = sections.map((layout: any) => ({
       ...layout,
@@ -102,15 +100,14 @@ export default async function SlugPage(props: {
         return section;
       }),
     }));
-
   }
-const updatedStory = {
-  ...page,
-  content: {
-    ...page.content,
-    sections: updatedSections,
-  },
-};
+  const updatedStory = {
+    ...page,
+    content: {
+      ...page.content,
+      sections: updatedSections,
+    },
+  };
   console.log(preview, "preview mode ______--------------------");
   return (
     <>
@@ -128,17 +125,14 @@ const updatedStory = {
   );
 }
 
-
 export const generateMetadata = async (props: {
   params: Promise<PageParams>;
 }): Promise<Metadata> => {
   const params = await props.params;
 
   const slugParam =
-    params.slug && params.slug.length > 0
-      ? params.slug.join("/")
-      : "home";
+    params.slug && params.slug.length > 0 ? params.slug.join("/") : "home";
 
-   const metaData = await generateMetaDataByslug('rlc',slugParam);
+  const metaData = await generateMetaDataByslug("rlc", slugParam);
   return metaData;
 };
