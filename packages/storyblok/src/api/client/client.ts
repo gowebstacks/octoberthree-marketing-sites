@@ -685,11 +685,24 @@ export async function getAllStoriesByFolder(
     perPage?: number;
     page?: number;
     filterQuery?: any;
-  }
+  },
+  rootFolder?: string
 ): Promise<ISbStoryData<any>[]> {
   const version = isDraft ? "draft" : "published";
+  const { search, category, ...restFilter } = options?.filterQuery || {};
+  const usePagination =
+    options?.perPage || options?.page || options?.filterQuery;
 
-  const usePagination = options?.perPage || options?.page || options?.filterQuery;
+  let tagUuid: string | undefined;
+
+  if (category) {
+    const tagRes = await storyblokApi.getStories({
+      version,
+      starts_with: `${rootFolder}/tags/${category}`,
+    });
+    tagUuid = tagRes.stories?.[0]?.uuid;
+    if (!tagUuid) return []
+  }
   if (usePagination) {
     const data = await storyblokApi.getStories({
       version,
@@ -698,9 +711,12 @@ export async function getAllStoriesByFolder(
       page: options?.page || 1,
       resolve_relations: ["tags, topics"],
       is_startpage: false,
-    ...(options?.filterQuery?.search && {
-    search_term: options.filterQuery.search,
-  }),
+      ...(search && {
+        search_term: search,
+      }),
+
+      'filter_query[tags][any_in_array]': tagUuid,
+
     });
 
     const stories = data.stories || [];
@@ -753,7 +769,6 @@ export async function getStoryBySlug(
       version,
       resolve_relations: ["resourceCard.tags"],
     });
-    console.log(result, "test the api data");
     if (!result?.data?.story) return null;
     return {
       story: result.data.story,

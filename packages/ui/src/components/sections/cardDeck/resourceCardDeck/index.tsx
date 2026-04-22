@@ -232,8 +232,7 @@ export const ResourceCardDeck: FC<Props> = ({
       {filteredResources?.length ? (
         <div
           className="
-          grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] 
-          gap-(--gaps-16-12-12)
+         grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-(--gaps-16-12-12)
         "
         >
           {filteredResources?.map((resource) => (

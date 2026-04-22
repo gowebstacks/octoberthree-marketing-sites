@@ -106,8 +106,7 @@ export interface StoryblokNavigationMenuItem {
     openInNewTab: boolean;
   };
   menuSection?: StoryblokMenuSection[];
-  spotlightCard?: StoryblokNavigationSpotlightCard;
-  featuredCard?: StoryblokNavigationFeaturedCard;
+
 }
 
 export interface StoryblokNavigationInnerItem {
@@ -137,34 +136,9 @@ export interface StoryblokMenuSection {
   title: string;
   items: StoryblokNavigationInnerItem[];
   ctaLink?: StoryblokNavigationInnerItem['link'];
-}
-export interface StoryblokNavigationSpotlightCard {
-  _uid: string;
-  component: 'navigationSpotlightCard';
-  heading: {
-    heading?: {
-      _type: string;
-      fontFamily: string;
-      elementType: string;
-      headingSize: string;
-    };
-    body?: any[];
-  };
+  bottomLinks?: StoryblokNavigationInnerItem[];
 }
 
-export interface StoryblokNavigationFeaturedCard {
-  _uid: string;
-  component: 'navigationFeaturedCard';
-  callToAction?: {
-    component: 'link';
-    linkType: 'internal' | 'external';
-    externalUrl: string;
-    openInNewTab: boolean;
-  };
-  linkPosition?: string;
-  submenuBlocks?: any[];
-  submenuLayout?: string;
-}
 export type Person = {
   firstName?: string;
   lastName?: string;

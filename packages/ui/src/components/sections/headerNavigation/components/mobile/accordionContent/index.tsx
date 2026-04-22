@@ -1,64 +1,118 @@
+"use client";
+
 import { Content } from "@radix-ui/react-accordion";
 import type { FC } from "react";
+import { useState } from "react";
 
 import type {
   StoryblokMenuSection,
   StoryblokNavigationInnerItem,
-  StoryblokNavigationSpotlightCard,
 } from "../../../../../../types/storyblok";
 
 import NavItem from "../../navItem";
-import FeaturedCard from "../../featuredCard";
-import { Link } from "../../../../../atoms";
+import { Button, Link, Icon } from "../../../../../atoms";
 import { getLinkHref } from "../../../../../../utils/getLinkHref";
 
 interface AccordionContentProps {
   menuSection: StoryblokMenuSection[];
-  spotlightCard?: StoryblokNavigationSpotlightCard;
 }
 
-const AccordionContent: FC<AccordionContentProps> = ({
-  menuSection,
-  spotlightCard,
-}) => (
-  <Content
-    className="
-      flex flex-col gap-4 overflow-hidden
-      data-[state=closed]:animate-(--animate-accordion-slide-up)
-      data-[state=open]:animate-(--animate-accordion-slide-down)
-    "
-    style={{
-      background: "var(--surface-background)",
-   
-    }}
-  >
-    <div className="flex flex-col gap-8 p-(--scale-16)  sm:p-8  md:p-12">
-      {menuSection.map((section) => (
-        <div key={section._uid} className="flex flex-col gap-4">
-          {/* Section title */}
-          <span className="text-mono-sm  text-(--text-headings) uppercase tracking-wide ">
-            {section.title} 
-          </span>
+const AccordionContent: FC<AccordionContentProps> = ({ menuSection }) => {
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
 
-          {/* Section items */}
-          <div className="flex flex-wrap gap-4  sm:gap-14 items-center">
-            {section.items.map((menuItem: StoryblokNavigationInnerItem) => (
-              <NavItem key={menuItem._uid} {...menuItem} isMobile />
-            ))}
+  const toggleSection = (id: string) => {
+    setOpenSections((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
-            {section.ctaLink && (
-              <Link
-                href={getLinkHref(section.ctaLink)}
-                className="cursor-pointer text-xs font-medium text-(--text-link-active)"
+  return (
+    <Content
+      className="
+        flex flex-col gap-4 overflow-hidden
+        data-[state=closed]:animate-(--animate-accordion-slide-up)
+        data-[state=open]:animate-(--animate-accordion-slide-down)
+      "
+    >
+      <div className="flex flex-col gap-8 py-(--scale-24) px-(--scale-64)">
+        {menuSection.map((section) => {
+          const isOpen = openSections[section._uid];
+
+          return (
+            <div key={section._uid} className="flex flex-col gap-4">
+              {/* Section title (NOW CLICKABLE + ICON) */}
+              <button
+                onClick={() => toggleSection(section._uid)}
+                className="flex w-full items-center justify-between text-sm text-white rounded-sm px-3 py-2 bg-(--surface-accent-background)"
               >
-                {section.ctaLink.label}
-              </Link>
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
-  </Content>
-);
+                <span>{section.title}</span>
+                <Icon
+                  icon="chevron-down"
+                  size={18}
+                  className={`transition-transform ${
+                    isOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {/* Section content (TOGGLE) */}
+              {isOpen && (
+                <div className="flex flex-col gap-1">
+                  {section.items.map((item: StoryblokNavigationInnerItem) => (
+                    <Link
+                      key={item._uid}
+                      href={getLinkHref(item.link)}
+                      className="flex items-center justify-between text-xs max-w-[337px] transition-all hover:border-[#E8E0D8] rounded-sm px-6 py-1 hover:bg-[#F6F3EF] border border-transparent"
+                    >
+                      <span>{item.label}</span>
+
+                      <Icon
+                        icon="chevron-right"
+                        size={14}
+                        className="opacity-70"
+                      />
+                    </Link>
+                  ))}
+
+                 {Array.isArray(section.ctaLink) && section.ctaLink.length > 0 ? (
+                    <div className="flex gap-3 mt-4">
+                      {section.ctaLink.map((item) => (
+                        <Button
+                          key={item._uid}
+                          label={item.label}
+                          tone={item.tone}
+                          leadingIcon={item.leadingIcon}
+                        url={item.url as any}
+                          
+                          className="px-4! py-2! h-10!"
+                        />
+                      ))}
+                    </div>
+                  ) : null}
+
+                  {section.bottomLinks?.length ? (
+                    <div className="mb-6 mt-2 flex flex-col gap-2">
+                      {section.bottomLinks.map((item) => (
+                        <Button
+                          key={item._uid}
+                          label={item.label}
+                          mode="link"
+                          trailingIcon={item.icon}
+                          link={item.link as any}
+                          className="[&>span]:text-[14px]! [&_svg]:w-4 [&_svg]:h-4"
+                        />
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </Content>
+  );
+};
 
 export default AccordionContent;

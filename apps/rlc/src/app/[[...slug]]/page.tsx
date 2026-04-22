@@ -36,16 +36,11 @@ export default async function SlugPage(props: {
 `rlc/${slugParam}${slugParam === 'resources' || slugParam === 'services' ? '/' : ''}`  ,
   preview
   );
-  console.log(page, slugParam, "page data");
 
   if (!page) {
     notFound();
   }
-  console.log(
-    "*********************************************************",
-    page.content.sections,
-    slugParam
-  );
+
 
   // Extract content and settings from Storyblok page
   const { content } = page;
@@ -59,7 +54,6 @@ export default async function SlugPage(props: {
   const absoluteUrl = `${siteBase}${pathPart}`;
 
   let updatedSections = sections;
-  console.log(slugParam, "slug param");
   if (slugParam === "meet-the-team") {
     const getAuthorCard = (content: any) => {
       return content?.sections

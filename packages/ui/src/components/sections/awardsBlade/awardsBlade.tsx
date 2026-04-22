@@ -50,7 +50,6 @@ const AwardImage: FC<AwardImageProps> = ({ award, theme, noPadding }) => {
   const dimensionMatch = filename.match(/\/(\d+)x(\d+)\//);
   const width = dimensionMatch ? parseInt(dimensionMatch[1]) : 224;
   const height = dimensionMatch ? parseInt(dimensionMatch[2]) : 160;
-  console.log(award, "award in awardblade")
 
   return (
     <div

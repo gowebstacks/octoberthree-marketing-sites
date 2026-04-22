@@ -26,7 +26,11 @@ export default async function ResourcesPage(props: {
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page || 1);
   const search = searchParams?.search as string | undefined;
-  const category = searchParams?.category as string | undefined;
+  const rawCategory = searchParams?.category as string | undefined;
+
+  const category = rawCategory
+    ? rawCategory.replace(/_/g, "-").toLowerCase()
+    : undefined;
   const ITEMS_PER_PAGE = 4 * 5;
   const preview = isStoryblokEditor(searchParams);
 
@@ -37,11 +41,18 @@ export default async function ResourcesPage(props: {
   const rels = story.rels as any;
   const sections = story.content.sections || [];
 
+  const filterQuery = {
+    ...(search && { search }),
+    ...(category && { category }),
+  };
   const resources = await getAllStoriesByFolder("rlc/resources", preview, {
     perPage: ITEMS_PER_PAGE,
     page,
-  filterQuery: search ? { search } : undefined,
-  });
+    filterQuery: Object.keys(filterQuery).length ? filterQuery : undefined,
+   
+  },
+'rlc'
+);
   const total = (resources as any).total || 0;
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
   const rlcRels = (resources as any).rels;
@@ -105,7 +116,7 @@ export default async function ResourcesPage(props: {
       ...story.content,
       sections: updatedSections,
     },
-     rels: mergedRels, 
+    rels: mergedRels,
   };
 
   return (

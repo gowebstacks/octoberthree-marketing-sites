@@ -31,7 +31,7 @@ const hasSections = (sections?: StoryblokMenuSection[]) =>
 const MobileNavAccordion: FC<MobileNavAccordionProps> = ({ item }) =>
   hasSections(item.menuSection) ? (
     <div className="relative w-full 
-border-b border-(--color-navy-primary-300)">
+border-b border-(--color-cream-50---p-background)">
       <Trigger className="group flex w-full cursor-pointer items-center justify-between gap-2 py-6 px-(--scale-16) sm:px-(--scale-64)! text-heading transition-colors hover:text-headline-hover">
         <span className="text-sm text-(--text-nav-item)">
           {item.label || item.link?.label}
@@ -49,7 +49,7 @@ border-b border-(--color-navy-primary-300)">
     <Link
       href={item.link as any}
       onClick={() => toggleMobileMenu()}
-      className="border-b border-(--color-navy-primary-300) flex w-full items-center justify-between px-(--scale-16) py-6 sm:px-(--scale-64)! text-sm text-(--text-nav-item) transition-colors hover:text-headline-hover"
+      className="border-b border-(--color-cream-50---p-background) flex w-full items-center justify-between px-(--scale-16) py-6 sm:px-(--scale-64)! text-sm text-(--text-nav-item) transition-colors hover:text-headline-hover"
     >
       <span>{item.label || item.link?.label}</span>
     </Link>
@@ -67,10 +67,10 @@ const MobileNavigation: FC<MobileNavigationProps> = ({ menuItems, ctaBar }) => {
       <Root
         type="single"
         collapsible
-        className="w-full border-t border-(--stroke-primary) bg-(--surface-background)"
+        className="w-full border-t border-(--stroke-primary) bg-(--surface-secondary-background)"
       >
         <div className="flex flex-col gap-24">
-          <div className="flex flex-col bg-(--surface-background)">
+          <div className="flex flex-col bg-(--surface-secondary-background)">
             {menuItems?.map((mainItem) => (
               <Item
                 key={mainItem._uid}

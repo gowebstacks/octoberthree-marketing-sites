@@ -31,16 +31,11 @@ export default async function SlugPage(props: {
   const preview = inEditor;
 
   const page = await getWebsitePageBySlug(`edge/${slugParam}`, preview);
-  console.log(page, slugParam, "page data");
 
   if (!page) {
     notFound();
   }
-  console.log(
-    "*********************************************************",
-    page.content.sections,
-    slugParam
-  );
+ 
 
   // Extract content and settings from Storyblok page
   const { content } = page;

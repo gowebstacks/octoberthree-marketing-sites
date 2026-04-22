@@ -36,16 +36,11 @@ export default async function SlugPage(props: {
     `octoberthree-main/${slugParam}${slugParam === 'articles' ? '/' :''}`,
     preview
   );
-  console.log(page, slugParam, "page data");
 
   if (!page) {
     notFound();
   }
-  console.log(
-    "*********************************************************",
-    page.content.sections,
-    slugParam
-  );
+
 
   // Extract content and settings from Storyblok page
   const { content } = page;

@@ -26,7 +26,11 @@ export default async function ArticlesPage(props: {
   const searchParams = await props.searchParams;
   const page = Number(searchParams?.page || 1);
   const search = searchParams?.search as string | undefined;
-  const category = searchParams?.category as string | undefined;
+  const rawCategory = searchParams?.category as string | undefined;
+
+  const category = rawCategory
+    ? rawCategory.replace(/_/g, "-").toLowerCase()
+    : undefined;
   const preview = isStoryblokEditor(searchParams);
 
   const story = await getWebsitePageBySlug(
@@ -40,14 +44,19 @@ export default async function ArticlesPage(props: {
   const sections = story.content.sections || [];
   const ITEMS_PER_PAGE = 4 * 5;
 
+  const filterQuery = {
+  ...(search && { search }),
+  ...(category && {category}),
+};
   const articles = await getAllStoriesByFolder(
     "octoberthree-main/articles",
     preview,
     {
       perPage: ITEMS_PER_PAGE,
       page,
-  filterQuery: search ? { search } : undefined,
-    }
+      filterQuery: Object.keys(filterQuery).length ? filterQuery : undefined,
+    },
+   'octoberthree-main'
   );
   const total = (articles as any).total || 0;
 
@@ -112,7 +121,7 @@ export default async function ArticlesPage(props: {
       ...story.content,
       sections: updatedSections,
     },
-     rels: mergedRels, 
+    rels: mergedRels,
   };
 
   return (
