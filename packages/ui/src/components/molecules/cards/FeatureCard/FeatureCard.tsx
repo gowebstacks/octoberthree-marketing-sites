@@ -37,9 +37,9 @@ export const FeatureCard: FC<FeatureCardProps> = ({
       className={twMerge("px-6 py-8", "group flex h-full flex-col rounded-sm ")}
     >
       {/* Icon */}
-      {icon && (
+      {icon?.icon && (
         <div className="relative w-11 h-11 flex items-center justify-center rounded-sm bg-(--surface-accent-background)">
-          <Icon color="white" icon={icon?.icon} size={20} />
+          <Icon filled={true} color="white" icon={icon?.icon} size={20} />
         </div>
       )}
 
