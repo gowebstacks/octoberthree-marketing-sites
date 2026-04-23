@@ -12,7 +12,9 @@ import { Icon } from "../../../atoms";
 
 export interface FeatureCardProps {
   _uid: string;
-  icon?: string;
+  icon?: {
+    icon :string
+  };
   heading?: string;
   body?: RichTextContent;
   theme?: "light" | "dark";
@@ -37,7 +39,7 @@ export const FeatureCard: FC<FeatureCardProps> = ({
       {/* Icon */}
       {icon && (
         <div className="relative w-11 h-11 flex items-center justify-center rounded-sm bg-(--surface-accent-background)">
-          <Icon color="white" icon={icon} size={20} />
+          <Icon color="white" icon={icon?.icon || icon as any} size={20} />
         </div>
       )}
 
