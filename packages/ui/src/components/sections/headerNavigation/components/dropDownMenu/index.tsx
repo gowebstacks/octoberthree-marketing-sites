@@ -54,9 +54,9 @@ const DropDownMenu: FC<StoryblokNavigationMenuItem> = ({ menuSection }) => {
               href={getLinkHref(item.link)}
               className="flex items-center justify-between text-xs transition-all hover:border-[#E8E0D8] rounded-sm px-6 py-1 hover:bg-[#F6F3EF] border border-transparent"
             >
-              <span>{item.label}</span>
+              <span className="flex-1">{item.label}</span>
 
-              <Icon icon="chevron-right" size={14} className="opacity-70" />
+              <Icon icon="chevron-right" size={16} className="" />
             </Link>
           ))}
         </div>
@@ -68,9 +68,9 @@ const DropDownMenu: FC<StoryblokNavigationMenuItem> = ({ menuSection }) => {
               href={getLinkHref(item.link)}
               className="flex items-center justify-between text-xs transition-all hover:border-[#E8E0D8] rounded-sm px-6 py-1 hover:bg-[#F6F3EF] border border-transparent"
             >
-              <span>{item.label}</span>
+              <span className="flex-1">{item.label}</span>
 
-              <Icon icon="chevron-right" size={14} className="opacity-70" />
+              <Icon icon="chevron-right" size={16}  />
             </Link>
           ))}
         </div>

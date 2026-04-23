@@ -42,7 +42,7 @@ const MenuItemWithDropdown: FC<
           {hasDropdown && (
             <Icon
               icon="chevron-down"
-              size={16}
+              size={20}
               className="
                 mt-0.5 transition-transform duration-200
                 group-data-[state=open]:rotate-180

@@ -35,7 +35,7 @@ const AccordionContent: FC<AccordionContentProps> = ({ menuSection }) => {
         data-[state=open]:animate-(--animate-accordion-slide-down)
       "
     >
-      <div className="flex flex-col gap-8 py-(--scale-24) px-(--scale-64)">
+      <div className="flex flex-col gap-8 py-(--scale-24) px-4 sm:px-16">
         {menuSection.map((section) => {
           const isOpen = openSections[section._uid];
 
@@ -70,7 +70,6 @@ const AccordionContent: FC<AccordionContentProps> = ({ menuSection }) => {
                       <Icon
                         icon="chevron-right"
                         size={14}
-                        className="opacity-70"
                       />
                     </Link>
                   ))}
@@ -100,7 +99,7 @@ const AccordionContent: FC<AccordionContentProps> = ({ menuSection }) => {
                           mode="link"
                           trailingIcon={item.icon}
                           link={item.link as any}
-                          className="[&>span]:text-[14px]! [&_svg]:w-4 [&_svg]:h-4"
+                          className="[&>span]:text-[14px]! [&_svg]:w-4 [&_svg]:h-4 justify-start! items-left!"
                         />
                       ))}
                     </div>
