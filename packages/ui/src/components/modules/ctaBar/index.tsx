@@ -88,7 +88,7 @@ const CTABar: FC<CTABarProps> = ({
           )}
         >
           <div className="flex flex-col gap-2 w-full">
-            <InputField
+            {/* <InputField
               type="email"
               value={email}
               onChange={(e: any) => {
@@ -100,8 +100,8 @@ const CTABar: FC<CTABarProps> = ({
               placeholder={placeholder}
               className="rounded h-10 lg:h-12.5 sm:min-w-75"
               required
-            />
-            {/* <HubspotFormComponent basic={true} formId="fce28be1-0ef7-4d68-93bd-b3427e85479a"/> */}
+            /> */}
+            <HubspotFormComponent cta={true}  basic={true} formId="fce28be1-0ef7-4d68-93bd-b3427e85479a"/>
 
             {success && (
               <Toast
@@ -113,13 +113,13 @@ const CTABar: FC<CTABarProps> = ({
             {error && <Toast title={error} actionLabel="" position="top-right"/>}
           </div>
 
-          <Button
+          {/* <Button
             fullWidth={layout === "split"}
             type="submit"
             disabled={loading}
           >
             {loading ? "Submitting..." : "Subscribe"}
-          </Button>
+          </Button> */}
         </form>
       ) : (
         items?.map((item: ButtonProps) => {
