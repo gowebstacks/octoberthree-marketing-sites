@@ -39,8 +39,11 @@ function buildSearchParams(obj: Record<string, any>): URLSearchParams {
 // Enhanced fetch function with proper typing
 export async function storyblokFetch<T = any>(
   slug: string,
-  params: ISbStoryParams = {}
+  params: ISbStoryParams = {},
+  options: { revalidate?: number } = {revalidate: 86400}
 ): Promise<StoryblokResponse<T> | null> {
+  const revalidateTime = options?.revalidate ?? 86400;
+
   try {
     const defaultParams: ISbStoryParams = {
       version: "published", // Default to published to allow static generation
@@ -67,7 +70,7 @@ export async function storyblokFetch<T = any>(
       `${STORYBLOK_API_URL}/stories/${slug}?${queryParams}` as any,
      {
       cache: isDraft ? "no-store" : "force-cache",
-      next: isDraft ? undefined : { revalidate: 86400 },
+      next: isDraft ? undefined : { revalidate: revalidateTime },
     }as RequestInit & { next?: any });
 
     if (!response.ok) {
@@ -135,8 +138,8 @@ export function isStoryblokConfigured(): boolean {
 
 // Mock storyblokApi for compatibility
 export const storyblokApi = {
-  getStory: async (slug: string, params: any = {}) => {
-    const data = await storyblokFetch(slug, params);
+  getStory: async (slug: string, params: any = {}, revalidateParams?: { revalidate?: number } ) => {
+    const data = await storyblokFetch(slug, params, revalidateParams);
 
     if (!data) {
       return { data: { story: null, rels: [] } };
@@ -250,8 +253,8 @@ export const getGlobalLayoutData = async (
 ) => {
   try {
     const [headerRes, footerRes] = await Promise.allSettled([
-      storyblokApi.getStory(headerSlug, { version: "published" }),
-      storyblokApi.getStory(footerSlug, { version: "published" }),
+      storyblokApi.getStory(headerSlug, { version: "published" }, { revalidate: 60 }),
+      storyblokApi.getStory(footerSlug, { version: "published" }, { revalidate: 60 }),
     ]);
 
     const header =

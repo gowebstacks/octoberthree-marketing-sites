@@ -48,9 +48,9 @@ export const ResourceCardDeck: FC<Props> = ({
 
   const relMap = useMemo(() => buildRelMap(rels), [rels]);
   const showFilters =
-  pathname.includes("/articles") ||
-  pathname.includes("/resources") ||
-  pathname.includes("/insights");
+    pathname.includes("/articles") ||
+    pathname.includes("/resources") ||
+    pathname.includes("/insights");
 
   const tagNameMap = useMemo(() => {
     const map: Record<string, string> = {};
@@ -151,83 +151,82 @@ export const ResourceCardDeck: FC<Props> = ({
         </div>
       ) : null}
 
-      {
-        showFilters &&
+      {showFilters && (
         <div className="border items-start border-(--stroke-secondary) p-4 sm:px-8 sm:py-4.5 lg:py-8 flex flex-col-reverse lg:flex-row gap-4 justify-between">
-        <div className="flex flex-wrap gap-3">
-          {visibleFilters.map((option) => {
-            const isActive = activeFilter === option;
+          <div className="flex flex-1 flex-wrap gap-3">
+            {visibleFilters.map((option) => {
+              const isActive = activeFilter === option;
 
-            const label =
-              option === "all"
-                ? "All"
-                : option.charAt(0).toUpperCase() + option.slice(1);
+              const label =
+                option === "all"
+                  ? "All"
+                  : option.charAt(0).toUpperCase() + option.slice(1);
 
-            return (
-              <Button
-                key={option}
-                trailingIcon="None"
-                tone="secondary"
-                onClick={() => setActiveFilter(option)}
-                className={twMerge(
-                  isActive
-                    ? " border-(--stroke-secondary-button-hover) ring-4 ring-(--stroke-secondary-button-hover)"
-                    : "",
-                  "h-10!"
-                )}
+              return (
+                <Button
+                  key={option}
+                  trailingIcon="None"
+                  tone="secondary"
+                  onClick={() => setActiveFilter(option)}
+                  className={twMerge(
+                    isActive
+                      ? " border-(--stroke-secondary-button-hover) ring-4 ring-(--stroke-secondary-button-hover)"
+                      : "",
+                    "h-10!"
+                  )}
+                >
+                  {label}
+                </Button>
+              );
+            })}
+
+            {filterOptions.length > 5 ? (
+              <button
+                onClick={() => setShowAllFilters((prev) => !prev)}
+                className="px-4 py-2 rounded-md border text-sm border-(--stroke-pagination) bg-white flex items-center gap-2 h-10!"
               >
-                {label}
-              </Button>
-            );
-          })}
+                More
+                <span
+                  className={`transition-transform ${
+                    showAllFilters ? "rotate-180" : ""
+                  }`}
+                >
+                  ▾
+                </span>
+              </button>
+            ) : null}
+          </div>
 
-          {filterOptions.length > 5 ? (
+          <div className="flex  items-center gap-1 border border-(--stroke-primary) rounded-md  bg-white w-full lg:w-[320px]!  px-1.5 py-1 h-10">
+            <Icon
+              size={16}
+              color="var(--icon-primary-dark)"
+              icon="search-lg"
+              className="shrink-0"
+            />
+
+            <input
+              type="text"
+              placeholder="Search"
+              className="outline-none text-sm w-full bg-transparent h-8"
+              onChange={(e) => setInput(e.target.value)}
+              value={input}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch();
+                }
+              }}
+            />
+
             <button
-              onClick={() => setShowAllFilters((prev) => !prev)}
-              className="px-4 py-2 rounded-md border text-sm border-(--stroke-pagination) bg-white flex items-center gap-2 h-10!"
+              onClick={handleSearch}
+              className="text-xs cursor-pointer h-8 px-2 rounded-xs bg-(--surface-search-button) text-white"
             >
-              More
-              <span
-                className={`transition-transform ${
-                  showAllFilters ? "rotate-180" : ""
-                }`}
-              >
-                ▾
-              </span>
+              Search
             </button>
-          ) : null}
+          </div>
         </div>
-
-        <div className="flex items-center gap-1 border border-(--stroke-primary) rounded-md  bg-white w-full lg:w-[320px]!  px-1.5 py-1 h-10">
-          <Icon
-            size={16}
-            color="var(--icon-primary-dark)"
-            icon="search-lg"
-            className="shrink-0"
-          />
-
-          <input
-            type="text"
-            placeholder="Search"
-            className="outline-none text-sm w-full bg-transparent h-8"
-            onChange={(e) => setInput(e.target.value)}
-            value={input}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSearch();
-              }
-            }}
-          />
-
-          <button
-            onClick={handleSearch}
-            className="text-xs cursor-pointer h-8 px-2 rounded-xs bg-(--surface-search-button) text-white"
-          >
-            Search
-          </button>
-        </div>
-      </div>
-      }
+      )}
 
       {filteredResources?.length ? (
         <div
