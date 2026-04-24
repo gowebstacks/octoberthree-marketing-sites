@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { InputField } from "../../molecules";
 import { Icon } from "../../atoms";
 import { SbBlokData, storyblokEditable } from "@storyblok/react";
+
 export interface CalculatorFormBlok extends SbBlokData{
   _uid: string;
   component: "calculatorForm";
@@ -13,21 +14,59 @@ export interface CalculatorFormProps {
   blok: CalculatorFormBlok;
 }
 
+import {
+  calcData as prevData,
+  dataRanges as prevDataRanges,
+} from "../../data/cb-calc/2024_data";
+
+import {
+  calcData as currentData,
+  dataRanges as currentDataRanges,
+} from "../../data/cb-calc/2025_data";
+
 export const CalculatorForm = ({ blok }: CalculatorFormProps) => {
   var [age, setAge] = useState(50);
   var [compensation, setCompensation] = useState(150000);
   var [years, setYears] = useState(5);
   var [year, setYear] = useState("2025");
 
-  var result = (age * 10 + years * 100 + compensation * 0.05).toFixed(2);
+  const [result, setResult] = useState(0);
 
   var [ein, setEin] = useState("");
   var [plan, setPlan] = useState("");
   var [sponsor, setSponsor] = useState("");
 
+  const selectedData = year === "2024" ? prevData : currentData;
+  const selectedRanges =
+    year === "2024" ? prevDataRanges : currentDataRanges;
+
+  const getResult = () => {
+    return selectedData.find((x: any) => {
+      const comp = Number(String(x.compensation).replace(/,/g, ""));
+      return (
+        Number(x.age) === age &&
+        comp === compensation &&
+        Number(x.yos) === years
+      );
+    });
+  };
+
+  useEffect(() => {
+    const resultVal = getResult();
+    if (!resultVal) {
+      setResult(0);
+      return;
+    }
+    const credit = Number(
+      String(resultVal.credit).replace(/,/g, "")
+    );
+    setResult(credit);
+  }, [age, compensation, years, year]);
+
   if (blok.variant === "simple") {
     return (
       <div {...storyblokEditable(blok)} className="bg-[#EFE9E3] border border-(--stroke-card) rounded-sm max-w-187.5 mx-auto py-(--scale-24) px-(--padding-24-18-18)">
+       
         <div className="mb-4">
           <InputField
             label="EIN"
@@ -70,7 +109,7 @@ export const CalculatorForm = ({ blok }: CalculatorFormProps) => {
               className="outline-none text-sm w-full bg-transparent h-8"
             />
 
-            <button className="text-xs h-8 px-2 rounded-xs bg-(--surface-search-button) text-white">
+            <button className="text-xs w-[84px] h-8 px-2 rounded-xs bg-(--surface-search-button) text-white">
               Find Plan
             </button>
           </div>
@@ -226,9 +265,10 @@ export const CalculatorForm = ({ blok }: CalculatorFormProps) => {
         </p>
 
         <p className="text-display-2xl text-(--text-link)">
-          ${Number(result).toLocaleString()}
+          ${result.toLocaleString()}
         </p>
       </div>
+
        <style>{`
         .slider {
           -webkit-appearance: none;
