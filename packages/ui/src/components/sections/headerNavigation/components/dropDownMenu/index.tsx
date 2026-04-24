@@ -22,11 +22,11 @@ const DropDownMenu: FC<StoryblokNavigationMenuItem> = ({ menuSection }) => {
     <div
       className={twMerge(
         "rounded-sm bg-white shadow-md p-6",
-        rightItems.length > 0 ? "w-[608px]" : ""
+        rightItems.length > 0 ? "w-152" : ""
       )}
     >
       <div className="flex items-center justify-between mb-6">
-        <p className="text-mono-sm whitespace-nowrap uppercase tracking-wide text-(--text-nav-item-dark)">
+        <p className="text-mono-sm whitespace-nowrap uppercase tracking-wide text-(--text-nav-item-dark) mr-8">
           {section.title}
         </p>
 
@@ -46,34 +46,51 @@ const DropDownMenu: FC<StoryblokNavigationMenuItem> = ({ menuSection }) => {
         ) : null}
       </div>
 
-      <div className="grid grid-cols-2 gap-x-4 gap-y-4 min-w-68 py-6 border-t border-b border-(--color-cream-50---p-background)">
+      <div
+        className={twMerge(
+          "grid  gap-x-4 gap-y-4 min-w-68 py-6 border-t border-b border-(--color-cream-50---p-background)",
+          rightItems.length > 0 ? "grid-cols-2" : "grid-cols-1"
+        )}
+      >
         <div className="flex flex-col gap-1 ">
           {leftItems.map((item) => (
             <Link
               key={item._uid}
               href={getLinkHref(item.link)}
-              className="flex items-center justify-between text-xs transition-all hover:border-[#E8E0D8] rounded-sm px-6 py-1 hover:bg-[#F6F3EF] border border-transparent"
+              className="flex group items-center justify-between text-xs transition-all hover:border-[#E8E0D8] rounded-sm px-6 py-1 hover:bg-[#F6F3EF] border border-transparent"
             >
               <span className="flex-1">{item.label}</span>
 
-              <Icon icon="chevron-right" size={16} className="" />
+              <Icon
+                icon="chevron-right"
+                size={16}
+                className="opacity-0 group-hover:opacity-100 transition-opacity"
+              />
             </Link>
           ))}
         </div>
 
-        <div className="flex flex-col gap-1 ">
-          {rightItems.map((item) => (
-            <Link
-              key={item._uid}
-              href={getLinkHref(item.link)}
-              className="flex items-center justify-between text-xs transition-all hover:border-[#E8E0D8] rounded-sm px-6 py-1 hover:bg-[#F6F3EF] border border-transparent"
-            >
-              <span className="flex-1">{item.label}</span>
+        {rightItems.length > 0 ? (
+          <div className="flex flex-col gap-1 ">
+            {rightItems.map((item) => (
+              <Link
+                key={item._uid}
+                href={getLinkHref(item.link)}
+                className="flex group items-center justify-between text-xs transition-all hover:border-[#E8E0D8] rounded-sm px-6 py-1 hover:bg-[#F6F3EF] border border-transparent"
+              >
+                <span className="flex-1">{item.label}</span>
 
-              <Icon icon="chevron-right" size={16}  />
-            </Link>
-          ))}
-        </div>
+                <Icon
+                  icon="chevron-right"
+                  size={16}
+                  className="opacity-0 group-hover:opacity-100 transition-opacity"
+                />
+              </Link>
+            ))}
+          </div>
+        ) : (
+          ""
+        )}
       </div>
 
       {section.bottomLinks?.length ? (

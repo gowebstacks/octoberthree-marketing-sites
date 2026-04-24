@@ -1386,7 +1386,15 @@
     flex-direction: column;
     gap: 16px;
   }
-
+    .hubspot-form>div{
+      background: none !important;
+    }
+   .hubspot-form.basic form {
+    gap: 12px;
+  }
+.hubspot-form .hs_recaptcha{
+  display: none !important;
+}
   .hubspot-form label {
     font-size: var(--text-jumper-text-class-mono-sm) !important;
     font-weight: 500 !important;

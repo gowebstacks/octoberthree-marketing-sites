@@ -30,8 +30,10 @@ const hasSections = (sections?: StoryblokMenuSection[]) =>
 
 const MobileNavAccordion: FC<MobileNavAccordionProps> = ({ item }) =>
   hasSections(item.menuSection) ? (
-    <div className="relative w-full 
-border-b border-(--color-cream-50---p-background)">
+    <div
+      className="relative w-full 
+border-b border-(--color-cream-50---p-background)"
+    >
       <Trigger className="group flex w-full cursor-pointer items-center justify-between gap-2 py-6 px-(--scale-16) sm:px-(--scale-64)! text-heading transition-colors hover:text-headline-hover">
         <span className="text-sm text-(--text-nav-item)">
           {item.label || item.link?.label}
@@ -82,14 +84,13 @@ const MobileNavigation: FC<MobileNavigationProps> = ({ menuItems, ctaBar }) => {
             ))}
           </div>
 
-         {
-          ctaBar &&
-          <div className="px-(--scale-16) pb-8 sm:hidden">
-             {ctaBar?.map((ctaGroup, index) => (
-            <CTABar key={index} buttons={ctaGroup.buttons} />
-          ))}
-          </div>
-         }
+          {ctaBar && (
+            <div className="px-(--scale-16) pb-8 sm:hidden">
+              {ctaBar?.map((ctaGroup, index) => (
+                <CTABar key={index} buttons={ctaGroup.buttons} />
+              ))}
+            </div>
+          )}
         </div>
       </Root>
     </MainMobileAccordion>

@@ -11,6 +11,8 @@ import type { EyebrowBlockProps } from "../../atoms";
 import CTABar, { CTABarProps } from "../../modules/ctaBar";
 import { RichText } from "../../molecules/richText/richText";
 import type { RichTextContent } from "../../../types/storyblok";
+import { HubspotFormComponent } from "../../organisms";
+import Link from "next/link";
 
 export interface SubscribeProps extends SbBlokData {
   component?: "subscribe";
@@ -25,18 +27,11 @@ export interface SubscribeProps extends SbBlokData {
   rtc: boolean;
 }
 
-const mockBlok : SubscribeProps= {
-  ctaBar: [
-    {
-      type: "subscribe",
-      formId: "",
-      buttons: [],
-      portalId: "",
-      component: "ctaBar",
-    },
-  ],
-  layout: "leading",
-  heading: [
+
+export const Subscribe: FC<{ blok: SubscribeProps }> = ({ blok }) => {
+  const {
+    eyebrow,
+    heading=[
     {
       heading: "Want to receive the latest articles?",
       fontFamily: "display",
@@ -44,82 +39,12 @@ const mockBlok : SubscribeProps= {
       headingSize: "xl",
     },
   ],
-  pattern: "square",
-  component: "subscribe",
-  consentText: {
-    type: "doc",
-    content: [
-      {
-        type: "paragraph",
-        attrs: {
-          textAlign: null,
-        },
-        content: [
-          {
-            text: "By submitting the form, you agree our ",
-            type: "text",
-            marks: [
-              {
-                type: "textStyle",
-                attrs: {
-                  color: "#000000",
-                },
-              },
-            ],
-          },
-          {
-            text: "Privacy polic",
-            type: "text",
-            marks: [
-              {
-                type: "link",
-                attrs: {
-                  href: "/privacy",
-                  uuid: null,
-                  anchor: null,
-                  target: "_self",
-                  linktype: "url",
-                },
-              },
-              {
-                type: "textStyle",
-                attrs: {
-                  color: "#000000",
-                },
-              },
-            ],
-          },
-          {
-            text: "y.",
-            type: "text",
-            marks: [
-              {
-                type: "textStyle",
-                attrs: {
-                  color: "#000000",
-                },
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  } as any,
-  size: "sm",
-  rtc: false,
-} ;
-export const Subscribe: FC<{ blok: SubscribeProps }> = ({ blok }) => {
-  const {
-    eyebrow,
-    heading,
     body,
-    ctaBar,
-    consentText,
-    pattern,
+    pattern='square',
     layout = "stacked",
-    size = "default",
-    rtc = true,
-  } = mockBlok
+    size = "sm",
+    rtc = false,
+  } = blok;
 
   console.log(blok, "insidhythtloggsg");
 
@@ -129,18 +54,17 @@ export const Subscribe: FC<{ blok: SubscribeProps }> = ({ blok }) => {
     split: "flex flex-col sm:gap-10 md:flex-row  md:justify-between",
   };
 
-
   const [isLg, setIsLg] = useState(false);
 
-useEffect(() => {
-  const m = window.matchMedia("(min-width: 1024px)");
-  const update = () => setIsLg(m.matches);
-  update();
-  m.addEventListener("change", update);
-  return () => m.removeEventListener("change", update);
-}, []);
+  useEffect(() => {
+    const m = window.matchMedia("(min-width: 1024px)");
+    const update = () => setIsLg(m.matches);
+    update();
+    m.addEventListener("change", update);
+    return () => m.removeEventListener("change", update);
+  }, []);
 
-const layoutMode = isLg ? "leading" : "split";
+  const layoutMode = isLg ? "leading" : "split";
   return (
     <div
       className={twMerge(
@@ -182,7 +106,7 @@ const layoutMode = isLg ? "leading" : "split";
               <Heading
                 {...heading[0]}
                 className={twMerge(
-                  "lg:max-w-200",
+                  "lg:max-w-200 mb-2",
                   layout === "stacked" && "mx-auto",
                   "text-(--text-headings-light)"
                 )}
@@ -208,28 +132,16 @@ const layoutMode = isLg ? "leading" : "split";
             layout !== "split" && "w-full"
           )}
         >
-          {ctaBar?.map((cta) => (
-            <CTABar
-              key={cta._uid}
-              blok={cta}
-              layout={size === "sm" ? "split" : layout}
-              className={twMerge(
-                layout === "stacked" && "sm:w-fit m-auto",
-                layout === "split" && "w-full",
-                "mt-0"
-              )}
-            />
-          ))}
+          <HubspotFormComponent
+            basic={true}
+            formId="fce28be1-0ef7-4d68-93bd-b3427e85479a"
+          />
 
-          {consentText && (
-            <RichText
-              doc={consentText}
-              className={twMerge(
-                "mt-(--gaps-16-12-12)",
-                layout === "stacked" && "text-center"
-              )}
-            />
-          )}
+      
+
+          <p className="mt-(--gaps-16-12-12)">
+            By submitting the form, you agree our <Link className="underline" href={'/privacy'}>Privacy policy.</Link>
+          </p>
         </div>
       </div>
     </div>

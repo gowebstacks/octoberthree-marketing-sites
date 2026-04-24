@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import Script from "next/script";
 import { twMerge } from "tailwind-merge";
 import { Icon } from "../../atoms";
@@ -73,6 +73,21 @@ export function HubspotFormComponent({
     loaded.current = true;
   };
 
+  useEffect(() => {
+  let tries = 0;
+
+  const interval = setInterval(() => {
+    if (window.hbspt) {
+      createForm();
+      clearInterval(interval);
+    }
+
+    tries++;
+    if (tries > 10) clearInterval(interval); // stop after ~5s
+  }, 500);
+
+  return () => clearInterval(interval);
+}, []);
   return (
     <div className={twMerge(className, "hubspot-form relative z-1", basic && 'basic')}>
       <Script
