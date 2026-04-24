@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import Script from "next/script";
 import { twMerge } from "tailwind-merge";
 import { Icon } from "../../atoms";
+import { Toast } from "../../molecules";
 
 declare global {
   interface Window {
@@ -18,7 +19,8 @@ export type HubspotFormProps = {
   formId: string;
   className?: string;
   onReady?: () => void;
-  basic?:boolean
+  basic?:boolean;
+  cta?:boolean
 };
 
 export function HubspotFormComponent({
@@ -26,7 +28,8 @@ export function HubspotFormComponent({
   formId,
   className,
   onReady,
-  basic=false
+  basic=false,
+  cta=true
 }: HubspotFormProps) {
   const id = useId();
   const targetId = `hubspot-form-${id}`;
@@ -83,13 +86,13 @@ export function HubspotFormComponent({
     }
 
     tries++;
-    if (tries > 10) clearInterval(interval); // stop after ~5s
+    if (tries > 10) clearInterval(interval);
   }, 500);
 
   return () => clearInterval(interval);
 }, []);
   return (
-    <div className={twMerge(className, "hubspot-form relative z-1", basic && 'basic')}>
+    <div className={twMerge(className, "hubspot-form relative z-1", basic && 'basic', cta && 'cta')}>
       <Script
         src="https://js.hsforms.net/forms/v2.js"
         strategy="afterInteractive"
@@ -139,10 +142,9 @@ export function HubspotFormComponent({
           )}
 
           {status === "error" && (
-            <div className="mt-2 text-sm text-(--text-error)">
-              We couldn’t submit your request. Please check the form and try
-              again.
-            </div>
+            <Toast position="top-right" title="  We couldn’t submit your request. Please check the form for any error and try
+              again."/>
+          
           )}
         </>
       ) : (

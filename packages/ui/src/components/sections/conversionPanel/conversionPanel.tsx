@@ -45,7 +45,7 @@ export const ConversionPanel: FC<{ blok: ConversionPanelProps }> = ({
           rtc ? '' :'rounded-md relative',
           "z-2  overflow-hidden w-full mx-auto max-w-360  flex flex-col md:items-center",
           variant === "dark"  || backgroundImage?.filename 
-            ? `bg-(--surface-accent-background) [&_*:not(button):not(button_*):not(a):not(a_*):not(input):not(input_*)]:text-white! ${rtc ? '' :'section-padding-xl-top-bottom md:px-12 px-4' } `
+            ? `bg-(--surface-accent-background) [&_*:not(button):not(button_*):not(a):not(a_*):not(input):not(input_*):not(.toast)]:text-white! ${rtc ? '' :'section-padding-xl-top-bottom md:px-12 px-4' } `
             : "bg-(--surface-background)",
           fullWidth && variant !== "dark" && "bg-(--color-cream-100)",
         )}
