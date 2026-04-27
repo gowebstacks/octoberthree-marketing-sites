@@ -69,7 +69,7 @@ export const Subscribe: FC<{ blok: SubscribeProps }> = ({ blok }) => {
     <div
       className={twMerge(
         rtc && "lg:hidden",
-        "bg-(--surface-accent-background) relative mt-8",
+        "bg-(--surface-accent-background) relative mt-8 lg:mt-0",
         size === "sm" ? "p-6" : "p-6 md:p-8 "
       )}
     >
@@ -134,6 +134,7 @@ export const Subscribe: FC<{ blok: SubscribeProps }> = ({ blok }) => {
         >
           <HubspotFormComponent
             basic={true}
+            cta={false}
             formId="fce28be1-0ef7-4d68-93bd-b3427e85479a"
           />
 

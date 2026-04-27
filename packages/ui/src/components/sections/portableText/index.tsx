@@ -5,6 +5,7 @@ import { RichText } from "../../molecules/richText/richText";
 import TableOfContents from "../../organisms/tableOfContents";
 import { ConversionPanel, ConversionPanelProps } from "../conversionPanel";
 import { Subscribe } from "../../modules";
+import { twMerge } from "tailwind-merge";
 
 export interface PortableTextProps extends SbBlokData {
   component?: "portableText";
@@ -143,13 +144,23 @@ const renderDefault = (blok: any, body: any, hasToc: boolean) => {
       {...storyblokEditable(blok)}
       className="px-4 sm:px-6 lg:px-16 max-w-360 mx-auto"
     >
-      <div className="relative flex flex-col lg:flex-row gap-12">
-        {hasToc && (
+      <div className={
+        twMerge(
+          'relative flex flex-col lg:flex-row lg:gap-12',
+          hasToc ? 'gap-12' :''
+        )
+      }>
+     
           <aside className="lg:w-[320px] shrink-0">
             <div className="sticky top-4 flex flex-col gap-10">
-              <TableOfContents article={{ body }} label="Table of contents" />
+              {
+                hasToc && (
+                  <TableOfContents article={{ body }} label="Table of contents" />
+                )
+              }
 
               <div className="hidden lg:block">
+
                 <Subscribe
                   {...storyblokEditable(subscribeBlock)}
                   blok={{ ...subscribeBlock, size: "sm", rtc: false }}
@@ -157,7 +168,7 @@ const renderDefault = (blok: any, body: any, hasToc: boolean) => {
               </div>
             </div>
           </aside>
-        )}
+      
         <div className="flex-1 min-w-0">
           <RichText
             doc={body}
@@ -182,7 +193,7 @@ export const PortableText: FC<{ blok: PortableTextProps }> = ({ blok }) => {
 
   const { hasPair, authorCard, formBlock, filteredContent } =
     extractAuthorAndForm(blok.body);
-  const hasToc = generateTocItems(blok.body).length > 0;
+  const hasToc = generateTocItems(blok.body).length > 1;
 
   if (hasPair && authorCard && formBlock) {
     return (
