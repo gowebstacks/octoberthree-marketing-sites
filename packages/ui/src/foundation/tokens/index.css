@@ -1390,7 +1390,7 @@
       background: none !important;
     }
    .hubspot-form.basic form {
-    gap: 12px;
+    gap: 12px !important;
   }
 .hubspot-form .hs_recaptcha{
   display: none !important;
@@ -1504,7 +1504,9 @@
 
     cursor: pointer;
   }
-
+.hubspot-form.basic .hs-button{
+  margin-top: 0px !important;
+}
   .hubspot-form input[type="submit"]:hover,
   .hubspot-form .hs-button:hover {
     background: var(--surface-button-hover);
