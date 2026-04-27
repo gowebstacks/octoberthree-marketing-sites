@@ -25,6 +25,7 @@ export default async function RootLayout({
 }>) {
 
   const { header, footer } = await getGlobalLayoutData("octoberthree-main/globals/header-navigation","octoberthree-main/globals/o3-footer" );
+  console.log(header, footer, "test")
   return (
     <html lang="en">
       <body className={`${lato.className}`}>
