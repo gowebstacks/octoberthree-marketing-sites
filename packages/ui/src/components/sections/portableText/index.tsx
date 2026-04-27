@@ -1,3 +1,4 @@
+'use client'
 import type { FC } from "react";
 import { storyblokEditable, type SbBlokData } from "@storyblok/react";
 
@@ -6,12 +7,14 @@ import TableOfContents from "../../organisms/tableOfContents";
 import { ConversionPanel, ConversionPanelProps } from "../conversionPanel";
 import { Subscribe } from "../../modules";
 import { twMerge } from "tailwind-merge";
+import { usePathname } from "next/navigation";
 
 export interface PortableTextProps extends SbBlokData {
   component?: "portableText";
   body?: any;
   hubspotId?: string;
 }
+
 
 const generateTocItems = (body: any) => {
   const blocks = body?.content || [];
@@ -115,7 +118,7 @@ const renderSideBySide = (authorCard: any, formBlock: any) => (
   </div>
 );
 
-const renderDefault = (blok: any, body: any, hasToc: boolean) => {
+const renderDefault = (blok: any, body: any, hasToc: boolean, showSubscribe?: boolean) => {
   const subscribeBlock = body?.content
     ?.filter((item: any) => item.type === "blok")
     ?.flatMap((item: any) => item.attrs?.body || [])
@@ -159,13 +162,16 @@ const renderDefault = (blok: any, body: any, hasToc: boolean) => {
                 )
               }
 
-              <div className="hidden lg:block">
+             {
+              showSubscribe &&
+               <div className="hidden lg:block">
 
                 <Subscribe
                   {...storyblokEditable(subscribeBlock)}
                   blok={{ ...subscribeBlock, size: "sm", rtc: false }}
                 />
               </div>
+             }
             </div>
           </aside>
       
@@ -176,12 +182,15 @@ const renderDefault = (blok: any, body: any, hasToc: boolean) => {
             className="prose prose-lg dark:prose-invert"
           />
 
-          <div className="lg:hidden">
+{
+  showSubscribe &&
+            <div className="lg:hidden">
             <Subscribe
               {...storyblokEditable(subscribeBlock)}
               blok={{ ...subscribeBlock, size: "md", rtc: false }}
             />
           </div>
+}
         </div>
       </div>
     </div>
@@ -189,6 +198,13 @@ const renderDefault = (blok: any, body: any, hasToc: boolean) => {
 };
 
 export const PortableText: FC<{ blok: PortableTextProps }> = ({ blok }) => {
+  const pathname = usePathname();
+
+const allowedPaths = ["/resources", "/insights", "/articles"];
+
+const showSubscribe = allowedPaths.some((path) =>
+  pathname.startsWith(path)
+);
   if (!blok?.body) return null;
 
   const { hasPair, authorCard, formBlock, filteredContent } =
@@ -204,5 +220,5 @@ export const PortableText: FC<{ blok: PortableTextProps }> = ({ blok }) => {
     );
   }
 
-  return renderDefault(blok, blok.body, hasToc);
+  return renderDefault(blok, blok.body, hasToc, showSubscribe);
 };

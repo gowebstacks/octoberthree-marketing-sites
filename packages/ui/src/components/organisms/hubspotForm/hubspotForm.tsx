@@ -29,7 +29,7 @@ export function HubspotFormComponent({
   className,
   onReady,
   basic=false,
-  cta=true
+  cta=false
 }: HubspotFormProps) {
   const id = useId();
   const targetId = `hubspot-form-${id}`;
