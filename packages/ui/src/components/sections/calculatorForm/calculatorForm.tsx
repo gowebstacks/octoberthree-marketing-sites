@@ -163,7 +163,7 @@ export const CalculatorForm = ({ blok }: CalculatorFormProps) => {
               setEin(e.target.value);
               setSelectedPlan(null);
             }}
-            placeholder="placeholder"
+            placeholder="Enter EIN"
           />
         </div>
 
@@ -175,7 +175,7 @@ export const CalculatorForm = ({ blok }: CalculatorFormProps) => {
               setPlanNumber(e.target.value);
               setSelectedPlan(null);
             }}
-            placeholder="placeholder"
+            placeholder="Enter plan number"
           />
         </div>
 
