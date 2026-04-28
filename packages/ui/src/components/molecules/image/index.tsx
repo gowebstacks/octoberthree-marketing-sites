@@ -95,6 +95,7 @@ const Image: FC<ImageProps> = ({
     tertiary: "pattern-tertiary",
   }[patternColor || "secondary"];
 
+
   return (
     asset?.url && (
       <picture

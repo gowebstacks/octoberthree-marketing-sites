@@ -52,25 +52,27 @@ const MenuItemWithDropdown: FC<
         </button>
       </Trigger>
 
-      {hasDropdown && (
-        <Content
-          className="
-           absolute left-0 top-full z-50 mt-4
-    pointer-events-auto
-    origin-top
-    data-[state=open]:opacity-100
-    data-[state=open]:scale-100
-    data-[state=closed]:opacity-0
-    data-[state=closed]:scale-95
-    transition-[opacity,transform]
-    duration-200
-    ease-out
-          "
-        >
-          <div className="absolute inset-x-0 -top-4 h-4" />
-          <DropDownMenu {...item} />
-        </Content>
-      )}
+   {hasDropdown && (
+  <Content
+    forceMount
+    className="
+      absolute left-0 top-full z-50 mt-4
+      pointer-events-auto
+      origin-top
+
+      data-[state=open]:opacity-100
+      data-[state=open]:translate-y-0
+
+      data-[state=closed]:opacity-0
+      data-[state=closed]:-translate-y-2
+
+      transition-all duration-300 ease-in-out
+    "
+  >
+    <div className="absolute inset-x-0 -top-4 h-4" />
+    <DropDownMenu {...item} />
+  </Content>
+)}
     </Item>
   );
 };
