@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import type { FC } from "react";
 import { storyblokEditable, type SbBlokData } from "@storyblok/react";
 
@@ -14,7 +14,6 @@ export interface PortableTextProps extends SbBlokData {
   body?: any;
   hubspotId?: string;
 }
-
 
 const generateTocItems = (body: any) => {
   const blocks = body?.content || [];
@@ -118,7 +117,12 @@ const renderSideBySide = (authorCard: any, formBlock: any) => (
   </div>
 );
 
-const renderDefault = (blok: any, body: any, hasToc: boolean, showSubscribe?: boolean) => {
+const renderDefault = (
+  blok: any,
+  body: any,
+  hasToc: boolean,
+  showSubscribe?: boolean
+) => {
   const subscribeBlock = body?.content
     ?.filter((item: any) => item.type === "blok")
     ?.flatMap((item: any) => item.attrs?.body || [])
@@ -147,34 +151,32 @@ const renderDefault = (blok: any, body: any, hasToc: boolean, showSubscribe?: bo
       {...storyblokEditable(blok)}
       className="px-4 sm:px-6 lg:px-16 max-w-360 mx-auto"
     >
-      <div className={
-        twMerge(
-          'relative flex flex-col lg:flex-row lg:gap-12',
-          hasToc ? 'gap-12' :''
-        )
-      }>
-     
-          <aside className="lg:w-[320px] shrink-0">
-            <div className="sticky top-4 flex flex-col gap-10">
-              {
-                hasToc && (
-                  <TableOfContents article={{ body }} label="Table of contents" />
-                )
-              }
+      <div
+        className={twMerge(
+          "relative flex flex-col lg:flex-row lg:gap-12",
+          hasToc ? "gap-12" : ""
+        )}
+      >
+       {
+        (hasToc || showSubscribe) &&
+         <aside className="lg:w-[320px] shrink-0">
+          <div className="sticky top-4 flex flex-col gap-10">
+            {hasToc && (
+              <TableOfContents article={{ body }} label="Table of contents" />
+            )}
 
-             {
-              showSubscribe &&
-               <div className="hidden lg:block">
-
+            {showSubscribe && (
+              <div className="hidden lg:block">
                 <Subscribe
                   {...storyblokEditable(subscribeBlock)}
                   blok={{ ...subscribeBlock, size: "sm", rtc: false }}
                 />
               </div>
-             }
-            </div>
-          </aside>
-      
+            )}
+          </div>
+        </aside>
+       }
+
         <div className="flex-1 min-w-0">
           <RichText
             doc={body}
@@ -182,15 +184,14 @@ const renderDefault = (blok: any, body: any, hasToc: boolean, showSubscribe?: bo
             className="prose prose-lg dark:prose-invert"
           />
 
-{
-  showSubscribe &&
+          {showSubscribe && (
             <div className="lg:hidden">
-            <Subscribe
-              {...storyblokEditable(subscribeBlock)}
-              blok={{ ...subscribeBlock, size: "md", rtc: false }}
-            />
-          </div>
-}
+              <Subscribe
+                {...storyblokEditable(subscribeBlock)}
+                blok={{ ...subscribeBlock, size: "md", rtc: false }}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -200,11 +201,9 @@ const renderDefault = (blok: any, body: any, hasToc: boolean, showSubscribe?: bo
 export const PortableText: FC<{ blok: PortableTextProps }> = ({ blok }) => {
   const pathname = usePathname();
 
-const allowedPaths = ["/resources", "/insights", "/articles"];
+  const allowedPaths = ["/resources", "/insights", "/articles"];
 
-const showSubscribe = allowedPaths.some((path) =>
-  pathname.startsWith(path)
-);
+  const showSubscribe = allowedPaths.some((path) => pathname.startsWith(path));
   if (!blok?.body) return null;
 
   const { hasPair, authorCard, formBlock, filteredContent } =
