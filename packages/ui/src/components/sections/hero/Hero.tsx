@@ -1,4 +1,5 @@
-import type { FC } from "react";
+"use client";
+import { useEffect, useState, type FC } from "react";
 import Image from "next/image";
 import { storyblokEditable, type SbBlokData } from "@storyblok/react";
 import { twMerge } from "tailwind-merge";
@@ -18,6 +19,11 @@ export interface HeroBlok extends SbBlokData {
 export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
   const hasImage = Boolean(blok.heroImage?.filename);
   const hasVideo = Boolean(blok.video?.length);
+  const [animate, setAnimate] = useState(false);
+
+  useEffect(() => {
+    setAnimate(true);
+  }, []);
   const themeClasses = {
     primary: "bg-[var(--surface-accent-background)]",
     secondary: "bg-[var(--surface-icon-card)]",
@@ -54,7 +60,11 @@ export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
             blok.reverse && "lg:order-2"
           )}
         >
-          <div className={blok?.logoPopout?.filename && "pb-20 sm:pb-0 sm:pr-20 lg:pr-0"}>
+          <div
+            className={
+              blok?.logoPopout?.filename && "pb-20 sm:pb-0 sm:pr-20 lg:pr-0"
+            }
+          >
             {blok.body?.map((nestedBlok) => (
               <ContentBlock
                 key={nestedBlok._uid}
@@ -103,7 +113,9 @@ export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
               blok.reverse
                 ? "left-px rounded-[0_999px_999px_0]"
                 : " rounded-[999px_0_0_999px]",
-              hasVideo ? "right-px" : "right-0"
+              hasVideo ? "right-px" : "right-0",
+              animate ? "translate-x-0" : "translate-x-full",
+              "transition-transform duration-700 ease-out"
             )}
           >
             <div className="absolute inset-0 bg-[linear-gradient(-80deg,var(--illustration-primary)_0%,transparent_15%)] opacity-50" />

@@ -39,10 +39,10 @@ export const LeadershipCard: FC<LeadershipCardProps> = ({
             url: blok.image.filename,
           }}
           alt={blok.image.alt || blok.name}
-          aspectRatio="3/4"
-          objectCover
+          aspectRatio="913/1024"
+          objectContain
           unsetMaxWidth
-          className="w-full bg-gray-100 h-77 rounded-none!"
+          className="w-full bg-gray-100 rounded-none!"
           sizes="(max-width: 768px) 100vw, 300px"
           patternVariant='sm'
           showPatternOnHover

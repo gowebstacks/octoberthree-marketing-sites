@@ -21,7 +21,7 @@ const DropDownMenu: FC<StoryblokNavigationMenuItem> = ({ menuSection }) => {
   return (
     <div
       className={twMerge(
-        "rounded-sm bg-white shadow-md p-6",
+        "rounded-sm bg-white shadow-md p-6 relative",
         rightItems.length > 0 ? "w-152" : ""
       )}
     >
@@ -102,8 +102,8 @@ const DropDownMenu: FC<StoryblokNavigationMenuItem> = ({ menuSection }) => {
               key={item._uid}
               label={item.label}
               mode="link"
-              trailingIcon={item.icon}
-              link={item.link as any}
+              trailingIcon={item?.icon}
+              link={getLinkHref(item?.link)}
               className="[&>span]:text-[14px]! [&_svg]:w-4 [&_svg]:h-4"
             />
           ))}

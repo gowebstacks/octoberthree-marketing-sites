@@ -157,25 +157,24 @@ const renderDefault = (
           hasToc ? "gap-12" : ""
         )}
       >
-       {
-        (hasToc || showSubscribe) &&
-         <aside className="lg:w-[320px] shrink-0">
-          <div className="sticky top-4 flex flex-col gap-10">
-            {hasToc && (
-              <TableOfContents article={{ body }} label="Table of contents" />
-            )}
+        {(hasToc || showSubscribe) && (
+          <aside className="lg:w-[320px] shrink-0">
+            <div className="sticky top-4 flex flex-col gap-10">
+              {showSubscribe && (
+                <div className="hidden lg:block">
+                  <Subscribe
+                    {...storyblokEditable(subscribeBlock)}
+                    blok={{ ...subscribeBlock, size: "sm", rtc: false }}
+                  />
+                </div>
+              )}
 
-            {showSubscribe && (
-              <div className="hidden lg:block">
-                <Subscribe
-                  {...storyblokEditable(subscribeBlock)}
-                  blok={{ ...subscribeBlock, size: "sm", rtc: false }}
-                />
-              </div>
-            )}
-          </div>
-        </aside>
-       }
+              {hasToc && (
+                <TableOfContents article={{ body }} label="Table of contents" />
+              )}
+            </div>
+          </aside>
+        )}
 
         <div className="flex-1 min-w-0">
           <RichText

@@ -57,7 +57,7 @@ export const HeaderNavigation: React.FC<HeaderNavigationProps> = ({
           <div
             className="
               hidden
-              xl:absolute xl:left-[calc(50%-50px)] xl:top-1/2
+              xl:absolute xl:left-[calc(50%-70px)] xl:top-1/2
               xl:-translate-x-1/2 xl:-translate-y-1/2
               xl:flex
               transition-colors duration-300 ease-in-out

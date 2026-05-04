@@ -129,16 +129,9 @@ export function HubspotFormComponent({
           )}
 
           {status === "success" && (
-            <div className="absolute rounded-sm z-100 inset-0 bg-(--surface-success) flex flex-col items-center justify-center gap-3">
-              <Icon
-                icon="check-verified-02"
-                strokeWidth={0.1}
-                className="h-17.5 w-17.5 text-(--icon-success)"
-              />
-              <p className="text-mono-lg font-medium text-(--text-success)">
-                SUBMITTED
-              </p>
-            </div>
+             <Toast position="top-right"   title="Thanks! Your form has been submitted successfully."
+/>
+          
           )}
 
           {status === "error" && (
