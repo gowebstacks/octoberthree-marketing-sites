@@ -29,10 +29,6 @@ export const getLinkHref = (link: any) => {
       return `/${cleanSlug}`;
     }
 
-    console.log("SITE DEBUG", {
-      env: process.env.NEXT_PUBLIC_SITE,
-      slug,
-    });
     return base ? `${base}/${cleanSlug}` : `/${slug}`;
   }
   if (typeof link === "string") {
