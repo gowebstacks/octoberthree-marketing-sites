@@ -1,4 +1,3 @@
-
 const DOMAIN_MAP: any = {
   "octoberthree-main": "https://october3-main-webstacks.vercel.app",
   rlc: "https://rlc-webstacks.vercel.app",
@@ -30,6 +29,10 @@ export const getLinkHref = (link: any) => {
       return `/${cleanSlug}`;
     }
 
+    console.log("SITE DEBUG", {
+      env: process.env.NEXT_PUBLIC_SITE,
+      slug,
+    });
     return base ? `${base}/${cleanSlug}` : `/${slug}`;
   }
   if (typeof link === "string") {

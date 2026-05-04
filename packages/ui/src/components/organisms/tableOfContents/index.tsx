@@ -1,14 +1,14 @@
-'use client';
-import { Link as ScrollLink } from 'react-scroll';
-import { twMerge } from 'tailwind-merge';
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { ChevronDownIcon } from '@radix-ui/react-icons';
+"use client";
+import { Link as ScrollLink } from "react-scroll";
+import { twMerge } from "tailwind-merge";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 
-import useTocStore, { setActiveItem } from './store';
+import useTocStore, { setActiveItem } from "./store";
 
-import { FC, useEffect, useRef, useState } from 'react';
-import { generateSlug as baseGenerateSlug } from '../../../utils/slugs';
-import { Icon } from '../../atoms';
+import { FC, useEffect, useRef, useState } from "react";
+import { generateSlug as baseGenerateSlug } from "../../../utils/slugs";
+import { Icon } from "../../atoms";
 
 // Helper function to generate TOC-specific slugs that match heading IDs
 const generateSlug = (text: string): string => {
@@ -35,17 +35,17 @@ interface TableOfContentsProps {
 }
 
 const ScrollItems: FC<{ items: TOCItem[] }> = ({ items }) => {
-  const activeItem = useTocStore(state => state.activeItem);
+  const activeItem = useTocStore((state) => state.activeItem);
 
   const handleActiveItem = (index: number) => {
     requestAnimationFrame(() => {
       setActiveItem(index);
     });
-    const tocEl = document.getElementById('table-of-contents');
+    const tocEl = document.getElementById("table-of-contents");
     if (tocEl) {
-      tocEl.classList.add('scrolling');
+      tocEl.classList.add("scrolling");
       setTimeout(() => {
-        tocEl.classList.remove('scrolling');
+        tocEl.classList.remove("scrolling");
       }, 1200);
     }
   };
@@ -53,7 +53,9 @@ const ScrollItems: FC<{ items: TOCItem[] }> = ({ items }) => {
   return (
     <ul className="flex flex-col">
       {items.map((item, index) => {
-        const originAnchorLink = generateSlug(item?.originalTitle || item?.title || '');
+        const originAnchorLink = generateSlug(
+          item?.originalTitle || item?.title || ""
+        );
 
         return item.hidden ? (
           <></>
@@ -66,17 +68,20 @@ const ScrollItems: FC<{ items: TOCItem[] }> = ({ items }) => {
             <ScrollLink
               to={originAnchorLink || item.sectionId}
               data-url={originAnchorLink || item.sectionId}
-              aria-current={index === activeItem ? 'location' : undefined}
+              aria-current={index === activeItem ? "location" : undefined}
               smooth={true}
               duration={300}
               offset={-180}
               className={twMerge(
-                'cursor-pointer block px-4 py-2.5 transition-colors text-(--text-link-disabled) text-sm ',
-                index === activeItem && 'text-(--text-body-dark) border-l-3 border-(--stroke-table-of-contents)'
+                "cursor-pointer block px-4 py-2.5 transition-colors text-(--text-link-disabled) text-sm ",
+                index === activeItem &&
+                  "text-(--text-body-dark) border-l-3 border-(--stroke-table-of-contents)"
               )}
               onClick={() => handleActiveItem(index)}
             >
-              {item.title !== item.originalTitle ? item.title : item.originalTitle}
+              {item.title !== item.originalTitle
+                ? item.title
+                : item.originalTitle}
             </ScrollLink>
           </li>
         );
@@ -87,10 +92,12 @@ const ScrollItems: FC<{ items: TOCItem[] }> = ({ items }) => {
 
 const TableOfContents: FC<TableOfContentsProps> = ({ label, article }) => {
   const body = article?.body?.content || [];
-  const tableOfContents = Array.isArray(article) ? [] : article?.tableOfContents;
+  const tableOfContents = Array.isArray(article)
+    ? []
+    : article?.tableOfContents;
   const [expanded, setExpended] = useState(false);
   const tocRef = useRef<HTMLDivElement>(null);
-  const activeItem = useTocStore(state => state.activeItem);
+  const activeItem = useTocStore((state) => state.activeItem);
 
   if (!article) {
     return null;
@@ -102,13 +109,15 @@ const TableOfContents: FC<TableOfContentsProps> = ({ label, article }) => {
     return blocks
       .filter(
         (block) =>
-          block.type === 'heading' &&
+          block.type === "heading" &&
           block.attrs?.level === 2 &&
           block.content?.length
       )
       .map((block, index) => {
-        const text =
-          block.content.map((node: any) => node.text || '').join('').trim();
+        const text = block.content
+          .map((node: any) => node.text || "")
+          .join("")
+          .trim();
 
         return {
           key: `toc-${index}`,
@@ -122,22 +131,26 @@ const TableOfContents: FC<TableOfContentsProps> = ({ label, article }) => {
       });
   };
 
-  const tocItems = tableOfContents?.length ? tableOfContents : generateTocItems(body || []);
+  const tocItems = tableOfContents?.length
+    ? tableOfContents
+    : generateTocItems(body || []);
 
   useEffect(() => {
     if (!tocItems?.length) return;
 
     const headings = tocItems
-      .filter(item => !item.hidden)
-      .map(item => {
-        const originAnchorLink = generateSlug(item?.originalTitle || item?.title || '');
+      .filter((item) => !item.hidden)
+      .map((item) => {
+        const originAnchorLink = generateSlug(
+          item?.originalTitle || item?.title || ""
+        );
         return document.getElementById(originAnchorLink || item.sectionId);
       })
       .filter((el): el is HTMLElement => el !== null);
 
     const handleScroll = () => {
-      const tocEl = document.getElementById('table-of-contents');
-      if (tocEl && tocEl.classList.contains('scrolling')) {
+      const tocEl = document.getElementById("table-of-contents");
+      if (tocEl && tocEl.classList.contains("scrolling")) {
         return;
       }
       const scrollPosition = 200;
@@ -151,20 +164,22 @@ const TableOfContents: FC<TableOfContentsProps> = ({ label, article }) => {
 
       if (currentHeading) {
         const index = tocItems.findIndex(
-          item =>
+          (item) =>
             !item.hidden &&
             (item.sectionId === currentHeading.id ||
               item?.originalTitle === currentHeading.innerText ||
-              item?.title === currentHeading.innerText),
+              item?.title === currentHeading.innerText)
         );
         if (index !== -1) {
           setActiveItem(index);
-          const anchorEl = document.querySelector(`[data-url=${currentHeading.id}]`)?.parentElement;
+          const anchorEl = document.querySelector(
+            `[data-url=${currentHeading.id}]`
+          )?.parentElement;
           const scrollOffset = (anchorEl?.offsetTop || 0) - 45;
           if (tocRef.current) {
             tocRef.current.scrollTo({
               top: scrollOffset,
-              behavior: 'smooth',
+              behavior: "smooth",
             });
           }
         }
@@ -172,36 +187,42 @@ const TableOfContents: FC<TableOfContentsProps> = ({ label, article }) => {
     };
 
     handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [tocItems]);
 
   useEffect(() => {
     setTimeout(() => {
-      const anchorEl = document.querySelector('[aria-current=location]')?.parentElement;
+      const anchorEl = document.querySelector(
+        "[aria-current=location]"
+      )?.parentElement;
       const scrollOffset = (anchorEl?.offsetTop || 0) - 45;
       if (tocRef.current) {
         tocRef.current.scrollTo({
           top: scrollOffset,
-          behavior: 'smooth',
+          behavior: "smooth",
         });
       }
     }, 300);
   }, [expanded]);
 
-  if (!tocItems?.length || (!tocItems.length && (!article.body || !article.body.length))) {
+  if (
+    !tocItems?.length ||
+    (!tocItems.length && (!article.body || !article.body.length))
+  ) {
     return null;
   }
 
   const dropdownItems = tocItems
-    .filter(item => !item.hidden)
-    .map(item => ({
-      label: item.title !== item.originalTitle ? item.title : item.originalTitle,
+    .filter((item) => !item.hidden)
+    .map((item) => ({
+      label:
+        item.title !== item.originalTitle ? item.title : item.originalTitle,
       value: item.sectionId,
     }));
 
   const handleChange = (value: string) => {
-    const index = tocItems.findIndex(item => item.sectionId === value);
+    const index = tocItems.findIndex((item) => item.sectionId === value);
     if (index !== -1) {
       setActiveItem(index);
       const element = document.getElementById(value);
@@ -210,7 +231,7 @@ const TableOfContents: FC<TableOfContentsProps> = ({ label, article }) => {
         const offsetPosition = elementPosition + window.pageYOffset - 220;
         window.scrollTo({
           top: offsetPosition,
-          behavior: 'smooth',
+          behavior: "smooth",
         });
       }
     }
@@ -223,13 +244,23 @@ const TableOfContents: FC<TableOfContentsProps> = ({ label, article }) => {
           <div className="pt-4">
             <DropdownMenu.Root>
               <DropdownMenu.Trigger className="w-full bg-(--surface-secondary-background) border border-(--stroke-primary)  p-4 text-lg outline-none flex items-center justify-between text-(--text-body-dark)">
-                <span className="truncate text-left flex-1 font-medium">{label || 'Table of contents'}</span>
+                <span className="truncate text-left flex-1 font-medium">
+                  {label || "Table of contents"}
+                </span>
                 <ChevronDownIcon className="ml-2 h-4 w-4 shrink-0 text-(--icon-primary)" />
               </DropdownMenu.Trigger>
 
               <DropdownMenu.Portal>
                 <DropdownMenu.Content
-                  className="w-[calc(100vw-32px)] min-w-50 overflow-auto  bg-(--surface-secondary-background) border border-(--stroke-primary) p-2 shadow-lg max-h-[--radix-popper-available-height]"
+                  className="
+    w-[var(--radix-dropdown-menu-trigger-width)]
+    max-h-[--radix-popper-available-height]
+    overflow-auto
+    bg-(--surface-secondary-background)
+    border border-(--stroke-primary)
+    p-2 shadow-lg
+    z-9999
+  "
                   align="start"
                   sideOffset={4}
                 >
@@ -239,9 +270,10 @@ const TableOfContents: FC<TableOfContentsProps> = ({ label, article }) => {
                       <DropdownMenu.Item
                         key={item.value}
                         className={twMerge(
-                          'relative flex cursor-pointer select-none items-center px-4 py-3 text-sm outline-none transition-all',
-                          'text-(--text-body-dark)',
-                          isActive && 'bg-(--surface-selected) text-(--text-body-dark) border-l-3 border-(--stroke-table-of-contents) pl-3.5'
+                          "relative flex cursor-pointer select-none items-center px-4 py-3 text-sm outline-none transition-all",
+                          "text-(--text-body-dark)",
+                          isActive &&
+                            "bg-(--surface-selected) text-(--text-body-dark) border-l-3 border-(--stroke-table-of-contents) pl-3.5"
                         )}
                         onClick={() => handleChange(item.value)}
                       >
@@ -258,15 +290,15 @@ const TableOfContents: FC<TableOfContentsProps> = ({ label, article }) => {
 
       <div className="hidden lg:block bg-(--surface-secondary-background) border border-(--stroke-primary) overflow-hidden px-6 py-8">
         <p className="text-(--text-headings) border-b border-(--stroke-primary) pb-4 text-lg font-medium">
-          {label || 'Table of contents'}
+          {label || "Table of contents"}
         </p>
         {dropdownItems.length > 0 && (
           <div
             ref={tocRef}
             id="table-of-contents"
             className={twMerge(
-              'relative scrollbar-hidden overflow-auto transition-all duration-300 mt-6',
-              expanded ? 'max-h-[calc(100vh-300px)]' : 'max-h-56',
+              "relative scrollbar-hidden overflow-auto transition-all duration-300 mt-6",
+              expanded ? "max-h-[calc(100vh-300px)]" : "max-h-56"
             )}
           >
             <ScrollItems items={tocItems} />
@@ -274,7 +306,11 @@ const TableOfContents: FC<TableOfContentsProps> = ({ label, article }) => {
               className="sticky bottom-0 flex w-full p-2 items-center justify-center bg-(--surface-secondary-background) transition-colors"
               onClick={() => setExpended(!expanded)}
             >
-              <Icon color="var(--icon-primary)" icon="chevron-up" className={expanded ? 'rotate-0' : 'rotate-180'} />
+              <Icon
+                color="var(--icon-primary)"
+                icon="chevron-up"
+                className={expanded ? "rotate-0" : "rotate-180"}
+              />
             </button>
           </div>
         )}

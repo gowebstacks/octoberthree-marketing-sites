@@ -14,6 +14,7 @@ import type { SbBlokData } from "@storyblok/react";
 import { getLinkData, LinkFragment } from "../link";
 import parseUrl, { ensureLeadingSlash } from "../../../utils/parseUrl";
 import { FormModal } from "../../molecules/formModal";
+import { getLinkHref } from "../../../utils/getLinkHref";
 
 type NativeButtonProps = ComponentPropsWithoutRef<"button"> &
   ComponentPropsWithoutRef<"a">;
@@ -130,6 +131,13 @@ if (
 
   // Only add leading slash for internal URLs, not for external URLs or anchor links
   let url = rawLinkData;
+
+  if (actualLinkType === "internal" && actualInternalLink?.cached_url) {
+  url = getLinkHref({
+    linkType: "internal",
+    internalLink: actualInternalLink,
+  });
+}
 
   // Check if it's an anchor link (starts with # or TEST#)
   const extendedLink = finalLink as any; // Type assertion for extended properties

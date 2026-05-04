@@ -183,9 +183,11 @@ export const ResourceCardDeck: FC<Props> = ({
             {filterOptions.length > 5 ? (
               <button
                 onClick={() => setShowAllFilters((prev) => !prev)}
-                className="px-4 py-2 rounded-md border text-sm border-(--stroke-pagination) bg-white flex items-center gap-2 h-10!"
+                className="px-4 py-2 cursor-pointer rounded-md border text-sm border-(--stroke-pagination) bg-white flex items-center gap-2 h-10!"
               >
-                More
+               { 
+                  showAllFilters ? 'Less' : 'More'
+                }
                 <span
                   className={`transition-transform ${
                     showAllFilters ? "rotate-180" : ""

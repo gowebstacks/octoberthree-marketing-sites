@@ -103,7 +103,7 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
   filterable,
   ...blok
 }) => {
-  const ITEMS_PER_PAGE = 12;
+  const ITEMS_PER_PAGE = 16;
   const [currentPage, setCurrentPage] = useState(1);
   const [teams, setTeams] = useState<string[]>([]);
   const [locations, setLocations] = useState<string[]>([]);
@@ -121,14 +121,37 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
     );
   }, [rows, relMap]);
 
-  const teamOptions = useMemo(
-    () =>
-      [...new Set(allCards.flatMap((c) => extractCardContent(c).team))].map(
-        (t) => ({ label: t, value: t })
-      ),
-    [allCards]
-  );
+  const TEAM_ORDER = [
+    "Our Leadership",
+    "Retirement Solutions",
+    "Actuarial",
+    "Pension Risk Transfer",
+    "Advisor Services",
+    "Pension Administration",
+    "McCreedy",
+    "Actuarial Operations",
+    "Operations",
+    "Marketing",
+    "IT",
+    "Finance",
+  ];
+  const teamOptions = useMemo(() => {
+    const uniqueTeams = [
+      ...new Set(allCards.flatMap((c) => extractCardContent(c).team)),
+    ];
 
+    return uniqueTeams
+      .sort((a, b) => {
+        const indexA = TEAM_ORDER.indexOf(a);
+        const indexB = TEAM_ORDER.indexOf(b);
+
+        if (indexA === -1) return 1;
+        if (indexB === -1) return -1;
+
+        return indexA - indexB;
+      })
+      .map((t) => ({ label: t, value: t }));
+  }, [allCards]);
   const locationOptions = useMemo(
     () =>
       [
@@ -171,33 +194,32 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
       ),
     [filteredByTeamLocation, names]
   );
-const totalItems = filteredCards.length;
+  const totalItems = filteredCards.length;
   const paginatedCards = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
     return filteredCards.slice(start, start + ITEMS_PER_PAGE);
   }, [filteredCards, currentPage]);
 
- const groupedPaginatedRows = useMemo(() => {
-  if (!rows) return [];
+  const groupedPaginatedRows = useMemo(() => {
+    if (!rows) return [];
 
-  const paginatedUids = new Set(paginatedCards.map((c) => c._uid));
+    const paginatedUids = new Set(paginatedCards.map((c) => c._uid));
 
-  return rows
-    .map((row) => {
-      const expandedCards = (row.cards ?? []).flatMap((card) =>
-        resolveRelatedBios(card, relMap)
-      );
+    return rows
+      .map((row) => {
+        const expandedCards = (row.cards ?? []).flatMap((card) =>
+          resolveRelatedBios(card, relMap)
+        );
 
-      const filteredRowCards = expandedCards.filter((card) =>
-        paginatedUids.has(card._uid)
-      );
+        const filteredRowCards = expandedCards.filter((card) =>
+          paginatedUids.has(card._uid)
+        );
 
-      return { ...row, cards: filteredRowCards };
-    })
-    .filter((row) => row.cards.length > 0);
-}, [rows, paginatedCards, relMap]);
-  
-  
+        return { ...row, cards: filteredRowCards };
+      })
+      .filter((row) => row.cards.length > 0);
+  }, [rows, paginatedCards, relMap]);
+
   const hasRelatedBios = useMemo(() => {
     if (!rows) return false;
 
@@ -219,7 +241,7 @@ const totalItems = filteredCards.length;
       )}
       {filterable && (
         <div className="border border-(--stroke-secondary) p-4 sm:px-8 sm:py-4.5 lg:py-8 flex flex-col gap-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Dropdown
               label="Select a Team"
               multiple
@@ -228,14 +250,15 @@ const totalItems = filteredCards.length;
               options={teamOptions}
               placeholder="All"
             />
-            <Dropdown
+            {/* Removed as per bugticket #187*/}
+            {/* <Dropdown
               label="Location"
               multiple
               value={locations}
               onChange={(v) => setLocations(v as string[])}
               options={locationOptions}
               placeholder="All"
-            />
+            /> */}
             <Dropdown
               label="Search by Name"
               multiple

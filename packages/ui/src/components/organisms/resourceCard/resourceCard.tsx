@@ -8,10 +8,16 @@ import { twMerge } from "tailwind-merge";
 import Image from "next/image";
 import { storyblokLoader } from "../../../utils/storyblokImageLoader";
 
-// Universal resource type that handles blogs, case studies, webinars, and press releases
+
+type ResourceUIType =
+  | "article"
+  | "caseStudy"
+  | "webinar"
+  | "pressRelease";
+
 export interface ResourceCardProps extends SbBlokData {
   _id: string;
-  _type: "blogPost" | "caseStudy" | "webinar" | "pressRelease";
+  type: ResourceUIType;
   title: string;
   excerpt?: string;
   body?: RichTextContent;
@@ -102,7 +108,7 @@ export const extractPlainText = (body: any[]): string => {
 
 export const ResourceCard: FC<ResourceCardProps> = (props) => {
   const {
-    _type,
+    type,
     title,
     excerpt,
     body,
@@ -132,14 +138,16 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
 
   // Get the first topic or default based on type
   const category =
-    _type === "caseStudy"
-      ? companyName?.toUpperCase() || "CASE STUDY"
-      : topics?.[0]?.name?.toUpperCase() || "BLOG";
+    type === "caseStudy"
+      ?  "CASE STUDY"
+      : type === "article" ? "Article"
+      : type === "webinar" ? "Webinar" 
+      : type === "pressRelease" ?  "Press Release" : "Article"
 
   // Get badge label from centralized constants
-  const badgeLabel = RESOURCE_TYPE_LABELS[_type] || "Article";
+  const badgeLabel = RESOURCE_TYPE_LABELS[type] || "Article";
 
-  const resourceUrl = link  || `${getResourceRoute(_type)}/${resourceSlug}`;
+  const resourceUrl = link  || `${getResourceRoute(type)}/${resourceSlug}`;
     const firstParagraph = getFirstValidParagraph(body);
 
   return (

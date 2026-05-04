@@ -52,10 +52,13 @@ const MenuItemWithDropdown: FC<
         </button>
       </Trigger>
 
-   {hasDropdown && (
-  <Content
-    forceMount
-    className="
+      {hasDropdown && (
+        <Content
+          forceMount
+          onPointerDownOutside={(e) => {
+            e.preventDefault();
+          }}
+          className="
       absolute left-0 top-full z-50 mt-4
       pointer-events-auto
       origin-top
@@ -68,11 +71,11 @@ const MenuItemWithDropdown: FC<
 
       transition-all duration-300 ease-in-out
     "
-  >
-    <div className="absolute inset-x-0 -top-4 h-4" />
-    <DropDownMenu {...item} />
-  </Content>
-)}
+        >
+          <div className="absolute inset-x-0 -top-4 h-4" />
+          <DropDownMenu {...item} />
+        </Content>
+      )}
     </Item>
   );
 };
@@ -92,7 +95,7 @@ const Navigation: FC<NavigationProps> = ({ menuItems }) => {
       delayDuration={120}
       skipDelayDuration={300}
     >
-      <List className="hidden items-center gap-5 xl:flex lg:gap-6 lg:justify-center">
+      <List className="hidden items-center gap-5 xl:flex lg:gap- lg:justify-center">
         {menuItems?.map((item) => (
           <Fragment key={item._uid}>
             {item.menuSection?.length ? (
