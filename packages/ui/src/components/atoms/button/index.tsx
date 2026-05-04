@@ -28,9 +28,9 @@ export type ButtonProps = NativeButtonProps & {
   // New props for mode and tone
   mode?: "filled" | "link" | "nav";
   tone?: "primary" | "secondary";
-  background? : 'light' | 'dark'
+  background?: "light" | "dark";
   // Keep variant for backward compatibility
-  variant?: "primary" | "secondary" | "link" ;
+  variant?: "primary" | "secondary" | "link";
   leadingIcon?: string;
   trailingIcon?: string;
   fullWidth?: boolean;
@@ -50,7 +50,7 @@ export type ButtonProps = NativeButtonProps & {
   anchorLinkId?: string;
   popupform?: string;
   openInNewTab?: boolean;
-  iconColor?:string
+  iconColor?: string;
 } & SbBlokData;
 
 const Button: FC<ButtonProps> = ({
@@ -91,26 +91,29 @@ const Button: FC<ButtonProps> = ({
     openInNewTab !== undefined ? openInNewTab : actualBlok?.openInNewTab;
   const actualMode = mode || actualBlok?.mode || "filled";
   const actualTone = tone || actualBlok?.tone || "primary";
-  const actualTrailingIcon = trailingIcon || actualBlok?.trailingIcon ||  (actualTone === "secondary" ? "arrow-up-right" : undefined);
-  
+  const actualTrailingIcon =
+    trailingIcon ||
+    actualBlok?.trailingIcon ||
+    (actualTone === "secondary" ? "arrow-up-right" : undefined);
+
   const actualLeadingIcon = leadingIcon || actualBlok?.leadingIcon;
   // Build link from Storyblok data if available
-  let finalLink = link ;
+  let finalLink = link;
 
-if (
-  props.url &&
-  typeof props.url !== "string" &&
-  "cached_url" in props.url &&
-  props.url.cached_url !== ""
-) {
-  finalLink = props.url;
-}  
+  if (
+    props.url &&
+    typeof props.url !== "string" &&
+    "cached_url" in props.url &&
+    props.url.cached_url !== ""
+  ) {
+    finalLink = props.url;
+  }
   if (
     !finalLink &&
     actualLinkType === "internal" &&
     actualInternalLink?.cached_url
   ) {
-    console.log("no final link", internalLink)
+    console.log("no final link", internalLink);
     finalLink = `/${actualInternalLink.cached_url}`;
   } else if (!finalLink && actualLinkType === "external" && actualExternalUrl) {
     finalLink = actualExternalUrl;
@@ -124,20 +127,32 @@ if (
     };
   }
 
- 
-
   // Get the raw link data without modification
   const rawLinkData = getLinkData(finalLink);
 
   // Only add leading slash for internal URLs, not for external URLs or anchor links
   let url = rawLinkData;
 
+
   if (actualLinkType === "internal" && actualInternalLink?.cached_url) {
-  url = getLinkHref({
-    linkType: "internal",
-    internalLink: actualInternalLink,
-  });
-}
+    url = getLinkHref({
+      linkType: "internal",
+      internalLink: actualInternalLink,
+    });
+  }
+
+  if (
+    props.url &&
+    typeof props.url !== "string" &&
+    (props.url as any).linktype === "story" &&
+    "cached_url" in props.url &&
+     props.url.cached_url !== ""
+  ) {
+    url = getLinkHref({
+      linkType: "internal",
+      internalLink: finalLink,
+    });
+  }
 
   // Check if it's an anchor link (starts with # or TEST#)
   const extendedLink = finalLink as any; // Type assertion for extended properties
@@ -159,9 +174,8 @@ if (
     !url.startsWith("http://") &&
     !url.startsWith("https://") &&
     !url.startsWith("#") &&
-      !url.startsWith("tel:") &&
-  !url.startsWith("mailto:")
-    
+    !url.startsWith("tel:") &&
+    !url.startsWith("mailto:")
   ) {
     url = ensureLeadingSlash(url);
   }
@@ -211,27 +225,47 @@ if (
 
     return (
       <>
-        {actualLeadingIcon && actualLeadingIcon !== "None" && mode!=='nav' && (
-          <span>
-            <Icon color={iconColor} size={20} icon={actualLeadingIcon} aria-hidden={true} />
-          </span>
-        )}
-        <span className="mt-0.5 lg:mt-0" >
-          {actualLabel || children}
-        </span>
-        {actualTrailingIcon && actualTrailingIcon !== "None" &&  mode!=='nav'  &&(
-          <span>
-            <Icon color={iconColor} size={20} icon={actualTrailingIcon} aria-hidden={true} />
-          </span>
-        )}
-        {actualTrailingIcon && actualTrailingIcon !== "None" &&  mode==='nav' &&(
-          <span>
-            <Icon color={iconColor} size={20} icon={'chevron-down'} aria-hidden={true} />
-          </span>
-        )}
+        {actualLeadingIcon &&
+          actualLeadingIcon !== "None" &&
+          mode !== "nav" && (
+            <span>
+              <Icon
+                color={iconColor}
+                size={20}
+                icon={actualLeadingIcon}
+                aria-hidden={true}
+              />
+            </span>
+          )}
+        <span className="mt-0.5 lg:mt-0">{actualLabel || children}</span>
+        {actualTrailingIcon &&
+          actualTrailingIcon !== "None" &&
+          mode !== "nav" && (
+            <span>
+              <Icon
+                color={iconColor}
+                size={20}
+                icon={actualTrailingIcon}
+                aria-hidden={true}
+              />
+            </span>
+          )}
+        {actualTrailingIcon &&
+          actualTrailingIcon !== "None" &&
+          mode === "nav" && (
+            <span>
+              <Icon
+                color={iconColor}
+                size={20}
+                icon={"chevron-down"}
+                aria-hidden={true}
+              />
+            </span>
+          )}
         {shouldShowAutoArrow && (
           <span>
-            <Icon color={iconColor}
+            <Icon
+              color={iconColor}
               size={20}
               icon="arrow-up-right"
               spriteType="ui"
@@ -246,6 +280,8 @@ if (
   const [openPopup, setOpenPopup] = useState(false);
 
   const handleClick = (e: any) => {
+ 
+
     // Call user's onClick first if provided
     if (props.onClick) {
       props.onClick(e);
@@ -289,10 +325,10 @@ if (
             variant, // Keep for backward compatibility
             fullWidth,
             size,
-            background : background? background : 'light'
+            background: background ? background : "light",
           }),
           "group",
-          'h-10 lg:h-13',
+          "h-10 lg:h-13",
           className
         )}
         // Spread user props first so our controlled props take precedence

@@ -9,6 +9,12 @@ import { HeadingBlok } from "../../atoms/heading";
 import { twMerge } from "tailwind-merge";
 import { buildRelMap, resolveRel } from "../../../utils";
 
+const AUTOPLAY_INTERVAL_MS = 5000;
+const RESUME_DELAY_MS = 5000;
+const DRAG_FRICTION = 0.65;
+const VELOCITY_THRESHOLD = 0.15;
+const SWIPE_TRIGGER_PERCENT = 0.18;
+
 export interface TestimonialBlok extends SbBlokData {
   quote?: string;
   title?: string;
@@ -27,6 +33,8 @@ export interface TestimonialSliderBlok extends SbBlokData {
   heading?: HeadingBlok[];
   testimonials: (TestimonialBlok | TestimonialSlideBlok)[];
   mode: "light" | "dark";
+  autoplay?: boolean;
+  autoplaySpeed?: number;
 }
 
 interface TestimonialSliderProps {
@@ -36,14 +44,28 @@ interface TestimonialSliderProps {
 
 export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
   const activeCardRef = useRef<HTMLDivElement | null>(null);
+  const sliderContainerRef = useRef<HTMLDivElement | null>(null);
+  const autoplayIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const rafIdRef = useRef<number | null>(null);
+
+  const dragStartX = useRef(0);
+  const dragStartTime = useRef(0);
+  const lastDragX = useRef(0);
+  const lastDragTime = useRef(0);
+  const dragVelocity = useRef(0);
+  const [dragOffset, setDragOffset] = useState(0);
+  const isDragging = useRef(false);
+  const isAnimatingMomentum = useRef(false);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeHeight, setActiveHeight] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-
-  const dragStartX = useRef(0);
-  const [dragOffset, setDragOffset] = useState(0);
-  const isDragging = useRef(false);
+  const [isAutoplayPaused, setIsAutoplayPaused] = useState(false);
+  const autoplaySpeed =
+    blok?.autoplaySpeed != null
+      ? blok.autoplaySpeed * 1000
+      : AUTOPLAY_INTERVAL_MS;
 
   const mode = blok.mode || "dark";
 
@@ -70,17 +92,72 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
   const prevIndex = getIndex(currentIndex - 1);
   const nextIndex = getIndex(currentIndex + 1);
 
+  const stopAutoplay = useCallback(() => {
+    if (autoplayIntervalRef.current) {
+      clearInterval(autoplayIntervalRef.current);
+      autoplayIntervalRef.current = null;
+    }
+  }, []);
+
+  const startAutoplay = useCallback(() => {
+    if (!blok.autoplay || total <= 1 || isAutoplayPaused) return;
+    stopAutoplay();
+    autoplayIntervalRef.current = setInterval(() => {
+      setCurrentIndex((prev) => getIndex(prev + 1));
+    }, autoplaySpeed);
+  }, [blok.autoplay, total, isAutoplayPaused, stopAutoplay, getIndex]);
+
+  const pauseAutoplay = useCallback(() => {
+    if (!blok.autoplay) return;
+    setIsAutoplayPaused(true);
+    stopAutoplay();
+    if (resumeTimeoutRef.current) {
+      clearTimeout(resumeTimeoutRef.current);
+      resumeTimeoutRef.current = null;
+    }
+  }, [blok.autoplay, stopAutoplay]);
+
+  const scheduleAutoplayResume = useCallback(() => {
+    if (!blok.autoplay || total <= 1) return;
+    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
+    resumeTimeoutRef.current = setTimeout(() => {
+      setIsAutoplayPaused(false);
+      resumeTimeoutRef.current = null;
+    }, RESUME_DELAY_MS);
+  }, [blok.autoplay, total]);
+
+  useEffect(() => {
+    if (blok.autoplay && total > 1 && !isAutoplayPaused) {
+      startAutoplay();
+    } else {
+      stopAutoplay();
+    }
+    return () => {
+      stopAutoplay();
+      if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
+    };
+  }, [blok.autoplay, total, isAutoplayPaused, startAutoplay, stopAutoplay]);
+
   useEffect(() => {
     const el = activeCardRef.current;
     if (!el) return;
 
+    let timeoutId: NodeJS.Timeout;
     const observer = new ResizeObserver((entries) => {
       const entry = entries[0];
-      if (entry) setActiveHeight(Math.ceil(entry.contentRect.height));
+      if (entry) {
+        if (timeoutId) clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          setActiveHeight(Math.ceil(entry.contentRect.height));
+        }, 16);
+      }
     });
 
     observer.observe(el);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      clearTimeout(timeoutId);
+    };
   }, [currentIndex]);
 
   useEffect(() => {
@@ -91,50 +168,151 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
     return () => media.removeEventListener("change", handleChange);
   }, []);
 
-  const handleStart = (x: number) => {
-    isDragging.current = true;
-    dragStartX.current = x;
-  };
+  const commitSlideChange = useCallback(
+    (direction: "next" | "prev") => {
+      setCurrentIndex((prev) =>
+        direction === "next" ? getIndex(prev + 1) : getIndex(prev - 1)
+      );
+      setDragOffset(0);
+    },
+    [getIndex]
+  );
 
-  // 🔥 UPDATED: infinite continuous drag
-  const handleMove = (x: number) => {
-    if (!isDragging.current) return;
+  const animateMomentum = useCallback(() => {
+    if (!isAnimatingMomentum.current) return;
 
+    const velocity = dragVelocity.current;
+    const absVelocity = Math.abs(velocity);
+    if (absVelocity < VELOCITY_THRESHOLD) {
+      setDragOffset(0);
+      isAnimatingMomentum.current = false;
+      return;
+    }
+
+    const newOffset = dragOffset + velocity * 16;
     const cardWidth = activeCardRef.current?.offsetWidth || 600;
-    const maxDrag = cardWidth * 0.2;
+    const maxOffset = cardWidth * 0.25;
 
-    let diff = x - dragStartX.current;
-
-    diff = diff * 0.6;
-    diff = Math.max(-maxDrag, Math.min(maxDrag, diff));
-
-    const trigger = cardWidth * 0.15;
-
-    // 👉 swipe left → next
-    if (diff <= -trigger) {
-      setCurrentIndex((prev) => getIndex(prev + 1));
-      dragStartX.current = x;
-      setDragOffset(0);
-      return;
+    if (Math.abs(newOffset) > maxOffset) {
+      if (newOffset > maxOffset) commitSlideChange("prev");
+      else if (newOffset < -maxOffset) commitSlideChange("next");
+      else {
+        setDragOffset(0);
+        isAnimatingMomentum.current = false;
+      }
+    } else {
+      setDragOffset(newOffset);
+      dragVelocity.current *= 0.92;
+      rafIdRef.current = requestAnimationFrame(animateMomentum);
     }
+  }, [dragOffset, commitSlideChange]);
 
-    // 👉 swipe right → prev
-    if (diff >= trigger) {
-      setCurrentIndex((prev) => getIndex(prev - 1));
-      dragStartX.current = x;
-      setDragOffset(0);
-      return;
+  const stopMomentum = useCallback(() => {
+    if (rafIdRef.current) {
+      cancelAnimationFrame(rafIdRef.current);
+      rafIdRef.current = null;
     }
+    isAnimatingMomentum.current = false;
+  }, []);
 
-    setDragOffset(diff);
-  };
+  const handleStart = useCallback(
+    (x: number) => {
+      stopMomentum();
+      isDragging.current = true;
+      dragStartX.current = x;
+      dragStartTime.current = performance.now();
+      lastDragX.current = x;
+      lastDragTime.current = dragStartTime.current;
+      dragVelocity.current = 0;
+      pauseAutoplay();
+      scheduleAutoplayResume();
+    },
+    [pauseAutoplay, scheduleAutoplayResume, stopMomentum]
+  );
 
-  const handleEnd = () => {
+  const handleMove = useCallback(
+    (x: number) => {
+      if (!isDragging.current) return;
+
+      const now = performance.now();
+      const deltaX = x - lastDragX.current;
+      const deltaTime = Math.max(1, now - lastDragTime.current);
+      const instantaneousVelocity = deltaX / deltaTime;
+
+      dragVelocity.current =
+        dragVelocity.current * 0.6 + instantaneousVelocity * 0.4;
+
+      lastDragX.current = x;
+      lastDragTime.current = now;
+
+      let diff = x - dragStartX.current;
+      const cardWidth = activeCardRef.current?.offsetWidth || 600;
+      const maxDrag = cardWidth * 0.3;
+
+      diff = diff * DRAG_FRICTION;
+      diff = Math.max(-maxDrag, Math.min(maxDrag, diff));
+      setDragOffset(diff);
+
+      const elapsed = now - dragStartTime.current;
+      const totalDiff = x - dragStartX.current;
+      const avgVelocity = Math.abs(totalDiff / elapsed);
+      const triggerPx = cardWidth * SWIPE_TRIGGER_PERCENT;
+
+      if (
+        elapsed < 200 &&
+        avgVelocity > 0.8 &&
+        Math.abs(totalDiff) > triggerPx
+      ) {
+        if (totalDiff > 0) commitSlideChange("prev");
+        else commitSlideChange("next");
+        handleEnd();
+      }
+    },
+    [commitSlideChange]
+  );
+
+  const handleEnd = useCallback(() => {
     if (!isDragging.current) return;
 
-    setDragOffset(0);
     isDragging.current = false;
-  };
+    const cardWidth = activeCardRef.current?.offsetWidth || 600;
+    const absOffset = Math.abs(dragOffset);
+    const triggerPx = cardWidth * SWIPE_TRIGGER_PERCENT;
+
+    if (absOffset > triggerPx) {
+      if (dragOffset > 0) commitSlideChange("prev");
+      else commitSlideChange("next");
+    } else if (Math.abs(dragVelocity.current) > VELOCITY_THRESHOLD) {
+      if (dragVelocity.current > 0) commitSlideChange("prev");
+      else if (dragVelocity.current < 0) commitSlideChange("next");
+      else setDragOffset(0);
+    } else {
+      setDragOffset(0);
+    }
+
+    dragVelocity.current = 0;
+  }, [dragOffset, commitSlideChange]);
+
+  const handleNext = useCallback(() => {
+    pauseAutoplay();
+    scheduleAutoplayResume();
+    setCurrentIndex(nextIndex);
+  }, [pauseAutoplay, scheduleAutoplayResume, nextIndex]);
+
+  const handlePrevious = useCallback(() => {
+    pauseAutoplay();
+    scheduleAutoplayResume();
+    setCurrentIndex(prevIndex);
+  }, [pauseAutoplay, scheduleAutoplayResume, prevIndex]);
+
+  const handleGoTo = useCallback(
+    (index: number) => {
+      pauseAutoplay();
+      scheduleAutoplayResume();
+      setCurrentIndex(index);
+    },
+    [pauseAutoplay, scheduleAutoplayResume]
+  );
 
   const desktopSlides = useMemo(() => {
     return resolvedTestimonials.map((testimonial, index) => {
@@ -147,12 +325,12 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
         stateClasses = "z-30 scale-100 opacity-100 translate-x-0";
       } else if (isPrev) {
         stateClasses =
-          "z-20 scale-90 opacity-0 md:opacity-100 lg:-translate-x-28  md:-translate-x-20 -translate-x-24";
+          "z-20 scale-90 opacity-0 md:opacity-100 lg:-translate-x-28 md:-translate-x-20 -translate-x-24";
       } else if (isNext) {
         stateClasses =
           "z-20 scale-90 opacity-0 md:opacity-100 lg:translate-x-28 md:translate-x-20 translate-x-24";
       } else {
-        stateClasses = "z-10 scale-75 opacity-0";
+        stateClasses = "z-10 scale-75 opacity-0 pointer-events-none";
       }
 
       const dynamicHeight =
@@ -160,28 +338,29 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
           ? { height: `calc(${activeHeight}px - 56px)` }
           : undefined;
 
+      const transformStyle = isActive
+        ? {
+            transform: `translate3d(${dragOffset}px, 0, 0)`,
+            transition:
+              isDragging.current || isAnimatingMomentum.current
+                ? "none"
+                : "transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1)",
+          }
+        : undefined;
+
       return (
         <div
-          key={`${testimonial._uid} ${index}`}
+          key={`${testimonial._uid}-${index}`}
           {...storyblokEditable(testimonial)}
           className={twMerge(
-            "absolute transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] cursor-pointer",
+            "absolute will-change-transform backface-hidden transition-all duration-700 ease-out cursor-pointer",
             stateClasses
           )}
-          style={
-            isActive
-              ? {
-                  transform: `translateX(${dragOffset}px)`,
-                  transition: isDragging.current
-                    ? "none"
-                    : "transform 1s cubic-bezier(0.16,1,0.3,1)",
-                }
-              : undefined
-          }
+          style={transformStyle}
           onDragStart={(e) => e.preventDefault()}
           onClick={() => {
-            if (isNext) setCurrentIndex(nextIndex);
-            if (isPrev) setCurrentIndex(prevIndex);
+            if (isNext) handleNext();
+            if (isPrev) handlePrevious();
           }}
         >
           <div
@@ -201,7 +380,7 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
           >
             <div
               className={twMerge(
-                "py-(--scale-24) px-(--scale-16) sm:px-14 sm:py-18 md:py-18 md:px-14 transition-opacity duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)] select-none",
+                "py-(--scale-24) px-(--scale-16) sm:px-14 sm:py-18 md:py-18 md:px-14 transition-opacity duration-700 ease-out select-none",
                 isActive ? "opacity-100" : "opacity-0"
               )}
             >
@@ -236,6 +415,8 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
     nextIndex,
     activeHeight,
     dragOffset,
+    handleNext,
+    handlePrevious,
   ]);
 
   if (resolvedTestimonials.length === 0) return null;
@@ -280,17 +461,24 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
         </div>
 
         <div
-          className="relative w-full flex items-center justify-center cursor-grab active:cursor-grabbing select-none"
+          ref={sliderContainerRef}
+          className="relative w-full flex items-center justify-center cursor-grab active:cursor-grabbing select-none touch-pan-y"
           style={{
             height: activeHeight || "auto",
-            transition: "height 0.7s cubic-bezier(0.16,1,0.3,1)",
+            transition: "height 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1)",
           }}
           onMouseDown={(e) => handleStart(e.clientX)}
           onMouseMove={(e) => handleMove(e.clientX)}
           onMouseUp={handleEnd}
           onMouseLeave={handleEnd}
-          onTouchStart={(e) => handleStart(e.touches[0].clientX)}
-          onTouchMove={(e) => handleMove(e.touches[0].clientX)}
+          onTouchStart={(e) => {
+            e.preventDefault();
+            handleStart(e.touches[0].clientX);
+          }}
+          onTouchMove={(e) => {
+            e.preventDefault();
+            handleMove(e.touches[0].clientX);
+          }}
           onTouchEnd={handleEnd}
         >
           {desktopSlides}
@@ -303,9 +491,9 @@ export function TestimonialSlider({ blok, rels = [] }: TestimonialSliderProps) {
           currentIndex={currentIndex}
           totalSlides={total}
           mode={mode}
-          onNext={() => setCurrentIndex(nextIndex)}
-          onPrevious={() => setCurrentIndex(prevIndex)}
-          onGoTo={(index) => setCurrentIndex(index)}
+          onNext={handleNext}
+          onPrevious={handlePrevious}
+          onGoTo={handleGoTo}
           showArrows={isMobile}
           alignment="center"
         />

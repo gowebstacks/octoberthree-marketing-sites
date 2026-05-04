@@ -40,7 +40,7 @@ function buildSearchParams(obj: Record<string, any>): URLSearchParams {
 export async function storyblokFetch<T = any>(
   slug: string,
   params: ISbStoryParams = {},
-  options: { revalidate?: number } = {revalidate: 86400}
+  options: { revalidate?: number } = { revalidate: 86400 }
 ): Promise<StoryblokResponse<T> | null> {
   const revalidateTime = options?.revalidate ?? 86400;
 
@@ -68,10 +68,11 @@ export async function storyblokFetch<T = any>(
     const isDraft = (defaultParams.version || "draft") === "draft";
     const response = await fetch(
       `${STORYBLOK_API_URL}/stories/${slug}?${queryParams}` as any,
-     {
-      cache: isDraft ? "no-store" : "force-cache",
-      next: isDraft ? undefined : { revalidate: revalidateTime },
-    }as RequestInit & { next?: any });
+      {
+        cache: isDraft ? "no-store" : "force-cache",
+        next: isDraft ? undefined : { revalidate: revalidateTime },
+      } as RequestInit & { next?: any }
+    );
 
     if (!response.ok) {
       throw new Error(
@@ -101,9 +102,10 @@ export async function getWebsitePageBySlug(
   ) {
     return null;
   }
+  if (slug.includes("/globals/404")) {
+    return null;
+  }
   try {
-  
-
     // fetch the full story data with resolved relations
     const data = await storyblokFetch(slug, {
       version: isDraft ? "draft" : "published",
@@ -138,7 +140,11 @@ export function isStoryblokConfigured(): boolean {
 
 // Mock storyblokApi for compatibility
 export const storyblokApi = {
-  getStory: async (slug: string, params: any = {}, revalidateParams?: { revalidate?: number } ) => {
+  getStory: async (
+    slug: string,
+    params: any = {},
+    revalidateParams?: { revalidate?: number }
+  ) => {
     const data = await storyblokFetch(slug, params, revalidateParams);
 
     if (!data) {
@@ -167,10 +173,11 @@ export const storyblokApi = {
     const isDraft = (params.version || "draft") === "draft";
     const response = await fetch(
       `${STORYBLOK_API_URL}/stories?${queryParams}` as any,
-{
-      cache: isDraft ? "no-store" : "force-cache",
-      next: isDraft ? undefined : { revalidate: 86400 },
-    }as RequestInit & { next?: any });
+      {
+        cache: isDraft ? "no-store" : "force-cache",
+        next: isDraft ? undefined : { revalidate: 86400 },
+      } as RequestInit & { next?: any }
+    );
 
     if (!response.ok) {
       throw new Error(
@@ -218,10 +225,11 @@ export async function getAllTeamMembers(
 
       const response = await fetch(
         `${STORYBLOK_API_URL}/stories?${queryParams}` as any,
-       {
-      cache: isDraft ? "no-store" : "force-cache",
-      next: isDraft ? undefined : { revalidate: 86400 },
-    }as RequestInit & { next?: any });
+        {
+          cache: isDraft ? "no-store" : "force-cache",
+          next: isDraft ? undefined : { revalidate: 86400 },
+        } as RequestInit & { next?: any }
+      );
 
       if (!response.ok) {
         throw new Error(
@@ -245,7 +253,6 @@ export async function getAllTeamMembers(
   }
 }
 
-
 // Get layout data
 export const getGlobalLayoutData = async (
   headerSlug: string,
@@ -253,8 +260,16 @@ export const getGlobalLayoutData = async (
 ) => {
   try {
     const [headerRes, footerRes] = await Promise.allSettled([
-      storyblokApi.getStory(headerSlug, { version: "published" }, { revalidate: 60 }),
-      storyblokApi.getStory(footerSlug, { version: "published" }, { revalidate: 60 }),
+      storyblokApi.getStory(
+        headerSlug,
+        { version: "published" },
+        { revalidate: 60 }
+      ),
+      storyblokApi.getStory(
+        footerSlug,
+        { version: "published" },
+        { revalidate: 60 }
+      ),
     ]);
 
     const header =
@@ -285,7 +300,6 @@ export const getGlobalLayoutData = async (
     };
   }
 };
-
 
 export async function getAllStoriesByFolder(
   folderPath: string,
@@ -342,16 +356,14 @@ export async function getAllStoriesByFolder(
   }
   let allStories: ISbStoryData<any>[] = [];
 
-    const data = await storyblokApi.getStories({
-      version,
-      starts_with: folderPath,
-      per_page: 100,
+  const data = await storyblokApi.getStories({
+    version,
+    starts_with: folderPath,
+    per_page: 100,
+  });
+  const stories = data.stories || [];
+  allStories.push(...stories);
 
-    });
-    const stories = data.stories || [];
-    allStories.push(...stories);
-
-  
   return allStories as ISbStoryData<any>[] & { rels: any[] };
 }
 export async function getStoryBySlug(
@@ -373,7 +385,6 @@ export async function getStoryBySlug(
     return null;
   }
 }
-
 
 export const getPageData = cache(async (slug: string, preview: boolean) => {
   return await getWebsitePageBySlug(slug, preview);
