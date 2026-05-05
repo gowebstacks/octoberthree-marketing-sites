@@ -389,3 +389,32 @@ export async function getStoryBySlug(
 export const getPageData = cache(async (slug: string, preview: boolean) => {
   return await getWebsitePageBySlug(slug, preview);
 });
+
+
+
+export async function getAllStories(isDraft = false) {
+  const version = isDraft ? "draft" : "published";
+  const SITE = process.env.NEXT_PUBLIC_SITE!;
+
+  let allStories: any[] = [];
+  let page = 1;
+  let total = 0;
+
+  do {
+    const data = await storyblokApi.getStories({
+      version,
+      per_page: 100,
+      page,
+      starts_with: `${SITE}/`,
+      excluding_fields: "sections,body",
+    });
+
+    total = Number(data._headers?.total || 0);
+    allStories.push(...(data.stories || []));
+
+    page++;
+    await new Promise((r) => setTimeout(r, 150)); // prevent 429
+  } while (allStories.length < total && page < 200);
+
+  return allStories;
+}
