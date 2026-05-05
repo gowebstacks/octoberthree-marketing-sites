@@ -25,7 +25,6 @@ export const RichText: FC<RichTextProps> = ({
 
     if (node.marks) {
       node.marks.forEach((mark: any) => {
-        
         if (mark.type === "link") {
           let href = mark.attrs?.href || "#";
           if (!href.startsWith("http")) {
@@ -130,6 +129,26 @@ export const RichText: FC<RichTextProps> = ({
         <li key={`li-${index}`}>
           {node.content?.map((child: any, i: number) => renderNode(child, i))}
         </li>
+      );
+    }
+
+    if (node.type === "blockquote") {
+      return (
+        <blockquote
+          key={`blockquote-${index}`}
+          style={{ backgroundColor: "#efe9e3" }}
+          className="rounded-sm p-8 [&_p]:mb-0"
+        >
+          <p className="text-(--text-headings-dark) text-rich-blockquote leading-relaxed">
+            “
+            {node.content?.flatMap((child: any) =>
+              child.content?.map((c: any, i: number) =>
+                c.type === "text" ? renderText(c, i) : renderNode(c, i)
+              )
+            )}
+            ”
+          </p>
+        </blockquote>
       );
     }
 
