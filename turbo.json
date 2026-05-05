@@ -5,12 +5,12 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**","storybook-static/**"],
+      "outputs": [".next/**", "!.next/cache/**", "storybook-static/**"],
       "env": [
-        "STORYBLOK_PERSONAL_ACCESS_TOKEN",
-        "STORYBLOK_SPACE_ID",
         "STORYBLOK_PREVIEW_ACCESS_TOKEN",
-        "STORYBLOK_PUBLIC_ACCESS_TOKEN"
+        "STORYBLOK_PUBLIC_ACCESS_TOKEN",
+        "NEXT_PUBLIC_SITE",
+        "NEXT_PUBLIC_SITE_URL"
       ]
     },
     "lint": {

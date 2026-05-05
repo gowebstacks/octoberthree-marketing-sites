@@ -5,8 +5,15 @@ const TOKEN = process.env.STORYBLOK_PREVIEW_ACCESS_TOKEN;
 
 const DOMAIN =
   process.env.NODE_ENV === "production"
-    ? process.env.NEXT_PUBLIC_SITE_URL || "https://october3-main-webstacks.vercel.app/"
+    ? process.env.NEXT_PUBLIC_SITE_URL ||
+      "https://rlc-webstacks.vercel.app"
     : "http://localhost:3000";
+
+//  ENV DEBUG
+console.log("[env] NODE_ENV:", process.env.NODE_ENV);
+console.log("[env] SITE:", SITE);
+console.log("[env] DOMAIN:", DOMAIN);
+console.log("[env] TOKEN exists:", !!TOKEN);
 
 async function getAllStories() {
   let page = 1;
@@ -23,6 +30,11 @@ async function getAllStories() {
     }
 
     const data = await res.json();
+    console.log(`[data] stories count (page ${page}):`, data.stories?.length);
+    console.log(
+      `[data] first slug (page ${page}):`,
+      data.stories?.[0]?.full_slug
+    );
     allStories.push(...data.stories);
 
     if (data.stories.length < 100) break;
@@ -51,7 +63,7 @@ export default async function sitemap() {
           slug &&
           !slug.includes(".") &&
           !slug.includes("/tags") &&
-          !slug.includes("/topics")  &&
+          !slug.includes("/topics") &&
           !slug.includes("/globals")
         );
       })
@@ -60,9 +72,7 @@ export default async function sitemap() {
         const slug = story.full_slug.replace(`${SITE}/`, "");
 
         const url =
-          slug === "home" || slug === ""
-            ? DOMAIN
-            : `${DOMAIN}/${slug}`;
+          slug === "home" || slug === "" ? DOMAIN : `${DOMAIN}/${slug}`;
 
         return {
           url,
