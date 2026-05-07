@@ -171,10 +171,10 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
        
       )}
     >
-      <div className={twMerge('flex flex-col h-full',carousel ? "max-w-100" : "",  !displayImage?.filename &&
+      <div className={twMerge('flex flex-col h-full',carousel ? "w-100 max-w-100" : "",  !displayImage?.filename &&
           (mode === "light"
-            ? "border-t-8 border-t-orange-300"
-            : "border-t-8 border-t-(--surface-accent-background)"))}>
+            ? "border-t-8 border-t-(--resource-card-border-light)"
+            : "border-t-8 border-t-(--resource-card-border-dark)"))}>
         {/* Featured Image */}
         {displayImage?.filename && (
           <div

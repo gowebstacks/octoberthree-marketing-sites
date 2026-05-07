@@ -289,6 +289,8 @@
     transparent
   );
   --gradient-left: var(--color-cyan-100---p);
+  --resource-card-border-light: var(--color-orange-300);
+  --resource-card-border-dark: var(--color-navy-primary-900---p);
 
   /* Default desktop */
   --stroke-width-none: var(--scale-0);
@@ -1369,13 +1371,13 @@
     padding: var(--padding-24-18-18);
     border-radius: 4px;
   }
-  .hubspot-form.basic,  .hubspot-form.basic >div {
+  .hubspot-form.basic,
+  .hubspot-form.basic > div {
     padding: 0;
     background: none !important;
   }
   .hubspot-form.basic form,
-  .hubspot-form.basic[data-hs-forms-root]
-  {
+  .hubspot-form.basic[data-hs-forms-root] {
     background: none !important;
   }
   .hubspot-form.basic.hs-form {
@@ -1385,21 +1387,20 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-        max-width: none !important;
-
+    max-width: none !important;
   }
-    .hubspot-form>div{
-      background: none !important;
-    }
-   .hubspot-form.basic form {
+  .hubspot-form > div {
+    background: none !important;
+  }
+  .hubspot-form.basic form {
     gap: 12px !important;
   }
-.hubspot-form .hs_recaptcha{
-  display: none !important;
-}
-.hubspot-form.cta form>div>label{
-  display: none;
-}
+  .hubspot-form .hs_recaptcha {
+    display: none !important;
+  }
+  .hubspot-form.cta form > div > label {
+    display: none;
+  }
 
   .hubspot-form label {
     font-size: var(--text-jumper-text-class-mono-sm) !important;
@@ -1461,13 +1462,13 @@
     text-transform: none !important;
     margin-bottom: 0;
   }
-.hubspot-form .hs-error-msgs li{
-  list-style: none !important;
-  margin-top: 4px;
-}
-.hubspot-form  form>div label{
-  text-align: left;
-}
+  .hubspot-form .hs-error-msgs li {
+    list-style: none !important;
+    margin-top: 4px;
+  }
+  .hubspot-form form > div label {
+    text-align: left;
+  }
   .hubspot-form input::placeholder,
   .hubspot-form textarea::placeholder {
     color: var(--text-placeholder);
@@ -1506,19 +1507,19 @@
 
     cursor: pointer;
   }
-.hubspot-form.basic .hs-button{
-  margin-top: 0px !important;
-}
+  .hubspot-form.basic .hs-button {
+    margin-top: 0px !important;
+  }
   .hubspot-form input[type="submit"]:hover,
   .hubspot-form .hs-button:hover {
     background: var(--surface-button-hover);
   }
-.hubspot-form.cta input[type="submit"]{
-  text-transform: capitalize;
-  padding: 10px 24px !important;
-  height: 48px;
-}
-.hubspot-form.cta .hs-input {
+  .hubspot-form.cta input[type="submit"] {
+    text-transform: capitalize;
+    padding: 10px 24px !important;
+    height: 48px;
+  }
+  .hubspot-form.cta .hs-input {
     height: 48px !important;
   }
   .hs-form-field .input {
@@ -1572,17 +1573,13 @@
     box-shadow: none !important;
   }
 
-
-
-@media (min-width: 640px) {
-  .hubspot-form.cta .hs-input {
-    min-width: 18.75rem;
+  @media (min-width: 640px) {
+    .hubspot-form.cta .hs-input {
+      min-width: 18.75rem;
+    }
+    .hubspot-form.cta form {
+      display: flex;
+      flex-direction: row;
+    }
   }
-  .hubspot-form.cta form{
-  display: flex;
-  flex-direction: row;
-}
-}
-
-
 }
