@@ -59,7 +59,7 @@ export const ImageTextCard: FC<ImageTextCardProps> = ({
 
         <div
           className={twMerge(
-            "grid transition-[grid-template-rows] duration-200 ease-in-out ",
+            "grid transition-[grid-template-rows] duration-700 ease-in-out ",
             isActive ? "grid-rows-[1fr] delay-200" : "grid-rows-[0fr]"
           )}
         >

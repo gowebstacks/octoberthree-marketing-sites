@@ -23,7 +23,9 @@ export const ImageCardDeck: FC<ImageCardDeckProps> = ({
   htmlId,
   ...blok
 }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndexes, setActiveIndexes] = useState<
+    Record<number, number>
+  >({});
 
   return (
     <div
@@ -31,15 +33,20 @@ export const ImageCardDeck: FC<ImageCardDeckProps> = ({
       {...storyblokEditable(blok)}
       id={htmlId}
     >
-
       {rows?.map((row, rowIndex) => {
         const isTwoCards = row.cards?.length === 2;
+        const activeIndex = activeIndexes[rowIndex] ?? 0;
 
         return (
           <div
             key={rowIndex}
-            onMouseLeave={() => setActiveIndex(0)}
-            className="flex flex-col sm:flex-row w-full gap-4 overflow-hidden"
+            onMouseLeave={() =>
+              setActiveIndexes((prev) => ({
+                ...prev,
+                [rowIndex]: 0,
+              }))
+            }
+            className="flex w-full flex-col gap-4 overflow-hidden sm:flex-row"
           >
             {row.cards?.map((item, i) => {
               const key = (item as any)?._uid || (item as any)?._key || i;
@@ -48,9 +55,14 @@ export const ImageCardDeck: FC<ImageCardDeckProps> = ({
               return (
                 <div
                   key={key}
-                  onMouseEnter={() => setActiveIndex(i)}
+                  onMouseEnter={() =>
+                    setActiveIndexes((prev) => ({
+                      ...prev,
+                      [rowIndex]: i,
+                    }))
+                  }
                   className={twMerge(
-                    "transition-flex duration-400  ease-in-out min-w-0 w-full",
+                    "transition-flex duration-400 ease-in-out min-w-0 w-full",
                     isTwoCards
                       ? "sm:flex-1"
                       : isActive
@@ -58,7 +70,10 @@ export const ImageCardDeck: FC<ImageCardDeckProps> = ({
                       : "sm:flex-1"
                   )}
                 >
-                  <ImageTextCard {...(item as any)} isActive={isActive} />
+                  <ImageTextCard
+                    {...(item as any)}
+                    isActive={isActive}
+                  />
                 </div>
               );
             })}

@@ -36,6 +36,11 @@ export default async function InsightPage(props: {
 const story = await getPageData("edge/insights", preview);
   if (!story) notFound();
 
+
+  const categories = await getAllStoriesByFolder(
+  "edge/categories",
+);
+
   const rels = story.rels as any;
   const sections = story.content.sections || [];
 
@@ -96,6 +101,7 @@ const story = await getPageData("edge/insights", preview);
         return {
           ...section,
           resources: insightCards,
+          categories,
           pagination: {
             currentPage: page,
             totalPages,

@@ -1,3 +1,4 @@
+'use client'
 import type { FC } from "react";
 import { getResourceRoute, RESOURCE_TYPE_LABELS } from "../../../lib";
 import { Button, Heading, Link } from "../../atoms";
@@ -7,6 +8,7 @@ import { RichTextContent } from "../../../types/storyblok";
 import { twMerge } from "tailwind-merge";
 import Image from "next/image";
 import { storyblokLoader } from "../../../utils/storyblokImageLoader";
+import { usePathname } from "next/navigation";
 
 
 type ResourceUIType =
@@ -15,6 +17,7 @@ type ResourceUIType =
   | "webinar"
   | "pressRelease";
 
+  
 export interface ResourceCardProps extends SbBlokData {
   _id: string;
   type: ResourceUIType;
@@ -45,7 +48,7 @@ export interface ResourceCardProps extends SbBlokData {
   // Tocheck if it is used in resource carousel
   carousel?: boolean;
   mode: "dark" | "light";
-  labelLink?: string
+  linkLabel?: string
 }
 const getFirstValidParagraph = (body?: RichTextContent) => {
   const content = body?.content;
@@ -71,6 +74,7 @@ const getFirstValidParagraph = (body?: RichTextContent) => {
 
   return null;
 };
+
 
 // Helper function to extract plain text from portable text body
 export const extractPlainText = (body: any[]): string => {
@@ -152,6 +156,12 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
   const resourceUrl = link  || `${getResourceRoute(type)}/${resourceSlug}`;
     const firstParagraph = getFirstValidParagraph(body);
 
+  const pathname = usePathname();
+      const showLinkLabel=
+    pathname.includes("/articles") ||
+    pathname.includes("/resources") ||
+    pathname.includes("/insights");
+
   return (
     <Link
       href={resourceUrl}
@@ -161,12 +171,12 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
        
       )}
     >
-      <div className={twMerge('flex flex-col',carousel ? "max-w-100" : "",  !displayImage.filename &&
+      <div className={twMerge('flex flex-col h-full',carousel ? "max-w-100" : "",  !displayImage?.filename &&
           (mode === "light"
             ? "border-t-8 border-t-orange-300"
             : "border-t-8 border-t-(--surface-accent-background)"))}>
         {/* Featured Image */}
-        {displayImage.filename && (
+        {displayImage?.filename && (
           <div
             className={twMerge(
               "relative  flex justify-center items-center overflow-hidden h-35",
@@ -177,7 +187,7 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
           >
             <Image
             loader={storyblokLoader}
-              src={displayImage.filename}
+              src={displayImage?.filename}
               alt={displayImage?.alt || title || "Resource"}
               className="object-cover h-24.25 w-full"
               fill
@@ -211,14 +221,13 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
           )}
 
           {/* Learn More Link */}
-         {
-          resourceUrl.url &&
+         {(resourceUrl?.url || showLinkLabel) && (
            <Button
             className="w-fit group-hover:text-(--text-link-hover) mt-auto"
             mode="link"
             label={linkLabel || "Read more"}
           />
-         }
+         )}
         </div>
       </div>
     </Link>

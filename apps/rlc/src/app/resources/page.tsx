@@ -38,6 +38,10 @@ export default async function ResourcesPage(props: {
 
   if (!story) notFound();
 
+  const categories = await getAllStoriesByFolder(
+  "rlc/categories",
+);
+
   const rels = story.rels as any;
   const sections = story.content.sections || [];
 
@@ -101,6 +105,7 @@ export default async function ResourcesPage(props: {
       if (section.component === "resourceCardDeck") {
         return {
           ...section,
+          categories,
           resources: rlcCards,
           pagination: {
             currentPage: page,

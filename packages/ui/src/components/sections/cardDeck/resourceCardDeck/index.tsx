@@ -12,7 +12,6 @@ import {
   ResourceCardProps,
 } from "../../../organisms";
 import { Pagination } from "../../../molecules";
-import { buildRelMap } from "../../../../utils";
 import { Button, Icon } from "../../../atoms";
 import { twMerge } from "tailwind-merge";
 
@@ -24,6 +23,8 @@ export interface ResourceCardDeckBlok extends SbBlokData {
 
 interface Props extends ResourceCardDeckBlok {
   rels?: any[];
+  categories?: any[];
+
   pagination?: {
     currentPage: number;
     totalPages: number;
@@ -34,8 +35,8 @@ export const ResourceCardDeck: FC<Props> = ({
   content,
   resources,
   htmlId,
-  rels = [],
   pagination,
+  categories,
   ...blok
 }) => {
   const router = useRouter();
@@ -43,86 +44,44 @@ export const ResourceCardDeck: FC<Props> = ({
   const searchParams = useSearchParams();
   const currentSearch = searchParams.get("search") || "";
   const [input, setInput] = useState(currentSearch);
-  const [activeFilter, setActiveFilter] = useState<string>("all");
   const [showAllFilters, setShowAllFilters] = useState(false);
+  const activeFilter = searchParams.get("category") || "all";
 
-  const relMap = useMemo(() => buildRelMap(rels), [rels]);
   const showFilters =
     pathname.includes("/articles") ||
     pathname.includes("/resources") ||
     pathname.includes("/insights");
 
-  const tagNameMap = useMemo(() => {
-    const map: Record<string, string> = {};
-
-    if (!resources) return map;
-
-    for (const r of resources as any[]) {
-      const tags = r?.tags || [];
-
-      for (const tag of tags) {
-        const resolved = typeof tag === "string" ? relMap[tag] : tag;
-
-        const name =
-          resolved?.name ||
-          resolved?.title ||
-          resolved?.label ||
-          resolved?.tagName ||
-          resolved?.slug;
-
-        if (name) {
-          map[name] = name;
-        }
-      }
+  const filterOptions = useMemo(() => {
+    if (!showFilters || !categories?.length) {
+      return [
+        {
+          label: "All",
+          value: "all",
+        },
+      ];
     }
 
-    return map;
-  }, [resources, relMap]);
+    return [
+      {
+        label: "All",
+        value: "all",
+      },
 
-  const filterOptions = useMemo(() => {
-    const keys = Object.keys(tagNameMap);
-    return keys.length ? ["all", ...keys] : ["all"];
-  }, [tagNameMap]);
+      ...categories.map((category: any) => ({
+        label: category?.content?.name || category?.name || category?.slug,
 
-  const filteredResources = useMemo(() => {
-    if (!resources) return [];
-
-    return (resources as any[]).filter((r) => {
-      const matchesFilter =
-        activeFilter === "all" ||
-        (r?.tags || []).some((tag: any) => {
-          const resolved = typeof tag === "string" ? relMap[tag] : tag;
-
-          const name =
-            resolved?.name ||
-            resolved?.title ||
-            resolved?.label ||
-            resolved?.tagName ||
-            resolved?.slug;
-
-          return name === activeFilter;
-        });
-
-      return matchesFilter;
-    });
-  }, [resources, activeFilter, relMap]);
+        value: category?.slug,
+      })),
+    ];
+  }, [categories, showFilters]);
 
   const visibleFilters = useMemo(() => {
     if (showAllFilters) return filterOptions;
+
     return filterOptions.slice(0, 5);
   }, [filterOptions, showAllFilters]);
 
-  useEffect(() => {
-    if (!resources) {
-      return;
-    }
-
-    resources.forEach((r: any, i: number) => {
-      (r?.tags || []).forEach((tag: any, j: number) => {
-        const resolved = typeof tag === "string" ? relMap[tag] : tag;
-      });
-    });
-  }, [resources, rels, relMap]);
   const handleSearch = () => {
     const params = new URLSearchParams(searchParams.toString());
 
@@ -155,27 +114,34 @@ export const ResourceCardDeck: FC<Props> = ({
         <div className="border items-start border-(--stroke-secondary) p-4 sm:px-8 sm:py-4.5 lg:py-8 flex flex-col-reverse lg:flex-row gap-4 justify-between">
           <div className="flex flex-1 flex-wrap gap-3">
             {visibleFilters.map((option) => {
-              const isActive = activeFilter === option;
-
-              const label =
-                option === "all"
-                  ? "All"
-                  : option.charAt(0).toUpperCase() + option.slice(1);
+              const isActive = activeFilter === option.value;
 
               return (
                 <Button
-                  key={option}
+                  key={option.value}
                   trailingIcon={{ icon: "None" }}
                   tone="secondary"
-                  onClick={() => setActiveFilter(option)}
+                  onClick={() => {
+                    const params = new URLSearchParams(searchParams.toString());
+
+                    if (option.value === "all") {
+                      params.delete("category");
+                    } else {
+                      params.set("category", option.value);
+                    }
+
+                    params.set("page", "1");
+
+                    router.push(`${pathname}?${params.toString()}`);
+                  }}
                   className={twMerge(
                     isActive
-                      ? " border-(--stroke-secondary-button-hover) ring-4 ring-(--stroke-secondary-button-hover)"
+                      ? "border-(--stroke-secondary-button-hover) ring-4 ring-(--stroke-secondary-button-hover)"
                       : "",
                     "h-10!"
                   )}
                 >
-                  {label}
+                  {option.label}
                 </Button>
               );
             })}
@@ -185,9 +151,7 @@ export const ResourceCardDeck: FC<Props> = ({
                 onClick={() => setShowAllFilters((prev) => !prev)}
                 className="px-4 py-2 cursor-pointer rounded-md border text-sm border-(--stroke-pagination) bg-white flex items-center gap-2 h-10!"
               >
-               { 
-                  showAllFilters ? 'Less' : 'More'
-                }
+                {showAllFilters ? "Less" : "More"}
                 <span
                   className={`transition-transform ${
                     showAllFilters ? "rotate-180" : ""
@@ -230,7 +194,7 @@ export const ResourceCardDeck: FC<Props> = ({
         </div>
       )}
 
-      {filteredResources?.length ? (
+      {resources?.length ? (
         <div
           className={twMerge(
             showFilters
@@ -238,7 +202,7 @@ export const ResourceCardDeck: FC<Props> = ({
               : "grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-(--gaps-16-12-12)"
           )}
         >
-          {filteredResources?.map((resource) => (
+          {resources?.map((resource) => (
             <ResourceCard key={resource._id} {...resource} />
           ))}
         </div>

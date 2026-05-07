@@ -110,7 +110,7 @@ export async function getWebsitePageBySlug(
     const data = await storyblokFetch(slug, {
       version: isDraft ? "draft" : "published",
       resolve_relations:
-        "testimonial.person,resourceCard.tags,testimonialSlide.testimonial,relatedBios.relatedBio,tags,topics", // Resolve testimonial, person, and company relations
+        "testimonial.person,resourceCard.tags,testimonialSlide.testimonial,relatedBios.relatedBio,tags,categories", // Resolve testimonial, person, and company relations
       resolve_level: 2,
     });
     if (!data) {
@@ -321,7 +321,7 @@ export async function getAllStoriesByFolder(
   if (category) {
     const tagRes = await storyblokApi.getStories({
       version,
-      starts_with: `${rootFolder}/tags/${category}`,
+      starts_with: `${rootFolder}/categories/${category}`,
     });
     tagUuid = tagRes.stories?.[0]?.uuid;
     if (!tagUuid) return [];
@@ -332,13 +332,13 @@ export async function getAllStoriesByFolder(
       starts_with: `${folderPath}/`,
       per_page: options?.perPage || 10,
       page: options?.page || 1,
-      resolve_relations: ["tags, topics"],
+      resolve_relations: ["tags,categories"],
       is_startpage: false,
       ...(search && {
         search_term: search,
       }),
 
-      "filter_query[tags][any_in_array]": tagUuid,
+      "filter_query[categories][any_in_array]": tagUuid,
     });
 
     const stories = data.stories || [];

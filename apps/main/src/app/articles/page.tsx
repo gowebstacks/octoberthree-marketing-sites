@@ -39,14 +39,18 @@ export default async function ArticlesPage(props: {
 
   if (!story) notFound();
 
+  const categories = await getAllStoriesByFolder(
+    "octoberthree-main/categories",
+  );
+
   const rels = story.rels as any;
   const sections = story.content.sections || [];
   const ITEMS_PER_PAGE = 4 * 5;
 
   const filterQuery = {
-  ...(search && { search }),
-  ...(category && {category}),
-};
+    ...(search && { search }),
+    ...(category && { category }),
+  };
   const articles = await getAllStoriesByFolder(
     "octoberthree-main/articles",
     preview,
@@ -55,8 +59,9 @@ export default async function ArticlesPage(props: {
       page,
       filterQuery: Object.keys(filterQuery).length ? filterQuery : undefined,
     },
-   'octoberthree-main'
+    "octoberthree-main"
   );
+
   const total = (articles as any).total || 0;
 
   const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
@@ -68,7 +73,7 @@ export default async function ArticlesPage(props: {
       content?.sections?.[0]?.section?.[0]?.body?.[0]?.eyebrow?.[0]?.eyebrow ||
       ""
     );
-  };
+  }; 
 
   const articleCards = articles
     .filter((a: any) => a.full_slug !== "octoberthree-main/articles/")
@@ -78,11 +83,11 @@ export default async function ArticlesPage(props: {
 
       title:
         article.content?.title ||
-        article.content.sections[0]?.section[0]?.body[0]?.heading[0]?.heading ||
+        article.content?.sections?.[0]?.section[0]?.body[0]?.heading[0]?.heading ||
         "",
 
       mode: "dark",
-      body: article.content.sections[1].section[0].body,
+      body: article.content?.sections[1].section[0].body,
 
       link: {
         cached_url: `${article.full_slug}`,
@@ -93,8 +98,9 @@ export default async function ArticlesPage(props: {
       featuredImage: {},
 
       tags: article.content.tags,
+      categories: article.content.categories,
 
-      date: getDate(article.content),
+      date: getDate(article?.content),
     }));
 
   const updatedSections = sections.map((layout: any) => ({
@@ -104,6 +110,7 @@ export default async function ArticlesPage(props: {
         return {
           ...section,
           resources: articleCards,
+          categories,
           pagination: {
             currentPage: page,
             totalPages,
@@ -138,7 +145,6 @@ export default async function ArticlesPage(props: {
     </>
   );
 }
-
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const metaData = await generateMetaDataByslug(
