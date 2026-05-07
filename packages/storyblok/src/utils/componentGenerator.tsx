@@ -48,9 +48,16 @@ interface componentGeneratorProps {
   documentId: string;
   documentType: string;
   rels?: any; // Storyblok resolved relations
+  tags?: string[];
+  topics?: string[];
 }
 
-export const getComponent = (component: SbBlokData, rels?: any) => {
+export const getComponent = (
+  component: SbBlokData,
+  rels?: any,
+  tags: string[] = [],
+  topics: string[] = []
+) => {
   switch (component.component) {
     case "sectionLayout":
       // For sectionLayout, render its nested content directly
@@ -59,7 +66,7 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
         return (
           <div key={component._uid}>
             {component.section.map((nestedComponent: SbBlokData) =>
-              getComponent(nestedComponent, rels)
+              getComponent(nestedComponent, rels, tags, topics)
             )}
           </div>
         );
@@ -67,16 +74,21 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
       return null;
 
     case "headingBlock":
+      return <HeadingBlock key={component._uid} {...(component as any)} />;
+    case "formBlock":
       return (
-        <HeadingBlock
+        <FormBlock key={component._uid} {...(component as FormBlockProps)} />
+      );
+    case "hero":
+      return (
+        <Hero
           key={component._uid}
-          {...(component as any)}
+          blok={component}
+          rels={rels}
+          tags={tags}
+          topics={topics}
         />
       );
-    case "formBlock":
-      return <FormBlock key={component._uid} {...component as FormBlockProps} />;
-    case "hero":
-      return <Hero key={component._uid} blok={component} />;
     case "testimonialSlider":
       return (
         <TestimonialSlider
@@ -89,7 +101,7 @@ export const getComponent = (component: SbBlokData, rels?: any) => {
       return (
         <ConversionPanel
           key={component._uid}
-          blok={{...component, rtc:false} as ConversionPanelProps}
+          blok={{ ...component, rtc: false } as ConversionPanelProps}
         />
       );
 
@@ -290,7 +302,6 @@ const getSectionProps = (section: SbBlokData) => {
     return {
       ...baseProps,
       bgGradient: section.bgGradient as any,
- 
     };
   }
 
@@ -302,6 +313,8 @@ export const ComponentGenerator: FC<componentGeneratorProps> = ({
   documentId,
   documentType,
   rels,
+  tags = [],
+  topics = [],
 }) => {
   // Keep sections responsive to reorders via Presentation tool
   const [optimisticSections] = useOptimistic<SbBlokData[] | undefined, any>(
@@ -339,7 +352,7 @@ export const ComponentGenerator: FC<componentGeneratorProps> = ({
             nextTheme={nextSection?.theme as any}
             id={section.htmlId as string}
           >
-            {getComponent(section, rels)}
+            {getComponent(section, rels, tags, topics)}
           </Section>
         );
       })}

@@ -46,7 +46,6 @@ export const Subscribe: FC<{ blok: SubscribeProps }> = ({ blok }) => {
     rtc = false,
   } = blok;
 
-  console.log(blok, "insidhythtloggsg");
 
   const layoutClasses = {
     stacked: "mx-auto text-center",

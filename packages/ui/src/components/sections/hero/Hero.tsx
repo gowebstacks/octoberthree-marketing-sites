@@ -7,6 +7,7 @@ import { ContentBlock, type ContentBlockBlok } from "../../organisms";
 import { Video, type VideoBlok } from "../../modules";
 import { storyblokLoader } from "../../../utils/storyblokImageLoader";
 import { StoryblokAsset } from "../../../lib";
+import { buildRelMap, resolveRel, StoryblokRel } from "../../../utils";
 export interface HeroBlok extends SbBlokData {
   body?: ContentBlockBlok[];
   heroImage?: { filename: string; alt?: string };
@@ -16,10 +17,24 @@ export interface HeroBlok extends SbBlokData {
   logoPopout?: StoryblokAsset;
   reverse?: boolean;
 }
-export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
+export const Hero: FC<{
+  blok: HeroBlok;
+  rels?: StoryblokRel[];
+  tags?: any;
+  topics?: any;
+}> = ({ blok, rels = [], tags, topics }) => {
   const hasImage = Boolean(blok.heroImage?.filename);
   const hasVideo = Boolean(blok.video?.length);
   const [animate, setAnimate] = useState(false);
+  const relMap = buildRelMap(rels);
+
+  const resolvedTags = tags
+    ?.map((tag: any) => resolveRel(tag, relMap))
+    .filter(Boolean);
+
+  const resolvedTopics = topics
+    ?.map((topic: any) => resolveRel(topic, relMap))
+    .filter(Boolean);
 
   useEffect(() => {
     setAnimate(true);
@@ -71,6 +86,13 @@ export const Hero: FC<{ blok: HeroBlok }> = ({ blok }) => {
                 blok={{
                   ...nestedBlok,
                   mode: blok.theme === "primary" ? "dark" : "light",
+                  badge: resolvedTags?.[0]
+                    ? [
+                        {
+                          label: resolvedTags[0].tagName,
+                        },
+                      ]
+                    : [],
                 }}
               />
             ))}

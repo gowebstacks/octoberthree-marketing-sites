@@ -27,6 +27,7 @@ type StoryblokFooterLinkGroup = {
   groupTitle?: string;
   links?: StoryblokFooterLink[];
   address?: string;
+  cityStateZip?:string
   phone?: string;
   cta?: any[];
   socialLinks?: any[];
@@ -138,13 +139,23 @@ export const FooterNavigation: React.FC<FooterNavigationProps> = ({
                 <div className="flex flex-col gap-3 text-(--color-neutral-100)">
                   {contact.address && (
                     <div>
-                      <p className="text-sm whitespace-pre-line ">
-                        {contact.address.replace(/\u2028/g, "\n")}
+                      <p className="text-sm whitespace-nowrap ">
+                        {contact?.address.replace(/\u2028/g, "\n")}
                       </p>
+                      {
+                        contact.cityStateZip && 
+                         <p className="text-sm whitespace-nowrap ">
+                        {contact?.cityStateZip.replace(/\u2028/g, "\n")}
+                      </p>
+                      }
+                     
                       {contact.phone && (
-                        <p className="text-sm ">
+                        <Link
+                          href={`tel:${contact.phone.replace("out", "")}`}
+                          className="text-sm"
+                        >
                           {contact.phone.replace("out", "")}
-                        </p>
+                        </Link>
                       )}
                     </div>
                   )}

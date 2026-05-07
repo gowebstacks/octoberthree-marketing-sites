@@ -110,7 +110,7 @@ export async function getWebsitePageBySlug(
     const data = await storyblokFetch(slug, {
       version: isDraft ? "draft" : "published",
       resolve_relations:
-        "testimonial.person,resourceCard.tags,testimonialSlide.testimonial,relatedBios.relatedBio", // Resolve testimonial, person, and company relations
+        "testimonial.person,resourceCard.tags,testimonialSlide.testimonial,relatedBios.relatedBio,tags,topics", // Resolve testimonial, person, and company relations
       resolve_level: 2,
     });
     if (!data) {

@@ -42,15 +42,24 @@ const story = await getPageData(
   return (
     <>
       {preview ? (
-        <StoryblokBridge
-          story={{ ...story, content: { ...story.content, sections } }}
-        />
+       <StoryblokBridge
+  story={{
+    ...story,
+    content: {
+      ...story.content,
+      sections,
+    },
+    rels,
+  }}
+/>
       ) : (
         <ComponentGenerator
           sections={sections}
           documentId={story.id.toString()}
           documentType={story.content.component}
           rels={rels || []}
+            tags={content.tags || []}
+  topics={content.topics || []}
         />
       )}
     </>

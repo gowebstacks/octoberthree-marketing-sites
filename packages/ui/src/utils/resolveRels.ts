@@ -1,4 +1,4 @@
-type StoryblokRel = {
+export type StoryblokRel = {
   uuid: string;
   content: any;
 };

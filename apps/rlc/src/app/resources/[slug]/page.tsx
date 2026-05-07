@@ -38,7 +38,14 @@ const ResourceContent = async ({
     <>
       {preview ? (
         <StoryblokBridge
-          story={{ ...story, content: { ...story.content, sections } }}
+          story={{
+            ...story,
+            content: {
+              ...story.content,
+              sections,
+            },
+            rels,
+          }}
         />
       ) : (
         <ComponentGenerator
@@ -46,6 +53,8 @@ const ResourceContent = async ({
           documentId={story.id.toString()}
           documentType={story.content.component}
           rels={rels || []}
+          tags={content.tags || []}
+          topics={content.topics || []}
         />
       )}
     </>

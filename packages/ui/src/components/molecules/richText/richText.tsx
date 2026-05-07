@@ -53,6 +53,13 @@ export const RichText: FC<RichTextProps> = ({
         if (mark.type === "underline") {
           element = <u>{element}</u>;
         }
+        if (mark.type === "subscript") {
+          element = <sub>{element}</sub>;
+        }
+
+        if (mark.type === "superscript") {
+          element = <sup>{element}</sup>;
+        }
       });
     }
 
@@ -62,6 +69,9 @@ export const RichText: FC<RichTextProps> = ({
   const renderInline = (content: any[]) =>
     content?.map((child: any, i: number) => {
       if (child.type === "text") return renderText(child, i);
+      if (child.type === "hard_break") {
+        return <br key={`br-${i} `} />;
+      }
       return null;
     });
 
@@ -163,6 +173,7 @@ export const RichText: FC<RichTextProps> = ({
         text-(--text-body-dark)!
         text-rich-body
         [&_p:not(:last-child)]:mb-6
+        [&_p:has(sub,sup)]:mb-2!
         [&_h1]:mb-3 [&_h2]:mb-3 [&_h3]:mb-3 [&_h4]:mb-3
         [&_ul]:mb-4 [&_ol]:mb-6
         [&_li]:mb-4

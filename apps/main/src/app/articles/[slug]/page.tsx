@@ -30,9 +30,9 @@ const ArticleContent = async ({
   preview: boolean;
 }) => {
   const article = await getPageData(
-  `octoberthree-main/articles/${slug}`,
-  preview
-);
+    `octoberthree-main/articles/${slug}`,
+    preview
+  );
 
   if (!article) return notFound();
 
@@ -40,10 +40,11 @@ const ArticleContent = async ({
   const rels = (article as any).rels || [];
   const sections = content.sections || [];
 
+  console.log(content, "article content for tags");
+  console.log(rels, "article content for rels tags");
 
   return (
     <>
-
       {preview ? (
         <StoryblokBridge
           story={{
@@ -52,6 +53,7 @@ const ArticleContent = async ({
               ...article.content,
               sections,
             },
+            rels,
           }}
         />
       ) : (
@@ -60,6 +62,8 @@ const ArticleContent = async ({
           documentId={article.id.toString()}
           documentType={article.content.component}
           rels={rels}
+          tags={content.tags || []}
+          topics={content.topics || []}
         />
       )}
     </>
@@ -99,11 +103,12 @@ export const generateMetadata = async (props: {
   const params = await props.params;
 
   const slugParam =
-    params.slug && params.slug.length > 0
-      ? params.slug
-      : "home";
+    params.slug && params.slug.length > 0 ? params.slug : "home";
 
-   const metaData = await generateMetaDataByslug('octoberthree-main', `articles/${slugParam}`);
+  const metaData = await generateMetaDataByslug(
+    "octoberthree-main",
+    `articles/${slugParam}`
+  );
   return metaData;
 };
 
