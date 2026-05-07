@@ -39,7 +39,6 @@ const SubscriptionCard = ({
           variant="primary"
           size="md"
           fullWidth
-          trailingIcon={"arrow-right"}
           label={buttonText}
         />
       </form>

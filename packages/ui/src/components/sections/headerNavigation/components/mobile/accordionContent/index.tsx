@@ -97,7 +97,7 @@ const AccordionContent: FC<AccordionContentProps> = ({ menuSection }) => {
                           key={item._uid}
                           label={item.label}
                           mode="link"
-                          trailingIcon={item.icon}
+                          trailingIcon={item.icon ? { icon: item.icon } : undefined}
                           link={item.link as any}
                           className="[&>span]:text-[14px]! [&_svg]:w-4 [&_svg]:h-4 justify-start! items-left!"
                         />

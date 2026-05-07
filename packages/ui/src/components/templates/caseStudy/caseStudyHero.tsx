@@ -19,7 +19,7 @@ const CaseStudyHero = (props: CaseStudyHeroProps) => {
               link="/work"
               mode="link"
               tone="primary"
-              leadingIcon="arrow-left"
+               trailingIcon={{icon : "arrow-left" }}
               size="md"
             >
               Back to case studies

@@ -81,7 +81,7 @@ const Pagination: FC<PaginationProps> = ({ totalPages, baseUrl }) => {
       <Button
         mode="link"
         size="sm"
-        leadingIcon="chevron-left"
+        leadingIcon={{icon : "chevron-left"}}
         disabled={currentPage === 1}
         onClick={() => handlePage(currentPage - 1)}
       >
@@ -132,7 +132,7 @@ const Pagination: FC<PaginationProps> = ({ totalPages, baseUrl }) => {
         mode="link"
         tone="primary"
         size="sm"
-        trailingIcon="chevron-right"
+        trailingIcon={{icon : "chevron-right"}}
         disabled={currentPage === totalPages}
         onClick={() => handlePage(currentPage + 1)}
       >

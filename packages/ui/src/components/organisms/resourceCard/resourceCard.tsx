@@ -45,6 +45,7 @@ export interface ResourceCardProps extends SbBlokData {
   // Tocheck if it is used in resource carousel
   carousel?: boolean;
   mode: "dark" | "light";
+  labelLink?: string
 }
 const getFirstValidParagraph = (body?: RichTextContent) => {
   const content = body?.content;
@@ -125,6 +126,7 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
     showBadge = false,
     carousel = false,
     mode='light',
+    linkLabel
   } = props;
 
   // Use featuredImage for all resource types
@@ -214,7 +216,7 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
            <Button
             className="w-fit group-hover:text-(--text-link-hover) mt-auto"
             mode="link"
-            label="Learn more"
+            label={linkLabel || "Read more"}
           />
          }
         </div>

@@ -7,8 +7,6 @@ import {
 } from "@repo/storyblok";
 import { FooterNavigation, HeaderNavigation } from "@repo/ui";
 import Script from "next/script";
-import StoryblokInit from "../lib/storyblok";
-
 import { Lato } from 'next/font/google'
 
 const lato = Lato({
@@ -30,11 +28,22 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${lato.className}`}>
-        <Script
-          src="https://app.storyblok.com/f/storyblok-v2-latest.js"
-          strategy="afterInteractive"
-        />
-        <StoryblokInit />
+        {/* Clym cookie */}
+        <Script src="https://widget.clym-sdk.net/blocking.js" strategy="lazyOnload" />
+        <Script id="clym-script" strategy="lazyOnload">
+          {`
+            (function(d,s,i,w,o){
+              var js,cjs=d.getElementsByTagName(s)[0];
+              if(d.getElementById(i))return;
+              js=d.createElement('script');
+              js.id=i;
+              js.src='https://widget.clym-sdk.net/clym.js';
+              js.onload=function(){Clym&&Clym.load(i,w,o);};
+              cjs.parentNode.insertBefore(js, cjs);
+            }(document,'script','clym-privacy','908324a4ad61452bad3e379ckciyaa2r',{}));
+          `}
+        </Script>
+
         <StoryblokBridge>
           <HeaderNavigation headerNavigation={header} />
           <main className="grow">{children}</main>

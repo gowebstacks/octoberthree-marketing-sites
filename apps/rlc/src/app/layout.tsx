@@ -6,9 +6,7 @@ import {
   getGlobalLayoutData,
   StoryblokBridge,
 } from "@repo/storyblok";
-import { FooterNavigation, HeaderNavigation, Layout } from "@repo/ui";
-import Script from "next/script";
-import StoryblokInit from "../lib/storyblok";
+import { FooterNavigation, HeaderNavigation } from "@repo/ui";
 
 import { Lato } from 'next/font/google'
 
@@ -32,11 +30,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${lato.className}`}>
-        <Script
-          src="https://app.storyblok.com/f/storyblok-v2-latest.js"
-          strategy="afterInteractive"
-        />
-        <StoryblokInit />
+   
         <StoryblokBridge>
           <HeaderNavigation headerNavigation={header} />
           <main className="grow">{children}</main>

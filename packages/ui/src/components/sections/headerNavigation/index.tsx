@@ -38,26 +38,29 @@ export const HeaderNavigation: React.FC<HeaderNavigationProps> = ({
       >
         <div className="h-full lg:basis-auto lg:shrink-0 lg:grow-0 flex items-center text-black!">
           {headerNavigation?.logo?.filename ? (
-            <Link href={"/"} aria-label="Home">
+            <Link
+              href="/"
+              aria-label="Home"
+              className="relative block h-13.75 min-w-50 w-fit max-w-50"
+            >
               <Image
-              loader={storyblokLoader}
+                loader={storyblokLoader}
                 src={headerNavigation?.logo?.filename}
-                className="max-h-13.75 w-fit min-w-26.5  max-w-49"
-                width={193}
-                height={55}
+                fill
+                className="object-left object-contain"
                 alt="logo"
               />
             </Link>
-          ) : 'Logo Placeholder'
-        }
-       
+          ) : (
+            "Logo Placeholder"
+          )}
         </div>
 
         {headerNavigation?.menuItems && (
           <div
             className="
               hidden
-              xl:absolute xl:left-[calc(50%-70px)] xl:top-1/2
+              xl:absolute xl:left-[calc(50%-62px)] xl:top-1/2
               xl:-translate-x-1/2 xl:-translate-y-1/2
               xl:flex
               transition-colors duration-300 ease-in-out

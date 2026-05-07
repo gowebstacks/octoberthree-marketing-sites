@@ -58,7 +58,7 @@ export const BlogPagination: FC<{
           aria-label="Previous page"
           mode="link"
           size="sm"
-          leadingIcon="arrow-left"
+          leadingIcon={{icon : 'arrow-leftt'}}
           disabled={currentPage === 1}
         >
           <span >Back</span>
@@ -108,7 +108,7 @@ export const BlogPagination: FC<{
           mode="link"
           tone="primary"
           size="sm"
-          trailingIcon="arrow-right"
+          trailingIcon={{icon : 'arrow-right'}}
           disabled={currentPage === totalPages}
         >
           <span>Next</span>

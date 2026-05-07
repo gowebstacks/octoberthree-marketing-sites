@@ -165,7 +165,7 @@ export const ResourceCardDeck: FC<Props> = ({
               return (
                 <Button
                   key={option}
-                  trailingIcon="None"
+                  trailingIcon={{ icon: "None" }}
                   tone="secondary"
                   onClick={() => setActiveFilter(option)}
                   className={twMerge(

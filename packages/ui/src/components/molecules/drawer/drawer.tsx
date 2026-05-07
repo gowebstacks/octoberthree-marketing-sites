@@ -132,7 +132,6 @@ export function Drawer({
           mode="filled"
           onClick={handleReset}
           className="flex-1"
-          leadingIcon="refresh-cw-05"
           disabled={!hasSelection}
         >
           Reset
@@ -142,7 +141,6 @@ export function Drawer({
           tone="primary"
           onClick={handleApply}
           disabled={!hasSelection}
-          leadingIcon="check"
           className="flex-1"
           iconColor="var(--icon-primary)"
         >

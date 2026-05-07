@@ -46,7 +46,7 @@ const DropDownMenu: FC<StoryblokNavigationMenuItem> = ({ menuSection }) => {
         ) : null}
       </div>
 
-      {(leftItems.length>0 || rightItems.length>0) && (
+      {(leftItems.length > 0 || rightItems.length > 0) && (
         <div
           className={twMerge(
             "grid mt-6  gap-x-4 gap-y-4 min-w-68 py-6 border-t border-b border-(--color-cream-50---p-background)",
@@ -102,7 +102,7 @@ const DropDownMenu: FC<StoryblokNavigationMenuItem> = ({ menuSection }) => {
               key={item._uid}
               label={item.label}
               mode="link"
-              trailingIcon={item?.icon}
+              trailingIcon={item?.icon ? { icon: item.icon } : undefined}
               link={getLinkHref(item?.link)}
               className="[&>span]:text-[14px]! [&_svg]:w-4 [&_svg]:h-4"
             />

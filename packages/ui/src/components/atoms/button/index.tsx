@@ -31,8 +31,8 @@ export type ButtonProps = NativeButtonProps & {
   background?: "light" | "dark";
   // Keep variant for backward compatibility
   variant?: "primary" | "secondary" | "link";
-  leadingIcon?: string;
-  trailingIcon?: string;
+  leadingIcon?: { icon: string };
+  trailingIcon?: { icon: string };
   fullWidth?: boolean;
   // Force component to render as an anchor
   asLink?: boolean;
@@ -94,7 +94,7 @@ const Button: FC<ButtonProps> = ({
   const actualTrailingIcon =
     trailingIcon ||
     actualBlok?.trailingIcon ||
-    (actualTone === "secondary" ? "arrow-up-right" : undefined);
+    (actualTone === "secondary" ? { icon: "arrow-up-right" } : undefined);
 
   const actualLeadingIcon = leadingIcon || actualBlok?.leadingIcon;
   // Build link from Storyblok data if available
@@ -113,7 +113,6 @@ const Button: FC<ButtonProps> = ({
     actualLinkType === "internal" &&
     actualInternalLink?.cached_url
   ) {
-    console.log("no final link", internalLink);
     finalLink = `/${actualInternalLink.cached_url}`;
   } else if (!finalLink && actualLinkType === "external" && actualExternalUrl) {
     finalLink = actualExternalUrl;
@@ -133,7 +132,6 @@ const Button: FC<ButtonProps> = ({
   // Only add leading slash for internal URLs, not for external URLs or anchor links
   let url = rawLinkData;
 
-
   if (actualLinkType === "internal" && actualInternalLink?.cached_url) {
     url = getLinkHref({
       linkType: "internal",
@@ -146,7 +144,7 @@ const Button: FC<ButtonProps> = ({
     typeof props.url !== "string" &&
     (props.url as any).linktype === "story" &&
     "cached_url" in props.url &&
-     props.url.cached_url !== ""
+    props.url.cached_url !== ""
   ) {
     url = getLinkHref({
       linkType: "internal",
@@ -214,74 +212,80 @@ const Button: FC<ButtonProps> = ({
   const derivedTone =
     actualTone || (variant === "secondary" ? "secondary" : "primary");
 
-  const ButtonContent = () => {
-    // Determine if we should show the automatic arrow icon for link buttons (both primary and secondary)
-    const shouldShowAutoArrow =
-      ((derivedMode === "link" &&
-        (derivedTone === "primary" || derivedTone === "secondary")) ||
-        variant === "link") &&
-      !actualTrailingIcon &&
-      !actualLeadingIcon;
+ const ButtonContent = () => {
+  // Extract icon strings from the objects
+  const leadingIconString = actualLeadingIcon?.icon;
+  const trailingIconString = actualTrailingIcon?.icon;
 
-    return (
-      <>
-        {actualLeadingIcon &&
-          actualLeadingIcon !== "None" &&
-          mode !== "nav" && (
-            <span>
-              <Icon
-                color={iconColor}
-                size={20}
-                icon={actualLeadingIcon}
-                aria-hidden={true}
-              />
-            </span>
-          )}
-        <span className="mt-0.5 lg:mt-0">{actualLabel || children}</span>
-        {actualTrailingIcon &&
-          actualTrailingIcon !== "None" &&
-          mode !== "nav" && (
-            <span>
-              <Icon
-                color={iconColor}
-                size={20}
-                icon={actualTrailingIcon}
-                aria-hidden={true}
-              />
-            </span>
-          )}
-        {actualTrailingIcon &&
-          actualTrailingIcon !== "None" &&
-          mode === "nav" && (
-            <span>
-              <Icon
-                color={iconColor}
-                size={20}
-                icon={"chevron-down"}
-                aria-hidden={true}
-              />
-            </span>
-          )}
-        {shouldShowAutoArrow && (
+  // Determine if we should show the automatic arrow icon for link buttons (both primary and secondary)
+const shouldShowAutoArrow =
+  ((derivedMode === "link" ||
+    derivedTone === "secondary" ||
+    variant === "link")) &&
+  !trailingIconString &&
+  !leadingIconString;
+
+
+  return (
+    <>
+      {leadingIconString &&
+        leadingIconString !== "None" &&
+        mode !== "nav" && (
           <span>
             <Icon
               color={iconColor}
               size={20}
-              icon="arrow-up-right"
-              spriteType="ui"
+              icon={leadingIconString}
               aria-hidden={true}
             />
           </span>
         )}
-      </>
-    );
-  };
+      <span className="mt-0.5 lg:mt-0">{actualLabel || children}</span>
+      {trailingIconString &&
+        trailingIconString !== "None" &&
+        mode !== "nav" && (
+          <span>
+            <Icon
+              color={iconColor}
+              size={20}
+              icon={trailingIconString}
+              aria-hidden={true}
+              spriteType="ui"
+            />
+          </span>
+        )}
+      {trailingIconString &&
+        trailingIconString !== "None" &&
+        mode === "nav" && (
+          <span>
+            <Icon
+              color={iconColor}
+              size={20}
+              icon={"chevron-down"}
+              aria-hidden={true}
+                            spriteType="ui"
+
+            />
+          </span>
+        )}
+      {shouldShowAutoArrow && (
+        <span>
+          <Icon
+            color={iconColor}
+            size={20}
+            icon="arrow-up-right"
+            spriteType="ui"
+            aria-hidden={true}
+          />
+        </span>
+      )}
+    </>
+  );
+};
 
   const [openPopup, setOpenPopup] = useState(false);
 
   const handleClick = (e: any) => {
- 
-
     // Call user's onClick first if provided
     if (props.onClick) {
       props.onClick(e);

@@ -41,7 +41,7 @@ const SliderItem: FC<SliderItemProps> = ({ item, priority, theme = 'dark' }) => 
               link={`/blog/${item?.seo?.slug?.current}`} 
               label="Read more" 
               mode="link" 
-              trailingIcon="arrow-right" 
+              trailingIcon={{icon : "arrow-right" }}
               className="w-fit mt-auto" 
             />
           </div>
@@ -67,7 +67,7 @@ const SliderItem: FC<SliderItemProps> = ({ item, priority, theme = 'dark' }) => 
               link={`/work/${item?.seo?.slug?.current}`} 
               label="Read more" 
               mode="link" 
-              trailingIcon="arrow-right" 
+               trailingIcon={{icon : "arrow-right" }}
               className="w-fit mt-auto" 
             />
           </div>
