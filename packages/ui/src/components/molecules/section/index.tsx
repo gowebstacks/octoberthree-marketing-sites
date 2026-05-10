@@ -6,8 +6,10 @@ import type {
   FC,
   ReactNode,
 } from "react";
-import Image from "../image";
 import { storyblokEditable } from "@storyblok/react";
+import Image from "next/image";
+import { storyblokLoader } from "../../../utils/storyblokImageLoader";
+import { getBackgroundImagePositionClass } from "../../../utils/getBgImagePositionClass";
 
 type PaddingVariants = {
   top?:
@@ -105,6 +107,16 @@ interface SectionProps extends ComponentPropsWithoutRef<"section"> {
    * Optional background image
    */
   backgroundImage?: any;
+  backgroundImagePosition?:
+    | "center"
+    | "top"
+    | "bottom"
+    | "left"
+    | "right"
+    | "top-left"
+    | "top-right"
+    | "bottom-left"
+    | "bottom-right";
   /**
    * Minimum height for the section
    */
@@ -129,10 +141,12 @@ export const Section: FC<SectionProps> = ({
   bgGradient,
   inverseGradient,
   backgroundImage,
+  backgroundImagePosition='center',
   minHeight,
   className,
   isFirstSection,
   sectionType,
+
   ...rest
 }) => {
   const Component = as || "section";
@@ -183,7 +197,6 @@ export const Section: FC<SectionProps> = ({
     return classNames.join(" ");
   };
 
- 
 
   return (
     <Component
@@ -196,32 +209,35 @@ export const Section: FC<SectionProps> = ({
           : sectionType === "conversionPanel"
             ? ""
             : "section-padding-xl-left-right",
-      getThemeClasses(theme),
+        getThemeClasses(theme),
         getPaddingClass(),
         getMinHeightClass(),
         className,
-        'overflow-visible'
+        "overflow-visible"
       )}
       {...rest}
       {...storyblokEditable}
     >
-      {bgGradient && <div className={twMerge("soft-gradient", bgGradient)}></div>}
-
-    
+      {bgGradient && (
+        <div className={twMerge("soft-gradient", bgGradient)}></div>
+      )}
 
       <div className="relative z-2">
         {/** Background Image */}
         {backgroundImage?.filename && (
           <div className="absolute inset-0 z-11 overflow-hidden rounded-sm max-w-360 mx-auto">
             <Image
-              asset={{ url: backgroundImage.filename }}
-              objectCover
-              unsetRatio
-              unsetMaxWidth
-              className="w-full h-full"
-              alt=""
-              isSquarePattern={false}
+              loader={storyblokLoader}
+              src={backgroundImage.filename}
+              alt="section-background-image"
+              fill
+              priority
+              className={twMerge(
+                "object-cover",
+                getBackgroundImagePositionClass(backgroundImagePosition)
+              )}
             />
+
             <div className="absolute inset-0 z-20 bg-black/60" />
           </div>
         )}

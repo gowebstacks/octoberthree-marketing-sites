@@ -294,6 +294,7 @@ const getSectionProps = (section: SbBlokData) => {
       },
     },
     backgroundImage: section.backgroundImage as any,
+    backgroundImagePosition: section.backgroundImagePosition as any,
     minHeight: section.minHeight as any,
   };
 

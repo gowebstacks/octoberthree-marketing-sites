@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { retirementlcRedirects } from "./redirects.config";
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -27,6 +28,7 @@ const nextConfig: NextConfig = {
         destination: '/:path*',
         permanent: false, 
       },
+      ...retirementlcRedirects
     ]
   },
 };

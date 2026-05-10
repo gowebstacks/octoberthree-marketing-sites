@@ -86,13 +86,7 @@ export const Hero: FC<{
                 blok={{
                   ...nestedBlok,
                   mode: blok.theme === "primary" ? "dark" : "light",
-                  badge: resolvedTags?.[0]
-                    ? [
-                        {
-                          label: resolvedTags[0].tagName,
-                        },
-                      ]
-                    : [],
+                 
                 }}
               />
             ))}

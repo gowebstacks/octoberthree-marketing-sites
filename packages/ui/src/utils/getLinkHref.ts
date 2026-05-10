@@ -5,6 +5,7 @@ const DOMAIN_MAP: any = {
 };
 
 export const getLinkHref = (link: any) => {
+  
   if (!link) return "#";
 
   if (
@@ -16,9 +17,9 @@ export const getLinkHref = (link: any) => {
 
   if (
     (link.linkType === "internal" && link.internalLink?.cached_url) ||
-    (link.linktype === "story" && link.cached_url)
+    (link.linktype === "story" && (link.cached_url || link.href))
   ) {
-    const slug = link.internalLink?.cached_url || link.cached_url;
+    const slug = link.internalLink?.cached_url || link.cached_url || link.href;
 
     const [site, ...rest] = slug.split("/");
     const base = DOMAIN_MAP[site] || "";

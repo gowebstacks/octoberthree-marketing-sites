@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { octoberthreeRedirects } from "./redirects.config";
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -27,6 +28,12 @@ const nextConfig: NextConfig = {
         destination: '/:path*',
         permanent: false, 
       },
+      {
+        source: '/component-sample-page',
+        destination: '/',
+        permanent: false, 
+      },
+      ...octoberthreeRedirects
     ]
   },
 };

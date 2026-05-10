@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { o3edgeRedirects } from "./redirects.confi";
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -27,6 +28,7 @@ const nextConfig: NextConfig = {
         destination: '/:path*',
         permanent: false, 
       },
+      ...o3edgeRedirects
     ]
   },
 };

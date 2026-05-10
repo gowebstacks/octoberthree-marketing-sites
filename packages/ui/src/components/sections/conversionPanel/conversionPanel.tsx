@@ -6,6 +6,7 @@ import {
 } from "../../organisms/contentBlock";
 import { twMerge } from "tailwind-merge";
 import { StoryblokAsset } from "../../../lib";
+import { getBackgroundImagePositionClass } from "../../../utils/getBgImagePositionClass";
 
 export interface ConversionPanelProps extends SbBlokData {
   component?: "conversionPanel";
@@ -16,6 +17,17 @@ export interface ConversionPanelProps extends SbBlokData {
   showBackgroundStrip?: boolean;
   fullWidth?: boolean;
   rtc?: boolean;
+    backgroundImagePosition?:
+    | "center"
+    | "top"
+    | "bottom"
+    | "left"
+    | "right"
+    | "top-left"
+    | "top-right"
+    | "bottom-left"
+    | "bottom-right";
+
 }
 
 export const ConversionPanel: FC<{ blok: ConversionPanelProps }> = ({
@@ -29,6 +41,8 @@ export const ConversionPanel: FC<{ blok: ConversionPanelProps }> = ({
     showBackgroundStrip,
     fullWidth = false,
     rtc = true,
+    backgroundImagePosition='center',
+
   } = blok;
   return (
     <div
@@ -48,13 +62,14 @@ export const ConversionPanel: FC<{ blok: ConversionPanelProps }> = ({
             ? `bg-(--surface-accent-background) [&_*:not(button):not(button_*):not(a):not(a_*):not(input):not(input_*):not(.toast)]:text-white! ${rtc ? '' :'section-padding-xl-top-bottom md:px-12 px-4' } `
             : "bg-(--surface-background) overflow-visible",
           fullWidth && variant !== "dark" && "bg-(--color-cream-100)",
+           getBackgroundImagePositionClass(backgroundImagePosition)
         )}
+        
         style={
           backgroundImage?.filename
             ? {
                 backgroundImage: `url(${backgroundImage.filename})`,
                 backgroundSize: "cover",
-                backgroundPosition: "center",
               }
             : undefined
         }

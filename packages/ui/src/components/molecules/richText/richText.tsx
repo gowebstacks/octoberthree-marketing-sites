@@ -4,6 +4,7 @@ import React, { type FC } from "react";
 import { twMerge } from "tailwind-merge";
 import { generateSlug } from "../../../utils/slugs";
 import { StoryblokComponent, storyblokEditable } from "@storyblok/react";
+import { getLinkHref } from "../../../utils/getLinkHref";
 
 export interface RichTextProps {
   doc?: any;
@@ -28,7 +29,7 @@ export const RichText: FC<RichTextProps> = ({
         if (mark.type === "link") {
           let href = mark.attrs?.href || "#";
           if (!href.startsWith("http")) {
-            href = `https://${href}`;
+            href = getLinkHref(href);
           }
           element = (
             <a
@@ -87,7 +88,19 @@ export const RichText: FC<RichTextProps> = ({
     }
 
     if (node.type === "paragraph") {
-      return <p key={`paragraph-${index}`}>{renderInline(node.content)}</p>;
+      const alignment =
+        node.attrs?.textAlign === "center"
+          ? "text-center"
+          : node.attrs?.textAlign === "right"
+            ? "text-right"
+            : node.attrs?.textAlign === "left"
+              ? "text-left"
+              : "";
+      return (
+        <p key={`paragraph-${index}`} className={alignment}>
+          {renderInline(node.content)}
+        </p>
+      );
     }
 
     if (node.type === "heading") {
