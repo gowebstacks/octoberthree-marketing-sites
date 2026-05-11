@@ -3,38 +3,32 @@ import { octoberthreeRedirects } from "./redirects.config";
 
 const nextConfig: NextConfig = {
   /* config options here */
- images: {
+  images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'a.storyblok.com',
-        port: '',
-        pathname: '/**',          
+        protocol: "https",
+        hostname: "a.storyblok.com",
+        port: "",
+        pathname: "/**",
       },
       {
-        protocol: 'https',
-        hostname: 'img2.storyblok.com',
-      },
-      {
-        protocol: 'https',
-        hostname: '*.storyblok.com',
+        protocol: "https",
+        hostname: "img2.storyblok.com",
       },
     ],
   },
-   async redirects() {
+  trailingSlash: true,
+
+  async redirects() {
     return [
       {
-        source: '/octoberthree-main/:path*',
-        destination: '/:path*',
-        permanent: false, 
+        source: "/octoberthree-main/:path*",
+        destination: "/:path*",
+        permanent: false,
       },
-      {
-        source: '/component-sample-page',
-        destination: '/',
-        permanent: false, 
-      },
-      ...octoberthreeRedirects
-    ]
+
+      ...octoberthreeRedirects,
+    ];
   },
 };
 

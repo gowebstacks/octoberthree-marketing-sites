@@ -3,33 +3,31 @@ import { retirementlcRedirects } from "./redirects.config";
 
 const nextConfig: NextConfig = {
   /* config options here */
- images: {
+  images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'a.storyblok.com',
-        port: '',
-        pathname: '/**',          
+        protocol: "https",
+        hostname: "a.storyblok.com",
+        port: "",
+        pathname: "/**",
       },
       {
-        protocol: 'https',
-        hostname: 'img2.storyblok.com',
+        protocol: "https",
+        hostname: "img2.storyblok.com",
       },
-      {
-        protocol: 'https',
-        hostname: '*.storyblok.com',
-      },
+     
     ],
   },
-   async redirects() {
+  trailingSlash: true,
+  async redirects() {
     return [
       {
-        source: '/rlc/:path*',
-        destination: '/:path*',
-        permanent: false, 
+        source: "/rlc/:path*",
+        destination: "/:path*",
+        permanent: false,
       },
-      ...retirementlcRedirects
-    ]
+      ...retirementlcRedirects,
+    ];
   },
 };
 

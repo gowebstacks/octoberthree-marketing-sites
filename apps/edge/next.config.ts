@@ -3,33 +3,31 @@ import { o3edgeRedirects } from "./redirects.confi";
 
 const nextConfig: NextConfig = {
   /* config options here */
- images: {
+  images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'a.storyblok.com',
-        port: '',
-        pathname: '/**',          
+        protocol: "https",
+        hostname: "a.storyblok.com",
+        port: "",
+        pathname: "/**",
       },
       {
-        protocol: 'https',
-        hostname: 'img2.storyblok.com',
-      },
-      {
-        protocol: 'https',
-        hostname: '*.storyblok.com',
+        protocol: "https",
+        hostname: "img2.storyblok.com",
       },
     ],
   },
-   async redirects() {
+  trailingSlash: true,
+
+  async redirects() {
     return [
       {
-        source: '/edge/:path*',
-        destination: '/:path*',
-        permanent: false, 
+        source: "/edge/:path*",
+        destination: "/:path*",
+        permanent: false,
       },
-      ...o3edgeRedirects
-    ]
+      ...o3edgeRedirects,
+    ];
   },
 };
 
