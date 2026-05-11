@@ -11,10 +11,13 @@ export function middleware(request: NextRequest) {
     changed = true;
   }
   // non-www → www
-  if (!url.hostname.startsWith('www.')) {
-    url.hostname = `www.${url.hostname}`;
-    changed = true;
-  }
+   // Disabled because Vercel preview domains do not support `www`
+  // and were causing SSL certificate errors (`ERR_CERT_COMMON_NAME_INVALID`).
+  // Re-enable only for custom production domains if needed.
+  // if (!url.hostname.startsWith('www.')) {
+  //   url.hostname = `www.${url.hostname}`;
+  //   changed = true;
+  // }
   // no trailing slash → add trailing slash (except for files with extensions)
   if (!url.pathname.includes('.') && !url.pathname.endsWith('/')) {
     url.pathname += '/';
