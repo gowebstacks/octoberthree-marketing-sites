@@ -1,5 +1,4 @@
 "use client";
-
 import { usePathname } from "next/navigation";
 import { Icon, Link } from "../../atoms";
 import { StoryblokAsset } from "../../../types/storyblok";
@@ -27,7 +26,7 @@ type StoryblokFooterLinkGroup = {
   groupTitle?: string;
   links?: StoryblokFooterLink[];
   address?: string;
-  cityStateZip?:string
+  cityStateZip?: string;
   phone?: string;
   cta?: any[];
   socialLinks?: any[];
@@ -72,6 +71,7 @@ const renderRichText = (content: any) => {
     </span>
   ));
 };
+const normalizePath = (path: string) => path.replace(/\/+$/, "") || "/";
 
 export const FooterNavigation: React.FC<FooterNavigationProps> = ({
   footerNavigation,
@@ -122,6 +122,18 @@ export const FooterNavigation: React.FC<FooterNavigationProps> = ({
                       key={link._uid}
                       href={getLinkHref(link.link)}
                       className="text-sm  hover:text-(--color-navy-primary-100) text-(--color-neutral-100) cursor-pointer"
+                      onClick={(e) => {
+                        const href = normalizePath(getLinkHref(link.link));
+
+                        if (href === normalizePath(pathname)) {
+                          e.preventDefault();
+
+                          window.scrollTo({
+                            top: 0,
+                            behavior: "smooth",
+                          });
+                        }
+                      }}
                     >
                       {link.label}
                     </Link>
@@ -142,13 +154,12 @@ export const FooterNavigation: React.FC<FooterNavigationProps> = ({
                       <p className="text-sm whitespace-nowrap ">
                         {contact?.address.replace(/\u2028/g, "\n")}
                       </p>
-                      {
-                        contact.cityStateZip && 
-                         <p className="text-sm whitespace-nowrap ">
-                        {contact?.cityStateZip.replace(/\u2028/g, "\n")}
-                      </p>
-                      }
-                     
+                      {contact.cityStateZip && (
+                        <p className="text-sm whitespace-nowrap ">
+                          {contact?.cityStateZip.replace(/\u2028/g, "\n")}
+                        </p>
+                      )}
+
                       {contact.phone && (
                         <Link
                           href={`tel:${contact.phone.replace("out", "")}`}

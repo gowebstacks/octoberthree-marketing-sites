@@ -1,10 +1,10 @@
 import { cva } from 'class-variance-authority';
 
-export const containerStyle = cva('flex gap-(--gaps-56-48-48) xl:gap-[135px]', {
+export const containerStyle = cva('flex gap-(--gaps-56-48-48)', {
   variants: {
     layout: {
       stack: 'flex-col',
-      split: 'flex-col lg:flex-row lg:items-start',
+      split: 'flex-col lg:flex-row lg:items-start xl:gap-[135px]',
     },
   },
   defaultVariants: {

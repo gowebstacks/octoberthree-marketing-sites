@@ -1,8 +1,27 @@
 import type { NextConfig } from "next";
 import { o3edgeRedirects } from "./redirects.confi";
 
+const securityHeaders = [
+  {
+    key: "X-Frame-Options",
+    value: "DENY",
+  },
+  {
+    key: "X-XSS-Protection",
+    value: "1; mode=block",
+  },
+  {
+    key: "X-Content-Type-Options",
+    value: "nosniff",
+  },
+  {
+    key: "Referrer-Policy",
+    value: "strict-origin-when-cross-origin",
+  },
+];
+
 const nextConfig: NextConfig = {
-  /* config options here */
+  poweredByHeader: false,
   images: {
     remotePatterns: [
       {
@@ -18,6 +37,14 @@ const nextConfig: NextConfig = {
     ],
   },
   trailingSlash: true,
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: securityHeaders,
+      },
+    ];
+  },
 
   async redirects() {
     return [

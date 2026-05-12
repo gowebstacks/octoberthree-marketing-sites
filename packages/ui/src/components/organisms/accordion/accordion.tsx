@@ -63,19 +63,17 @@ export function AccordionItem({
   );
 
   const value =
-    activeIndex !== null && items[activeIndex]
-      ? items[activeIndex]._uid
-      : "";
+    activeIndex !== null && items[activeIndex] ? items[activeIndex]._uid : "";
 
-  useEffect(() => {
-    if (activeIndex === null || !items.length) return;
-    const timeout = setTimeout(() => {
-      setActiveIndex((prev) =>
-        prev === null ? 0 : (prev + 1) % items.length
-      );
-    }, durations[activeIndex] || 4000);
-    return () => clearTimeout(timeout);
-  }, [activeIndex, durations, items.length]);
+  // useEffect(() => {
+  //   if (activeIndex === null || !items.length) return;
+  //   const timeout = setTimeout(() => {
+  //     setActiveIndex((prev) =>
+  //       prev === null ? 0 : (prev + 1) % items.length
+  //     );
+  //   }, durations[activeIndex] || 4000);
+  //   return () => clearTimeout(timeout);
+  // }, [activeIndex, durations, items.length]);
 
   return (
     <AccordionPrimitive.Root
@@ -104,9 +102,7 @@ export function AccordionItem({
             className="group relative border-b border-(--stroke-secondary) flex flex-col gap-(--gaps-16-12-12) p-(--gaps-24-18-18)"
           >
             <AccordionPrimitive.Header>
-              <AccordionPrimitive.Trigger
-                className="group cursor-pointer flex w-full items-center justify-between gap-3 text-left transition-colors text-neutral-600 data-[state=open]:text-(--text-headings-dark)"
-              >
+              <AccordionPrimitive.Trigger className="group cursor-pointer flex w-full items-center justify-between gap-3 text-left transition-colors text-neutral-600 data-[state=open]:text-(--text-headings-dark)">
                 <div className="flex items-center gap-4">
                   {item?.icon?.filename && (
                     <span className="shrink-0 transition-opacity opacity-50 group-data-[state=open]:opacity-100">
@@ -136,7 +132,7 @@ export function AccordionItem({
               </AccordionPrimitive.Trigger>
             </AccordionPrimitive.Header>
 
-            <div className="absolute bottom-0 left-0 w-full h-0.5 overflow-hidden">
+            {/* <div className="absolute bottom-0 left-0 w-full h-0.5 overflow-hidden">
               {isActive && activeIndex !== null && (
                 <div
                   key={activeIndex}
@@ -146,9 +142,9 @@ export function AccordionItem({
                   }}
                 />
               )}
-            </div>
+            </div> */}
 
-            <AccordionPrimitive.Content className="overflow-hidden data-[state=open]:accordion-down data-[state=closed]:accordion-up">
+            <AccordionPrimitive.Content className="accordion-content overflow-hidden">
               <div
                 {...storyblokEditable(item as any)}
                 data-blok-field="content"
@@ -168,14 +164,35 @@ export function AccordionItem({
       })}
 
       <style jsx>{`
-        @keyframes progressBar {
+        @keyframes accordionDown {
           from {
-            transform: scaleX(0);
+            height: 0;
           }
+
           to {
-            transform: scaleX(1);
+            height: var(--radix-accordion-content-height);
           }
         }
+
+        @keyframes accordionUp {
+          from {
+            height: var(--radix-accordion-content-height);
+          }
+
+          to {
+            height: 0;
+          }
+        }
+
+        .accordion-content {
+          overflow: hidden;
+          will-change: height;
+        }
+
+        .accordion-content[data-state="open"] {
+          animation: accordionDown 320ms cubic-bezier(0.33, 1, 0.68, 1);
+        }
+
       `}</style>
     </AccordionPrimitive.Root>
   );

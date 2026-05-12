@@ -26,7 +26,7 @@ export function renderMetadataFromStoryblok(
 
   const isHomepage = slug === '/' || slug === 'homepage' || !slug;
   const pathPart = isHomepage ? '' : `${slug}`;
-  const url = `${site}${pathPart}`;
+  const url = `${site}/${pathPart}`;
   const index = seo ? !seo.noIndex : true;
   const follow = seo ? !seo.noFollow : true;
   return {

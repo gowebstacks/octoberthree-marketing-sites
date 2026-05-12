@@ -81,10 +81,11 @@ export const RTCTable: FC<RTCTableProps> = (props) => {
                   py-(--gaps-18-16-16)
                   px-(--gaps-16-12-12)
                   text-md
-                  font-medium
+                  font-semibold
                   text-(--text-headings)
                   max-w-[256px]
                   min-w-28.5
+
                   ${header.alignment === "left" ? "text-left" : "text-center"}
                 `}
               >

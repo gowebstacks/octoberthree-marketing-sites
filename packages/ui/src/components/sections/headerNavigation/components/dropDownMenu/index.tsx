@@ -81,6 +81,9 @@ const DropDownMenu: FC<StoryblokNavigationMenuItem> = ({ menuSection }) => {
                 >
                   <span className="flex-1">{item.label}</span>
 
+                <pre>
+                  {JSON.stringify(item, null, 2)}
+                </pre>
                   <Icon
                     icon="chevron-right"
                     size={16}

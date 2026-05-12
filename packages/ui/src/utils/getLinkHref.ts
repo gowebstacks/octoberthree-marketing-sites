@@ -5,7 +5,6 @@ const DOMAIN_MAP: any = {
 };
 
 export const getLinkHref = (link: any) => {
-  
   if (!link) return "#";
 
   if (
@@ -23,14 +22,14 @@ export const getLinkHref = (link: any) => {
 
     const [site, ...rest] = slug.split("/");
     const base = DOMAIN_MAP[site] || "";
-    const cleanSlug = rest.join("/");
+    const cleanSlug = rest.join("/").replace(/^\/+|\/+$/g, "");
 
     const currentSite = process.env.NEXT_PUBLIC_SITE;
     if (site === currentSite) {
-      return `/${cleanSlug}`;
+      return `/${cleanSlug}/`;
     }
 
-    return base ? `${base}/${cleanSlug}` : `/${slug}`;
+    return base ? `${base}/${cleanSlug}/` : `/${slug}/`;
   }
   if (typeof link === "string") {
     return link;

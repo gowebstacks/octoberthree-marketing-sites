@@ -313,7 +313,7 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
                 key={card._uid || i}
                 {...storyblokEditable(card)}
                 className="w-full h-full cursor-pointer"
-                href={`/team/${card.slug}`}
+                href={`/team/${card.slug}/`}
               >
                 <LeadershipCard blok={card} />
               </a>

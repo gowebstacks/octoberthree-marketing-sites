@@ -95,7 +95,7 @@ export const Hero: FC<{
         {(hasVideo || hasImage) && (
           <div
             className={twMerge(
-              "relative h-full w-full overflow-hidden aspect-4/3",
+              "relative h-full w-full overflow-hidden aspect-4/3 md:left-px",
               blok.reverse && "lg:order-1"
             )}
           >

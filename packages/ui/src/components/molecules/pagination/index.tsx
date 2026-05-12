@@ -27,7 +27,7 @@ const Pagination: FC<PaginationProps> = ({ totalPages, baseUrl }) => {
   params.set("page", String(page));
 
   router.push(`${baseUrl || '/'}?${params.toString()}`, {
-    scroll: false,
+    scroll: true,
   });
 };
 

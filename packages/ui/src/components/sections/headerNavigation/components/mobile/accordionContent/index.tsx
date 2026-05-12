@@ -18,8 +18,9 @@ interface AccordionContentProps {
 }
 
 const AccordionContent: FC<AccordionContentProps> = ({ menuSection }) => {
-  const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
-
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>(
+    () => Object.fromEntries(menuSection.map((section) => [section._uid, true]))
+  );
   const toggleSection = (id: string) => {
     setOpenSections((prev) => ({
       ...prev,
@@ -67,14 +68,12 @@ const AccordionContent: FC<AccordionContentProps> = ({ menuSection }) => {
                     >
                       <span>{item.label}</span>
 
-                      <Icon
-                        icon="chevron-right"
-                        size={14}
-                      />
+                      <Icon icon="chevron-right" size={14} />
                     </Link>
                   ))}
 
-                 {Array.isArray(section.ctaLink) && section.ctaLink.length > 0 ? (
+                  {Array.isArray(section.ctaLink) &&
+                  section.ctaLink.length > 0 ? (
                     <div className="flex gap-3 mt-4">
                       {section.ctaLink.map((item) => (
                         <Button
@@ -82,8 +81,7 @@ const AccordionContent: FC<AccordionContentProps> = ({ menuSection }) => {
                           label={item.label}
                           tone={item.tone}
                           leadingIcon={item.leadingIcon}
-                        url={item.url as any}
-                          
+                          url={item.url as any}
                           className="px-4! py-2! h-10!"
                         />
                       ))}
@@ -97,7 +95,9 @@ const AccordionContent: FC<AccordionContentProps> = ({ menuSection }) => {
                           key={item._uid}
                           label={item.label}
                           mode="link"
-                          trailingIcon={item.icon ? { icon: item.icon } : undefined}
+                          trailingIcon={
+                            item.icon ? { icon: item.icon } : undefined
+                          }
                           link={item.link as any}
                           className="[&>span]:text-[14px]! [&_svg]:w-4 [&_svg]:h-4 justify-start! items-left!"
                         />
