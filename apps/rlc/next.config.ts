@@ -4,7 +4,7 @@ import { retirementlcRedirects } from "./redirects.config";
 const securityHeaders = [
   {
     key: "X-Frame-Options",
-    value: "DENY",
+    value: "SAMEORIGIN",
   },
   {
     key: "X-XSS-Protection",
@@ -17,6 +17,10 @@ const securityHeaders = [
   {
     key: "Referrer-Policy",
     value: "strict-origin-when-cross-origin",
+  },
+  {
+    key: "Content-Security-Policy",
+    value: "frame-ancestors 'self' https://app.storyblok.com;",
   },
 ];
 const nextConfig: NextConfig = {
@@ -35,7 +39,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-   async headers() {
+  async headers() {
     return [
       {
         source: "/(.*)",

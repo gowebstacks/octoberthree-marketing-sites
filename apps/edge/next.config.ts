@@ -4,7 +4,7 @@ import { o3edgeRedirects } from "./redirects.confi";
 const securityHeaders = [
   {
     key: "X-Frame-Options",
-    value: "DENY",
+    value: "SAMEORIGIN",
   },
   {
     key: "X-XSS-Protection",
@@ -17,6 +17,10 @@ const securityHeaders = [
   {
     key: "Referrer-Policy",
     value: "strict-origin-when-cross-origin",
+  },
+  {
+    key: "Content-Security-Policy",
+    value: "frame-ancestors 'self' https://app.storyblok.com;",
   },
 ];
 
