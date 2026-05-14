@@ -10,7 +10,8 @@
         "STORYBLOK_PREVIEW_ACCESS_TOKEN",
         "STORYBLOK_PUBLIC_ACCESS_TOKEN",
         "NEXT_PUBLIC_SITE",
-        "NEXT_PUBLIC_SITE_URL"
+        "NEXT_PUBLIC_SITE_URL",
+        "STORYBLOK_WEBHOOK_SECRET"
       ]
     },
     "lint": {
