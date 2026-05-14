@@ -2,7 +2,7 @@ import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
-  const secret = request.nextUrl.searchParams.get("secret");
+  const secret = request.nextUrl.searchParams.get("secret")?.replace(/\/+$/, "");
 
   if (secret !== process.env.STORYBLOK_WEBHOOK_SECRET) {
     return NextResponse.json({ message: "Invalid secret" }, { status: 401 });
