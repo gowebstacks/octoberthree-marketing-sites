@@ -10,8 +10,9 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
-    "@repo/ui": "workspace:*",
+    "@next/third-parties": "^16.2.6",
     "@repo/storyblok": "workspace:*",
+    "@repo/ui": "workspace:*",
     "@storyblok/react": "^5.4.20",
     "@tailwindcss/postcss": "^4.1.5",
     "next": "16.1.0",

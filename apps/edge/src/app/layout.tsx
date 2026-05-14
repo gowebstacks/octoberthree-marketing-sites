@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
 import "@repo/ui/styles.css";
 import "./globals.css";
-import {
-  getGlobalLayoutData,
-  StoryblokBridge,
-} from "@repo/storyblok";
+import { getGlobalLayoutData, StoryblokBridge } from "@repo/storyblok";
 import { FooterNavigation, HeaderNavigation } from "@repo/ui";
 import Script from "next/script";
-import { Lato } from 'next/font/google'
+import { Lato } from "next/font/google";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 const lato = Lato({
-  subsets: ['latin'],
-  weight: ['100','300','400','700','900'],
-})
+  subsets: ["latin"],
+  weight: ["100", "300", "400", "700", "900"],
+});
 
 export const metadata: Metadata = {
   title: "O3 Edge",
@@ -23,13 +21,19 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
-  const { header, footer } = await getGlobalLayoutData("edge/globals/header-navigation","edge/globals/edge-footer" );
+  const { header, footer } = await getGlobalLayoutData(
+    "edge/globals/header-navigation",
+    "edge/globals/edge-footer"
+  );
   return (
     <html lang="en">
+      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID!} />
       <body className={`${lato.className}`}>
         {/* Clym cookie */}
-        <Script src="https://widget.clym-sdk.net/blocking.js" strategy="lazyOnload" />
+        <Script
+          src="https://widget.clym-sdk.net/blocking.js"
+          strategy="lazyOnload"
+        />
         <Script id="clym-script" strategy="lazyOnload">
           {`
             (function(d,s,i,w,o){
