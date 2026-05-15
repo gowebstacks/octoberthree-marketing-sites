@@ -18,6 +18,10 @@ const securityHeaders = [
     key: "Referrer-Policy",
     value: "strict-origin-when-cross-origin",
   },
+  {
+    key: "Content-Security-Policy",
+    value: "frame-ancestors 'self' https://app.storyblok.com;",
+  },
 ];
 const nextConfig: NextConfig = {
   poweredByHeader: false,
@@ -35,7 +39,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-   async headers() {
+  async headers() {
     return [
       {
         source: "/(.*)",

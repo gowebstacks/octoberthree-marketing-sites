@@ -184,6 +184,24 @@ export const ResourceCardDeck: FC<Props> = ({
               }}
             />
 
+            {input && (
+              <button
+                onClick={() => {
+                  setInput("");
+
+                  const params = new URLSearchParams(searchParams.toString());
+                  params.delete("search");
+                  params.set("page", "1");
+
+                  router.push(`${pathname}?${params.toString()}`);
+                }}
+                className="flex cursor-pointer items-center justify-center w-8 h-8 text-sm text-(--text-secondary) hover:text-(--text-primary)"
+                aria-label="Clear search"
+              >
+                <Icon strokeWidth={2} icon="x"/>
+              </button>
+            )}
+
             <button
               onClick={handleSearch}
               className="text-xs cursor-pointer h-8 px-2 rounded-xs bg-(--surface-search-button) text-white"

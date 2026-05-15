@@ -7,6 +7,7 @@ import { FooterNavigation, HeaderNavigation } from "@repo/ui";
 
 import { Lato } from "next/font/google";
 import Script from "next/script";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 const lato = Lato({
   subsets: ["latin"],
@@ -28,6 +29,7 @@ export default async function RootLayout({
   );
   return (
     <html lang="en">
+      <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID!} />
       <body className={`${lato.className}`}>
         {/* Clym cookie */}
         <Script

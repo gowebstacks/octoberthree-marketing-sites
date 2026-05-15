@@ -9,15 +9,17 @@ import type { StoryblokAsset } from "../../../../lib";
 import Image from "next/image";
 import { storyblokLoader } from "../../../../utils/storyblokImageLoader";
 import { Icon } from "../../../atoms";
+import Button, { ButtonProps } from "../../../atoms/button";
 
 export interface FeatureCardProps {
   _uid: string;
   icon?: {
-    icon :string
+    icon: string;
   };
   heading?: string;
   body?: RichTextContent;
   theme?: "light" | "dark";
+  button?: ButtonProps[];
 }
 
 export const FeatureCard: FC<FeatureCardProps> = ({
@@ -25,6 +27,7 @@ export const FeatureCard: FC<FeatureCardProps> = ({
   heading,
   body,
   theme = "light",
+  button,
   ...blok
 }) => {
   const isBodyEmpty =
@@ -70,6 +73,17 @@ export const FeatureCard: FC<FeatureCardProps> = ({
             />
           </div>
         )}
+
+        {button?.length
+          ? button.map(({ _uid, ...rest }) => (
+              <Button
+                key={_uid}
+                {...(rest as any)}
+                mode={rest.mode}
+                label={rest.label}
+              />
+            ))
+          : null}
       </div>
     </div>
   );
