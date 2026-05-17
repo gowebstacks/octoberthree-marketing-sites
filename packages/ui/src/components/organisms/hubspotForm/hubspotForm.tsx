@@ -3,8 +3,9 @@
 import { useEffect, useId, useRef, useState } from "react";
 import Script from "next/script";
 import { twMerge } from "tailwind-merge";
-import { Icon } from "../../atoms";
+import { Heading, Icon } from "../../atoms";
 import { Toast } from "../../molecules";
+import { HeadingProps } from "../../atoms/heading";
 
 declare global {
   interface Window {
@@ -21,6 +22,7 @@ export type HubspotFormProps = {
   onReady?: () => void;
   basic?:boolean;
   cta?:boolean
+  heading?:HeadingProps[]
 };
 
 export function HubspotFormComponent({
@@ -29,7 +31,8 @@ export function HubspotFormComponent({
   className,
   onReady,
   basic=false,
-  cta=false
+  cta=false,
+  heading
 }: HubspotFormProps) {
   const id = useId();
   const targetId = `hubspot-form-${id}`;
@@ -99,6 +102,12 @@ export function HubspotFormComponent({
         onLoad={createForm}
       />
 
+  {!!heading?.length ? (
+        <Heading
+         {...heading[0]}
+         className="mb-5"
+        />
+      ) : null}
       {formId ? (
         <>
           {status === "loading" && (

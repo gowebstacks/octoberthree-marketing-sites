@@ -9,12 +9,14 @@ import {
 import { twMerge } from "tailwind-merge";
 import { StoryblokAsset } from "../../../lib";
 import { InputField } from "../../molecules";
+import { Heading, HeadingProps } from "../../atoms/heading";
 
 export interface FormBlockProps extends SbBlokData {
   content?: ContentBlockBlok[];
   pattern?: "square";
   image?: StoryblokAsset;
   hubspotFormId: string;
+  heading?: HeadingProps[];
 }
 
 export const FormBlock: FC<FormBlockProps> = ({
@@ -22,14 +24,13 @@ export const FormBlock: FC<FormBlockProps> = ({
   pattern = "square",
   image,
   hubspotFormId,
+  heading,
   ...blok
 }) => {
-
   const hubspotformID = ((blok as any).blok?.hubspotFormId.replace(
     /^hsForm_/,
     ""
   ) || hubspotFormId) as string;
-
 
   return (
     <div
@@ -50,7 +51,10 @@ export const FormBlock: FC<FormBlockProps> = ({
 
       <div className="flex-1">
         {/* <Form  /> */}
-        <HubspotFormComponent formId={hubspotformID || 'cbd47751-5c13-44c2-8dd1-3290840fe8b8'} />
+        <HubspotFormComponent
+        heading={heading}
+          formId={hubspotformID || "cbd47751-5c13-44c2-8dd1-3290840fe8b8"}
+        />
       </div>
     </div>
   );

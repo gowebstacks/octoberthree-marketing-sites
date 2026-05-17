@@ -56,7 +56,7 @@ export const ResourceBentoCardDeck: FC<ResourceBentoCardDeckBlok> = ({
 
         <div className="flex gap-8 flex-col flex-1">
           {secondary.slice(0, 3).map((resource) => (
-            <ResourceBentoCard key={resource._id} {...resource} size="sm" />
+            <ResourceBentoCard key={resource._uid} {...resource} size="sm" />
           ))}
         </div>
       </div>
