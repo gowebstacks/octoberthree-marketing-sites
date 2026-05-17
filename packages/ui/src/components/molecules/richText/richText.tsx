@@ -27,16 +27,30 @@ export const RichText: FC<RichTextProps> = ({
     if (node.marks) {
       node.marks.forEach((mark: any) => {
         if (mark.type === "link") {
-          let href = mark.attrs?.href || "#";
-          if (!href.startsWith("http")) {
-            href = getLinkHref(href);
-          }
+          console.log("this i slink", mark.attrs);
+          const {
+            href = "#",
+            anchor,
+            target = "_self",
+            custom = {},
+          } = mark.attrs || {};
+          const resolvedHref =
+            mark.attrs?.linktype === "email"
+              ? `mailto:${href}`
+              : getLinkHref(href);
+
+          const finalHref = `${resolvedHref}${anchor ? `#${anchor}` : ""}`;
+
           element = (
             <a
-              href={href}
-              target={mark.attrs?.target || "_self"}
-              rel="noopener noreferrer"
+              href={finalHref}
+              target={target}
+              rel={
+                custom.rel ||
+                (target === "_blank" ? "noopener noreferrer" : undefined)
+              }
               className="text-link underline text-(--text-link-active)"
+              {...custom}
             >
               {element}
             </a>
