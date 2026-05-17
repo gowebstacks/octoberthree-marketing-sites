@@ -112,7 +112,7 @@ export const AuthorCard: FC<{ blok: AuthorCardProps }> = ({ blok }) => {
         </div>
       </div>
       {variant === "bioOutside" && (
-        <p className="mt-8  text-rich-body  text-(--text-body-dark)">{bio}</p>
+        <p className="mt-8  text-rich-body  text-(--text-body-dark) whitespace-pre-line">{bio}</p>
       )}
     </div>
   );

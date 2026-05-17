@@ -46,7 +46,7 @@ export const RichText: FC<RichTextProps> = ({
               href={finalHref}
               target={target}
               rel={
-                custom.rel ||
+                custom?.rel ||
                 (target === "_blank" ? "noopener noreferrer" : undefined)
               }
               className="text-link underline text-(--text-link-active)"

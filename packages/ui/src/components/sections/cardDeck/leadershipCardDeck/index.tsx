@@ -1,12 +1,13 @@
 "use client";
 
 import type { FC } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { storyblokEditable, type SbBlokData } from "@storyblok/react";
 import { ContentBlock, LeadershipCard } from "../../../organisms";
-import { BlogPagination, Dropdown } from "../../../molecules";
+import { Dropdown, Pagination } from "../../../molecules";
 import { Badge, Heading } from "../../../atoms";
 import { buildRelMap } from "../../../../utils";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type StoryblokRel = {
   uuid: string;
@@ -27,6 +28,12 @@ interface LeadershipCardDeckBlok extends SbBlokData {
   htmlId?: string;
   rels?: StoryblokRel[];
   filterable?: boolean;
+  pagination?: {
+    currentPage: number;
+    totalPages: number;
+  };
+  allTeams?: string[];
+  allNames?: string[];
 }
 
 const getGridClass = (desktop?: string, tablet?: string, mobile?: string) => {
@@ -101,19 +108,20 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
   htmlId,
   rels = [],
   filterable,
+  pagination,
+  allTeams = [],
+  allNames = [],
   ...blok
 }) => {
-  const ITEMS_PER_PAGE = 16;
-  const [currentPage, setCurrentPage] = useState(1);
-  const [teams, setTeams] = useState<string[]>([]);
-  const [locations, setLocations] = useState<string[]>([]);
-  const [names, setNames] = useState<string[]>([]);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const teams = searchParams.getAll("team");
+  const names = searchParams.getAll("name");
 
   const relMap = useMemo(() => buildRelMap(rels), [rels]);
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [teams, locations, names]);
   const allCards = useMemo(() => {
     if (!rows) return [];
     return rows.flatMap((row) =>
@@ -135,12 +143,10 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
     "IT",
     "Finance",
   ];
+  const shouldLinkToTeamPage =
+    pathname.includes("meet-our-team") || pathname.includes("meet-the-team");
   const teamOptions = useMemo(() => {
-    const uniqueTeams = [
-      ...new Set(allCards.flatMap((c) => extractCardContent(c).team)),
-    ];
-
-    return uniqueTeams
+    return allTeams
       .sort((a, b) => {
         const indexA = TEAM_ORDER.indexOf(a);
         const indexB = TEAM_ORDER.indexOf(b);
@@ -150,61 +156,24 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
 
         return indexA - indexB;
       })
-      .map((t) => ({ label: t, value: t }));
-  }, [allCards]);
-  const locationOptions = useMemo(
-    () =>
-      [
-        ...new Set(
-          allCards.map((c) => extractCardContent(c).location).filter(Boolean)
-        ),
-      ].map((l) => ({ label: l!, value: l! })),
-    [allCards]
-  );
-
-  const filteredByTeamLocation = useMemo(
-    () =>
-      allCards.filter((card) => {
-        const { team, location } = extractCardContent(card);
-        return (
-          (!teams.length || teams.some((t) => team.includes(t))) &&
-          (!locations.length || locations.includes(location ?? ""))
-        );
-      }),
-    [allCards, teams, locations]
-  );
-
+      .map((t) => ({
+        label: t,
+        value: t,
+      }));
+  }, [allTeams]);
   const nameOptions = useMemo(
     () =>
-      [
-        ...new Set(
-          filteredByTeamLocation
-            .map((c) => extractCardContent(c).name)
-            .filter(Boolean)
-        ),
-      ].map((n) => ({ label: n!, value: n! })),
-    [filteredByTeamLocation]
+      allNames.map((n) => ({
+        label: n,
+        value: n,
+      })),
+    [allNames]
   );
-
-  const filteredCards = useMemo(
-    () =>
-      filteredByTeamLocation.filter(
-        (card) =>
-          !names.length || names.includes(extractCardContent(card).name ?? "")
-      ),
-    [filteredByTeamLocation, names]
-  );
-  const totalItems = filteredCards.length;
-  const paginatedCards = useMemo(() => {
-    const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredCards.slice(start, start + ITEMS_PER_PAGE);
-  }, [filteredCards, currentPage]);
 
   const groupedPaginatedRows = useMemo(() => {
     if (!rows) return [];
 
-    const paginatedUids = new Set(paginatedCards.map((c) => c._uid));
-
+    const paginatedUids = new Set(allCards.map((c) => c._uid));
     return rows
       .map((row) => {
         const expandedCards = (row.cards ?? []).flatMap((card) =>
@@ -218,7 +187,7 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
         return { ...row, cards: filteredRowCards };
       })
       .filter((row) => row.cards.length > 0);
-  }, [rows, paginatedCards, relMap]);
+  }, [rows, allCards, relMap]);
 
   const hasRelatedBios = useMemo(() => {
     if (!rows) return false;
@@ -246,7 +215,19 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
               label="Select a Team"
               multiple
               value={teams}
-              onChange={(v) => setTeams(v as string[])}
+              onChange={(v) => {
+                const params = new URLSearchParams(searchParams.toString());
+
+                params.delete("team");
+
+                (v as string[]).forEach((team) => {
+                  params.append("team", team);
+                });
+
+                params.delete("page");
+
+                router.push(`${pathname}?${params.toString()}`);
+              }}
               options={teamOptions}
               placeholder="All"
             />
@@ -263,7 +244,19 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
               label="Search by Name"
               multiple
               value={names}
-              onChange={(v) => setNames(v as string[])}
+              onChange={(v) => {
+                const params = new URLSearchParams(searchParams.toString());
+
+                params.delete("name");
+
+                (v as string[]).forEach((name) => {
+                  params.append("name", name);
+                });
+
+                params.delete("page");
+
+                router.push(`${pathname}?${params.toString()}`);
+              }}
               options={nameOptions}
               placeholder="Search"
             />
@@ -273,21 +266,42 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
               <Badge
                 key={team}
                 label={team}
-                onRemove={() => setTeams((p) => p.filter((t) => t !== team))}
-              />
-            ))}
-            {locations.map((loc) => (
-              <Badge
-                key={loc}
-                label={loc}
-                onRemove={() => setLocations((p) => p.filter((l) => l !== loc))}
+                onRemove={() => {
+                  const params = new URLSearchParams(searchParams.toString());
+
+                  const updatedTeams = teams.filter((t) => t !== team);
+
+                  params.delete("team");
+
+                  updatedTeams.forEach((t) => {
+                    params.append("team", t);
+                  });
+
+                  params.delete("page");
+
+                  router.push(`${pathname}?${params.toString()}`);
+                }}
               />
             ))}
             {names.map((name) => (
               <Badge
                 key={name}
                 label={name}
-                onRemove={() => setNames((p) => p.filter((n) => n !== name))}
+                onRemove={() => {
+                  const params = new URLSearchParams(searchParams.toString());
+
+                  const updatedNames = names.filter((n) => n !== name);
+
+                  params.delete("name");
+
+                  updatedNames.forEach((n) => {
+                    params.append("name", n);
+                  });
+
+                  params.delete("page");
+
+                  router.push(`${pathname}?${params.toString()}`);
+                }}
               />
             ))}
           </div>
@@ -308,30 +322,27 @@ export const LeadershipCardDeck: FC<LeadershipCardDeckBlok> = ({
             key={rowIndex}
             className={`grid  w-full gap-y-(--gaps-56-48-48) gap-x-(--gaps-16-12-12) ${getGridClass(row.cardsPerRow, row.cardsPerRowTablet, row.cardsPerRowMobile)}`}
           >
-            {row.cards?.map((card, i) => (
-              <a
-                key={card._uid || i}
-                {...storyblokEditable(card)}
-                className="w-full h-full cursor-pointer"
-                href={`/team/${card.slug}/`}
-              >
+            {row.cards?.map((card, i) =>
+              shouldLinkToTeamPage ? (
+                <a
+                  key={card._uid || i}
+                  {...storyblokEditable(card)}
+                  className="w-full h-full cursor-pointer"
+                  href={`/team/${card.slug}/`}
+                >
+                  <LeadershipCard blok={card} />
+                </a>
+              ) : (
                 <LeadershipCard blok={card} />
-              </a>
-            ))}
+              )
+            )}
           </div>
         ))}
       </div>
 
-      {totalItems > ITEMS_PER_PAGE && (
-        <div className="mt-8">
-          <BlogPagination
-            currentPage={currentPage}
-            totalItems={totalItems}
-            itemsPerPage={ITEMS_PER_PAGE}
-            onPageChange={setCurrentPage}
-          />
-        </div>
-      )}
+      {pagination?.totalPages && pagination.totalPages > 1 ? (
+        <Pagination totalPages={pagination.totalPages} baseUrl={pathname} />
+      ) : null}
     </div>
   );
 };
