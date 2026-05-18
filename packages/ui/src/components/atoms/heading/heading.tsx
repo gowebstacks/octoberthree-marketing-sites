@@ -159,7 +159,7 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
               className="lg:translate-y-[0.25em] translate-y-[0.1em]"
             />
           )}
-          <span className="flex-1">
+          <span className="flex-1 whitespace-pre-line">
             {finalText}
           </span>
         </span>
