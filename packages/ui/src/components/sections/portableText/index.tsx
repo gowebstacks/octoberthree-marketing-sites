@@ -4,7 +4,6 @@ import { storyblokEditable, type SbBlokData } from "@storyblok/react";
 
 import { RichText } from "../../molecules/richText/richText";
 import TableOfContents from "../../organisms/tableOfContents";
-import { ConversionPanel, ConversionPanelProps } from "../conversionPanel";
 import { Subscribe } from "../../modules";
 import { twMerge } from "tailwind-merge";
 import { usePathname } from "next/navigation";

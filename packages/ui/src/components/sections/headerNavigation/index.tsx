@@ -34,6 +34,7 @@ export const HeaderNavigation: React.FC<HeaderNavigationProps> = ({
           py-(--gaps-32-24-24)
           px-(--padding-side-sectional-80-64-16)
           items-center
+          justify-between
         "
       >
         <div className="h-full lg:basis-auto lg:shrink-0 lg:grow-0 flex items-center text-black!">
@@ -60,9 +61,9 @@ export const HeaderNavigation: React.FC<HeaderNavigationProps> = ({
           <div
             className="
               hidden
-              xl:absolute xl:left-[calc(50%-62px)] xl:top-1/2
-              xl:-translate-x-1/2 xl:-translate-y-1/2
               xl:flex
+              flex-1
+              justify-center
               transition-colors duration-300 ease-in-out
             "
           >
@@ -70,7 +71,7 @@ export const HeaderNavigation: React.FC<HeaderNavigationProps> = ({
           </div>
         )}
 
-        <div className="ml-auto flex items-center gap-4">
+        <div className="flex items-center gap-4 shrink-0">
           <div className="hidden md:block lg:hidden">
             <Icon icon="search-md" />
           </div>

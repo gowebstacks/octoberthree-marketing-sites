@@ -53,51 +53,109 @@ const page = await getPageData(
 
   let updatedSections = sections;
   if (slugParam === "meet-the-team") {
-    const getAuthorCard = (content: any) => {
-      return content?.sections
+    const currentPage = Number(searchParams?.page || 1);
+    const ITEMS_PER_PAGE = 16;
+    const selectedTeams = searchParams?.team
+      ? Array.isArray(searchParams.team)
+        ? searchParams.team
+        : [searchParams.team]
+      : [];
+
+    const selectedNames = searchParams?.name
+      ? Array.isArray(searchParams.name)
+        ? searchParams.name
+        : [searchParams.name]
+      : [];
+
+    const getAuthorCard = (content: any) =>
+      content?.sections
         ?.flatMap((layout: any) => layout.section || [])
         ?.find((section: any) => section.component === "portableText")
         ?.body?.content?.find((node: any) => node.type === "blok")
         ?.attrs?.body?.find((blok: any) => blok.component === "authorCard");
-    };
 
-    const teamMembers = (await getAllTeamMembers(preview, "rlc")).map(
-      (member: any) => {
+    const teamMembersResponse = await getAllTeamMembers(
+      preview,
+      "rlc"
+    );
+
+    const allCards = teamMembersResponse
+      .map((member: any) => {
         const authorCard = getAuthorCard(member.content);
+
+        if (!authorCard) return null;
 
         return {
           _uid: member.uuid,
           component: "leadershipCard",
-
-          name: authorCard?.name || "",
-          role: authorCard?.designation || "",
-          location: authorCard?.location || "",
-          image: authorCard?.headshotImage || {},
-
-          team: authorCard?.team || [],
+          name: authorCard.name || "",
+          role: authorCard.designation || "",
+          location: authorCard.location || "",
+          image: authorCard.headshotImage || {},
+          team: authorCard.team || [],
+          slug: member.slug,
           ...member,
         };
-      }
+      })
+      .filter(Boolean);
+
+    const allTeams = [
+      ...new Set(allCards.flatMap((card: any) => card.team || [])),
+    ].sort();
+
+    const allNames = [
+      ...new Set(allCards.map((card: any) => card.name).filter(Boolean)),
+    ].sort();
+
+    const filteredMembers = allCards.filter((member: any) => {
+      const matchesTeam =
+        !selectedTeams.length ||
+        selectedTeams.some((team) => member.team?.includes(team));
+
+      const matchesName =
+        !selectedNames.length || selectedNames.includes(member.name);
+
+      return matchesTeam && matchesName;
+    });
+
+    const totalPages = Math.max(
+      1,
+      Math.ceil(filteredMembers.length / ITEMS_PER_PAGE)
+    );
+
+    const safeCurrentPage = Math.min(currentPage, totalPages);
+
+    const start = (safeCurrentPage - 1) * ITEMS_PER_PAGE;
+
+    const paginatedMembers = filteredMembers.slice(
+      start,
+      start + ITEMS_PER_PAGE
     );
 
     updatedSections = sections.map((layout: any) => ({
       ...layout,
       section: layout.section?.map((section: any) => {
-        if (section.component === "leadershipCardDeck") {
-          return {
-            ...section,
-            rows: [
-              {
-                ...(section.rows?.[0] || {}),
-                _uid: section.rows?.[0]?._uid || section._uid,
-                component: "leadershipCardDeckRow",
-                cards: teamMembers,
-              },
-            ],
-          };
+        if (section.component !== "leadershipCardDeck") {
+          return section;
         }
 
-        return section;
+        return {
+          ...section,
+          pagination: {
+            currentPage: safeCurrentPage,
+            totalPages,
+          },
+          allTeams,
+          allNames,
+          rows: [
+            {
+              ...(section.rows?.[0] || {}),
+              _uid: section.rows?.[0]?._uid || section._uid,
+              component: "leadershipCardDeckRow",
+              cards: paginatedMembers,
+            },
+          ],
+        };
       }),
     }));
   }
@@ -108,7 +166,6 @@ const page = await getPageData(
       sections: updatedSections,
     },
   };
-  console.log(preview, "preview mode ______--------------------");
   return (
     <>
       {preview ? (

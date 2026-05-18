@@ -99,8 +99,7 @@ export const ResourceBentoCard: FC<ResourceBentoCardProps> = ({
   const styles = getResponsiveStyles();
 
   return (
-    <Link
-      href={resourceUrl}
+    <div
       {...storyblokEditable(props)}
       className={twMerge(
         "group relative overflow-hidden border border-(--stroke-secondary) max-h-144.75 min-h-42.75",
@@ -150,6 +149,6 @@ export const ResourceBentoCard: FC<ResourceBentoCardProps> = ({
 
         <Button mode="link" label="Learn more" className="w-fit" />
       </div>
-    </Link>
+    </div>
   );
 };

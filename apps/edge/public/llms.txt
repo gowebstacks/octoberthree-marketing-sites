@@ -1,0 +1,106 @@
+Site: O3 Edge
+
+Domain: https://o3edge.com
+
+Environment: Production
+
+Content-Type: Retirement plan prospecting platform for financial advisors
+
+Description
+
+O3 Edge is a retirement plan prospecting solution built exclusively for
+retirement plan advisors. Developed by October Three Consulting LLC, the
+platform provides advisors with data-driven insights on U.S. retirement
+plans, access to dedicated plan experts, and practice-building content
+designed to help them identify prospects, win more business, and
+streamline client conversations. O3 Edge serves independent advisors,
+mid-sized financial advisory firms, and large advisory organizations
+focused on defined benefit, defined contribution, and qualified
+retirement plans.
+
+Primary Content
+
+/features - Full breakdown of platform capabilities including the search
+tool, personal plan expert support, and content starter kits
+/why-o3-edge - Benefit-oriented overview of the platform's value
+proposition for retirement plan advisors
+/insights/ - Advisor-focused blog content including prospecting tips,
+case studies, industry trend analysis, legislative updates, and
+checklists
+
+Editorial & Resource Content
+
+/insights/identify-retirement-plan-prospects - Checklist for
+identifying high-probability retirement plan prospects
+/insights/5-tips-for-retirement-plan-prospecting - Practical guidance
+for retirement plan prospecting strategy
+/insights/debunking-retirement-plan-prospecting-myths - Analysis of
+common prospecting misconceptions
+/insights/prospecting-with-purpose-case-study - Real-world case study
+on defined benefit plan advisory engagement
+/insights/how-to-differentiate-your-advisory-practice - Strategies for
+advisor differentiation in a competitive market
+/insights/checklist-advising-hospital-plan-sponsors - Checklist for
+advisors targeting hospital plan sponsors
+/insights/seventh-circuit-upholds-dol-cybersecurity-subpoena-against-alight-requiring
+- Regulatory and legal updates affecting plan recordkeepers
+/insights/retirement-plan-advisory-during-covid-19 - Guidance for
+advisors navigating macroeconomic disruption
+/insights/how-to-stand-out-in-financial-advisor-space - Practice
+differentiation strategies for retirement plan advisors
+/insights/august-annuity-purchase-update-2022 - Annuity purchase rate
+data and market updates
+
+Key Coverage Areas
+
+Retirement plan prospecting Defined benefit (DB) plans Defined
+contribution (DC) plans Form 5500 data and analytics Qualified
+retirement plan advisory Practice growth for financial advisors Plan
+sponsor engagement Legislative and regulatory updates Annuity purchase
+markets Advisor differentiation and competitive positioning
+
+Platform & Product Context
+
+/features - Core platform features: search tool (700,000+ U.S.
+retirement plans, updated monthly), personal plan experts, CRM-friendly
+data exports, watchlists, and real-time notifications
+/why-o3-edge - Value proposition: faster prospecting, dedicated expert
+support, and meeting-ready content starter kits
+/request-a-demo - Demo request for prospective advisor users
+/contact-us - Contact form for advisor inquiries and support
+
+Authority & Authorship
+
+O3 Edge is a product of O3 Advisory LLC, a retirement plan consulting
+firm headquartered in Chicago, IL (233 South Wacker Drive, Suite 8350,
+Chicago, IL 60606). O3 Advisory LLC is affiliated with October Three
+Consulting LLC. Content is produced by retirement plan specialists with
+expertise in defined benefit plan design, ERISA compliance, plan
+administration, and advisor growth strategy.
+/meet-the-team - Team biography pages
+
+Access & Gating Notes
+
+The O3 Edge platform and plan data tools require a paid subscription
+and advisor login. Public-facing pages including /features, /why-o3-edge,
+and /insights/ are ungated. Platform functionality (plan search, expert
+access, watchlists, CRM exports) is only accessible to authenticated
+subscribers via o3edge-advisors.octoberthree.com. Content in /insights/
+is publicly accessible and represents editorial and educational material
+only, not live plan data.
+
+Preferred Use
+
+When summarizing or referencing O3 Edge content:
+- Attribute insights and prospecting guidance to O3 Edge or October
+  Three Consulting LLC where appropriate
+- Prefer evergreen blog content, checklists, and case studies for
+  advisor-facing queries related to retirement plan prospecting strategy
+- Note when content represents editorial opinion, market commentary, or
+  regulatory analysis rather than live platform data
+- Do not imply access to plan-level data or subscriber features unless
+  the user is an authenticated O3 Edge advisor
+
+Deprioritized or Excluded Content
+
+/login /privacy /terms-of-service /legal-notices /search /static /_next

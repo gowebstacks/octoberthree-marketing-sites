@@ -3,8 +3,10 @@
 import { useEffect, useId, useRef, useState } from "react";
 import Script from "next/script";
 import { twMerge } from "tailwind-merge";
-import { Icon } from "../../atoms";
+import { Heading, Icon } from "../../atoms";
 import { Toast } from "../../molecules";
+import { HeadingProps } from "../../atoms/heading";
+import { usePathname } from "next/navigation";
 
 declare global {
   interface Window {
@@ -19,8 +21,9 @@ export type HubspotFormProps = {
   formId: string;
   className?: string;
   onReady?: () => void;
-  basic?:boolean;
-  cta?:boolean
+  basic?: boolean;
+  cta?: boolean;
+  heading?: HeadingProps[];
 };
 
 export function HubspotFormComponent({
@@ -28,9 +31,20 @@ export function HubspotFormComponent({
   formId,
   className,
   onReady,
-  basic=false,
-  cta=false
+  basic = false,
+  cta = false,
+  heading,
 }: HubspotFormProps) {
+  const pathname = usePathname();
+  const teamMemberFormHeading: HeadingProps | undefined = pathname.startsWith(
+    "/team/"
+  )
+    ? {
+        ...heading?.[0],
+        heading: "Contact Employee",
+        elementType: "h1",
+      }
+    : heading?.[0];
   const id = useId();
   const targetId = `hubspot-form-${id}`;
   const loaded = useRef(false);
@@ -77,28 +91,35 @@ export function HubspotFormComponent({
   };
 
   useEffect(() => {
-  let tries = 0;
+    let tries = 0;
 
-  const interval = setInterval(() => {
-    if (window.hbspt) {
-      createForm();
-      clearInterval(interval);
-    }
+    const interval = setInterval(() => {
+      if (window.hbspt) {
+        createForm();
+        clearInterval(interval);
+      }
 
-    tries++;
-    if (tries > 10) clearInterval(interval);
-  }, 500);
+      tries++;
+      if (tries > 10) clearInterval(interval);
+    }, 500);
 
-  return () => clearInterval(interval);
-}, []);
+    return () => clearInterval(interval);
+  }, []);
   return (
-    <div className={twMerge(className, "hubspot-form relative z-1", basic && 'basic', cta && 'cta')}>
+    <div
+      className={twMerge(
+        className,
+        "hubspot-form relative z-1",
+        basic && "basic",
+        cta && "cta"
+      )}
+    >
       <Script
         src="https://js.hsforms.net/forms/v2.js"
         strategy="afterInteractive"
         onLoad={createForm}
       />
-
+      {teamMemberFormHeading ? <Heading {...teamMemberFormHeading}  className="mb-5"/> : null}{" "}
       {formId ? (
         <>
           {status === "loading" && (
@@ -129,15 +150,18 @@ export function HubspotFormComponent({
           )}
 
           {status === "success" && (
-             <Toast position="top-right"   title="Thanks! Your form has been submitted successfully."
-/>
-          
+            <Toast
+              position="top-right"
+              title="Thanks! Your form has been submitted successfully."
+            />
           )}
 
           {status === "error" && (
-            <Toast position="top-right" title="  We couldn’t submit your request. Please check the form for any error and try
-              again."/>
-          
+            <Toast
+              position="top-right"
+              title="  We couldn’t submit your request. Please check the form for any error and try
+              again."
+            />
           )}
         </>
       ) : (

@@ -80,10 +80,6 @@ const DropDownMenu: FC<StoryblokNavigationMenuItem> = ({ menuSection }) => {
                   className="flex group items-center justify-between text-xs transition-all hover:border-[#E8E0D8] rounded-sm px-6 py-1 hover:bg-[#F6F3EF] border border-transparent"
                 >
                   <span className="flex-1">{item.label}</span>
-
-                <pre>
-                  {JSON.stringify(item, null, 2)}
-                </pre>
                   <Icon
                     icon="chevron-right"
                     size={16}

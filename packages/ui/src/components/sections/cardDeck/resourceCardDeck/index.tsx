@@ -221,7 +221,7 @@ export const ResourceCardDeck: FC<Props> = ({
           )}
         >
           {resources?.map((resource) => (
-            <ResourceCard key={resource._id} {...resource} />
+            <ResourceCard key={resource._uid} {...resource} />
           ))}
         </div>
       ) : null}
