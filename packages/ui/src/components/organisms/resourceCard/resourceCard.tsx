@@ -48,7 +48,8 @@ export interface ResourceCardProps extends SbBlokData {
   // Tocheck if it is used in resource carousel
   carousel?: boolean;
   mode: "dark" | "light";
-  linkLabel?: string
+  linkLabel?: string;
+  variant?: "grid" | "list";
 }
 const getFirstValidParagraph = (body?: RichTextContent) => {
   const content = body?.content;
@@ -130,7 +131,8 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
     showBadge = false,
     carousel = false,
     mode='light',
-    linkLabel
+    linkLabel,
+    variant = "grid"
   } = props;
 
   // Use featuredImage for all resource types
@@ -162,13 +164,100 @@ export const ResourceCard: FC<ResourceCardProps> = (props) => {
     pathname.includes("/resources") ||
     pathname.includes("/insights");
 
+  if (variant === "list") {
+    const formattedDate = displayDate
+      ? new Date(displayDate).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })
+      : null;
+
+    return (
+      <Link
+        href={resourceUrl}
+        {...storyblokEditable(props)}
+        className={twMerge(
+          "group hover:shadow-lg cursor-pointer relative flex flex-col overflow-hidden transition-all duration-200 bg-(--surface-card) hover:bg-(--surface-card-hover) border border-(--stroke-card) rounded-sm",
+        )}
+      >
+        <div className={twMerge(
+          "flex flex-col sm:flex-row h-full",
+          !displayImage?.filename &&
+            (mode === "light"
+              ? "border-t-8 border-t-(--resource-card-border-light)"
+              : "border-t-8 border-t-(--resource-card-border-dark)")
+        )}>
+          {/* Featured Image */}
+          {displayImage?.filename && (
+            <div
+              className={twMerge(
+                "relative flex justify-center items-center overflow-hidden h-35 sm:h-auto sm:w-60 shrink-0",
+                mode === "light"
+                  ? "bg-orange-300 group-hover:bg-(--illustration-primary)"
+                  : "bg-(--surface-accent-background) group-hover:bg-(--text-blog-cta-card)"
+              )}
+            >
+              <Image
+                loader={storyblokLoader}
+                src={displayImage?.filename}
+                alt={displayImage?.alt || title || "Resource"}
+                className="object-cover w-full h-full"
+                fill
+              />
+            </div>
+          )}
+
+          {/* Content */}
+          <div className="flex flex-col p-(--padding-24-18-18) h-full flex-1">
+            {/* Category + Date */}
+            <div className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide mb-2">
+              <span className="text-(--text-link)">{category}</span>
+              {formattedDate && (
+                <>
+                  <span className="text-(--text-secondary)">·</span>
+                  <span className="text-(--text-secondary) normal-case">{formattedDate}</span>
+                </>
+              )}
+            </div>
+
+            {/* Title */}
+            {title && (
+              <Heading
+                as="h3"
+                size="lg"
+                weight="bold"
+                heading={title}
+                className="text-display-xl text-(--text-headings-dark) mb-2 group-hover:text-link-hover transition-colors duration-200 font-serif"
+              />
+            )}
+
+            {/* Excerpt */}
+            {body && (
+              <div className="text-sm text-(--text-body-dark) line-clamp-2 mb-4">
+                <RichText doc={firstParagraph} />
+              </div>
+            )}
+
+            {/* Learn More */}
+            <Button
+              className="w-fit group-hover:text-(--text-link-hover) mt-auto"
+              mode="link"
+              label={linkLabel || "Learn more"}
+            />
+          </div>
+        </div>
+      </Link>
+    );
+  }
+
   return (
     <Link
       href={resourceUrl}
       {...storyblokEditable(props)}
       className={twMerge(
         "group hover:shadow-lg cursor-pointer relative flex h-full flex-col overflow-hidden transition-all duration-200 bg-(--surface-card) hover:bg-(--surface-card-hover) border border-(--stroke-card) rounded-sm",
-       
+
       )}
     >
       <div className={twMerge('flex flex-col h-full',carousel ? "w-100 max-w-100" : "",  !displayImage?.filename &&

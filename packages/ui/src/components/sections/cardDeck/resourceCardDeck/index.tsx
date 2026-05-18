@@ -46,6 +46,7 @@ export const ResourceCardDeck: FC<Props> = ({
   const [input, setInput] = useState(currentSearch);
   const [showAllFilters, setShowAllFilters] = useState(false);
   const activeFilter = searchParams.get("category") || "all";
+  const viewMode = (searchParams.get("view") === "grid" ? "grid" : "list") as "grid" | "list";
 
   const showFilters =
     pathname.includes("/articles") ||
@@ -163,51 +164,89 @@ export const ResourceCardDeck: FC<Props> = ({
             ) : null}
           </div>
 
-          <div className="flex  items-center gap-1 border border-(--stroke-primary) rounded-md  bg-white w-full lg:w-[320px]!  px-1.5 py-1 h-10">
-            <Icon
-              size={16}
-              color="var(--icon-primary-dark)"
-              icon="search-lg"
-              className="shrink-0"
-            />
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 border border-(--stroke-primary) rounded-md bg-white w-full lg:w-[320px]! px-1.5 py-1 h-10">
+              <Icon
+                size={16}
+                color="var(--icon-primary-dark)"
+                icon="search-lg"
+                className="shrink-0"
+              />
 
-            <input
-              type="text"
-              placeholder="Search"
-              className="outline-none text-sm w-full bg-transparent h-8"
-              onChange={(e) => setInput(e.target.value)}
-              value={input}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleSearch();
-                }
-              }}
-            />
+              <input
+                type="text"
+                placeholder="Search"
+                className="outline-none text-sm w-full bg-transparent h-8"
+                onChange={(e) => setInput(e.target.value)}
+                value={input}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSearch();
+                  }
+                }}
+              />
 
-            {input && (
+              {input && (
+                <button
+                  onClick={() => {
+                    setInput("");
+
+                    const params = new URLSearchParams(searchParams.toString());
+                    params.delete("search");
+                    params.set("page", "1");
+
+                    router.push(`${pathname}?${params.toString()}`);
+                  }}
+                  className="flex cursor-pointer items-center justify-center w-8 h-8 text-sm text-(--text-secondary) hover:text-(--text-primary)"
+                  aria-label="Clear search"
+                >
+                  <Icon strokeWidth={2} icon="x"/>
+                </button>
+              )}
+
+              <button
+                onClick={handleSearch}
+                className="text-xs cursor-pointer h-8 px-2 rounded-xs bg-(--surface-search-button) text-white"
+              >
+                Search
+              </button>
+            </div>
+
+            {/* Grid / List toggle */}
+            <div className="hidden lg:flex items-center border border-(--stroke-primary) rounded-md overflow-hidden h-10">
               <button
                 onClick={() => {
-                  setInput("");
-
                   const params = new URLSearchParams(searchParams.toString());
-                  params.delete("search");
-                  params.set("page", "1");
-
+                  params.set("view", "grid");
                   router.push(`${pathname}?${params.toString()}`);
                 }}
-                className="flex cursor-pointer items-center justify-center w-8 h-8 text-sm text-(--text-secondary) hover:text-(--text-primary)"
-                aria-label="Clear search"
+                className={twMerge(
+                  "flex items-center justify-center w-10 h-full cursor-pointer transition-colors",
+                  viewMode === "grid"
+                    ? "bg-(--surface-search-button) text-white"
+                    : "bg-white text-(--text-secondary) hover:text-(--text-primary)"
+                )}
+                aria-label="Grid view"
               >
-                <Icon strokeWidth={2} icon="x"/>
+                <Icon size={18} icon="grid-01" strokeWidth={1.5} />
               </button>
-            )}
-
-            <button
-              onClick={handleSearch}
-              className="text-xs cursor-pointer h-8 px-2 rounded-xs bg-(--surface-search-button) text-white"
-            >
-              Search
-            </button>
+              <button
+                onClick={() => {
+                  const params = new URLSearchParams(searchParams.toString());
+                  params.delete("view");
+                  router.push(`${pathname}?${params.toString()}`);
+                }}
+                className={twMerge(
+                  "flex items-center justify-center w-10 h-full cursor-pointer transition-colors",
+                  viewMode === "list"
+                    ? "bg-(--surface-search-button) text-white"
+                    : "bg-white text-(--text-secondary) hover:text-(--text-primary)"
+                )}
+                aria-label="List view"
+              >
+                <Icon size={18} icon="rows-01" strokeWidth={1.5} />
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -215,13 +254,15 @@ export const ResourceCardDeck: FC<Props> = ({
       {resources?.length ? (
         <div
           className={twMerge(
-            showFilters
-              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-(--gaps-16-12-12)"
-              : "grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-(--gaps-16-12-12)"
+            viewMode === "list"
+              ? "flex flex-col gap-(--gaps-16-12-12)"
+              : showFilters
+                ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-(--gaps-16-12-12)"
+                : "grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-(--gaps-16-12-12)"
           )}
         >
           {resources?.map((resource) => (
-            <ResourceCard key={resource._uid} {...resource} />
+            <ResourceCard key={resource._uid} {...resource} variant={viewMode} />
           ))}
         </div>
       ) : null}
