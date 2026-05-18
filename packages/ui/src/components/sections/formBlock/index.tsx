@@ -48,11 +48,10 @@ export const FormBlock: FC<FormBlockProps> = ({
           <ContentBlock blok={{ ...content[0], mode: "dark" }} />
         </div>
       ) : null}
-
       <div className="flex-1">
         {/* <Form  /> */}
         <HubspotFormComponent
-        heading={heading}
+          heading={heading}
           formId={hubspotformID || "cbd47751-5c13-44c2-8dd1-3290840fe8b8"}
         />
       </div>
