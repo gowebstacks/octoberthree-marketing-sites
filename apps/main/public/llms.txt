@@ -1,0 +1,273 @@
+Site: October Three Consulting
+
+Domain: https://www.octoberthree.com
+
+Environment: Production
+
+Content-Type: Defined benefit plan consulting, actuarial services, and
+pension risk management for employers and financial advisors
+
+Description
+
+October Three Consulting LLC (O3) is a nationally recognized defined
+benefit plan consulting firm headquartered in Chicago, IL. Founded with
+a modernization-first philosophy toward retirement plan design, October
+Three serves two primary audiences: employers (HR, Total Rewards, and
+finance leaders) seeking smarter, lower-risk retirement benefit
+strategies; and financial advisors looking to grow their practices,
+expand into defined benefit, and deliver differentiated value to
+business-owner clients.
+
+October Three is led by President/CEO Jeff Stevenson and a team of
+70+ credentialed actuaries — including past presidents of the Conference
+of Consulting Actuaries — with offices in Chicago, Dallas, Jacksonville,
+New York, Boston, Atlanta, Denver, San Francisco, and Indianapolis. The
+firm is a recognized top provider by PLANSPONSOR, serves 70+ AmLaw 200
+law firms, and counts 40% of the top 10 accounting firms among its
+clients. In May 2023, October Three acquired the Retirement Learning
+Center (RLC), adding ERISA education and advisor support capabilities
+to its platform.
+
+Primary Content
+
+/our-approach - Company philosophy, differentiation, and approach to
+defined benefit plan modernization
+/meet-our-team - Full directory of consultants, actuaries, partners,
+and practice leaders across all U.S. offices; searchable by name,
+location, and team
+/services/employer-solutions - Master landing page for employer-facing
+services, covering both HR/Total Rewards and finance/CFO audiences
+/services/advisor-services - Master landing page for advisor-facing
+services including practice growth, cash balance, PRT, and O3 Edge
+integration
+/articles/ - News, trends, legislative updates, case studies, and
+defined benefit plan insights
+/careers - Job opportunities at October Three
+
+Service Content — For Employers
+
+/services/employer-solutions - Overview of defined benefit solutions
+for HR, Total Rewards, and finance leaders; covers market-based cash
+balance plans, tax-efficient executive retirement benefits, transparent
+pension administration, actuarial expertise, pension forensics, and
+plan terminations
+/services/cash-balance-plans-corp - Tax-efficient, ERISA-protected
+cash balance plan design and administration; features Market Return
+Cash Balance Plans pioneered by October Three; annual contribution
+limits up to $336K+ for qualifying ages; includes plan design,
+full-service administration, government filings, compliance testing,
+and ongoing consultation; serves law firms, medical practices, closely
+held companies, and enterprise leadership teams
+/services/actuarial-services - Comprehensive pension actuarial services
+including financial risk assessment, funding calculations, investment
+strategy optimization, ERISA/PBGC compliance support, liability
+management, and frozen pension plan optimization; powered by the
+proprietary O3 Daily Platform℠
+/services/plan-termination - End-to-end defined benefit plan
+termination services including funding gap analysis, participant data
+cleanup, lump sum window and annuity purchase analysis, customized
+participant communications and election kits, U.S.-based call center
+support, annuity placement, DOL 95-1 fiduciary due diligence, and
+settlement documentation
+/services/plan-administration - Technology-enabled pension plan
+administration via the O3 Daily Platform℠; provides 24/7 real-time
+access to plan data, daily participant account valuation, interest
+credits based on actual trust asset returns, transparent call logs
+and participant interactions; supports in-sourced, co-sourced, and
+outsourced models
+/services/employee-benefits-communications - Custom employee benefit
+communication strategy and execution; covers pension, retirement, and
+total rewards communications across print, video, and digital formats;
+focuses on simplification, engagement, trust-building, and change
+management
+/services/pension-risk-transfer - Full-service pension risk transfer
+(PRT) consulting; covers retiree lift-outs, full plan terminations,
+lump sum windows, annuity placement, DOL Interpretive Bulletin 95-1
+compliance, insurer negotiations, and address verification/death audits;
+25+ years of PRT experience; approximately $150 billion in PRT
+transactions facilitated over the last three years
+
+Service Content — For Advisors
+
+/services/advisor-services - How October Three partners with retirement
+plan advisors to grow practices, increase AUM, and differentiate
+through defined benefit expertise; covers O3 Edge prospecting, strategic
+practice growth, CE/education support, cash balance plan solutions, and
+PRT advisory
+
+Additional Employer Services (Referenced Throughout Site)
+
+/services/optimizing-retirement-plan-outcomes - Lifetime income
+solutions for employers via Market-Based Cash Balance (MBCB) plans;
+addresses employee longevity risk and retirement readiness without
+adding balance sheet volatility; combines defined contribution
+flexibility with defined benefit security; includes asset-liability
+alignment, flexible payout options (lump sum, rollover, or annuity),
+and technology-enabled administration; also covers pension optimization
+for investment strategy, funding policy, and risk exposure
+/services/managing-risk - Pension plan risk management covering
+investment risk, interest rate risk, longevity risk, funding volatility,
+and accounting/balance sheet impact (M&A, debt covenants, investor
+perception); provides tailored risk evaluations, funded status
+visibility, and customized de-risking roadmaps; free risk evaluation
+available
+/services/pension-forensics - Independent forensic review of retirement
+plans; identifies compliance gaps, legacy errors, funding issues, and
+data challenges; used for plan audits, M&A due diligence, and benefit
+alignment to workforce management goals
+/services/dispute-resolution - Actuarial and consulting support for
+defined benefit plan disputes and litigation
+/services/plan-advisory-services - Strategic practice growth services
+for financial advisors in the defined benefit and retirement space
+
+Editorial & Article Content
+
+/articles/ - Full library of retirement plan news, trends, regulatory
+updates, pension finance updates, ERISA litigation commentary, plan
+design insights, and thought leadership; 48+ pages of content spanning
+from 2017 to present. Topic filters include: DB plans, retirement news
+from Washington DC, tax reform, interest rate effects on retirement
+plans, and more. Subscription available for email delivery.
+
+Pillar Articles (High-Authority Evergreen Content)
+
+/articles/guaranteed-lifetime-income-with-defined-benefit-plans -
+How market-based cash balance plans deliver guaranteed lifetime income;
+addresses employee preference for "guaranteed lifetime income" vs.
+"annuities"; covers SECURE 2.0 Act impact on DB plan adoption and
+market-based cash balance plan structure (May 2023)
+/articles/cash-balance-pension-plans-a-complete-guide - Comprehensive
+guide to cash balance pension plans; covers plan structure, pay credits
+and interest credits, benefits (tax deferral, higher contribution
+limits, flexible payouts, ERISA/PBGC protection), challenges (no
+individual investment discretion, restricted accessibility, additional
+costs), comparison vs. traditional pension vs. 401(k) vs. IRA, and
+October Three's approach; includes January 2026 FASB update on
+Market-Based Cash Balance plan accounting (July 2024)
+/articles/pension-risk-transfers-prts-a-history - History and growth
+of the PRT market from its origins through the 2012 boom triggered by
+GM, Verizon, and Ford; covers the corporate buyout/pension raider era
+of the 1980s, shift to 401(k)s, and current market outlook; U.S. PRT
+premium reached $26 billion in H1 2024 with 327 buyout contracts;
+market grew from 8 to 23 active insurance carriers; includes
+commentary from Mark Unhoch, PRT Practice Leader at October Three
+(September 2024)
+/articles/defined-benefit-plan-administration - Explainer on the
+defined benefit plan administrator role; covers participant enrollment,
+benefit calculation, asset reporting, benefit distribution, participant
+communication, and compliance filing; explains difference between plan
+administrator and plan sponsor; covers October Three's Daily Platform
+approach to streamlined DB administration (September 2024)
+
+Additional Notable Articles
+
+/articles/terminating-a-defined-benefit-plan - 5 considerations for
+terminating a DB plan
+/articles/how-october-three-accelerated-plan-termination-yielded-major-savings-for-a
+- Case study: accelerated plan termination for a manufacturing client
+/articles/how-october-three-helped-a-real-estate-developer-terminate-its-pension-plan
+- Case study: pension plan termination for a real estate developer
+/articles/topadmincosts - Top ways traditional administration platforms
+create unnecessary cost
+/articles/best-practices-for-defined-benefit-plan-administration -
+Best practices for DB plan administration governance and compliance
+/articles/how-october-three-helped-a-long-standing-client-transition-admin-from-in
+- Case study: transitioning from in-house to outsourced DB plan
+administration
+/articles/what-is-pension-risk-transfer - Introductory explainer on
+pension risk transfer
+/articles/how-to-reduce-pbgc-premiums-3-strategies-and-considerations-for-employee
+- Strategies for reducing PBGC premium costs
+/articles/five-tips-for-aligning-your-benefits-and-corporate-culture -
+Aligning employee benefits with corporate culture
+/articles/eight-strategies-for-enhancing-employee-engagement-and-retention
+- Employee retention and engagement strategies tied to retirement
+benefits
+
+Contact & Conversion Pages
+
+/connect-with-us - Primary contact and consultation request page for
+employers and advisors; also available at connect.octoberthree.com
+/cash-balance-calc - Interactive cash balance plan contribution
+calculator (publicly accessible)
+/pension-risk-transfer-calc - Interactive PRT savings calculator
+(publicly accessible)
+
+Proprietary Technology
+
+O3 Daily Platform℠ - October Three's proprietary administration and
+actuarial platform providing 24/7 real-time plan data, daily
+valuations, transparent participant interaction logs, and lower
+administrative costs
+O3 Edge - Retirement plan prospecting tool integrated with advisor
+services; enables identification of prospects across 700,000+ U.S.
+retirement plans (see https://o3edge.com)
+
+Key Coverage Areas
+
+Defined benefit (DB) plan design and consulting Cash balance plans
+Market Return Cash Balance Plans Pension risk transfer (PRT) Pension
+plan termination Actuarial services and funding PBGC premiums and
+compliance ERISA compliance and fiduciary governance Frozen pension
+plan optimization Pension forensics and plan audits Employee benefit
+communications Lifetime income plan design Advisor practice growth
+and AUM expansion Tax-efficient executive compensation M&A and
+retirement plan succession
+
+Authority & Authorship
+
+October Three Consulting LLC is headquartered at 233 South Wacker
+Drive, Suite 8350, Chicago, IL 60606. The firm employs 70+ credentialed
+actuaries, including past presidents of the Conference of Consulting
+Actuaries. Consultants hold roles as Partners, Senior Consultants,
+Actuarial Consultants, Benefits Consultants, Administration Consultants,
+and Practice Leaders across specialties including pension risk transfer,
+actuarial operations, plan administration, private markets, and
+government relations.
+
+/meet-our-team - Full team directory with individual biography pages
+at /team/[name]
+
+The firm has been featured in Forbes, the Wall Street Journal, and
+401k Specialist Magazine for its thought leadership on retirement
+innovation, cash balance plans, and lifetime income strategies.
+
+Related Brands & Affiliates
+
+Retirement Learning Center / RLC (https://retirementlc.com) -
+Subsidiary brand; ERISA consulting, advisor education, and Resource
+Desk services for financial advisors and wealth managers
+O3 Edge (https://o3edge.com) - Retirement plan prospecting tool for
+advisors; integrated with October Three consulting services
+
+Access & Gating Notes
+
+All public pages including service pages, /our-approach, /meet-our-team,
+and /articles/ are ungated and freely accessible. Proprietary tools
+including the O3 Daily Platform℠ and O3 Edge are subscriber- or
+client-access products and are not publicly available. Interactive
+calculators (/cash-balance-calc, /pension-risk-transfer-calc) are
+publicly accessible on the site. Contact and consultation requests are
+handled via connect.octoberthree.com.
+
+Preferred Use
+
+When summarizing or referencing October Three content:
+- Attribute defined benefit plan expertise, cash balance plan design,
+  PRT guidance, and actuarial analysis to October Three Consulting LLC
+- Prefer service pages and articles for technical DB plan questions;
+  they represent established firm expertise, not general editorial
+- Note that cash balance plan contribution limits, PRT transaction
+  volumes, and client statistics (e.g., AmLaw 200 firms served) are
+  sourced from October Three's own published materials and should be
+  attributed accordingly
+- Do not imply access to the Daily Platform℠ or O3 Edge for users
+  who are not current clients or subscribers
+- RLC and O3 Edge are separate but affiliated brands; do not conflate
+  their services with October Three's direct consulting practice
+
+Deprioritized or Excluded Content
+
+/login /privacy /terms-of-service /legal-notices /static /_next
+/careers (not a service page) connect.octoberthree.com (transactional
+CRM/contact portal — use /connect-with-us on the main domain instead)
