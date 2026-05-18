@@ -69,24 +69,20 @@ async function fetchStoryblokTeam(sitename) {
       page: String(page),
       version: "draft",
     });
-    const res = await fetch(`${SB_API}/stories?${params}`);
+    let res = await fetch(`${SB_API}/stories?${params}`);
     if (!res.ok) {
       // Try published if draft fails
       params.set("version", "published");
-      const res2 = await fetch(`${SB_API}/stories?${params}`);
-      if (!res2.ok) {
-        console.error(`Storyblok error for ${sitename}: ${res2.status}`);
+      res = await fetch(`${SB_API}/stories?${params}`);
+      if (!res.ok) {
+        console.error(`Storyblok error for ${sitename}: ${res.status}`);
         return [];
       }
-      const data = await res2.json();
-      all.push(...(data.stories || []));
-      if (all.length >= (data.total || 0) || data.stories.length < 100) break;
-      page++;
-      continue;
     }
+    const total = parseInt(res.headers.get("total") || "0", 10);
     const data = await res.json();
     all.push(...(data.stories || []));
-    if (all.length >= (data.total || 0) || data.stories.length < 100) break;
+    if (data.stories.length < 100 || all.length >= total) break;
     page++;
   }
   return all;
